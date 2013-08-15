@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.gui;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -39,6 +40,8 @@ public class GuiIngame extends GuiScreen
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
 		DungeonRun.getGraphics().setColor(Color.white);
+		
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		
 		//Always sync the block renderer with the display and the player
 		renderBlocks.width = par1;
@@ -118,7 +121,7 @@ public class GuiIngame extends GuiScreen
 		if (input.isMousePressed(0))
 			this.player.worldObj.setBlock(0, 0, mouseBlockX, mouseBlockY, mouseBlockZ);
 		if (input.isMousePressed(1))
-			this.player.worldObj.setBlock(Block.stone.blockID, 0, mouseBlockX, 32, mouseBlockZ);
+			this.player.worldObj.setBlock(Block.stone.blockID, 0, mouseBlockX, mouseBlockY, mouseBlockZ);
 		if (input.isKeyDown(Input.KEY_ESCAPE))
 			DungeonRun.instance.pauseGame();
 	}

@@ -30,10 +30,11 @@ public class RenderBlocks
 	}
 
 	public void renderBlock(BlockInWorld block, int x, int y, int z, double playerPosX, double playerPosY, double playerPosZ, boolean hover) throws SlickException
-	{
+	{	
 		if (block != null && !block.isAir() && block.getBlock() != null)
 		{
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			
 			int middleX = getMiddleBlockX();
 			int middleY = getMiddleBlockY();
 
@@ -43,7 +44,7 @@ public class RenderBlocks
 
 			float posX = getRenderPosX(middleX, offsetX);
 			float posY = getRenderPosY(middleY, offsetY, offsetZ);
-
+			
 			BlockInWorld topBlock = block.world.getBlock(x, y + 1, z);
 			BlockInWorld sideBlock = block.world.getBlock(x, y, z - 1);
 			

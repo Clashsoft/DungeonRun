@@ -46,6 +46,6 @@ public class BlockInWorld
 		float f5 = world.getLightValue(x, y, z + 1);
 		float f6 = world.getLightValue(x, y, z - 1);
 		float f7 = (f1 + f2 + f3 + f4 + f5 + f6) / 6F;
-		return f * f7;
+		return f7;
 	}
 }

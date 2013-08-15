@@ -41,17 +41,20 @@ public class EntityPlayer extends EntityLiving
 	{
 		int i = isSprinting ? 2 : 1;
 		float f = Math.abs(rot == 0 || rot == 2 ? (float)posZ % 1F : (float)posX % 1F);
-		boolean b = canMove(f, this.rot);
-		if (isWalking && b)
-		{
-			this.move(0.1F * i, this.rot);
-			stepsWalked += i;
-		}
-		if(stepsWalked >= 10 || !b)
+		
+		boolean b = canMove(f, this.rot) || canMove(1 - f, this.rot);
+		
+		if((stepsWalked >= 8 && (f >= 0.499F && f <= 0.501F)) || !b)
 		{
 			this.isWalking = false;
 			this.isSprinting = false;
 			stepsWalked = 0;
+		}
+		
+		if (isWalking && b)
+		{
+			this.move(0.1F * i, this.rot);
+			stepsWalked += i;
 		}
 		super.updateEntity();
 	}

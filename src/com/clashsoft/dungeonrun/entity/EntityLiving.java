@@ -17,7 +17,7 @@ public abstract class EntityLiving extends Entity
 		if (!isJumping)
 		{
 			isJumping = true;
-			this.addVelocity(0, 0.5F, 0);
+			this.addVelocity(0, 0.6F, 0);
 		}
 	}
 
