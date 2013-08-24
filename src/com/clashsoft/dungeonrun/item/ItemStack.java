@@ -2,9 +2,9 @@ package com.clashsoft.dungeonrun.item;
 
 public class ItemStack
 {
-	public IStackable item;
-	public int stackSize;
-	public int metadata;
+	public IStackable	item;
+	public int			stackSize;
+	public int			metadata;
 	
 	public ItemStack(IStackable stackable)
 	{

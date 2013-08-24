@@ -5,14 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.imageout.ImageOut;
 
 import com.clashsoft.dungeonrun.block.Block;
@@ -20,38 +13,34 @@ import com.clashsoft.dungeonrun.engine.FontRenderer;
 import com.clashsoft.dungeonrun.engine.RenderEngine;
 import com.clashsoft.dungeonrun.engine.SoundEngine;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.gui.GameSettings;
-import com.clashsoft.dungeonrun.gui.GuiIngame;
-import com.clashsoft.dungeonrun.gui.GuiIntro;
-import com.clashsoft.dungeonrun.gui.GuiPauseMenu;
-import com.clashsoft.dungeonrun.gui.GuiScreen;
+import com.clashsoft.dungeonrun.gui.*;
 import com.clashsoft.dungeonrun.world.World;
 
 public class DungeonRun extends BasicGame
-{	
-	public static DungeonRun instance;
+{
+	public static DungeonRun	instance;
 	
-	public AppGameContainer theGameContainer;
-	public int tick;
+	public AppGameContainer		theGameContainer;
+	public int					tick;
 	
-	public RenderEngine renderEngine;
-	public SoundEngine soundEngine;
-	public FontRenderer fontRenderer;
+	public RenderEngine			renderEngine;
+	public SoundEngine			soundEngine;
+	public FontRenderer			fontRenderer;
 	
-	public boolean debugMode = true;
+	public boolean				debugMode	= true;
 	
-	public int mousePosX = 0;
-	public int mousePosY = 0;
+	public int					mousePosX	= 0;
+	public int					mousePosY	= 0;
 	
-	public GameSettings gameSettings;
+	public GameSettings			gameSettings;
 	
-	public boolean hasGameStarted;
-	public GuiIngame theIngameGui;
+	public boolean				hasGameStarted;
+	public GuiIngame			theIngameGui;
 	
-	public boolean isPaused;
-	private GuiScreen currentGui;
-	public World theWorld;
-	public EntityPlayer thePlayer;
+	public boolean				isPaused;
+	private GuiScreen			currentGui;
+	public World				theWorld;
+	public EntityPlayer			thePlayer;
 	
 	public DungeonRun()
 	{
@@ -61,7 +50,7 @@ public class DungeonRun extends BasicGame
 		this.fontRenderer = new FontRenderer(this);
 		this.gameSettings = new GameSettings();
 	}
-
+	
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
@@ -79,7 +68,7 @@ public class DungeonRun extends BasicGame
 			{
 				g.drawString(String.format("PlayerPos: (%.2f;%.2f;%.2f)", thePlayer.posX, thePlayer.posY, thePlayer.posZ), 10, 30);
 				g.drawString("PlayerRot: " + thePlayer.rot, 10, 50);
-				g.drawString(String.format("PlayerVelocity: (%.2f;%.2f;%.2f)",thePlayer.velocityX, thePlayer.velocityY, thePlayer.velocityZ), 10, 70);
+				g.drawString(String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", thePlayer.velocityX, thePlayer.velocityY, thePlayer.velocityZ), 10, 70);
 				g.drawString("PlayerWorld: " + thePlayer.worldObj.name, 10, 90);
 			}
 			
@@ -89,7 +78,7 @@ public class DungeonRun extends BasicGame
 			}
 		}
 	}
-
+	
 	@Override
 	public void init(GameContainer arg0) throws SlickException
 	{
@@ -101,7 +90,7 @@ public class DungeonRun extends BasicGame
 				b.registerIcons();
 		}
 	}
-
+	
 	@Override
 	public void update(GameContainer arg0, int arg1) throws SlickException
 	{
@@ -147,7 +136,7 @@ public class DungeonRun extends BasicGame
 	{
 		return instance.theGameContainer.getInput();
 	}
-
+	
 	public static void main(String[] args) throws SlickException
 	{
 		instance = new DungeonRun();
@@ -171,22 +160,21 @@ public class DungeonRun extends BasicGame
 	public static String getAppdataDirectory()
 	{
 		String OS = System.getProperty("os.name").toUpperCase();
-	    if (OS.contains("WIN"))
-	        return System.getenv("APPDATA");
-	    else if (OS.contains("MAC"))
-	        return System.getProperty("user.home") + "/Library/Application "
-	                + "Support";
-	    else if (OS.contains("NUX"))
-	        return System.getProperty("user.home");
-	    return System.getProperty("user.dir");
+		if (OS.contains("WIN"))
+			return System.getenv("APPDATA");
+		else if (OS.contains("MAC"))
+			return System.getProperty("user.home") + "/Library/Application Support";
+		else if (OS.contains("NUX"))
+			return System.getProperty("user.home");
+		return System.getProperty("user.dir");
 	}
 	
 	public static String getDateTime()
 	{
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-	    Date now = new Date();
-	    String strDate = sdfDate.format(now);
-	    return strDate;
+		Date now = new Date();
+		String strDate = sdfDate.format(now);
+		return strDate;
 	}
 	
 	public void setFullScreen(boolean flag) throws SlickException
@@ -203,8 +191,8 @@ public class DungeonRun extends BasicGame
 	{
 		theGameContainer.setVSync(flag);
 	}
-
-	public void startGame() throws SlickException //TODO Proper loading
+	
+	public void startGame() throws SlickException // TODO Proper loading
 	{
 		this.theWorld = new World("TestWorld");
 		this.thePlayer = new EntityPlayer(this.theWorld);
@@ -224,7 +212,7 @@ public class DungeonRun extends BasicGame
 		this.isPaused = false;
 		this.displayGuiScreen(theIngameGui);
 	}
-
+	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy)
 	{

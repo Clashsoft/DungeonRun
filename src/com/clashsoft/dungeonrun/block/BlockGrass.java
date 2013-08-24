@@ -5,7 +5,7 @@ import org.newdawn.slick.SlickException;
 
 public class BlockGrass extends Block
 {
-	private Image sideIcon;
+	private Image	sideIcon;
 	
 	public BlockGrass(int id)
 	{
@@ -19,7 +19,7 @@ public class BlockGrass extends Block
 		super.registerIcons();
 		sideIcon = getIcon("grass_side");
 	}
-
+	
 	@Override
 	public Image getBlockTextureFromSideAndMetadata(int side, int meta) throws SlickException
 	{

@@ -4,13 +4,13 @@ public class DimensionHelper
 {
 	public static class Pos1<T>
 	{
-		public T x;
+		public T	x;
 		
 		public Pos1(T i1)
 		{
 			x = i1;
 		}
-
+		
 		@Override
 		public int hashCode()
 		{
@@ -19,7 +19,7 @@ public class DimensionHelper
 			result = prime * result + ((this.x == null) ? 0 : this.x.hashCode());
 			return result;
 		}
-
+		
 		@Override
 		public boolean equals(Object obj)
 		{
@@ -43,14 +43,14 @@ public class DimensionHelper
 	
 	public static class Pos2<T> extends Pos1<T>
 	{
-		public T y;
+		public T	y;
 		
 		public Pos2(T i1, T i2)
 		{
 			super(i1);
 			y = i2;
 		}
-
+		
 		@Override
 		public int hashCode()
 		{
@@ -59,7 +59,7 @@ public class DimensionHelper
 			result = prime * result + ((this.y == null) ? 0 : this.y.hashCode());
 			return result;
 		}
-
+		
 		@Override
 		public boolean equals(Object obj)
 		{
@@ -83,14 +83,14 @@ public class DimensionHelper
 	
 	public static class Pos3<T> extends Pos2<T>
 	{
-		public T z;
+		public T	z;
 		
 		public Pos3(T i1, T i2, T i3)
 		{
 			super(i1, i2);
 			z = i3;
 		}
-
+		
 		@Override
 		public int hashCode()
 		{
@@ -99,7 +99,7 @@ public class DimensionHelper
 			result = prime * result + ((this.z == null) ? 0 : this.z.hashCode());
 			return result;
 		}
-
+		
 		@Override
 		public boolean equals(Object obj)
 		{
@@ -123,13 +123,13 @@ public class DimensionHelper
 	
 	public static class Size1<T>
 	{
-		public T width;
+		public T	width;
 		
 		public Size1(T i1)
 		{
 			width = i1;
 		}
-
+		
 		@Override
 		public int hashCode()
 		{
@@ -138,7 +138,7 @@ public class DimensionHelper
 			result = prime * result + ((this.width == null) ? 0 : this.width.hashCode());
 			return result;
 		}
-
+		
 		@Override
 		public boolean equals(Object obj)
 		{
@@ -162,14 +162,14 @@ public class DimensionHelper
 	
 	public static class Size2<T> extends Size1<T>
 	{
-		public T heigth;
+		public T	heigth;
 		
 		public Size2(T i1, T i2)
 		{
 			super(i1);
 			heigth = i2;
 		}
-
+		
 		@Override
 		public int hashCode()
 		{
@@ -178,7 +178,7 @@ public class DimensionHelper
 			result = prime * result + ((this.heigth == null) ? 0 : this.heigth.hashCode());
 			return result;
 		}
-
+		
 		@Override
 		public boolean equals(Object obj)
 		{
@@ -202,14 +202,14 @@ public class DimensionHelper
 	
 	public static class Size3<T> extends Size2<T>
 	{
-		public T length;
+		public T	length;
 		
 		public Size3(T i1, T i2, T i3)
 		{
 			super(i1, i2);
 			length = i3;
 		}
-
+		
 		@Override
 		public int hashCode()
 		{
@@ -218,7 +218,7 @@ public class DimensionHelper
 			result = prime * result + ((this.length == null) ? 0 : this.length.hashCode());
 			return result;
 		}
-
+		
 		@Override
 		public boolean equals(Object obj)
 		{
@@ -239,5 +239,5 @@ public class DimensionHelper
 			return true;
 		}
 	}
-
+	
 }

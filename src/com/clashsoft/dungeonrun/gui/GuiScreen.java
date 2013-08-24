@@ -3,19 +3,20 @@ package com.clashsoft.dungeonrun.gui;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
 
 public abstract class GuiScreen
-{	
-	protected DungeonRun dr;
+{
+	protected DungeonRun		dr;
 	
-	protected int width;
-	protected int height;
+	protected int				width;
+	protected int				height;
 	
-	protected List<GuiButton> buttonList = new LinkedList<GuiButton>();
+	protected List<GuiButton>	buttonList	= new LinkedList<GuiButton>();
 	
 	public final void init(DungeonRun game) throws SlickException
 	{
@@ -44,23 +45,25 @@ public abstract class GuiScreen
 	}
 	
 	public abstract void initGui() throws SlickException;
+	
 	public abstract void drawScreen(int par1, int par2) throws SlickException;
+	
 	public abstract void updateScreen() throws SlickException;
 	
-	public float getRescaleFactorX(int width)
+	public double getRescaleFactorX(int width)
 	{
-		return width / 544F;
+		return width / 544D;
 	}
 	
-	public float getRescaleFactorY(int height)
+	public double getRescaleFactorY(int height)
 	{
-		return height / 256F;
+		return height / 256D;
 	}
 	
 	public boolean isMouseInRegion(float x, float y, float sizeX, float sizeY)
 	{
-		float mouseX = DungeonRun.instance.mousePosX / getRescaleFactorX(width);
-		float mouseY = DungeonRun.instance.mousePosY / getRescaleFactorY(height);
-		return (mouseX >= x && mouseX <= x + sizeX && mouseY >= y && mouseY <= y + sizeY);
+		double mouseX = Mouse.getX() / getRescaleFactorX(width) * 1.0D;
+		double mouseY = (height - Mouse.getY()) / getRescaleFactorY(height) * 1.0D;
+		return (mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY);
 	}
 }

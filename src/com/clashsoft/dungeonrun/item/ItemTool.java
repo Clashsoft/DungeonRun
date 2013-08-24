@@ -7,5 +7,5 @@ public class ItemTool extends Item
 		super(id);
 		this.setMaxStackSize(1);
 	}
-
+	
 }

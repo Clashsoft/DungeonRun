@@ -9,25 +9,25 @@ import com.clashsoft.dungeonrun.DungeonRun;
 
 public class GuiOptions extends GuiListScreen
 {
-	private GuiScreen superGui;
+	private GuiScreen	superGui;
 	
 	public GuiOptions(GuiScreen superGui)
 	{
 		this.superGui = superGui;
 	}
-
+	
 	@Override
 	public void initGui() throws SlickException
 	{
 		super.initGui();
 	}
-
+	
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
 		super.drawScreen(par1, par2);
 	}
-
+	
 	@Override
 	public void updateScreen() throws SlickException
 	{
@@ -64,13 +64,13 @@ public class GuiOptions extends GuiListScreen
 					gs.musicVolume = 0F;
 			}
 	}
-
+	
 	@Override
 	public String getTitle()
 	{
 		return "Game Settings";
 	}
-
+	
 	@Override
 	public void addEntrys(List<String> s)
 	{
@@ -79,7 +79,7 @@ public class GuiOptions extends GuiListScreen
 		s.add("Video Options");
 		s.add("Back");
 	}
-
+	
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
@@ -91,7 +91,7 @@ public class GuiOptions extends GuiListScreen
 			this.dr.displayGuiScreen(superGui);
 		}
 	}
-
+	
 	@Override
 	public String getEntry(int i)
 	{

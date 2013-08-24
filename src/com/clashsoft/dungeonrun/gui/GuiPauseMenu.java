@@ -3,11 +3,8 @@ package com.clashsoft.dungeonrun.gui;
 import java.util.List;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Vector2f;
 
 import com.clashsoft.dungeonrun.DungeonRun;
 
@@ -24,13 +21,13 @@ public class GuiPauseMenu extends GuiListScreen
 		
 		super.drawScreen(par1, par2);
 	}
-
+	
 	@Override
 	public String getTitle()
 	{
 		return "Game Menu";
 	}
-
+	
 	@Override
 	public void addEntrys(List<String> s)
 	{
@@ -38,7 +35,7 @@ public class GuiPauseMenu extends GuiListScreen
 		s.add("Options");
 		s.add("Main Menu");
 	}
-
+	
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{

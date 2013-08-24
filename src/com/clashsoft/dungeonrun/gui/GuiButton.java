@@ -4,26 +4,26 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.util.ResourceRegistry;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos2;
+import com.clashsoft.dungeonrun.util.ResourceRegistry;
 
 public class GuiButton
 {
-	public int buttonID;
-	public Pos2<Integer> pos;
-	public String text;
-
-	public boolean isInvisible = false;
-	public boolean isLocked = false;
-	public boolean hover = false;
-
+	public int				buttonID;
+	public Pos2<Integer>	pos;
+	public String			text;
+	
+	public boolean			isInvisible	= false;
+	public boolean			isLocked	= false;
+	public boolean			hover		= false;
+	
 	public GuiButton(int id, int x, int y, String text)
 	{
 		this.buttonID = id;
 		this.pos = new Pos2<Integer>(x, y);
 		this.text = text;
 	}
-
+	
 	public void render() throws SlickException
 	{
 		if (!isInvisible)
@@ -37,6 +37,6 @@ public class GuiButton
 	
 	public boolean isMouseHovering()
 	{
-		return false; //GuiScreen.isMouseInRegion(pos.x, pos.y, 200, 40);
+		return false; // GuiScreen.isMouseInRegion(pos.x, pos.y, 200, 40);
 	}
 }

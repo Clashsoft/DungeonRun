@@ -11,11 +11,11 @@ import com.clashsoft.dungeonrun.DungeonRun;
 
 public class SoundEngine
 {
-	public class SoundLocation
+	public static class SoundLocation
 	{
-		public int x;
-		public int y;
-		public int z;
+		public final int	x;
+		public final int	y;
+		public final int	z;
 		
 		public SoundLocation(int x, int y, int z)
 		{
@@ -25,11 +25,13 @@ public class SoundEngine
 		}
 	}
 	
-	public DungeonRun dr;
+	public static final SoundLocation	DEFAULT_LOCATION	= new SoundLocation(0, 0, 0);
 	
-	private Map<String, Sound> sounds = new HashMap<String, Sound>();
-	private Map<String, Music> musics = new HashMap<String, Music>();
-
+	public final DungeonRun				dr;
+	
+	private Map<String, Sound>			sounds				= new HashMap<String, Sound>();
+	private Map<String, Music>			musics				= new HashMap<String, Music>();
+	
 	public SoundEngine(DungeonRun dr)
 	{
 		this.dr = dr;
@@ -53,7 +55,8 @@ public class SoundEngine
 	
 	public void playMusic(String music, boolean repeat) throws SlickException
 	{
-		this.playMusic(music, repeat, this.dr.gameSettings.musicVolume);
+		// this.playMusic(music, repeat, this.dr.gameSettings.musicVolume);
+		// FIXME
 	}
 	
 	public void playMusic(String music, boolean repeat, float volume) throws SlickException
@@ -76,5 +79,5 @@ public class SoundEngine
 		if (m != null)
 			m.stop();
 	}
-
+	
 }

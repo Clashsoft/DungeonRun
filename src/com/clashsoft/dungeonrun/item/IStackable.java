@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.item;
 
 public interface IStackable
 {
-	public boolean isBlock = false;
+	public boolean	isBlock	= false;
 	
 	public int getID();
 	

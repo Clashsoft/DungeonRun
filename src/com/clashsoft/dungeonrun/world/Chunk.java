@@ -2,12 +2,12 @@ package com.clashsoft.dungeonrun.world;
 
 public class Chunk
 {
-	public final World world;
-	private final int chunkX;
-	private final int chunkY;
-	private BlockInWorld[][][] blocks;
-	private float[][][] lightValues;
-	private int[][] maxY;
+	public final World			world;
+	public final int			chunkX;
+	public final int			chunkZ;
+	private BlockInWorld[][][]	blocks;
+	private float[][][]			lightValues;
+	private int[][]				maxY;
 	
 	public Chunk(World w, int x, int y)
 	{
@@ -19,7 +19,7 @@ public class Chunk
 		this.blocks = b;
 		this.world = w;
 		this.chunkX = x;
-		this.chunkY = y;
+		this.chunkZ = y;
 		this.lightValues = new float[16][64][16];
 		this.maxY = new int[16][16];
 		initializeLightValues(false);
@@ -62,7 +62,17 @@ public class Chunk
 			{
 				for (int k = z - 8; k <= z + 8; k++)
 				{
-					world.setLightValue(i, j, k, f);
+					int x1 = i + (chunkX * 16) - 512;
+					int z1 = k + (chunkZ * 16) - 512;
+					
+					int offX = Math.abs(i - x);
+					int offY = Math.abs(j - y);
+					int offZ = Math.abs(k - z);
+					int offset = offX + offY + offZ;
+					float f1 = offset * 0.1F;
+					float f2 = f - f1 * 0.1F;
+					float f3 = Math.max(world.getLightValue(x1, j, z1), f2);
+					world.setLightValue(x1, j, z1, f3);
 				}
 			}
 		}
@@ -74,14 +84,15 @@ public class Chunk
 		z %= 16;
 		return this.blocks[x][y][z];
 	}
-
+	
 	public float getLightValue(int x, int y, int z)
 	{
 		x %= 16;
 		z %= 16;
-		return canBlockSeeSky(x, y, z) ? 1F : lightValues[x][y][z];
+		float f = lightValues[x][y][z];
+		return canBlockSeeSky(x, y, z) ? 1F : f;
 	}
-
+	
 	private boolean canBlockSeeSky(int x, int y, int z)
 	{
 		x %= 16;
@@ -96,7 +107,7 @@ public class Chunk
 		maxY[x][z] = y;
 		return true;
 	}
-
+	
 	public void setLightValue(int x, int y, int z, float f)
 	{
 		x %= 16;

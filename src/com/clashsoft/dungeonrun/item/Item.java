@@ -2,14 +2,14 @@ package com.clashsoft.dungeonrun.item;
 
 public class Item implements IStackable
 {
-	public static Item[] itemsList = new Item[4096];
+	public static Item[]	itemsList		= new Item[4096];
 	
-	public static Item swordWood = new ItemSword(1, EnumToolMaterial.WOOD);
+	public static Item		swordWood		= new ItemSword(1, EnumToolMaterial.WOOD);
 	
-	public int itemID;
+	public int				itemID;
 	
-	public int maxUses = 0;
-	public int maxStackSize = 64;
+	public int				maxUses			= 0;
+	public int				maxStackSize	= 64;
 	
 	public Item(int id)
 	{
@@ -40,7 +40,7 @@ public class Item implements IStackable
 	{
 		return maxStackSize;
 	}
-
+	
 	public float getDamageVsEntity(ItemStack stack)
 	{
 		return 0F;

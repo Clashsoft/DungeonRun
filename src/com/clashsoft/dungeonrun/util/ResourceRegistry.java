@@ -6,10 +6,10 @@ import org.newdawn.slick.SpriteSheet;
 
 public class ResourceRegistry
 {
-	public static Image chaotic_development_bg;
-	public static Image buttons;
-	public static Image icons;
-	public static SpriteSheet iconsSprite;
+	public static Image			chaotic_development_bg;
+	public static Image			buttons;
+	public static Image			icons;
+	public static SpriteSheet	iconsSprite;
 	
 	static
 	{

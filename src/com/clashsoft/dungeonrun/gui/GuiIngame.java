@@ -17,12 +17,12 @@ import com.clashsoft.dungeonrun.util.DimensionHelper.Pos3;
 
 public class GuiIngame extends GuiScreen
 {
-	public EntityPlayer player;
-	public RenderBlocks renderBlocks;
+	public EntityPlayer					player;
+	public RenderBlocks					renderBlocks;
 	
-	public int mouseBlockX, mouseBlockY, mouseBlockZ;
+	public int							mouseBlockX, mouseBlockY, mouseBlockZ;
 	
-	private Map<Pos3<Float>, Entity> entityMap = new HashMap<Pos3<Float>, Entity>();
+	private Map<Pos3<Float>, Entity>	entityMap	= new HashMap<Pos3<Float>, Entity>();
 	
 	public GuiIngame(EntityPlayer player)
 	{
@@ -30,12 +30,12 @@ public class GuiIngame extends GuiScreen
 		this.player = player;
 		this.renderBlocks = DungeonRun.instance.renderEngine.blockRenderer;
 	}
-
+	
 	@Override
 	public void initGui() throws SlickException
 	{
 	}
-
+	
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
@@ -43,7 +43,7 @@ public class GuiIngame extends GuiScreen
 		
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		
-		//Always sync the block renderer with the display and the player
+		// Always sync the block renderer with the display and the player
 		renderBlocks.width = par1;
 		renderBlocks.heigth = par2;
 		for (int x = (int) (player.posX + RenderBlocks.BLOCKS_X); x > player.posX - RenderBlocks.BLOCKS_X; x--)
@@ -52,7 +52,7 @@ public class GuiIngame extends GuiScreen
 			{
 				for (int y = 0; y < 64; y++)
 				{
-					Entity e = entityMap.get(new Pos3<Float>((float)x, (float)y, (float)z));
+					Entity e = entityMap.get(new Pos3<Float>((float) x, (float) y, (float) z));
 					if (e != null)
 						e.getRenderer().render(e, par1, par2);
 					
@@ -73,18 +73,19 @@ public class GuiIngame extends GuiScreen
 			}
 		}
 	}
-
+	
 	private boolean isMouseOverBlock(int x, int y, int z)
 	{
-		float posX = renderBlocks.getRenderPosX(renderBlocks.getMiddleBlockX(), renderBlocks.getOffset(x, player.posX));
-		float posY = renderBlocks.getRenderPosY(renderBlocks.getMiddleBlockY(), renderBlocks.getOffset(y, player.posY), renderBlocks.getOffset(z, player.posZ));
+		float offsetX = renderBlocks.getOffset(x, player.posX);
+		float offsetY = renderBlocks.getOffset(z, player.posZ) + 1.5F;
+		float offsetZ = renderBlocks.getOffset(y, player.posY);
 		
-		float f = 544 / width;
-		float f2 = 256 / height;
+		float posX = renderBlocks.getRenderPosX(renderBlocks.getMiddleBlockX(), offsetX);
+		float posY = renderBlocks.getRenderPosY(renderBlocks.getMiddleBlockY(), offsetY, offsetZ);
 		
-		return isMouseInRegion(posX, posY, 16F, 16F) && renderBlocks.canSeeBlock(player.worldObj, x, y, z, player.posX, player.posY, player.posZ);
+		return isMouseInRegion(posX + 8F, posY, 16F, 16F) && renderBlocks.canSeeBlock(player.worldObj, x, y, z, player.posX, player.posY, player.posZ);
 	}
-
+	
 	@Override
 	public void updateScreen() throws SlickException
 	{
@@ -102,7 +103,7 @@ public class GuiIngame extends GuiScreen
 			float z = (int) Math.floor(e.posZ);
 			entityMap.put(new Pos3<Float>(x, y, z), e);
 			entityMap.put(new Pos3<Float>(x + 1F, y, z), e);
-			//entityMap.put(new Pos3<Float>(x - 1F, y, z), e);
+			// entityMap.put(new Pos3<Float>(x - 1F, y, z), e);
 			entityMap.put(new Pos3<Float>(x, y, z - 1), e);
 		}
 		

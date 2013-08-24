@@ -4,7 +4,7 @@ import com.clashsoft.dungeonrun.DungeonRun;
 
 public class FontRenderer
 {
-	public DungeonRun dr;
+	public DungeonRun	dr;
 	
 	public FontRenderer(DungeonRun kq)
 	{

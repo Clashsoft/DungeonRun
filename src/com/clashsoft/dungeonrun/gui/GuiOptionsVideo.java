@@ -8,7 +8,7 @@ import com.clashsoft.dungeonrun.DungeonRun;
 
 public class GuiOptionsVideo extends GuiListScreen
 {
-	private GuiScreen superGui;
+	private GuiScreen	superGui;
 	
 	public GuiOptionsVideo(GuiScreen superGui)
 	{
@@ -21,7 +21,7 @@ public class GuiOptionsVideo extends GuiListScreen
 	{
 		return "Video Options";
 	}
-
+	
 	@Override
 	public void addEntrys(List<String> s)
 	{
@@ -30,7 +30,7 @@ public class GuiOptionsVideo extends GuiListScreen
 		s.add("Use VSync: ");
 		s.add("Back");
 	}
-
+	
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
@@ -42,7 +42,7 @@ public class GuiOptionsVideo extends GuiListScreen
 			this.dr.displayGuiScreen(superGui);
 		this.dr.gameSettings.updateGame();
 	}
-
+	
 	@Override
 	public String getEntry(int i)
 	{

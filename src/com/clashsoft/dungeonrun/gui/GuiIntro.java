@@ -3,19 +3,18 @@ package com.clashsoft.dungeonrun.gui;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.gui.GuiScreen;
 import com.clashsoft.dungeonrun.util.ResourceRegistry;
 
 public class GuiIntro extends GuiScreen
 {
-	private int tick = 0;
-
+	private int	tick	= 0;
+	
 	@Override
 	public void initGui()
 	{
 		
 	}
-
+	
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
@@ -26,7 +25,7 @@ public class GuiIntro extends GuiScreen
 		ResourceRegistry.chaotic_development_bg.draw(0, 0);
 		GL11.glScalef(1600F / par1, 1200F / par2, 1F);
 	}
-
+	
 	@Override
 	public void updateScreen() throws SlickException
 	{
@@ -37,5 +36,5 @@ public class GuiIntro extends GuiScreen
 			this.dr.displayGuiScreen(new GuiMainMenu());
 		}
 	}
-
+	
 }

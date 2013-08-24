@@ -1,16 +1,14 @@
 package com.clashsoft.dungeonrun.engine;
 
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
 
 public class RenderEngine
 {
-	public DungeonRun dr;
+	public DungeonRun	dr;
 	
-	public RenderBlocks blockRenderer;
+	public RenderBlocks	blockRenderer;
 	
 	public RenderEngine(DungeonRun dungeonRun)
 	{
