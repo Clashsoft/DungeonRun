@@ -5,7 +5,7 @@ import com.clashsoft.dungeonrun.item.ItemStack;
 public class InventoryPlayer
 {
 	public EntityPlayer	player;
-	private ItemStack[]	inventory	= new ItemStack[20];
+	private ItemStack[]	inventory	= new ItemStack[64];
 	
 	public InventoryPlayer(EntityPlayer ep)
 	{
