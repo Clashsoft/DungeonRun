@@ -6,7 +6,7 @@ public class NBTTagString extends NBTBase
 	
 	public NBTTagString(String name, String value)
 	{
-		super(TYPE_STRING, name);
+		super(TYPE_STRING, name, value);
 		this.value = value;
 	}
 	

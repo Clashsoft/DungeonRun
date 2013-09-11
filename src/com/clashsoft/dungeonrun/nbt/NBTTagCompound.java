@@ -11,7 +11,13 @@ public class NBTTagCompound extends NBTBase
 	
 	public NBTTagCompound(String name)
 	{
-		super(TYPE_COMPOUND, name);
+		super(TYPE_COMPOUND, name, null);
+	}
+	
+	@Override
+	public Map<String, NBTBase> getValue()
+	{
+		return tags;
 	}
 	
 	public boolean setTag(String name, NBTBase tag)

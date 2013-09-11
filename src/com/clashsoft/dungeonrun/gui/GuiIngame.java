@@ -1,7 +1,6 @@
 package com.clashsoft.dungeonrun.gui;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
@@ -90,10 +89,16 @@ public class GuiIngame extends GuiScreen
 	public void updateScreen() throws SlickException
 	{
 		Input input = this.dr.theGameContainer.getInput();
-		for (Entity e : player.worldObj.getEntitys())
+		
+		try
+		{
+		for (Entity e : this.dr.theWorld.getEntitys())
 		{
 			e.updateEntity();
 		}
+		}
+		catch (ConcurrentModificationException ex)
+		{}
 		
 		entityMap.clear();
 		for (Entity e : player.worldObj.getEntitys())

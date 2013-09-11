@@ -1,6 +1,7 @@
 package com.clashsoft.dungeonrun.nbt;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,8 +17,14 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 
 	public NBTTagList(String name, int capacity)
 	{
-		super(TYPE_LIST, name);
+		super(TYPE_LIST, name, null);
 		tags = new ArrayList(capacity);
+	}
+	
+	@Override
+	public ArrayList<NBTBase> getValue()
+	{
+		return tags;
 	}
 	
 	public void addTag(NBTBase tag)
@@ -138,14 +145,19 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		return list;
 	}
 
-	public <T> T[] toArray(T[] array)
+	public <T> T[] toArray(Class<T> arrayType)
 	{
-		return tags.toArray(array);
+		T[] array = (T[]) Array.newInstance(arrayType, this.tags.size());
+		for (int i = 0; i < this.tagCount(); i++)
+		{
+			array[i] = (T) this.tagAt(i).getValue();
+		}
+		return array;
 	}
 
-	public <T> T toArray()
+	public <T> T[] toArray()
 	{
-		return (T) tags.toArray();
+		return (T[]) tags.toArray();
 	}
 	
 	@Override

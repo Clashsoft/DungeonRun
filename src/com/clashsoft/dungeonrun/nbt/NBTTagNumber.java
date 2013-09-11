@@ -6,7 +6,7 @@ public abstract class NBTTagNumber extends NBTBase
 	
 	public NBTTagNumber(byte type, String name, Number value)
 	{
-		super(type, name);
+		super(type, name, value);
 		this.value = value;
 	}
 	

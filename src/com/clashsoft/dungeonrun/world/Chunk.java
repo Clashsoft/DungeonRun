@@ -157,7 +157,7 @@ public class Chunk implements INBTSaveable
 		nbt.setInteger("ChunkX", this.chunkX);
 		nbt.setInteger("ChunkZ", this.chunkZ);
 		nbt.setTagList(NBTTagList.fromList("BlockIDs", Arrays.asList(blockIDs)));
-		nbt.setTagList(NBTTagList.fromList("BlockMetadataValues", Arrays.asList(metadataValues)));
+		nbt.setTagList(NBTTagList.fromList("BlockMs", Arrays.asList(metadataValues)));
 		//nbt.setTagList(NBTTagList.fromList("LightValues", Arrays.asList(lightValues)));
 	}
 	
@@ -165,8 +165,9 @@ public class Chunk implements INBTSaveable
 	{
 		this.chunkX = nbt.getInteger("ChunkX");
 		this.chunkZ = nbt.getInteger("ChunkZ");
-		this.blockIDs = nbt.getTagList("BlockIDs").toArray(new Integer[blockIDs.length]);
-		this.metadataValues = nbt.getTagList("BlockMetadataValues").toArray(new Integer[metadataValues.length]);
+		this.blockIDs = nbt.getTagList("BlockIDs").toArray(Integer.class);
+		this.metadataValues = nbt.getTagList("BlockMs").toArray(Integer.class);
+		
 		//this.lightValues = nbt.getTagList("LightValues").toArray();
 	}
 }

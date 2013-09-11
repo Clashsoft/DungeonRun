@@ -24,11 +24,17 @@ public abstract class NBTBase
 	
 	public String name;
 	public byte type;
+	public Object value;
 	
-	public NBTBase(byte type, String name)
+	public NBTBase(byte type, String name, Object value)
 	{
 		this.type = type;
 		this.name = name;
+	}
+	
+	public Object getValue()
+	{
+		return value;
 	}
 	
 	@Override

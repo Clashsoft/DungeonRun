@@ -6,7 +6,7 @@ public class NBTTagBoolean extends NBTBase
 	
 	public NBTTagBoolean(String name, boolean value)
 	{
-		super(TYPE_BOOLEAN, name);
+		super(TYPE_BOOLEAN, name, value);
 		this.value = value;
 	}
 
