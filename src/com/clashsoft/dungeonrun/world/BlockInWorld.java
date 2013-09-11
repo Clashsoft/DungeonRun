@@ -5,8 +5,8 @@ import com.clashsoft.dungeonrun.block.Block;
 public class BlockInWorld
 {
 	public World	world;
-	private int		blockID;
-	private int		metadata;
+	public int		blockID;
+	public int		metadata;
 	public int		x, y, z;
 	
 	public BlockInWorld(World w, int id, int metadata)

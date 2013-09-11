@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.entity;
 
+import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.world.World;
 
 public abstract class EntityLiving extends EntityDamagable
@@ -27,5 +28,21 @@ public abstract class EntityLiving extends EntityDamagable
 		
 		if (isCollidedVertically())
 			isJumping = false;
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+		
+		nbt.setBoolean("IsJumping", this.isJumping);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+		
+		this.isJumping = nbt.getBoolean("IsJumping");
 	}
 }

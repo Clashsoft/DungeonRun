@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.entity;
 
+import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.world.World;
 
 public abstract class EntityDamagable extends Entity
@@ -23,4 +24,20 @@ public abstract class EntityDamagable extends Entity
 	}
 	
 	public abstract boolean canBeDamagedBy(DamageSource source);
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+		
+		nbt.setFloat("Health", this.health);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+		
+		this.health = nbt.getFloat("Health");
+	}
 }

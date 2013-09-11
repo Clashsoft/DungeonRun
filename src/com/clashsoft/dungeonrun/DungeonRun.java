@@ -15,6 +15,7 @@ import com.clashsoft.dungeonrun.engine.SoundEngine;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.gui.*;
 import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.dungeonrun.world.WorldInfo;
 
 public class DungeonRun extends BasicGame
 {
@@ -69,7 +70,7 @@ public class DungeonRun extends BasicGame
 				g.drawString(String.format("PlayerPos: (%.2f;%.2f;%.2f)", thePlayer.posX, thePlayer.posY, thePlayer.posZ), 10, 30);
 				g.drawString("PlayerRot: " + thePlayer.rot, 10, 50);
 				g.drawString(String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", thePlayer.velocityX, thePlayer.velocityY, thePlayer.velocityZ), 10, 70);
-				g.drawString("PlayerWorld: " + thePlayer.worldObj.name, 10, 90);
+				g.drawString("PlayerWorld: " + thePlayer.worldObj.worldInfo.getName(), 10, 90);
 			}
 			
 			if (theIngameGui != null)
@@ -109,7 +110,7 @@ public class DungeonRun extends BasicGame
 					file.mkdir();
 				String path = file.getPath() + "/" + getDateTime() + ".png";
 				ImageOut.write(i, path, false);
-				System.out.println("Screenshot saved as 1" + path);
+				System.out.println("Screenshot saved as " + path);
 			}
 			catch (Exception ex)
 			{
@@ -151,9 +152,9 @@ public class DungeonRun extends BasicGame
 	
 	public static File getSaveDataFolder()
 	{
-		
 		File f = new File(getAppdataDirectory(), "dungeonrun");
-		f.mkdir();
+		if (!f.exists())
+			f.mkdirs();
 		return f;
 	}
 	
@@ -194,23 +195,66 @@ public class DungeonRun extends BasicGame
 	
 	public void startGame() throws SlickException // TODO Proper loading
 	{
-		this.theWorld = new World("TestWorld");
+		this.theWorld = new World(new WorldInfo("TestWorld"));
+		loadWorld(theWorld);
+		
 		this.thePlayer = new EntityPlayer(this.theWorld);
 		thePlayer.posY = 34F;
 		this.theWorld.spawnEntityInWorld(this.thePlayer);
 		this.theIngameGui = (GuiIngame) this.displayGuiScreen(new GuiIngame(this.thePlayer));
 	}
 	
+	public void endGame() throws SlickException
+	{
+		saveWorld(this.theWorld);
+		this.displayGuiScreen(new GuiMainMenu());
+	}
+	
 	public void pauseGame() throws SlickException
 	{
 		this.isPaused = true;
 		this.displayGuiScreen(new GuiPauseMenu());
+//		new Thread(new Runnable()
+//		{
+//			@Override
+//			public void run()
+//			{
+//				saveWorld(theWorld);
+//			}
+//		}).start();
 	}
 	
 	public void unpauseGame() throws SlickException
 	{
 		this.isPaused = false;
 		this.displayGuiScreen(theIngameGui);
+	}
+	
+	public void saveWorld(World world)
+	{
+		String worldFileName = world.worldInfo.getFileName();
+		
+		File saves = new File(getSaveDataFolder(), "saves");
+		if (!saves.exists())
+			saves.mkdirs();
+		
+		File worldFile = new File(saves, worldFileName + ".drs");
+		world.save(worldFile);
+	}
+	
+	public boolean loadWorld(World world)
+	{
+		String worldFileName = world.worldInfo.getFileName();
+		
+		File saves = new File(getSaveDataFolder(), "saves");
+		if (!saves.exists())
+		{
+			saves.mkdirs();
+			return false;
+		}
+		
+		File worldFile = new File(saves, worldFileName + ".drs");
+		return world.load(worldFile);
 	}
 	
 	@Override

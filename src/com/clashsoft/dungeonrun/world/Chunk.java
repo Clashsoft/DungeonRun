@@ -1,52 +1,73 @@
 package com.clashsoft.dungeonrun.world;
 
-public class Chunk
+import java.util.Arrays;
+
+import com.clashsoft.dungeonrun.nbt.INBTSaveable;
+import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
+import com.clashsoft.dungeonrun.nbt.NBTTagList;
+
+public class Chunk implements INBTSaveable
 {
 	public final World			world;
-	public final int			chunkX;
-	public final int			chunkZ;
-	private BlockInWorld[][][]	blocks;
-	private float[][][]			lightValues;
-	private int[][]				maxY;
+	
+	public int					chunkX;
+	public int					chunkZ;
+	
+	private BlockInWorld[]		blocks;
+	private Integer[]				blockIDs;
+	private Integer[]				metadataValues;
+	
+	private Float[]				lightValues;
+	private Integer[]				maxY;
 	
 	public Chunk(World w, int x, int y)
 	{
-		this(w, x, y, new BlockInWorld[16][64][16]);
+		this(w, x, y, new BlockInWorld[index(16, 64, 16)]);
 	}
 	
-	public Chunk(World w, int x, int y, BlockInWorld[][][] b)
+	public Chunk(World w, int x, int y, BlockInWorld[] b)
 	{
-		this.blocks = b;
 		this.world = w;
 		this.chunkX = x;
 		this.chunkZ = y;
-		this.lightValues = new float[16][64][16];
-		this.maxY = new int[16][16];
+		
+		this.blocks = b;
+		this.blockIDs = new Integer[blocks.length];
+		this.metadataValues = new Integer[blocks.length];
+		
+		this.lightValues = new Float[blocks.length];
+		this.maxY = new Integer[16 * 16];
 		initializeLightValues(false);
 	}
 	
 	protected void initializeLightValues(boolean flag)
 	{
-		for (int i = 0; i < blocks.length; i++)
+		for (int i = 0; i < 16; i++)
 		{
-			for (int j = 0; j < blocks[i].length; j++)
+			for (int j = 0; j < 64; j++)
 			{
-				for (int k = 0; k < blocks[i][j].length; k++)
+				for (int k = 0; k < 16; k++)
 				{
-					BlockInWorld block = world.getBlock(i, j, k);
-					lightValues[i][j][k] = (block != null ? block.getLightValue() : 0.1F);
+					BlockInWorld block = world.getBlock(chunkPosToWorldPosX(i), j, chunkPosToWorldPosZ(k));
+					lightValues[index(i, j, k)] = (block != null ? block.getLightValue() : 0.1F);
 				}
 			}
 		}
 	}
 	
-	public void setBlock(int blockId, int meta, int x, int y, int z, int flags)
+	public void setBlock(int blockId, int metadata, int x, int y, int z, int flags)
 	{
-		x %= 16;
-		z %= 16;
-		this.blocks[x][y][z] = new BlockInWorld(world, blockId, meta);
-		float f = this.blocks[x][y][z].getLightValue();
+		x &= 15;
+		z &= 15;
+		int i = index(x, y, z);
+		if (blocks[i] == null)
+			this.blocks[index(x, y, z)] = new BlockInWorld(world, blockId, metadata);
 		
+		blocks[i].world = world;
+		blocks[i].blockID = blockIDs[i] = blockId;
+		blocks[i].metadata = metadataValues[i] = metadata;
+		
+		float f = this.blocks[index(x, y, z)].getLightValue();
 		if ((flags & 1) != 0)
 		{
 			updateLightValues(x, y, z, f);
@@ -80,38 +101,72 @@ public class Chunk
 	
 	public BlockInWorld getBlock(int x, int y, int z)
 	{
-		x %= 16;
-		z %= 16;
-		return this.blocks[x][y][z];
+		x &= 15;
+		z &= 15;
+		return this.blocks[index(x, y, z)];
 	}
 	
 	public float getLightValue(int x, int y, int z)
 	{
-		x %= 16;
-		z %= 16;
-		float f = lightValues[x][y][z];
+		x &= 15;
+		z &= 15;
+		float f = lightValues[index(x, y, z)];
 		return canBlockSeeSky(x, y, z) ? 1F : f;
 	}
 	
 	private boolean canBlockSeeSky(int x, int y, int z)
 	{
-		x %= 16;
-		z %= 16;
-		if (maxY[x][z] == y)
+		x &= 15;
+		z &= 15;
+		int index = x << 4 | z;
+		if (maxY[index] != null && maxY[index] == y)
 			return true;
 		for (int i = y; i < 64; i++)
 		{
 			if (getBlock(x, i, z) != null && !getBlock(x, i, z).isAir())
 				return false;
 		}
-		maxY[x][z] = y;
+		maxY[x << 4 | z] = y;
 		return true;
 	}
 	
 	public void setLightValue(int x, int y, int z, float f)
 	{
-		x %= 16;
-		z %= 16;
-		lightValues[x][y][z] = f;
+		x &= 15;
+		z &= 15;
+		lightValues[index(x, y, z)] = f;
+	}
+	
+	protected static int index(int x, int y, int z)
+	{
+		return x << 12 | y << 4 | z;
+	}
+	
+	protected int chunkPosToWorldPosX(int x)
+	{
+		return ((chunkX - (World.CHUNKS_X / 2)) * 16) + x;
+	}
+	
+	protected int chunkPosToWorldPosZ(int z)
+	{
+		return ((chunkZ - (World.CHUNKS_Z / 2)) * 16) + z;
+	}
+
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		nbt.setInteger("ChunkX", this.chunkX);
+		nbt.setInteger("ChunkZ", this.chunkZ);
+		nbt.setTagList(NBTTagList.fromList("BlockIDs", Arrays.asList(blockIDs)));
+		nbt.setTagList(NBTTagList.fromList("BlockMetadataValues", Arrays.asList(metadataValues)));
+		//nbt.setTagList(NBTTagList.fromList("LightValues", Arrays.asList(lightValues)));
+	}
+	
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		this.chunkX = nbt.getInteger("ChunkX");
+		this.chunkZ = nbt.getInteger("ChunkZ");
+		this.blockIDs = nbt.getTagList("BlockIDs").toArray(new Integer[blockIDs.length]);
+		this.metadataValues = nbt.getTagList("BlockMetadataValues").toArray(new Integer[metadataValues.length]);
+		//this.lightValues = nbt.getTagList("LightValues").toArray();
 	}
 }

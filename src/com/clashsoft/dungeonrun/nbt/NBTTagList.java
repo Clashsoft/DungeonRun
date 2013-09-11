@@ -1,14 +1,13 @@
 package com.clashsoft.dungeonrun.nbt;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class NBTTagList extends NBTBase implements Iterable
-{
-	private static final long	serialVersionUID	= 9188374575161487548L;
-	
-	private List<NBTBase> tags;
+public class NBTTagList extends NBTBase implements Iterable<NBTBase>
+{	
+	private ArrayList<NBTBase> tags;
 	
 	public NBTTagList(String name)
 	{
@@ -21,12 +20,28 @@ public class NBTTagList extends NBTBase implements Iterable
 		tags = new ArrayList(capacity);
 	}
 	
-	public boolean addTag(String name, NBTBase tag)
+	public void addTag(NBTBase tag)
 	{
-		boolean ret = tags.contains(tag);
-		tag.name = name;
 		tags.add(tag);
-		return ret;
+	}
+	
+	public void addTag(String name, NBTBase tag)
+	{
+		tag.name = name;
+		addTag(tag);
+	}
+	
+	public void setTag(int index, NBTBase tag)
+	{
+		ensureSize(index + 1);
+		tags.set(index, tag);
+	}
+	
+	private void ensureSize(int size)
+	{
+		tags.ensureCapacity(size);
+		while(tags.size() < size)
+			tags.add(null);
 	}
 	
 	public int tagCount()
@@ -75,18 +90,103 @@ public class NBTTagList extends NBTBase implements Iterable
 		addTag(name, new NBTTagDouble(name, value));
 	}
 	
+	public void addLong(String name, long value)
+	{
+		addTag(name, new NBTTagLong(name, value));
+	}
+	
 	public void addString(String name, String value)
 	{
 		addTag(name, new NBTTagString(name, value));
 	}
 	
-	public void addTagList(String name, NBTTagList list)
+	public void addTagList(NBTTagList list)
 	{
-		addTag(name, list);
+		if (list != this)
+			addTag(name, list);
 	}
 	
-	public void addTagCompound(String name, NBTTagCompound compound)
+	public void addTagCompound(NBTTagCompound compound)
 	{
-		addTag(name, compound);
+		addTag(compound);
+	}
+	
+	public static NBTTagList fromList(String name, List args)
+	{
+		NBTTagList list = new NBTTagList(name, args.size());
+		for (int i = 0; i < args.size(); i++)
+		{
+			String tagName = name + "@" + i;
+			NBTBase base = NBTBase.createFromObject(tagName, args.get(i));
+			if (base != null)
+				list.addTag(base);
+		}
+		return list;
+	}
+	
+	public static <T extends Serializable> NBTTagList fromArray(String name, T... args)
+	{
+		NBTTagList list = new NBTTagList(name, args.length);
+		for (int i = 0; i < args.length; i++)
+		{
+			String tagName = name + "@" + i;
+			T t = args[i];
+			NBTBase tag = NBTBase.createFromObject(tagName, t);
+			if (tag != null)
+				list.addTag(tagName, tag);
+		}
+		return list;
+	}
+
+	public <T> T[] toArray(T[] array)
+	{
+		return tags.toArray(array);
+	}
+
+	public <T> T toArray()
+	{
+		return (T) tags.toArray();
+	}
+	
+	@Override
+	public boolean valueEquals(NBTBase that)
+	{
+		return tags.equals(((NBTTagList)that).tags);
+	}
+	
+	@Override
+	public String writeValueString(String prefix)
+	{
+		StringBuilder sb = new StringBuilder(tags.toString().length());
+		
+		sb.append("\n" + prefix + "[");
+		
+		for (int key = 0; key < tags.size(); key++)
+		{
+			NBTBase value = tags.get(key);
+			sb.append("\n").append(prefix).append(" (").append(key).append(':');
+			sb.append(value.createString(prefix + " ")).append(')');
+		}
+		
+		sb.append("\n" + prefix + "]");
+		return sb.toString();
+	}
+
+	@Override
+	public void readValueString(String dataString)
+	{
+		int pos1 = dataString.indexOf('[') + 1;
+		int pos2 = dataString.lastIndexOf(']');
+		if (pos1 < 0 || pos2 < 0)
+			return;
+		dataString = dataString.substring(pos1, pos2).trim();
+		for (String sub : NBTTagCompound.split(dataString))
+		{	
+			int point = sub.indexOf(':');
+			String tagID = sub.substring(0, point);
+			String tag = sub.substring(point + 1, sub.length());
+			NBTBase base = NBTParser.parseTag(tag);
+			this.setTag(Integer.parseInt(tagID), base);
+		}
 	}
 }

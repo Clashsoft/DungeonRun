@@ -20,14 +20,7 @@ public class Block implements IStackable
 	public static Block		stone			= new Block(7).setBlockName("Stone");
 	public static Block		cobbleStone		= new Block(8).setBlockName("Cobblestone");
 	public static Block		planks			= new Block(9).setBlockName("Planks");
-	public static Block		water			= new Block(10).setBlockName("Water").setNoTop();	// Water
-																								// is
-																								// used
-																								// to
-																								// make
-																								// the
-																								// world
-																								// boundaries
+	public static Block		water			= new Block(10).setBlockName("Water").setNoTop();
 																								
 	public int				blockID;
 	public boolean			canStepOnBlock	= true;
@@ -45,6 +38,12 @@ public class Block implements IStackable
 	public int getID()
 	{
 		return blockID;
+	}
+	
+	@Override
+	public boolean isBlock()
+	{
+		return false;
 	}
 	
 	public Block setNoTop()

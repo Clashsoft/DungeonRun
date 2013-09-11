@@ -3,16 +3,18 @@ package com.clashsoft.dungeonrun.entity;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.entity.render.RenderEntity;
+import com.clashsoft.dungeonrun.nbt.INBTSaveable;
+import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
 
-public abstract class Entity
+public abstract class Entity implements INBTSaveable
 {
 	public static int	nextEntityId	= 0;
 	
-	public int			entityId;
+	public int	entityId;
 	
-	public World		worldObj;
+	public final World	worldObj;
 	
 	public double		posX			= 0.5;
 	public double		posY			= 32;
@@ -26,8 +28,7 @@ public abstract class Entity
 	
 	public Entity(World world)
 	{
-		this.entityId = nextEntityId;
-		nextEntityId++;
+		this.entityId = nextEntityId++;
 		this.worldObj = world;
 		this.setLocation(0.5F, 32, 0.5F);
 		this.setVelocity(0, 0, 0);
@@ -185,4 +186,50 @@ public abstract class Entity
 	public abstract RenderEntity getRenderer() throws SlickException;
 	
 	public abstract String getTexture();
+
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		nbt.setString("EntityType", EntityList.getNameFromClass(getClass()));
+		nbt.setInteger("EntityID", this.entityId);
+		
+		NBTTagCompound pos = new NBTTagCompound("Position");
+		pos.setDouble("X", this.posX);
+		pos.setDouble("Y", this.posY);
+		pos.setDouble("Z", this.posZ);
+		nbt.setTagCompound(pos);
+		
+		NBTTagCompound momentum = new NBTTagCompound("Momentum");
+		momentum.setDouble("X", this.velocityX);
+		momentum.setDouble("Y", this.velocityY);
+		momentum.setDouble("Z", this.velocityZ);
+		nbt.setTagCompound(momentum);
+		
+		nbt.setByte("Rotation", this.rot);
+		nbt.setInteger("AirTime", this.airTime);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		this.entityId = nbt.getInteger("EntityID");
+		
+		NBTTagCompound pos = nbt.getTagCompound("Position");
+		if (pos != null)
+		{
+			this.posX = pos.getDouble("X");
+			this.posY = pos.getDouble("Y");
+			this.posZ = pos.getDouble("Z");
+		}
+		
+		NBTTagCompound momentum = nbt.getTagCompound("Momentum");
+		if (momentum != null)
+		{
+			this.velocityX = momentum.getDouble("X");
+			this.velocityY = momentum.getDouble("Y");
+			this.velocityZ = momentum.getDouble("Z");
+		}
+		
+		this.rot = nbt.getByte("Rotation");
+		this.airTime = nbt.getInteger("AirTime");
+	}
 }

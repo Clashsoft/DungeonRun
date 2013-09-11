@@ -6,6 +6,7 @@ import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.entity.render.RenderEntity;
 import com.clashsoft.dungeonrun.entity.render.RenderPlayer;
 import com.clashsoft.dungeonrun.gui.GuiDeath;
+import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.world.World;
 
 public class EntityPlayer extends EntityLiving
@@ -44,7 +45,7 @@ public class EntityPlayer extends EntityLiving
 		
 		boolean b = canMove(f, this.rot) || canMove(1 - f, this.rot);
 		
-		if ((stepsWalked >= 8 && (f >= 0.499F && f <= 0.501F)) || !b)
+		if ((stepsWalked >= 5 && (f >= 0.499F && f <= 0.501F)) || !b)
 		{
 			this.isWalking = false;
 			this.isSprinting = false;
@@ -95,5 +96,23 @@ public class EntityPlayer extends EntityLiving
 	public boolean canBeDamagedBy(DamageSource source)
 	{
 		return true;
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+		nbt.setInteger("StepsWalked", this.stepsWalked);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+		this.stepsWalked = nbt.getInteger("StepsWalked");
+		
+		NBTTagCompound inventory = new NBTTagCompound("Inventory");
+		this.inventory.writeToNBT(inventory);
+		nbt.setTagCompound(inventory);
 	}
 }

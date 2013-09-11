@@ -1,6 +1,10 @@
 package com.clashsoft.dungeonrun.item;
 
-public class ItemStack
+import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.nbt.INBTSaveable;
+import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
+
+public class ItemStack implements INBTSaveable
 {
 	public IStackable	item;
 	public int			stackSize;
@@ -26,5 +30,24 @@ public class ItemStack
 	public int getMaxStackSize()
 	{
 		return item.getMaxStackSize(this);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		nbt.setInteger("ItemID", item.getID());
+		nbt.setBoolean("IsBlock", item.isBlock());
+		nbt.setInteger("StackSize", this.stackSize);
+		nbt.setInteger("DamageValue", this.metadata);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		boolean isBlock = nbt.getBoolean("IsBlock");
+		int itemID = nbt.getInteger("ItemID");
+		this.item = (isBlock ? Block.blocksList[itemID] : Item.itemsList[itemID]);
+		this.stackSize = nbt.getInteger("StackSize");
+		this.metadata = nbt.getInteger("DamageValue");
 	}
 }

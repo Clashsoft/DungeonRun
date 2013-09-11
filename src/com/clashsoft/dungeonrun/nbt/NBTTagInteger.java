@@ -1,14 +1,24 @@
 package com.clashsoft.dungeonrun.nbt;
 
-public class NBTTagInteger extends NBTBase
-{
-	private static final long	serialVersionUID	= -7242077016744146107L;
-	
+public class NBTTagInteger extends NBTTagNumber
+{	
 	public int value;
 	
 	public NBTTagInteger(String name, int value)
 	{
-		super(TYPE_INT, name);
+		super(TYPE_INT, name, value);
 		this.value = value;
-	}	
+	}
+
+	@Override
+	public char getPostfixChar()
+	{
+		return 'I';
+	}
+
+	@Override
+	public Number readNumber(String number)
+	{
+		return value = Integer.parseInt(number);
+	}
 }
