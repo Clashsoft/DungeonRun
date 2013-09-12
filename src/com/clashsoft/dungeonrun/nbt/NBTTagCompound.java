@@ -22,6 +22,8 @@ public class NBTTagCompound extends NBTBase
 	
 	public boolean setTag(String name, NBTBase tag)
 	{
+		if (name.contains("[") || name.contains("]") || name.contains("{") || name.contains("}"))
+			throw new IllegalArgumentException("Name must not contain [ ] { } !");
 		boolean ret = tags.containsKey(name);
 		tags.put(name, tag);
 		return ret;

@@ -6,7 +6,6 @@ import java.util.*;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.nbt.NBTBase;
@@ -19,21 +18,18 @@ public class World
 	public static final int			WORLDSIZE_Z = 1024;
 	public static final int			CHUNKS_X = WORLDSIZE_X / 16;
 	public static final int			CHUNKS_Z = WORLDSIZE_Z / 16;
-	public static final int			BLOCKTRANSLATE_X = WORLDSIZE_X / 2;
-	public static final int			BLOCKTRANSLATE_Z = WORLDSIZE_Z / 2;
 	
 	public WorldInfo				worldInfo = null;
 	
 	private NBTTagCompound			worldNBT = new NBTTagCompound("World");
 	
-	private Chunk[][]				chunks			= new Chunk[CHUNKS_X][CHUNKS_Z];
+	private Chunk[][]				chunks			= new Chunk[CHUNKS_X * 2][CHUNKS_Z * 2];
 	private Map<Integer, Entity>	entitys			= new HashMap<Integer, Entity>();
 	private List<Integer>			entitysToRemove	= new LinkedList<Integer>();
 	
 	public World(WorldInfo info)
 	{
 		this.worldInfo = info;
-		this.generateTerrain();
 	}
 	
 	public BlockInWorld getBlock(int x, int y, int z)
@@ -41,12 +37,9 @@ public class World
 		if (x >= -WORLDSIZE_X && x < WORLDSIZE_X && y >= 0 && y < 64 && z >= -WORLDSIZE_Z && z < WORLDSIZE_Z)
 		{
 			Chunk c = getChunkAtCoordinates(x, z);
-			if (c != null)
-			{
-				return c.getBlock(x, y, z);
-			}
+			return c.getBlock(x, y, z);
 		}
-		return new BlockInWorld(this, 0, 0);
+		return BlockInWorld.AIR;
 	}
 	
 	public void setBlock(int block, int meta, int x, int y, int z)
@@ -57,8 +50,6 @@ public class World
 	public void setBlock(int block, int meta, int x, int y, int z, int flags)
 	{
 		Chunk c = getChunkAtCoordinates(x, z);
-		if (c == null)
-			c = setChunkAtCoordinates(x, z);
 		c.setBlock(block, meta, x, y, z, flags);
 	}
 	
@@ -67,15 +58,15 @@ public class World
 		// Should be -32 - 31
 		int x1 = (int)(x / 16F);
 		int z1 = (int)(z / 16F);
-		return chunks[x1 + (CHUNKS_X / 2)][z1 + (CHUNKS_Z / 2)];
-	}
-	
-	public Chunk setChunkAtCoordinates(int x, int z)
-	{
-		int x1 = (int)(x / 16F);
-		int z1 = (int)(z / 16F);
-		Chunk c = new Chunk(this, x1 + (CHUNKS_X / 2), z1 + (CHUNKS_X / 2));
-		chunks[c.chunkX][c.chunkZ] = c;
+		int x2 = x1 + (CHUNKS_X);
+		int z2 = z1 + (CHUNKS_Z);
+		
+		Chunk c = chunks[x2][z2];
+		if (c == null)
+		{
+			c = chunks[x2][z2] = new Chunk(this, x1, z1).generate();
+			System.out.println("Generating missing chunk " + c.toString());
+		}
 		return c;
 	}
 	
@@ -108,21 +99,6 @@ public class World
 	public Collection<Entity> getEntitys()
 	{
 		return entitys.values();
-	}
-	
-	public void generateTerrain()
-	{
-		for (int i = 0; i < 32; i++)
-		{
-			for (int j = -32; j < 32; j++)
-			{
-				for (int k = -32; k < 32; k++)
-				{
-					int block = i == 31 ? Block.grass.blockID : Block.dirt.blockID;
-					this.setBlock(block, 0, j, i, k, 0);
-				}
-			}
-		}
 	}
 	
 	public float getLightValue(int x, int y, int z)
@@ -164,7 +140,7 @@ public class World
 			{
 				if (chunks[i][j] != null)
 				{
-					NBTTagCompound chunkNBT = new NBTTagCompound("Chunk[" + i + ";" + j + "]");
+					NBTTagCompound chunkNBT = new NBTTagCompound("Chunk:" + i + ";" + j);
 					chunks[i][j].writeToNBT(chunkNBT);
 					chunkDataList.addTagCompound(chunkNBT);
 				}
@@ -180,7 +156,7 @@ public class World
 		for (Integer i : this.entitys.keySet())
 		{
 			Entity entity = this.entitys.get(i);
-			NBTTagCompound entityNBT = new NBTTagCompound("Entity[" + entity.entityId + "]");
+			NBTTagCompound entityNBT = new NBTTagCompound("Entity#" + entity.entityId);
 			entity.writeToNBT(entityNBT);
 			entityDataList.addTagCompound(entityNBT);
 		}
@@ -203,7 +179,7 @@ public class World
 				{
 					Chunk chunk = new Chunk(this, 0, 0);
 					chunk.readFromNBT((NBTTagCompound)base);
-					chunks[chunk.chunkX][chunk.chunkZ] = chunk;
+					chunks[chunk.chunkX + CHUNKS_X][chunk.chunkZ + CHUNKS_Z] = chunk;
 				}
 			}
 		

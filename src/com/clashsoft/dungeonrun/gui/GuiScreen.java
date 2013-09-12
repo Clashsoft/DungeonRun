@@ -66,4 +66,9 @@ public abstract class GuiScreen
 		double mouseY = (height - Mouse.getY()) / getRescaleFactorY(height) * 1.0D;
 		return (mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY);
 	}
+	
+	public void setWorldSaving(boolean state)
+	{
+		
+	}
 }

@@ -4,6 +4,8 @@ import com.clashsoft.dungeonrun.block.Block;
 
 public class BlockInWorld
 {
+	public static BlockInWorld AIR = new BlockInWorld(null, 0, 0);
+	
 	public World	world;
 	public int		blockID;
 	public int		metadata;
@@ -33,7 +35,7 @@ public class BlockInWorld
 	
 	public boolean isAir()
 	{
-		return blockID == 0;
+		return blockID == 0 || this == AIR;
 	}
 	
 	public float getLightValue()

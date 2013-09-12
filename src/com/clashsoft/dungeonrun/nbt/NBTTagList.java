@@ -1,6 +1,5 @@
 package com.clashsoft.dungeonrun.nbt;
 
-import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -58,7 +57,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	
 	public NBTBase tagAt(int index)
 	{
-		return (index >= 0 && index < tagCount()) ? tags.get(index) : null;
+		return tags.get(index);
 	}
 	
 	@Override
@@ -118,6 +117,19 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		addTag(compound);
 	}
 	
+	public static <T> NBTTagList fromArray(String name, T[] args)
+	{
+		NBTTagList list = new NBTTagList(name, args.length);
+		for (int i = 0; i < args.length; i++)
+		{
+			String tagName = name + "@" + i;
+			NBTBase base = NBTBase.createFromObject(tagName, args[i]);
+			if (base != null)
+				list.addTag(base);
+		}
+		return list;
+	}
+	
 	public static NBTTagList fromList(String name, List args)
 	{
 		NBTTagList list = new NBTTagList(name, args.size());
@@ -127,20 +139,6 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 			NBTBase base = NBTBase.createFromObject(tagName, args.get(i));
 			if (base != null)
 				list.addTag(base);
-		}
-		return list;
-	}
-	
-	public static <T extends Serializable> NBTTagList fromArray(String name, T... args)
-	{
-		NBTTagList list = new NBTTagList(name, args.length);
-		for (int i = 0; i < args.length; i++)
-		{
-			String tagName = name + "@" + i;
-			T t = args[i];
-			NBTBase tag = NBTBase.createFromObject(tagName, t);
-			if (tag != null)
-				list.addTag(tagName, tag);
 		}
 		return list;
 	}
@@ -158,6 +156,30 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	public <T> T[] toArray()
 	{
 		return (T[]) tags.toArray();
+	}
+	
+	public int[] toIntArray()
+	{
+		int[] array = new int[this.tagCount()];
+		for (int i = 0; i < this.tagCount(); i++)
+		{
+			NBTBase base = this.tagAt(i);
+			if (base instanceof NBTTagNumber)
+				array[i] = ((NBTTagInteger)base).value;
+		}
+		return array;
+	}
+	
+	public float[] toFloatArray()
+	{
+		float[] array = new float[this.tagCount()];
+		for (int i = 0; i < this.tagCount(); i++)
+		{
+			NBTBase base = this.tagAt(i);
+			if (base instanceof NBTTagNumber)
+				array[i] = ((NBTTagFloat)base).value;
+		}
+		return array;
 	}
 	
 	@Override

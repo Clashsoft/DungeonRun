@@ -26,7 +26,7 @@ public class GuiDeath extends GuiListScreen
 		if (i == 0)
 			this.dr.startGame();
 		else
-			this.dr.displayGuiScreen(new GuiMainMenu());
+			this.dr.endGame();
 	}
 	
 }

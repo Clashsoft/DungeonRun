@@ -1,43 +1,59 @@
 package com.clashsoft.dungeonrun.world;
 
-import java.util.Arrays;
-
+import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.nbt.INBTSaveable;
 import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.nbt.NBTTagList;
+import com.clashsoft.dungeonrun.util.ArrayConverter;
 
 public class Chunk implements INBTSaveable
 {
-	public final World			world;
+	public final World		world;
 	
-	public int					chunkX;
-	public int					chunkZ;
+	public int				chunkX;
+	public int				chunkZ;
 	
-	private BlockInWorld[]		blocks;
-	private Integer[]				blockIDs;
-	private Integer[]				metadataValues;
+	private int[]		blockIDs;
+	private int[]		metadataValues;
 	
-	private Float[]				lightValues;
-	private Integer[]				maxY;
+	private float[]			lightValues;
+	private int[]		maxY;
 	
 	public Chunk(World w, int x, int y)
-	{
-		this(w, x, y, new BlockInWorld[index(16, 64, 16)]);
-	}
-	
-	public Chunk(World w, int x, int y, BlockInWorld[] b)
 	{
 		this.world = w;
 		this.chunkX = x;
 		this.chunkZ = y;
 		
-		this.blocks = b;
-		this.blockIDs = new Integer[blocks.length];
-		this.metadataValues = new Integer[blocks.length];
+		int length = index(15, 63, 15) + 1;
 		
-		this.lightValues = new Float[blocks.length];
-		this.maxY = new Integer[16 * 16];
-		initializeLightValues(false);
+		this.blockIDs = new int[length];
+		this.metadataValues = new int[length];
+		
+		this.lightValues = new float[length];
+		this.maxY = new int[16 * 16];
+	}
+	
+	protected Chunk generate()
+	{
+		for (int x = 0; x < 16; ++x)
+		{
+			for (int y = 0; y < 32; ++y)
+			{
+				for (int z = 0; z < 16; ++z)
+				{
+					int blockID = 0;
+					if (y == 31)
+						blockID = Block.grass.blockID;
+					else if (y < 31 && y >= 27)
+						blockID = Block.dirt.blockID;
+					else if (y < 27)
+						blockID = Block.stone.blockID;
+					this.setBlock(blockID, 0, x, y, z, 0);
+				}
+			}
+		}
+		return this;
 	}
 	
 	protected void initializeLightValues(boolean flag)
@@ -59,15 +75,12 @@ public class Chunk implements INBTSaveable
 	{
 		x &= 15;
 		z &= 15;
-		int i = index(x, y, z);
-		if (blocks[i] == null)
-			this.blocks[index(x, y, z)] = new BlockInWorld(world, blockId, metadata);
+		int index = index(x, y, z);
 		
-		blocks[i].world = world;
-		blocks[i].blockID = blockIDs[i] = blockId;
-		blocks[i].metadata = metadataValues[i] = metadata;
+		blockIDs[index] = blockId;
+		metadataValues[index] = metadata;
 		
-		float f = this.blocks[index(x, y, z)].getLightValue();
+		float f = this.getLightValue(x, y, z);
 		if ((flags & 1) != 0)
 		{
 			updateLightValues(x, y, z, f);
@@ -103,7 +116,39 @@ public class Chunk implements INBTSaveable
 	{
 		x &= 15;
 		z &= 15;
-		return this.blocks[index(x, y, z)];
+		int index = index(x, y, z);
+		return new BlockInWorld(this.world, getBlockID(index), getBlockMetadata(index));
+	}
+	
+	public int getBlockID(int x, int y, int z)
+	{
+		x &= 15;
+		z &= 15;
+		return this.getBlockID(index(x, y, z));
+	}
+	
+	protected int getBlockID(int index)
+	{
+		try
+		{
+			return this.blockIDs[index];
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int getBlockMetadata(int x, int y, int z)
+	{
+		x &= 15;
+		z &= 15;
+		return this.getBlockMetadata(index(x, y, z));
+	}
+	
+	protected int getBlockMetadata(int index)
+	{
+		return this.metadataValues[index];
 	}
 	
 	public float getLightValue(int x, int y, int z)
@@ -119,14 +164,14 @@ public class Chunk implements INBTSaveable
 		x &= 15;
 		z &= 15;
 		int index = x << 4 | z;
-		if (maxY[index] != null && maxY[index] == y)
+		if (maxY[index] == y)
 			return true;
 		for (int i = y; i < 64; i++)
 		{
 			if (getBlock(x, i, z) != null && !getBlock(x, i, z).isAir())
 				return false;
 		}
-		maxY[x << 4 | z] = y;
+		maxY[index] = y;
 		return true;
 	}
 	
@@ -139,35 +184,32 @@ public class Chunk implements INBTSaveable
 	
 	protected static int index(int x, int y, int z)
 	{
-		return x << 12 | y << 4 | z;
+		return (x << 6 | y) << 4 | z;
 	}
 	
 	protected int chunkPosToWorldPosX(int x)
 	{
-		return ((chunkX - (World.CHUNKS_X / 2)) * 16) + x;
+		return (chunkX * 16) + x;
 	}
 	
 	protected int chunkPosToWorldPosZ(int z)
 	{
-		return ((chunkZ - (World.CHUNKS_Z / 2)) * 16) + z;
+		return (chunkZ * 16) + z;
 	}
-
+	
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("ChunkX", this.chunkX);
 		nbt.setInteger("ChunkZ", this.chunkZ);
-		nbt.setTagList(NBTTagList.fromList("BlockIDs", Arrays.asList(blockIDs)));
-		nbt.setTagList(NBTTagList.fromList("BlockMs", Arrays.asList(metadataValues)));
-		//nbt.setTagList(NBTTagList.fromList("LightValues", Arrays.asList(lightValues)));
+		nbt.setTagList(NBTTagList.fromArray("BlockIDs", ArrayConverter.convertIntArray(blockIDs)));
+		nbt.setTagList(NBTTagList.fromArray("BlockMs", ArrayConverter.convertIntArray(metadataValues)));
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.chunkX = nbt.getInteger("ChunkX");
 		this.chunkZ = nbt.getInteger("ChunkZ");
-		this.blockIDs = nbt.getTagList("BlockIDs").toArray(Integer.class);
-		this.metadataValues = nbt.getTagList("BlockMs").toArray(Integer.class);
-		
-		//this.lightValues = nbt.getTagList("LightValues").toArray();
+		this.blockIDs = nbt.getTagList("BlockIDs").toIntArray();
+		this.metadataValues = nbt.getTagList("BlockMs").toIntArray();
 	}
 }

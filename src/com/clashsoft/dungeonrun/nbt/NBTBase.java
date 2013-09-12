@@ -22,6 +22,8 @@ public abstract class NBTBase
 	public static byte TYPE_LONG = 8;
 	public static byte TYPE_STRING = 9;
 	
+	public static byte TYPE_ARRAY = 20;
+	
 	public String name;
 	public byte type;
 	public Object value;
@@ -30,6 +32,8 @@ public abstract class NBTBase
 	{
 		this.type = type;
 		this.name = name;
+		if (name.contains("[") || name.contains("]") || name.contains("{") || name.contains("}"))
+			throw new IllegalArgumentException("Name must not contain [ ] { } !");
 	}
 	
 	public Object getValue()

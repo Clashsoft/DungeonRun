@@ -28,10 +28,10 @@ public class DungeonRun extends BasicGame
 	public SoundEngine			soundEngine;
 	public FontRenderer			fontRenderer;
 	
-	public boolean				debugMode	= true;
+	public boolean				debugMode		= true;
 	
-	public int					mousePosX	= 0;
-	public int					mousePosY	= 0;
+	public int					mousePosX		= 0;
+	public int					mousePosY		= 0;
 	
 	public GameSettings			gameSettings;
 	
@@ -39,7 +39,7 @@ public class DungeonRun extends BasicGame
 	public GuiIngame			theIngameGui;
 	
 	public boolean				isPaused;
-	private GuiScreen			currentGui;
+	public GuiScreen			currentGui;
 	public World				theWorld;
 	public EntityPlayer			thePlayer;
 	
@@ -193,7 +193,7 @@ public class DungeonRun extends BasicGame
 		theGameContainer.setVSync(flag);
 	}
 	
-	public void startGame() throws SlickException // TODO Proper loading
+	public void startGame() throws SlickException
 	{
 		this.theWorld = new World(new WorldInfo("TestWorld"));
 		loadWorld(theWorld);
@@ -204,6 +204,7 @@ public class DungeonRun extends BasicGame
 		this.theIngameGui = (GuiIngame) this.displayGuiScreen(new GuiIngame(this.thePlayer));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void endGame() throws SlickException
 	{
 		saveWorld(this.theWorld);
@@ -214,14 +215,6 @@ public class DungeonRun extends BasicGame
 	{
 		this.isPaused = true;
 		this.displayGuiScreen(new GuiPauseMenu());
-//		new Thread(new Runnable()
-//		{
-//			@Override
-//			public void run()
-//			{
-//				saveWorld(theWorld);
-//			}
-//		}).start();
 	}
 	
 	public void unpauseGame() throws SlickException

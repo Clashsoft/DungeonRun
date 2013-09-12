@@ -23,6 +23,8 @@ public class GuiIngame extends GuiScreen
 	
 	private Map<Pos3<Float>, Entity>	entityMap	= new HashMap<Pos3<Float>, Entity>();
 	
+	private boolean worldSaving = false;
+	
 	public GuiIngame(EntityPlayer player)
 	{
 		super();
@@ -70,6 +72,13 @@ public class GuiIngame extends GuiScreen
 					}
 				}
 			}
+		}
+		
+		if (worldSaving)
+		{
+			String text = "Saving World...";
+			int width = DungeonRun.instance.fontRenderer.getStringWidth(text);
+			DungeonRun.instance.fontRenderer.drawString(this.width - 20 - width, height - 20, text, 0xFFFFFF);
 		}
 	}
 	
@@ -130,5 +139,11 @@ public class GuiIngame extends GuiScreen
 			this.player.worldObj.setBlock(Block.stone.blockID, 0, mouseBlockX, mouseBlockY, mouseBlockZ);
 		if (input.isKeyDown(Input.KEY_ESCAPE))
 			DungeonRun.instance.pauseGame();
+	}
+	
+	@Override
+	public void setWorldSaving(boolean state)
+	{
+		this.worldSaving = state;
 	}
 }
