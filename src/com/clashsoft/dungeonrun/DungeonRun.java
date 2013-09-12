@@ -204,7 +204,6 @@ public class DungeonRun extends BasicGame
 		this.theIngameGui = (GuiIngame) this.displayGuiScreen(new GuiIngame(this.thePlayer));
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void endGame() throws SlickException
 	{
 		saveWorld(this.theWorld);
