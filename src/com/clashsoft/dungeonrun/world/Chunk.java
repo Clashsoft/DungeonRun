@@ -13,11 +13,13 @@ public class Chunk implements INBTSaveable
 	public int				chunkX;
 	public int				chunkZ;
 	
-	private int[]		blockIDs;
-	private int[]		metadataValues;
+	private int[]			blockIDs;
+	private int[]			metadataValues;
 	
 	private float[]			lightValues;
-	private int[]		maxY;
+	private int[]			maxY;
+	
+	public boolean dummy;
 	
 	public Chunk(World w, int x, int y)
 	{
@@ -32,6 +34,8 @@ public class Chunk implements INBTSaveable
 		
 		this.lightValues = new float[length];
 		this.maxY = new int[16 * 16];
+		
+		this.dummy = true;
 	}
 	
 	protected Chunk generate()
@@ -53,6 +57,7 @@ public class Chunk implements INBTSaveable
 				}
 			}
 		}
+		this.dummy = false;
 		return this;
 	}
 	
@@ -211,5 +216,6 @@ public class Chunk implements INBTSaveable
 		this.chunkZ = nbt.getInteger("ChunkZ");
 		this.blockIDs = nbt.getTagList("BlockIDs").toIntArray();
 		this.metadataValues = nbt.getTagList("BlockMs").toIntArray();
+		this.dummy = false;
 	}
 }

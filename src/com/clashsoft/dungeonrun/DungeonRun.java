@@ -198,9 +198,12 @@ public class DungeonRun extends BasicGame
 		this.theWorld = new World(new WorldInfo("TestWorld"));
 		loadWorld(theWorld);
 		
-		this.thePlayer = new EntityPlayer(this.theWorld);
-		thePlayer.posY = 34F;
-		this.theWorld.spawnEntityInWorld(this.thePlayer);
+		if (this.theWorld.getPlayers().isEmpty())
+		{
+			this.thePlayer = new EntityPlayer(this.theWorld);
+			thePlayer.posY = 34F;
+			this.theWorld.spawnEntityInWorld(this.thePlayer);
+		}
 		this.theIngameGui = (GuiIngame) this.displayGuiScreen(new GuiIngame(this.thePlayer));
 	}
 	
@@ -230,8 +233,10 @@ public class DungeonRun extends BasicGame
 		if (!saves.exists())
 			saves.mkdirs();
 		
-		File worldFile = new File(saves, worldFileName + ".drs");
-		world.save(worldFile);
+		File worldDir = new File(saves, worldFileName);
+		if (!worldDir.exists())
+			worldDir.mkdirs();
+		world.save(worldDir);
 	}
 	
 	public boolean loadWorld(World world)
@@ -245,7 +250,7 @@ public class DungeonRun extends BasicGame
 			return false;
 		}
 		
-		File worldFile = new File(saves, worldFileName + ".drs");
+		File worldFile = new File(saves, worldFileName);
 		return world.load(worldFile);
 	}
 	

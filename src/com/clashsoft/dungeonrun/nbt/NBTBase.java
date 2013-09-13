@@ -9,7 +9,7 @@ import com.clashsoft.dungeonrun.util.FileCompressing;
 
 public abstract class NBTBase
 {
-	public static final boolean DELETE_COMPRESSED_FILES = true;
+	public static final boolean DELETE_COMPRESSED_FILES = false;
 	
 	public static byte TYPE_COMPOUND = 0;
 	public static byte TYPE_LIST = 1;

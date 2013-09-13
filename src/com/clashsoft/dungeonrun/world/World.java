@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
+import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.nbt.NBTBase;
 import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.nbt.NBTTagList;
@@ -25,6 +26,7 @@ public class World
 	
 	private Chunk[][]				chunks			= new Chunk[CHUNKS_X * 2][CHUNKS_Z * 2];
 	private Map<Integer, Entity>	entitys			= new HashMap<Integer, Entity>();
+	private Map<String, EntityPlayer> playerEntitys = new HashMap<String, EntityPlayer>();
 	private List<Integer>			entitysToRemove	= new LinkedList<Integer>();
 	
 	public World(WorldInfo info)
@@ -56,8 +58,8 @@ public class World
 	public Chunk getChunkAtCoordinates(int x, int z)
 	{
 		// Should be -32 - 31
-		int x1 = (int)(x / 16F);
-		int z1 = (int)(z / 16F);
+		int x1 = (int) Math.floor(x / 16F);
+		int z1 = (int) Math.floor(z / 16F);
 		int x2 = x1 + (CHUNKS_X);
 		int z2 = z1 + (CHUNKS_Z);
 		
@@ -72,12 +74,17 @@ public class World
 	
 	public void spawnEntityInWorld(Entity e)
 	{
+		if (e instanceof EntityPlayer)
+			this.playerEntitys.put(((EntityPlayer)e).username, DungeonRun.instance.thePlayer = ((EntityPlayer)e));
 		this.entitys.put(e.entityId, e);
 	}
 	
 	public void removeEntity(int id)
 	{
 		this.entitys.remove(id);
+		
+		if (entitys.get(id) instanceof EntityPlayer)
+			this.playerEntitys.remove(((EntityPlayer)entitys.get(id)).username);
 	}
 	
 	public void updateWorld() throws SlickException
@@ -99,6 +106,11 @@ public class World
 	public Collection<Entity> getEntitys()
 	{
 		return entitys.values();
+	}
+	
+	public Collection<EntityPlayer> getPlayers()
+	{
+		return playerEntitys.values();
 	}
 	
 	public float getLightValue(int x, int y, int z)
@@ -128,25 +140,14 @@ public class World
 	
 	public boolean save(File file)
 	{
+		boolean success = true;
+		
 		if (worldNBT == null)
 			worldNBT = new NBTTagCompound("World");
 		
 		worldNBT.clear();
 		
-		NBTTagList chunkDataList = new NBTTagList("ChunkData", chunks.length * chunks.length);
-		for (int i = 0; i < chunks.length; i++)
-		{
-			for (int j = 0; j < chunks[i].length; j++)
-			{
-				if (chunks[i][j] != null)
-				{
-					NBTTagCompound chunkNBT = new NBTTagCompound("Chunk:" + i + ";" + j);
-					chunks[i][j].writeToNBT(chunkNBT);
-					chunkDataList.addTagCompound(chunkNBT);
-				}
-			}
-		}
-		worldNBT.setTagList(chunkDataList);
+		File level = new File(file, "level.drf");
 		
 		NBTTagCompound infoCompound = new NBTTagCompound("WorldInfo");
 		worldInfo.writeToNBT(infoCompound);
@@ -162,26 +163,38 @@ public class World
 		}
 		worldNBT.setTagList(entityDataList);
 		
-		return worldNBT.serialize(file, true);
+		success = worldNBT.serialize(level, true);
+		
+		File regionDir = new File(file, "chunks");
+		if (!regionDir.exists())
+			regionDir.mkdirs();
+		
+		for (int i = 0; i < chunks.length; i++)
+		{
+			for (int j = 0; j < chunks[i].length; j++)
+			{
+				Chunk c = chunks[i][j];
+				if (c != null)
+				{
+					File chunkFile = new File(regionDir, "chunk." + (i - CHUNKS_X) + "." + (j - CHUNKS_Z) + ".drf");
+					NBTTagCompound chunkCompound = new NBTTagCompound("Chunk" + c.chunkX + ";" + c.chunkZ);
+					c.writeToNBT(chunkCompound);
+					chunkCompound.serialize(chunkFile, true);
+				}
+			}
+		}
+		return success;
 	}
 	
 	public boolean load(File file)
 	{
-		worldNBT = (NBTTagCompound) NBTBase.deserialize(file, true);
-		if (worldNBT == null)
+		File level = new File(file, "level.drf");
+		if (!level.exists())
 			return false;
 		
-		NBTTagList chunkDataList = worldNBT.getTagList("ChunkData");
-		if (chunkDataList != null)
-			for (NBTBase base : chunkDataList)
-			{
-				if (base instanceof NBTTagCompound)
-				{
-					Chunk chunk = new Chunk(this, 0, 0);
-					chunk.readFromNBT((NBTTagCompound)base);
-					chunks[chunk.chunkX + CHUNKS_X][chunk.chunkZ + CHUNKS_Z] = chunk;
-				}
-			}
+		worldNBT = (NBTTagCompound) NBTBase.deserialize(level, true);
+		if (worldNBT == null)
+			return false;
 		
 		NBTTagCompound infoCompound = worldNBT.getTagCompound("WorldInfo");
 		worldInfo.readFromNBT(infoCompound);
@@ -194,9 +207,33 @@ public class World
 				{
 					String entityType = ((NBTTagCompound)base).getString("EntityType");
 					Entity entity = EntityList.constructFromType(entityType, this);
+					entity.readFromNBT((NBTTagCompound)base);
 					this.spawnEntityInWorld(entity);
 				}
 			}
+		
+		File regionDir = new File(file, "chunks");
+		if (!regionDir.exists())
+			return false;
+		
+		for (int i = 0; i < chunks.length; i++)
+		{
+			for (int j = 0; j < chunks[i].length; j++)
+			{
+				File chunkFile = new File(regionDir, "chunk." + (i - CHUNKS_X) + "." + (j - CHUNKS_Z) + ".drf");
+				NBTBase base = NBTBase.deserialize(chunkFile, true);
+				if (base instanceof NBTTagCompound)
+				{
+					Chunk c = new Chunk(this, 0, 0);
+					c.readFromNBT((NBTTagCompound)base);
+					if (!c.dummy)
+						chunks[i][j] = c;
+					else
+						chunks[i][j] = null;
+				}
+			}
+		}
+		
 		return true;
 	}
 }

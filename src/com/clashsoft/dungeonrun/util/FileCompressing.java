@@ -35,7 +35,7 @@ public class FileCompressing
 			gzos.finish();
 			gzos.close();
 			
-			System.out.println("Successfully compressed " + old + " to " + newFile);
+			//System.out.println("Successfully compressed " + old + " to " + newFile);
 			return newFile;
 		}
 		catch (IOException ex)
@@ -69,7 +69,7 @@ public class FileCompressing
 			out.close();
 			gzis.close();
 			
-			System.out.println("Successfully decompressed " + oldFile + " to " + newFile);
+			//System.out.println("Successfully decompressed " + oldFile + " to " + newFile);
 			return newFile;
 		}
 		catch (IOException ex)

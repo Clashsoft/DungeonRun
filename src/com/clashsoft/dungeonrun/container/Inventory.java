@@ -20,11 +20,14 @@ public abstract class Inventory implements INBTSaveable
 		for (int i = 0; i < getInventorySize(); i++)
 		{
 			ItemStack stack = getStackInSlot(i);
-			NBTTagCompound compound = new NBTTagCompound("Slot[" + i + "]");
-			stack.writeToNBT(compound);
-			compound.setInteger("SlotID", i);
-			
-			slots.addTagCompound(compound);
+			if (stack != null)
+			{
+				NBTTagCompound compound = new NBTTagCompound("Slot#" + i);
+				stack.writeToNBT(compound);
+				compound.setInteger("SlotID", i);
+				
+				slots.addTagCompound(compound);
+			}
 		}
 		
 		nbt.setTagList(slots);

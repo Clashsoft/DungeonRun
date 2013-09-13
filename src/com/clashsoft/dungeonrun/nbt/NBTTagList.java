@@ -191,7 +191,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	@Override
 	public String writeValueString(String prefix)
 	{
-		StringBuilder sb = new StringBuilder(tags.toString().length());
+		StringBuilder sb = new StringBuilder(tags.toString().length() * 8);
 		
 		sb.append("\n" + prefix + "[");
 		

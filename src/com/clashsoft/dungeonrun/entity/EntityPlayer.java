@@ -13,6 +13,8 @@ public class EntityPlayer extends EntityLiving
 {
 	public RenderPlayer<EntityPlayer>	renderer;
 	
+	public String						username = "";
+	
 	public InventoryPlayer				inventory;
 	public boolean						isWalking	= false;
 	public boolean						isSprinting	= false;
