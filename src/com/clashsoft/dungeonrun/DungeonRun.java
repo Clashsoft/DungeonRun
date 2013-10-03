@@ -28,10 +28,10 @@ public class DungeonRun extends BasicGame
 	public SoundEngine			soundEngine;
 	public FontRenderer			fontRenderer;
 	
-	public boolean				debugMode		= true;
+	public boolean				debugMode	= true;
 	
-	public int					mousePosX		= 0;
-	public int					mousePosY		= 0;
+	public int					mousePosX	= 0;
+	public int					mousePosY	= 0;
 	
 	public GameSettings			gameSettings;
 	
@@ -195,22 +195,53 @@ public class DungeonRun extends BasicGame
 	
 	public void startGame() throws SlickException
 	{
-		this.theWorld = new World(new WorldInfo("TestWorld"));
-		loadWorld(theWorld);
+		this.displayGuiScreen(new GuiWaiting("Loading World..."));
 		
-		if (this.theWorld.getPlayers().isEmpty())
+		this.theWorld = new World(new WorldInfo("TestWorld"));
+		new Thread(new Runnable()
 		{
-			this.thePlayer = new EntityPlayer(this.theWorld);
-			thePlayer.posY = 34F;
-			this.theWorld.spawnEntityInWorld(this.thePlayer);
-		}
-		this.theIngameGui = (GuiIngame) this.displayGuiScreen(new GuiIngame(this.thePlayer));
+			public void run()
+			{
+				try
+				{
+					loadWorld(theWorld);
+					
+					if (DungeonRun.this.theWorld.getPlayers().isEmpty())
+					{
+						DungeonRun.this.thePlayer = new EntityPlayer(DungeonRun.this.theWorld);
+						thePlayer.posY = 34F;
+						DungeonRun.this.theWorld.spawnEntityInWorld(DungeonRun.this.thePlayer);
+					}
+					
+					DungeonRun.this.theIngameGui = (GuiIngame) DungeonRun.this.displayGuiScreen(new GuiIngame(DungeonRun.this.thePlayer));
+				}
+				catch (SlickException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		}).start();
 	}
 	
 	public void endGame() throws SlickException
 	{
-		saveWorld(this.theWorld);
-		this.displayGuiScreen(new GuiMainMenu());
+		this.displayGuiScreen(new GuiWaiting("Saving World..."));
+		new Thread(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					saveWorld(DungeonRun.this.theWorld);
+					
+					DungeonRun.this.displayGuiScreen(new GuiMainMenu());
+				}
+				catch (SlickException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		}).start();
 	}
 	
 	public void pauseGame() throws SlickException
@@ -225,10 +256,9 @@ public class DungeonRun extends BasicGame
 		this.displayGuiScreen(theIngameGui);
 	}
 	
-	public void saveWorld(World world)
+	public void saveWorld(World world) throws SlickException
 	{
 		String worldFileName = world.worldInfo.getFileName();
-		
 		File saves = new File(getSaveDataFolder(), "saves");
 		if (!saves.exists())
 			saves.mkdirs();
@@ -239,10 +269,9 @@ public class DungeonRun extends BasicGame
 		world.save(worldDir);
 	}
 	
-	public boolean loadWorld(World world)
+	public boolean loadWorld(World world) throws SlickException
 	{
 		String worldFileName = world.worldInfo.getFileName();
-		
 		File saves = new File(getSaveDataFolder(), "saves");
 		if (!saves.exists())
 		{

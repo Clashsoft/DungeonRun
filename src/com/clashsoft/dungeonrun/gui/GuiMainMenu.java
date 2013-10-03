@@ -64,9 +64,12 @@ public class GuiMainMenu extends GuiListScreen
 	{
 		super.updateScreen();
 		
-		player.posX += 4;
-		player.posX %= 700;
-		player.isWalking = true;
+		if (player != null)
+		{
+			player.posX += 4;
+			player.posX %= 700;
+			player.isWalking = true;
+		}
 	}
 	
 	@Override

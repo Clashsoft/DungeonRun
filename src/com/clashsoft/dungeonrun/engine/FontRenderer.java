@@ -20,4 +20,9 @@ public class FontRenderer
 	{
 		return DungeonRun.getGraphics().getFont().getWidth(text);
 	}
+
+	public int getStringHeigth(String message)
+	{
+		return DungeonRun.getGraphics().getFont().getLineHeight();
+	}
 }
