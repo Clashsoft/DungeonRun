@@ -9,6 +9,7 @@ public class RenderEngine
 	public DungeonRun	dr;
 	
 	public RenderBlocks	blockRenderer;
+	public RenderItems	itemRenderer;
 	
 	public RenderEngine(DungeonRun dungeonRun)
 	{

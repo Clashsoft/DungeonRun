@@ -18,11 +18,13 @@ import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.WorldInfo;
 
 public class DungeonRun extends BasicGame
-{	
+{
 	public static DungeonRun	instance;
 	
+	public static final String	VERSION		= "v0.3";
+	
 	public AppGameContainer		theGameContainer;
-	public int					tick;
+	public long					tick;
 	
 	public RenderEngine			renderEngine;
 	public SoundEngine			soundEngine;
@@ -64,7 +66,7 @@ public class DungeonRun extends BasicGame
 		else
 		{
 			getGraphics().setColor(Color.white);
-			g.drawString("Dungeon Run v0.2 (" + gc.getFPS() + " FPS)", 10, 10);
+			g.drawString(String.format("Dungeon Run %s (%d FPS)", VERSION, gc.getFPS()), 10, 10);
 			if (thePlayer != null)
 			{
 				g.drawString(String.format("PlayerPos: (%.2f;%.2f;%.2f)", thePlayer.posX, thePlayer.posY, thePlayer.posZ), 10, 30);
@@ -85,6 +87,8 @@ public class DungeonRun extends BasicGame
 	{
 		Mouse.setClipMouseCoordinatesToWindow(true);
 		this.displayGuiScreen(new GuiIntro());
+		
+		this.gameSettings.updateGame();
 		for (Block b : Block.blocksList)
 		{
 			if (b != null)
@@ -92,17 +96,28 @@ public class DungeonRun extends BasicGame
 		}
 	}
 	
-	@Override
-	public void update(GameContainer arg0, int arg1) throws SlickException
+	public void shutdown() throws SlickException
 	{
-		tick++;
+		this.saveWorld(theWorld);
+		this.gameSettings.save();
+		this.theGameContainer.exit();
+	}
+	
+	@Override
+	public void update(GameContainer gc, int tick) throws SlickException
+	{
+		this.tick++;
 		if (this.currentGui != null)
 			this.currentGui.update(this);
-		Input input = arg0.getInput();
+		
+		this.gameSettings.resolution.width = gc.getWidth();
+		this.gameSettings.resolution.heigth = gc.getHeight();
+		
+		Input input = gc.getInput();
 		if (input.isKeyPressed(Input.KEY_F2))
 		{
-			Image i = new Image(arg0.getWidth(), arg0.getHeight());
-			arg0.getGraphics().copyArea(i, 0, 0);
+			Image i = new Image(gc.getWidth(), gc.getHeight());
+			gc.getGraphics().copyArea(i, 0, 0);
 			try
 			{
 				File file = new File(getSaveDataFolder(), "screenshots");
@@ -195,7 +210,7 @@ public class DungeonRun extends BasicGame
 	
 	public void startGame() throws SlickException
 	{
-		this.displayGuiScreen(new GuiWaiting("Loading World..."));
+		this.displayGuiScreen(new GuiInfo("Loading World..."));
 		
 		this.theWorld = new World(new WorldInfo("TestWorld"));
 		new Thread(new Runnable()
@@ -225,7 +240,7 @@ public class DungeonRun extends BasicGame
 	
 	public void endGame() throws SlickException
 	{
-		this.displayGuiScreen(new GuiWaiting("Saving World..."));
+		this.displayGuiScreen(new GuiInfo("Saving World..."));
 		new Thread(new Runnable()
 		{
 			public void run()
@@ -256,8 +271,11 @@ public class DungeonRun extends BasicGame
 		this.displayGuiScreen(theIngameGui);
 	}
 	
-	public void saveWorld(World world) throws SlickException
+	public boolean saveWorld(World world) throws SlickException
 	{
+		if (world == null)
+			return false;
+		
 		String worldFileName = world.worldInfo.getFileName();
 		File saves = new File(getSaveDataFolder(), "saves");
 		if (!saves.exists())
@@ -266,11 +284,16 @@ public class DungeonRun extends BasicGame
 		File worldDir = new File(saves, worldFileName);
 		if (!worldDir.exists())
 			worldDir.mkdirs();
-		world.save(worldDir);
+		return world.save(worldDir);
 	}
 	
 	public boolean loadWorld(World world) throws SlickException
 	{
+		this.theWorld = world;
+		
+		if (world == null)
+			return false;
+		
 		String worldFileName = world.worldInfo.getFileName();
 		File saves = new File(getSaveDataFolder(), "saves");
 		if (!saves.exists())
@@ -286,7 +309,6 @@ public class DungeonRun extends BasicGame
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy)
 	{
-		super.mouseMoved(oldx, oldy, newx, newy);
 		mousePosX = newx;
 		mousePosY = newy;
 	}

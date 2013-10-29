@@ -1,5 +1,8 @@
 package com.clashsoft.dungeonrun.world;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import com.clashsoft.dungeonrun.block.Block;
 
 public class BlockInWorld
@@ -36,6 +39,11 @@ public class BlockInWorld
 	public boolean isAir()
 	{
 		return blockID == 0 || this == AIR;
+	}
+	
+	public Image getBlockTexture(int side) throws SlickException
+	{
+		return getBlock().getBlockTextureFromSideAndMetadata(side, metadata);
 	}
 	
 	public float getLightValue()

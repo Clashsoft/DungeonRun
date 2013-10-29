@@ -87,7 +87,7 @@ public class GuiMainMenu extends GuiListScreen
 		else if (i == 1)
 			this.dr.displayGuiScreen(new GuiOptions(this));
 		else if (i == 2)
-			this.dr.theGameContainer.exit();
+			this.dr.shutdown();
 	}
 	
 	@Override

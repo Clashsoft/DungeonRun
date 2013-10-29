@@ -4,11 +4,11 @@ import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.block.Block;
 
-public class GuiWaiting extends GuiScreen
+public class GuiInfo extends GuiScreen
 {
 	public String message;
 	
-	public GuiWaiting(String message)
+	public GuiInfo(String message)
 	{
 		this.message = message;
 	}
