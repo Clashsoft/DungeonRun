@@ -3,7 +3,6 @@ package com.clashsoft.dungeonrun.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -26,18 +25,14 @@ public abstract class GuiListScreen extends GuiScreen
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
-		DungeonRun.getGraphics().setColor(Color.lightGray);
-		DungeonRun.getGraphics().drawString(getTitle(), (par1 - DungeonRun.getGraphics().getFont().getWidth(getTitle())) / 2, 20);
+		drawBricks(par1, par2);
+		
+		DungeonRun.instance.fontRenderer.drawString((par1 - DungeonRun.instance.fontRenderer.getStringWidth(getTitle())) / 2, 20, getTitle(), 0x00EFFF, true);
 		for (int i = 0; i < entrys.size(); i++)
 		{
 			String text = getEntry(i);
-			int width = DungeonRun.getGraphics().getFont().getWidth(text);
-			if (i == selection)
-				DungeonRun.getGraphics().setColor(Color.white);
-			else
-				DungeonRun.getGraphics().setColor(Color.lightGray);
-			DungeonRun.getGraphics().drawString(text, (par1 - width) / 2 + getFirstEntryPosX(), getFirstEntryPosY() + (i * 20));
-			DungeonRun.getGraphics().setColor(Color.lightGray);
+			int width = DungeonRun.instance.fontRenderer.getStringWidth(text);
+			DungeonRun.instance.fontRenderer.drawString((par1 - width) / 2 + getFirstEntryPosX(), getFirstEntryPosY() + (i * 20), text, selection == i ? 0xFFFFFF : 0xAAAAAA, true);
 		}
 	}
 	

@@ -30,11 +30,13 @@ public class GuiMainMenu extends GuiListScreen
 		for (int i = 0; i < entrys.size(); i++)
 		{
 			String s = entrys.get(i);
-			int length = DungeonRun.getGraphics().getFont().getWidth(s);
-			int posY = (par2 - (entrys.size() * DungeonRun.getGraphics().getFont().getHeight(s))) / 2 + (i * 20);
-			DungeonRun.getGraphics().drawString(s, (int) ((par1 - length) / 2F), posY);
+			int length = DungeonRun.instance.fontRenderer.getStringWidth(s);
+			int posY = (par2 - (entrys.size() * DungeonRun.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
+			DungeonRun.instance.fontRenderer.drawString((int) ((par1 - length) / 2F), posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
+			
 			if (length >= longestStringLength)
 				longestStringLength = length;
+			
 			if (selection == i)
 			{
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);

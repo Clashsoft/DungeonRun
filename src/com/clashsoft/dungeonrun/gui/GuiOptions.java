@@ -76,7 +76,7 @@ public class GuiOptions extends GuiListScreen
 	{
 		s.add("Sound Volume: ");
 		s.add("Music Volume: ");
-		s.add("Video Options");
+		s.add("Video Options...");
 		s.add("Back");
 	}
 	

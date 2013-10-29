@@ -6,7 +6,6 @@ import org.newdawn.slick.SlickException;
 
 public class GuiDeath extends GuiListScreen
 {
-	
 	@Override
 	public String getTitle()
 	{

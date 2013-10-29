@@ -42,7 +42,7 @@ public class RenderPlayer<T extends EntityPlayer> extends RenderEntity<T>
 		int x = (int)((w / 2F) - 6);
 		int y = (int)((h / 2F) - 28);
 		if (DungeonRun.instance.gameSettings.renderHitBoxes)
-			DungeonRun.getGraphics().drawRect(x, y, 12, 24);
+			DungeonRun.instance.theGameContainer.getGraphics().drawRect(x, y, 12, 24);
 		r.draw(x, y);
 		return new Rectangle(x, y, 12, 24);
 	}

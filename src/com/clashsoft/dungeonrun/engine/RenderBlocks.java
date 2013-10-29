@@ -59,7 +59,7 @@ public class RenderBlocks
 					image1.setImageColor(1, 1, 1);
 					if (hover)
 					{
-						DungeonRun.getGraphics().drawRect(posX, posY, 15, 15);
+						DungeonRun.instance.renderEngine.graphics.drawRect(posX, posY, 15, 15);
 					}
 				}
 			}
@@ -79,7 +79,7 @@ public class RenderBlocks
 					image2.setImageColor(1F, 1F, 1F);
 					if (hover)
 					{
-						DungeonRun.getGraphics().drawRect(posX, posY2, 15, 15);
+						DungeonRun.instance.renderEngine.graphics.drawRect(posX, posY2, 15, 15);
 					}
 					GL11.glScalef(1F, 16F / 12F, 1F);
 				}

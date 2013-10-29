@@ -2,23 +2,14 @@ package com.clashsoft.dungeonrun.gui;
 
 import java.util.List;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
-
-import com.clashsoft.dungeonrun.DungeonRun;
 
 public class GuiPauseMenu extends GuiListScreen
 {
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
-		this.dr.theIngameGui.drawScreen(par1, par2);
-		
-		Color c = new Color(0F, 0F, 0F, 0.5F);
-		DungeonRun.getGraphics().setColor(c);
-		DungeonRun.getGraphics().fill(new Rectangle(0, 0, par1, par2));
-		
+		this.drawDefaultBackground(par1, par2);
 		super.drawScreen(par1, par2);
 	}
 	

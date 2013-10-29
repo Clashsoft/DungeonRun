@@ -45,55 +45,41 @@ public class DungeonRun extends BasicGame
 	public World				theWorld;
 	public EntityPlayer			thePlayer;
 	
-	public DungeonRun()
+	public DungeonRun() throws SlickException
 	{
 		super("Dungeon Run");
-		this.renderEngine = new RenderEngine(this);
-		this.soundEngine = new SoundEngine(this);
-		this.fontRenderer = new FontRenderer(this);
-		this.gameSettings = new GameSettings();
 	}
 	
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
+		this.renderEngine.graphics = g;
+		
 		if (this.hasGameStarted)
 			this.theIngameGui.render(gc.getWidth(), gc.getHeight());
 		if (this.currentGui != null)
 			this.currentGui.render(gc.getWidth(), gc.getHeight());
-		if (!debugMode)
-			g.drawString(gc.getFPS() + " FPS", 10, 10);
-		else
-		{
-			getGraphics().setColor(Color.white);
-			g.drawString(String.format("Dungeon Run %s (%d FPS)", VERSION, gc.getFPS()), 10, 10);
-			if (thePlayer != null)
-			{
-				g.drawString(String.format("PlayerPos: (%.2f;%.2f;%.2f)", thePlayer.posX, thePlayer.posY, thePlayer.posZ), 10, 30);
-				g.drawString("PlayerRot: " + thePlayer.rot, 10, 50);
-				g.drawString(String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", thePlayer.velocityX, thePlayer.velocityY, thePlayer.velocityZ), 10, 70);
-				g.drawString("PlayerWorld: " + thePlayer.worldObj.worldInfo.getName(), 10, 90);
-			}
-			
-			if (theIngameGui != null)
-			{
-				g.drawString(String.format("HoverPos: (%d;%d;%d)", theIngameGui.mouseBlockX, theIngameGui.mouseBlockY, theIngameGui.mouseBlockZ), 10, 110);
-			}
-		}
 	}
 	
 	@Override
 	public void init(GameContainer arg0) throws SlickException
 	{
 		Mouse.setClipMouseCoordinatesToWindow(true);
-		this.displayGuiScreen(new GuiIntro());
+		
+		this.renderEngine = new RenderEngine(this);
+		this.soundEngine = new SoundEngine(this);
+		this.fontRenderer = new FontRenderer(this);
+		this.gameSettings = new GameSettings();
 		
 		this.gameSettings.updateGame();
+		
 		for (Block b : Block.blocksList)
 		{
 			if (b != null)
 				b.registerIcons();
 		}
+		
+		this.displayGuiScreen(new GuiIntro());
 	}
 	
 	public void shutdown() throws SlickException
@@ -109,9 +95,6 @@ public class DungeonRun extends BasicGame
 		this.tick++;
 		if (this.currentGui != null)
 			this.currentGui.update(this);
-		
-		this.gameSettings.resolution.width = gc.getWidth();
-		this.gameSettings.resolution.heigth = gc.getHeight();
 		
 		Input input = gc.getInput();
 		if (input.isKeyPressed(Input.KEY_F2))
@@ -141,11 +124,6 @@ public class DungeonRun extends BasicGame
 		this.currentGui = gui;
 		this.currentGui.init(this);
 		return this.currentGui;
-	}
-	
-	public static Graphics getGraphics()
-	{
-		return instance.theGameContainer.getGraphics();
 	}
 	
 	public static Input getInput()
@@ -196,11 +174,6 @@ public class DungeonRun extends BasicGame
 	public void setFullScreen(boolean flag) throws SlickException
 	{
 		theGameContainer.setFullscreen(flag);
-	}
-	
-	public void setResolution(int width, int heigth) throws SlickException
-	{
-		theGameContainer.setDisplayMode(width, heigth, theGameContainer.isFullscreen());
 	}
 	
 	public void setVSync(boolean flag)

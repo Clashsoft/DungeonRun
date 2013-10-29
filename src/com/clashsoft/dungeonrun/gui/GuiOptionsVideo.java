@@ -25,7 +25,7 @@ public class GuiOptionsVideo extends GuiListScreen
 	@Override
 	public void addEntrys(List<String> s)
 	{
-		s.add("Resolution: ");
+		s.add("Gui Scale: ");
 		s.add("Fullscreen: ");
 		s.add("Use VSync: ");
 		s.add("Back");
@@ -34,7 +34,12 @@ public class GuiOptionsVideo extends GuiListScreen
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
-		if (i == 1)
+		if (i == 0)
+		{
+			this.dr.gameSettings.guiSize++;
+			this.dr.gameSettings.guiSize %= 4;
+		}
+		else if (i == 1)
 			this.dr.gameSettings.fullScreen = !this.dr.gameSettings.fullScreen;
 		else if (i == 2)
 			this.dr.gameSettings.useVSync = !this.dr.gameSettings.useVSync;
@@ -46,9 +51,11 @@ public class GuiOptionsVideo extends GuiListScreen
 	@Override
 	public String getEntry(int i)
 	{
-		if (i == 1)
+		if (i == 0)
+			return entrys.get(i) + DungeonRun.instance.gameSettings.guiSize;
+		else if (i == 1)
 			return entrys.get(i) + DungeonRun.instance.gameSettings.fullScreen;
-		if (i == 2)
+		else if (i == 2)
 			return entrys.get(i) + DungeonRun.instance.gameSettings.useVSync;
 		return super.getEntry(i);
 	}

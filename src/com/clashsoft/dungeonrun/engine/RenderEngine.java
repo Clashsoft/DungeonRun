@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.engine;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.clashsoft.dungeonrun.DungeonRun;
@@ -7,6 +8,8 @@ import com.clashsoft.dungeonrun.DungeonRun;
 public class RenderEngine
 {
 	public DungeonRun	dr;
+	
+	public Graphics		graphics;
 	
 	public RenderBlocks	blockRenderer;
 	public RenderItems	itemRenderer;
@@ -19,6 +22,6 @@ public class RenderEngine
 	
 	public void drawTexture(Image image, int x, int y, int u, int v, int sx, int sy)
 	{
-		DungeonRun.getGraphics().drawImage(image, x, y, x + sx, y + sy, u, v, sx, sy);
+		graphics.drawImage(image, x, y, x + sx, y + sy, u, v, sx, sy);
 	}
 }

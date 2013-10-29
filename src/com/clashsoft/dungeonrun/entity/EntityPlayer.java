@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.entity;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.container.InventoryPlayer;
 import com.clashsoft.dungeonrun.entity.render.RenderEntity;
 import com.clashsoft.dungeonrun.entity.render.RenderPlayer;
 import com.clashsoft.dungeonrun.gui.GuiDeath;

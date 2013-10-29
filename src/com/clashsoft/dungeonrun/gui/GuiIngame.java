@@ -1,9 +1,10 @@
 package com.clashsoft.dungeonrun.gui;
 
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -40,15 +41,14 @@ public class GuiIngame extends GuiScreen
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
-		DungeonRun.getGraphics().setColor(Color.white);
-		
+		GL11.glColor3f(1F, 1F, 1F);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		
-		// Always sync the block renderer with the display and the player
 		if (player != null)
 		{
 			renderBlocks.width = par1;
 			renderBlocks.heigth = par2;
+			
 			for (int x = (int) (player.posX + RenderBlocks.BLOCKS_X); x > player.posX - RenderBlocks.BLOCKS_X; x--)
 			{
 				for (int z = (int) (player.posZ + RenderBlocks.BLOCKS_Z); z > player.posZ - RenderBlocks.BLOCKS_Z - 4; z--)
@@ -81,7 +81,7 @@ public class GuiIngame extends GuiScreen
 		{
 			String text = "Saving World...";
 			int width = DungeonRun.instance.fontRenderer.getStringWidth(text);
-			DungeonRun.instance.fontRenderer.drawString(this.width - 20 - width, height - 20, text, 0xFFFFFF);
+			DungeonRun.instance.fontRenderer.drawString(this.windowWidth - 20 - width, windowHeight - 20, text, 0xFFFFFF);
 		}
 	}
 	

@@ -1,9 +1,9 @@
-package com.clashsoft.dungeonrun.entity;
+package com.clashsoft.dungeonrun.container;
 
-import com.clashsoft.dungeonrun.container.Inventory;
+import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.item.ItemStack;
 
-public class InventoryPlayer extends Inventory
+public class InventoryPlayer extends AbstractInventory
 {
 	public EntityPlayer	player;
 	private ItemStack[]	inventory	= new ItemStack[64];

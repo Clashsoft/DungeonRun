@@ -6,7 +6,7 @@ import com.clashsoft.dungeonrun.nbt.NBTBase;
 import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.nbt.NBTTagList;
 
-public abstract class Inventory implements INBTSaveable
+public abstract class AbstractInventory implements INBTSaveable
 {
 	public abstract void setStackInSlot(int slot, ItemStack stack);
 	public abstract ItemStack getStackInSlot(int slot);

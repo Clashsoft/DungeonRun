@@ -7,22 +7,21 @@ import java.util.Properties;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.util.DimensionHelper.Size2;
 
 public class GameSettings
 {
-	public static File		optionsFile		= new File(DungeonRun.getSaveDataFolder(), "options.txt");
+	public static File	optionsFile		= new File(DungeonRun.getSaveDataFolder(), "options.txt");
 	
 	// General Options
-	public float			musicVolume		= 1F;
-	public float			soundVolume		= 1F;
+	public float		musicVolume		= 1F;
+	public float		soundVolume		= 1F;
 	
 	// Video options
-	public Size2<Integer>	resolution		= new Size2<Integer>(800, 450);
-	public boolean			fullScreen		= false;
-	public boolean			useVSync		= true;
+	public int			guiSize			= 0;
+	public boolean		fullScreen		= false;
+	public boolean		useVSync		= true;
 	
-	public boolean			renderHitBoxes	= false;
+	public boolean		renderHitBoxes	= false;
 	
 	public GameSettings()
 	{
@@ -32,13 +31,14 @@ public class GameSettings
 	public void updateGame() throws SlickException
 	{
 		DungeonRun dr = DungeonRun.instance;
-		dr.setResolution(resolution.width, resolution.heigth);
+		if (dr.currentGui != null)
+			dr.currentGui.init(dr);
 		dr.setFullScreen(fullScreen);
 		dr.setVSync(useVSync);
 	}
 	
 	public void load()
-	{	
+	{
 		Properties props = new Properties();
 		try
 		{
@@ -55,8 +55,7 @@ public class GameSettings
 		this.musicVolume = Float.parseFloat(props.getProperty("music", "0"));
 		this.soundVolume = Float.parseFloat(props.getProperty("sound", "0"));
 		
-		this.resolution.width = Integer.parseInt(props.getProperty("resolutionX", "800"));
-		this.resolution.heigth = Integer.parseInt(props.getProperty("resolutionY", "450"));
+		this.guiSize = Integer.parseInt(props.getProperty("guisize", "0"));
 		
 		this.fullScreen = Boolean.parseBoolean(props.getProperty("fullscreen", "false"));
 		this.useVSync = Boolean.parseBoolean(props.getProperty("vsync", "true"));
@@ -69,8 +68,7 @@ public class GameSettings
 		props.setProperty("music", musicVolume + "");
 		props.setProperty("sound", soundVolume + "");
 		
-		props.setProperty("resolutionX", resolution.width + "");
-		props.setProperty("resolutionY", resolution.heigth + "");
+		props.setProperty("guisize", guiSize + "");
 		
 		props.setProperty("fullscreen", fullScreen + "");
 		props.setProperty("vsync", useVSync + "");
