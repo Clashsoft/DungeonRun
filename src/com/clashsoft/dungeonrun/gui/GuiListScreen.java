@@ -1,6 +1,6 @@
 package com.clashsoft.dungeonrun.gui;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.newdawn.slick.Color;
@@ -8,12 +8,13 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.engine.SoundEngine;
 
 public abstract class GuiListScreen extends GuiScreen
 {
 	protected int			selection	= 0;
-	protected List<String>	entrys		= new LinkedList<String>();
+	protected List<String>	entrys		= new ArrayList<String>();
 	
 	@Override
 	public void initGui() throws SlickException
@@ -56,7 +57,7 @@ public abstract class GuiListScreen extends GuiScreen
 		
 		if (DungeonRun.getInput().isKeyPressed(Input.KEY_ENTER))
 		{
-			this.dr.soundEngine.playSound("resources/audio/click.wav", SoundEngine.DEFAULT_LOCATION);
+			this.dr.soundEngine.playSoundEffect("resources/audio/click.wav", SoundEngine.DEFAULT_LOCATION);
 			this.onEntryUsed(selection);
 		}
 	}
@@ -80,5 +81,16 @@ public abstract class GuiListScreen extends GuiScreen
 	public String getEntry(int i)
 	{
 		return entrys.get(i);
+	}
+	
+	public void drawBricks(int width, int heigth) throws SlickException
+	{
+		for (int i = 0; i < width / 16F; i++)
+		{
+			for (int j = 0; j < heigth / 16F; j++)
+			{
+				Block.brick.getBlockTextureFromSideAndMetadata(0, 0).draw(i * 16, j * 16);
+			}
+		}
 	}
 }

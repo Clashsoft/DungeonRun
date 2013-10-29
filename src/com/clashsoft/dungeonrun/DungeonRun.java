@@ -18,7 +18,7 @@ import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.WorldInfo;
 
 public class DungeonRun extends BasicGame
-{
+{	
 	public static DungeonRun	instance;
 	
 	public AppGameContainer		theGameContainer;

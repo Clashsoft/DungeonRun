@@ -37,12 +37,12 @@ public class SoundEngine
 		this.dr = dr;
 	}
 	
-	public void playSound(String sound, SoundLocation sl) throws SlickException
+	public void playSoundEffect(String sound, SoundLocation sl) throws SlickException
 	{
-		this.playSound(sound, sl, this.dr.gameSettings.soundVolume);
+		this.playSoundEffect(sound, sl, this.dr.gameSettings.soundVolume);
 	}
 	
-	public void playSound(String sound, SoundLocation sl, float volume) throws SlickException
+	public void playSoundEffect(String sound, SoundLocation sl, float volume) throws SlickException
 	{
 		Sound s = sounds.get(sound);
 		if (s == null)
@@ -53,10 +53,22 @@ public class SoundEngine
 		s.playAt(1F, volume, sl.x, sl.y, sl.z);
 	}
 	
+	public void stopSoundEffect(String sound)
+	{
+		Sound s = sounds.get(sound);
+		if (s != null)
+			s.stop();
+	}
+	
+	public void stopAllSoundEffects()
+	{
+		for (Sound s : this.sounds.values())
+			s.stop();
+	}
+	
 	public void playMusic(String music, boolean repeat) throws SlickException
 	{
-		// this.playMusic(music, repeat, this.dr.gameSettings.musicVolume);
-		// FIXME
+		this.playMusic(music, repeat, this.dr.gameSettings.musicVolume);
 	}
 	
 	public void playMusic(String music, boolean repeat, float volume) throws SlickException
@@ -80,4 +92,15 @@ public class SoundEngine
 			m.stop();
 	}
 	
+	public void stopAllMusics()
+	{
+		for (Music m : this.musics.values())
+			m.stop();
+	}
+	
+	public void stopAllSounds()
+	{
+		stopAllSoundEffects();
+		stopAllMusics();
+	}
 }

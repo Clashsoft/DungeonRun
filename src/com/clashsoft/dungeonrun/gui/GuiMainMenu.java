@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ResourceRegistry;
 
@@ -27,13 +26,7 @@ public class GuiMainMenu extends GuiListScreen
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
 		int longestStringLength = 0;
-		for (int i = 0; i < par1 / 16F; i++)
-		{
-			for (int j = 0; j < par2 / 16F; j++)
-			{
-				Block.brick.getBlockTextureFromSideAndMetadata(0, 0).draw(i * 16, j * 16);
-			}
-		}
+		super.drawBricks(par1, par2);
 		for (int i = 0; i < entrys.size(); i++)
 		{
 			String s = entrys.get(i);
