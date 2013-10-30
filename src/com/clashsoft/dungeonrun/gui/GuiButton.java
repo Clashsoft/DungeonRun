@@ -5,7 +5,7 @@ import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos2;
-import com.clashsoft.dungeonrun.util.ResourceRegistry;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class GuiButton
 {
@@ -31,7 +31,7 @@ public class GuiButton
 			if (isLocked)
 				GL11.glColor4f(0.8F, 0.8F, 0.8F, 1F);
 			int texture = isMouseHovering() ? 40 : 80;
-			DungeonRun.instance.renderEngine.drawTexture(ResourceRegistry.buttons, pos.x, pos.y, 0, texture, 200, 40);
+			DungeonRun.instance.renderEngine.drawTexture(ResourceHelper.buttons, pos.x, pos.y, 0, texture, 200, 40);
 		}
 	}
 	

@@ -9,14 +9,14 @@ public class GuiDeath extends GuiListScreen
 	@Override
 	public String getTitle()
 	{
-		return "Game Over!";
+		return "game.gameover.title";
 	}
 	
 	@Override
 	public void addEntrys(List<String> s)
 	{
-		s.add("Respawn");
-		s.add("Main Menu");
+		s.add("game.respawn");
+		s.add("game.mainmenu");
 	}
 	
 	@Override

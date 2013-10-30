@@ -1,78 +1,92 @@
 package com.clashsoft.dungeonrun.engine;
 
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.util.ResourceLoader;
 
 import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class FontRenderer
 {
-	public static final int			HEIGHT	= 9;
+	public static final int				HEIGHT		= 9;
 	
-	protected Properties			charNames = null;
-	protected Map<Character, Image>	charMap	= new HashMap<Character, Image>();
+	protected Map<Character, String>	charPaths	= new HashMap();
+	protected Map<Character, Image>		charMap		= new HashMap<Character, Image>();
 	
-	public DungeonRun				dr;
+	public DungeonRun					dr;
 	
-	public float red = 1F;
-	public float green = 1F;
-	public float blue = 1F;
+	public float						red			= 1F;
+	public float						green		= 1F;
+	public float						blue		= 1F;
 	
 	public FontRenderer(DungeonRun dr) throws SlickException
 	{
 		this.dr = dr;
-		
-		this.charNames = loadCharNames();
+		loadCharNames();
 		loadChars();
 	}
 	
-	public Properties loadCharNames() throws SlickException
+	public void loadCharNames() throws SlickException
 	{
-		Properties props = new Properties();
-		try
-		{
-			props.load(ResourceLoader.getResourceAsStream("/resources/text/ascii/charmap.txt"));
+		List<String> lines = ResourceHelper.readAllLines("/resources/text/ascii/charmap.txt");
+		
+		for (String line : lines)
+		{	
+			if (line.isEmpty())
+				continue;
+			
+			int equalsSignIndex = line.indexOf('=', 1);
+			
+			if (equalsSignIndex == -1)
+				continue;
+			
+			char c = 0;
+			String key = line.substring(0, equalsSignIndex);
+			String path = line.substring(equalsSignIndex + 1);
+			
+			if (key.length() > 1)
+			{
+				if (key.startsWith("0x"))
+					c = (char) Integer.parseInt(key.substring(2), 16);
+				else
+				{
+					try
+					{
+						c = (char) Integer.parseInt(key);
+					}
+					catch (Exception ex)
+					{
+						System.err.println("Unknow char " + key + " (" + path + ")");
+					}
+				}
+			}
+			else
+				c = key.charAt(0);
+			
+			charPaths.put(Character.valueOf(c), path);
 		}
-		catch (IOException ex)
-		{
-			throw new SlickException("Unable to load font data: " + ex.getMessage(), ex);
-		}
-		return props;
 	}
 	
 	public void loadChars() throws SlickException
-	{	
-		for (Object k : charNames.keySet())
+	{
+		for (Character character : charPaths.keySet())
 		{
-			String key = (String)k;
-			String charPath = "resources/text/ascii/" + charNames.getProperty((String)key);
+			String path = charPaths.get(character);
+			String charPath = "resources/text/ascii/" + path;
 			
-			if ("equals".equalsIgnoreCase(key))
-				key = "=";
-			else if ("backslash".equalsIgnoreCase(key))
-				key = "\\";
-			else if ("colon".equalsIgnoreCase(key))
-				key = ":";
-			else if ("numbersign".equalsIgnoreCase(key))
-				key = "#";
-			else if ("space".equalsIgnoreCase(key))
-				key = " ";
-				
 			try
 			{
 				Image image = new Image(charPath);
-				charMap.put(Character.valueOf(key.charAt(0)), image);
+				charMap.put(character, image);
 			}
 			catch (Exception ex)
 			{
-				System.out.println("Unable to load char " + key + " (" + charPath + "): " + ex.getMessage());
+				System.err.println("Unable to load char " + character + " (" + charPath + "): " + ex.getMessage());
 			}
 		}
 	}
@@ -97,7 +111,7 @@ public class FontRenderer
 		
 		for (int i = 0; i < text.length(); i++)
 		{
-			x += drawChar(x, y + 4, text.charAt(i), shadow) + 1;
+			x += drawChar(x, y, text.charAt(i), shadow) + 1;
 		}
 		
 		GL11.glPopMatrix();

@@ -5,6 +5,7 @@ import java.util.List;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.util.I18n;
 
 public class GuiOptionsVideo extends GuiListScreen
 {
@@ -19,16 +20,16 @@ public class GuiOptionsVideo extends GuiListScreen
 	@Override
 	public String getTitle()
 	{
-		return "Video Options";
+		return "options.video.title";
 	}
 	
 	@Override
 	public void addEntrys(List<String> s)
 	{
-		s.add("Gui Scale: ");
-		s.add("Fullscreen: ");
-		s.add("Use VSync: ");
-		s.add("Back");
+		s.add("options.guiscale");
+		s.add("options.fullscreen");
+		s.add("options.vsync");
+		s.add("options.back");
 	}
 	
 	@Override
@@ -52,11 +53,11 @@ public class GuiOptionsVideo extends GuiListScreen
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return entrys.get(i) + DungeonRun.instance.gameSettings.guiSize;
+			return I18n.getStringFormatted("options.guiscale.value", DungeonRun.instance.gameSettings.guiSize);
 		else if (i == 1)
-			return entrys.get(i) + DungeonRun.instance.gameSettings.fullScreen;
+			return I18n.getStringFormatted("options.fullscreen.value", DungeonRun.instance.gameSettings.fullScreen);
 		else if (i == 2)
-			return entrys.get(i) + DungeonRun.instance.gameSettings.useVSync;
+			return I18n.getStringFormatted("options.vsync.value", DungeonRun.instance.gameSettings.useVSync);
 		return super.getEntry(i);
 	}
 }

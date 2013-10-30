@@ -13,6 +13,7 @@ import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.util.I18n;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos3;
 
 public class GuiIngame extends GuiScreen
@@ -79,7 +80,7 @@ public class GuiIngame extends GuiScreen
 		
 		if (worldSaving)
 		{
-			String text = "Saving World...";
+			String text = I18n.getString("world.saving");
 			int width = DungeonRun.instance.fontRenderer.getStringWidth(text);
 			DungeonRun.instance.fontRenderer.drawString(this.windowWidth - 20 - width, windowHeight - 20, text, 0xFFFFFF);
 		}

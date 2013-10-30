@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.gui;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.util.I18n;
 
 public class GuiInfo extends GuiScreen
 {
@@ -10,7 +11,7 @@ public class GuiInfo extends GuiScreen
 	
 	public GuiInfo(String message)
 	{
-		this.message = message;
+		this.message = I18n.getString(message);
 	}
 	
 	@Override

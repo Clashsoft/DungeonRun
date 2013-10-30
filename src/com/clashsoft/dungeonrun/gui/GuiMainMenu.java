@@ -3,11 +3,12 @@ package com.clashsoft.dungeonrun.gui;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.util.ResourceRegistry;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class GuiMainMenu extends GuiListScreen
 {
@@ -27,21 +28,23 @@ public class GuiMainMenu extends GuiListScreen
 	{
 		int longestStringLength = 0;
 		super.drawBricks(par1, par2);
+		
 		for (int i = 0; i < entrys.size(); i++)
 		{
 			String s = entrys.get(i);
 			int length = DungeonRun.instance.fontRenderer.getStringWidth(s);
+			int posX = (int) ((par1 - length) / 2F);
 			int posY = (par2 - (entrys.size() * DungeonRun.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
-			DungeonRun.instance.fontRenderer.drawString((int) ((par1 - length) / 2F), posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
+			DungeonRun.instance.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
 			
 			if (length >= longestStringLength)
 				longestStringLength = length;
 			
 			if (selection == i)
 			{
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-				ResourceRegistry.iconsSprite.getSprite(3, 0).draw((par1 - longestStringLength) / 2 - 18 - 4, posY);
-				ResourceRegistry.iconsSprite.getSprite(3, 0).draw((par1 + longestStringLength) / 2 + 4, posY);
+				Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
+				torch.draw(posX - torch.getWidth(), posY - 4);
+				torch.draw(posX + length, posY - 4);
 			}
 		}
 		
@@ -76,9 +79,9 @@ public class GuiMainMenu extends GuiListScreen
 	@Override
 	public void addEntrys(List<String> s)
 	{
-		s.add("Singleplayer");
-		s.add("Options");
-		s.add("Exit Game");
+		s.add("game.singleplayer");
+		s.add("options.title");
+		s.add("game.exit");
 	}
 	
 	@Override

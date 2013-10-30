@@ -183,7 +183,7 @@ public class DungeonRun extends BasicGame
 	
 	public void startGame() throws SlickException
 	{
-		this.displayGuiScreen(new GuiInfo("Loading World..."));
+		this.displayGuiScreen(new GuiInfo("world.loading"));
 		
 		this.theWorld = new World(new WorldInfo("TestWorld"));
 		new Thread(new Runnable()
@@ -213,7 +213,7 @@ public class DungeonRun extends BasicGame
 	
 	public void endGame() throws SlickException
 	{
-		this.displayGuiScreen(new GuiInfo("Saving World..."));
+		this.displayGuiScreen(new GuiInfo("world.saving"));
 		new Thread(new Runnable()
 		{
 			public void run()

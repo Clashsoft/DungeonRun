@@ -3,7 +3,7 @@ package com.clashsoft.dungeonrun.gui;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.util.ResourceRegistry;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class GuiIntro extends GuiScreen
 {
@@ -27,8 +27,8 @@ public class GuiIntro extends GuiScreen
 		
 		GL11.glPushMatrix();
 		GL11.glScalef(par1 / 1600F, par2 / 1200F, 1F);
-		ResourceRegistry.chaotic_development_bg.setAlpha(f);
-		ResourceRegistry.chaotic_development_bg.draw(0, 0);
+		ResourceHelper.chaotic_development_bg.setAlpha(f);
+		ResourceHelper.chaotic_development_bg.draw(0, 0);
 		GL11.glPopMatrix();
 	}
 	

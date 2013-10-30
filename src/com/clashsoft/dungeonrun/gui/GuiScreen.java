@@ -43,7 +43,7 @@ public abstract class GuiScreen
 		GL11.glPushMatrix();
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		
-		GL11.glScalef(par1 / scaledResolution.scaledWidth, par2 / scaledResolution.scaledHeight, 1F);
+		GL11.glScalef(scaledResolution.scaleFactor, scaledResolution.scaleFactor, 1F);
 		
 		this.drawScreen(scaledResolution.scaledWidth, scaledResolution.scaledHeight);
 		
@@ -54,21 +54,21 @@ public abstract class GuiScreen
 		}
 		
 		if (!dr.debugMode)
-			dr.fontRenderer.drawString(10, 0, String.format("%d FPS", dr.theGameContainer.getFPS()));
+			dr.fontRenderer.drawString(10, 5, String.format("%d FPS", dr.theGameContainer.getFPS()));
 		else
 		{
-			dr.fontRenderer.drawString(10, 0, String.format("Dungeon Run %s (%d FPS)", DungeonRun.VERSION, dr.theGameContainer.getFPS()));
+			dr.fontRenderer.drawString(10, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRun.VERSION, dr.theGameContainer.getFPS()));
 			if (dr.thePlayer != null)
 			{
-				dr.fontRenderer.drawString(10, 20, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
-				dr.fontRenderer.drawString(10, 30, String.format("PlayerRot: %d", dr.thePlayer.rot));
-				dr.fontRenderer.drawString(10, 40, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
-				dr.fontRenderer.drawString(10, 50, String.format("PlayerWorld :", dr.thePlayer.worldObj.toString()));
+				dr.fontRenderer.drawString(10, 25, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
+				dr.fontRenderer.drawString(10, 35, String.format("PlayerRot: %d", dr.thePlayer.rot));
+				dr.fontRenderer.drawString(10, 45, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
+				dr.fontRenderer.drawString(10, 55, String.format("PlayerWorld :", dr.thePlayer.worldObj.toString()));
 			}
 			
 			if (dr.theIngameGui != null)
 			{
-				dr.fontRenderer.drawString(10, 60, String.format("HoverPos: (%d;%d;%d)", dr.theIngameGui.mouseBlockX, dr.theIngameGui.mouseBlockY, dr.theIngameGui.mouseBlockZ));
+				dr.fontRenderer.drawString(10, 65, String.format("HoverPos: (%d;%d;%d)", dr.theIngameGui.mouseBlockX, dr.theIngameGui.mouseBlockY, dr.theIngameGui.mouseBlockZ));
 			}
 		}
 		GL11.glPopMatrix();

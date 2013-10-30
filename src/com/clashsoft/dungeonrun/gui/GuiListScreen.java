@@ -9,6 +9,7 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.engine.SoundEngine;
+import com.clashsoft.dungeonrun.util.I18n;
 
 public abstract class GuiListScreen extends GuiScreen
 {
@@ -27,7 +28,7 @@ public abstract class GuiListScreen extends GuiScreen
 	{
 		drawBricks(par1, par2);
 		
-		DungeonRun.instance.fontRenderer.drawString((par1 - DungeonRun.instance.fontRenderer.getStringWidth(getTitle())) / 2, 20, getTitle(), 0x00EFFF, true);
+		DungeonRun.instance.fontRenderer.drawString((par1 - DungeonRun.instance.fontRenderer.getStringWidth(getTitle())) / 2, 20, I18n.getString(getTitle()), 0x00EFFF, true);
 		for (int i = 0; i < entrys.size(); i++)
 		{
 			String text = getEntry(i);
@@ -75,7 +76,7 @@ public abstract class GuiListScreen extends GuiScreen
 	
 	public String getEntry(int i)
 	{
-		return entrys.get(i);
+		return I18n.getString(entrys.get(i));
 	}
 	
 	public void drawBricks(int width, int heigth) throws SlickException
