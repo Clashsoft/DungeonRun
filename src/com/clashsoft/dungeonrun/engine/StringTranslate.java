@@ -18,7 +18,8 @@ public class StringTranslate
 	
 	public String translate(String key)
 	{
-		return langMap.getProperty(key);
+		String s = langMap.getProperty(key);
+		return s == null ? key : s;
 	}
 	
 	public String translate(String key, Object[] args)

@@ -183,6 +183,8 @@ public class FontRenderer
 		this.setColor_I(color);
 		this.shadow = shadow;
 		
+		text = preDraw(text);
+		
 		for (int i = 0; i < text.length(); i++)
 		{
 			char c = text.charAt(i);
@@ -212,6 +214,8 @@ public class FontRenderer
 					i++;
 					continue;
 				}
+				else if (c1 == '\u00a7')
+					continue;
 			}
 			
 			x += drawChar(x, y, c) + 1;
@@ -220,6 +224,32 @@ public class FontRenderer
 		GL11.glPopMatrix();
 		
 		return x;
+	}
+	
+	public String preDraw(String text)
+	{
+		String text1 = new String(text);
+		for (int i = 0; i < text1.length(); i++)
+		{
+			char c = text1.charAt(i);
+			
+			if (c == '#')
+			{
+				int end = text1.indexOf(' ', i + 1);
+				if (end == -1)
+					end = text1.length();
+				if (end == i + 1)
+					continue;
+				
+				String key = text1.substring(i + 1, end);
+				String translatedKey = I18n.getString(key.replace('_', '.'));
+				
+				text = text.replace("#" + key, translatedKey);
+				
+				i = end;
+			}
+		}
+		return text;
 	}
 	
 	public float drawChar(float x, float y, char c)
