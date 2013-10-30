@@ -59,6 +59,11 @@ public abstract class GuiListScreen extends GuiScreen
 		}
 	}
 	
+	@Override
+	public void keyTyped(int key, char c) throws SlickException
+	{
+	}
+	
 	public abstract String getTitle();
 	
 	public abstract void addEntrys(List<String> s);

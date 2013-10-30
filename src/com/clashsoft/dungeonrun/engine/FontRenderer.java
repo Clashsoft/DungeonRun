@@ -247,6 +247,9 @@ public class FontRenderer
 	{
 		Image image = charMap.get(Character.valueOf(c));
 		
+		if (image == null)
+			return 0;
+		
 		float b = this.bold ? 1.25F : 1F;
 		
 		if (draw)

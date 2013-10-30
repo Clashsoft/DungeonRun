@@ -30,4 +30,8 @@ public class GuiInfo extends GuiScreen
 	{
 	}
 	
+	@Override
+	public void keyTyped(int key, char c) throws SlickException
+	{
+	}
 }

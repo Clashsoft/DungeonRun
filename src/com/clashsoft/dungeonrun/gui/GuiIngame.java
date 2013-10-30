@@ -86,6 +86,11 @@ public class GuiIngame extends GuiScreen
 		}
 	}
 	
+	@Override
+	public void keyTyped(int key, char c) throws SlickException
+	{
+	}
+	
 	private boolean isMouseOverBlock(int x, int y, int z)
 	{
 		float offsetX = renderBlocks.getOffset(x, player.posX);

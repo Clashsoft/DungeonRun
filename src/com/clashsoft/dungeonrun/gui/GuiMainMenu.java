@@ -91,7 +91,7 @@ public class GuiMainMenu extends GuiListScreen
 	public void onEntryUsed(int i) throws SlickException
 	{
 		if (i == 0)
-			this.dr.startGame();
+			this.dr.displayGuiScreen(new GuiSelectWorld(this));
 		else if (i == 1)
 			this.dr.displayGuiScreen(new GuiOptions(this));
 		else if (i == 2)

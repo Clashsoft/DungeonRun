@@ -22,5 +22,8 @@ gui.cancel=Cancel
 gui.done=Done
 gui.back=Back
 
+world.select=Select World
 world.loading=Loading World...
 world.saving=Saving World...
+world.create=Create World
+world.new.template=New World

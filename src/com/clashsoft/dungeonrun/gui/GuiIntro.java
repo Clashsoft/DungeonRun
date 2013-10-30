@@ -40,4 +40,9 @@ public class GuiIntro extends GuiScreen
 		else
 			this.dr.displayGuiScreen(new GuiMainMenu());
 	}
+	
+	@Override
+	public void keyTyped(int key, char c) throws SlickException
+	{
+	}
 }

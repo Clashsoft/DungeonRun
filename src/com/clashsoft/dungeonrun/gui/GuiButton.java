@@ -30,13 +30,13 @@ public class GuiButton
 		{
 			if (isLocked)
 				GL11.glColor4f(0.8F, 0.8F, 0.8F, 1F);
-			int texture = isMouseHovering() ? 40 : 80;
+			int texture = isMouseHovering() ? 40 : 0;
 			DungeonRun.instance.renderEngine.drawTexture(ResourceHelper.buttons, pos.x, pos.y, 0, texture, 200, 40);
 		}
 	}
 	
 	public boolean isMouseHovering()
 	{
-		return false; // GuiScreen.isMouseInRegion(pos.x, pos.y, 200, 40);
+		return DungeonRun.instance.currentGui.isMouseInRegion(pos.x, pos.y, 200, 40);
 	}
 }

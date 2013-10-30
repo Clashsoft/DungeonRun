@@ -64,7 +64,7 @@ public abstract class GuiScreen
 				dr.fontRenderer.drawStringWithShadow(5, 25, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
 				dr.fontRenderer.drawStringWithShadow(5, 35, String.format("PlayerRot: %d", dr.thePlayer.rot));
 				dr.fontRenderer.drawStringWithShadow(5, 45, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
-				dr.fontRenderer.drawStringWithShadow(5, 55, String.format("PlayerWorld :", dr.thePlayer.worldObj.toString()));
+				dr.fontRenderer.drawStringWithShadow(5, 55, String.format("PlayerWorld: %s", dr.theWorld.worldInfo.getName()));
 			}
 			
 			if (dr.theIngameGui != null)
@@ -79,6 +79,8 @@ public abstract class GuiScreen
 	{
 		this.updateScreen();
 	}
+	
+	public abstract void keyTyped(int key, char c) throws SlickException;
 	
 	public abstract void initGui() throws SlickException;
 	

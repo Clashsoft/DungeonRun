@@ -16,13 +16,12 @@ import com.clashsoft.dungeonrun.engine.SoundEngine;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.gui.*;
 import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.dungeonrun.world.WorldInfo;
 
 public class DungeonRun extends BasicGame
 {
 	public static DungeonRun	instance;
 	
-	public static final String	VERSION		= "v0.3";
+	public static final String	VERSION		= "v0.4";
 	
 	public AppGameContainer		theGameContainer;
 	public long					tick;
@@ -76,6 +75,8 @@ public class DungeonRun extends BasicGame
 		
 		this.gameSettings.updateGame();
 		
+		this.theGameContainer.getInput().addListener(this);
+		
 		for (Block b : Block.blocksList)
 		{
 			if (b != null)
@@ -93,11 +94,27 @@ public class DungeonRun extends BasicGame
 	}
 	
 	@Override
+	public void keyPressed(int key, char c)
+	{
+		if (this.currentGui != null)
+			try
+			{
+				this.currentGui.keyTyped(key, c);
+			}
+			catch (SlickException ex)
+			{
+				ex.printStackTrace();
+			}
+	}
+	
+	@Override
 	public void update(GameContainer gc, int tick) throws SlickException
 	{
 		this.tick++;
 		if (this.currentGui != null)
+		{
 			this.currentGui.update(this);
+		}
 		
 		Input input = gc.getInput();
 		if (input.isKeyPressed(Input.KEY_F2))
@@ -189,7 +206,6 @@ public class DungeonRun extends BasicGame
 		this.displayGuiScreen(new GuiInfo("world.loading"));
 		
 		this.hasGameStarted = true;
-		this.theWorld = new World(new WorldInfo("TestWorld"));
 		new Thread(new Runnable()
 		{
 			@Override
@@ -220,10 +236,6 @@ public class DungeonRun extends BasicGame
 	{
 		this.displayGuiScreen(new GuiInfo("world.saving"));
 		
-		this.theIngameGui = null;
-		this.hasGameStarted = false;
-		this.theWorld = null;
-		this.thePlayer = null;
 		new Thread(new Runnable()
 		{
 			@Override
@@ -231,9 +243,14 @@ public class DungeonRun extends BasicGame
 			{
 				try
 				{
-					saveWorld(DungeonRun.this.theWorld);
+					DungeonRun.this.saveWorld(DungeonRun.this.theWorld);
 					
 					DungeonRun.this.displayGuiScreen(new GuiMainMenu());
+					
+					DungeonRun.this.theIngameGui = null;
+					DungeonRun.this.hasGameStarted = false;
+					DungeonRun.this.theWorld = null;
+					DungeonRun.this.thePlayer = null;
 				}
 				catch (SlickException ex)
 				{
@@ -256,7 +273,7 @@ public class DungeonRun extends BasicGame
 	}
 	
 	public boolean saveWorld(World world) throws SlickException
-	{
+	{	
 		if (world == null)
 			return false;
 		
@@ -272,9 +289,7 @@ public class DungeonRun extends BasicGame
 	}
 	
 	public boolean loadWorld(World world) throws SlickException
-	{
-		this.theWorld = world;
-		
+	{	
 		if (world == null)
 			return false;
 		
