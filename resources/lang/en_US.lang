@@ -1,0 +1,26 @@
+game.gameover.title=Game Over
+game.respawn=Respawn
+game.back=Back to Game
+game.quit=Quit Game
+game.singleplayer=Play Singleplayer
+game.multiplayer=Play Multiplayer
+
+mainmenu.title=Main Menu
+
+pausemenu.title=Game Menu
+
+options.title=Game Settings
+options.soundvolume=Sound Volume
+options.musicvolume=Music Volume
+
+options.video.title=Video Options
+options.video.guiscale=GUI Size
+options.video.fullscreen=Fullscreen
+options.video.vsync=Vertical Sync
+
+gui.cancel=Cancel
+gui.done=Done
+gui.back=Back
+
+world.loading=Loading World...
+world.saving=Saving World...

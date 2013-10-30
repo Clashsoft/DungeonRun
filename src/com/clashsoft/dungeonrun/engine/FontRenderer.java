@@ -64,6 +64,9 @@ public class FontRenderer
 						System.err.println("Unknow char " + key + " (" + path + ")");
 					}
 				}
+				
+				if (dr.debugMode && c != 0)
+					System.out.println("Unicode char " + c + " [" + key + "] (" + path + ") loaded.");
 			}
 			else
 				c = key.charAt(0);
@@ -99,6 +102,16 @@ public class FontRenderer
 	public void drawString(int x, int y, String text, int color)
 	{
 		drawString(x, y, text, color, false);
+	}
+	
+	public void drawStringWithShadow(int x, int y, String text)
+	{
+		drawStringWithShadow(x, y, text, 0xFFFFFF);
+	}
+	
+	public void drawStringWithShadow(int x, int y, String text, int color)
+	{
+		drawString(x, y, text, color, true);
 	}
 	
 	public void drawString(int x, int y, String text, int color, boolean shadow)

@@ -16,7 +16,7 @@ public class GuiPauseMenu extends GuiListScreen
 	@Override
 	public String getTitle()
 	{
-		return "game.pausemenu.title";
+		return "pausemenu.title";
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class GuiPauseMenu extends GuiListScreen
 	{
 		s.add("game.back");
 		s.add("options.title");
-		s.add("game.mainmenu.title");
+		s.add("mainmenu.title");
 	}
 	
 	@Override

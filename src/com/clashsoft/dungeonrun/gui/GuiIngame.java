@@ -10,10 +10,10 @@ import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.engine.I18n;
 import com.clashsoft.dungeonrun.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.util.I18n;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos3;
 
 public class GuiIngame extends GuiScreen

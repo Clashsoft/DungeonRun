@@ -9,6 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
 import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
 
 public abstract class GuiScreen
@@ -54,21 +55,21 @@ public abstract class GuiScreen
 		}
 		
 		if (!dr.debugMode)
-			dr.fontRenderer.drawString(10, 5, String.format("%d FPS", dr.theGameContainer.getFPS()));
+			dr.fontRenderer.drawStringWithShadow(5, 5, String.format("%d FPS", dr.theGameContainer.getFPS()));
 		else
 		{
-			dr.fontRenderer.drawString(10, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRun.VERSION, dr.theGameContainer.getFPS()));
+			dr.fontRenderer.drawStringWithShadow(5, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRun.VERSION, dr.theGameContainer.getFPS()));
 			if (dr.thePlayer != null)
 			{
-				dr.fontRenderer.drawString(10, 25, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
-				dr.fontRenderer.drawString(10, 35, String.format("PlayerRot: %d", dr.thePlayer.rot));
-				dr.fontRenderer.drawString(10, 45, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
-				dr.fontRenderer.drawString(10, 55, String.format("PlayerWorld :", dr.thePlayer.worldObj.toString()));
+				dr.fontRenderer.drawStringWithShadow(5, 25, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
+				dr.fontRenderer.drawStringWithShadow(5, 35, String.format("PlayerRot: %d", dr.thePlayer.rot));
+				dr.fontRenderer.drawStringWithShadow(5, 45, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
+				dr.fontRenderer.drawStringWithShadow(5, 55, String.format("PlayerWorld :", dr.thePlayer.worldObj.toString()));
 			}
 			
 			if (dr.theIngameGui != null)
 			{
-				dr.fontRenderer.drawString(10, 65, String.format("HoverPos: (%d;%d;%d)", dr.theIngameGui.mouseBlockX, dr.theIngameGui.mouseBlockY, dr.theIngameGui.mouseBlockZ));
+				dr.fontRenderer.drawStringWithShadow(5, 65, String.format("HoverPos: (%d;%d;%d)", dr.theIngameGui.mouseBlockX, dr.theIngameGui.mouseBlockY, dr.theIngameGui.mouseBlockZ));
 			}
 		}
 		GL11.glPopMatrix();
@@ -87,12 +88,12 @@ public abstract class GuiScreen
 	
 	public double getRescaleFactorX(int windowWidth)
 	{
-		return windowWidth / 512D;
+		return scaledResolution.scaleFactor;
 	}
 	
 	public double getRescaleFactorY(int windowHeight)
 	{
-		return windowHeight / 200D;
+		return scaledResolution.scaleFactor;
 	}
 	
 	public boolean isMouseInRegion(float x, float y, float sizeX, float sizeY)
@@ -105,6 +106,19 @@ public abstract class GuiScreen
 	public void setWorldSaving(boolean state)
 	{
 		
+	}
+	
+	public void drawBricks(int width, int heigth) throws SlickException
+	{
+		GL11.glScalef(2F, 2F, 1F);
+		for (int i = 0; i < width / 8F; i++)
+		{
+			for (int j = 0; j < heigth / 8F; j++)
+			{
+				Block.brick.getBlockTextureFromSideAndMetadata(0, 0).draw(i * 16, j * 16);
+			}
+		}
+		GL11.glScalef(0.5F, 0.5F, 1F);
 	}
 	
 	public void drawDefaultBackground(int width, int height)

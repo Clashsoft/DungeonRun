@@ -13,6 +13,8 @@ public class GameSettings
 	public static File	optionsFile		= new File(DungeonRun.getSaveDataFolder(), "options.txt");
 	
 	// General Options
+	public String		language		= "en_US";
+	
 	public float		musicVolume		= 1F;
 	public float		soundVolume		= 1F;
 	

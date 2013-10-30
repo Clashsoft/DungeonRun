@@ -16,7 +16,7 @@ public class GuiDeath extends GuiListScreen
 	public void addEntrys(List<String> s)
 	{
 		s.add("game.respawn");
-		s.add("game.mainmenu");
+		s.add("mainmenu.title");
 	}
 	
 	@Override

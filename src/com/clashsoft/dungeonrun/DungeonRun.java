@@ -10,6 +10,7 @@ import org.newdawn.slick.imageout.ImageOut;
 
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.engine.FontRenderer;
+import com.clashsoft.dungeonrun.engine.I18n;
 import com.clashsoft.dungeonrun.engine.RenderEngine;
 import com.clashsoft.dungeonrun.engine.SoundEngine;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
@@ -29,6 +30,7 @@ public class DungeonRun extends BasicGame
 	public RenderEngine			renderEngine;
 	public SoundEngine			soundEngine;
 	public FontRenderer			fontRenderer;
+	public I18n					i18n;
 	
 	public boolean				debugMode	= true;
 	
@@ -70,6 +72,7 @@ public class DungeonRun extends BasicGame
 		this.soundEngine = new SoundEngine(this);
 		this.fontRenderer = new FontRenderer(this);
 		this.gameSettings = new GameSettings();
+		this.i18n = I18n.instance = new I18n();
 		
 		this.gameSettings.updateGame();
 		

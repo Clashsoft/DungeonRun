@@ -6,7 +6,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.util.I18n;
+import com.clashsoft.dungeonrun.engine.I18n;
 
 public class GuiOptions extends GuiListScreen
 {
@@ -77,8 +77,8 @@ public class GuiOptions extends GuiListScreen
 	{
 		s.add("options.soundvolume");
 		s.add("options.musicvolume");
-		s.add("videooptions.title");
-		s.add("options.back");
+		s.add("options.video.title");
+		s.add("gui.back");
 	}
 	
 	@Override
@@ -94,9 +94,9 @@ public class GuiOptions extends GuiListScreen
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return I18n.getStringFormatted("options.soundvolume.value", dr.gameSettings.soundVolume);
+			return I18n.getString("options.soundvolume") + ": " + dr.gameSettings.soundVolume;
 		if (i == 1)
-			return I18n.getStringFormatted("options.musicvolume.value", dr.gameSettings.soundVolume);
+			return I18n.getString("options.musicvolume") + ": " + dr.gameSettings.soundVolume;
 		return super.getEntry(i);
 	}
 }

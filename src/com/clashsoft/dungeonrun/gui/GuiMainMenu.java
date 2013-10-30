@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.engine.I18n;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 
@@ -31,10 +32,12 @@ public class GuiMainMenu extends GuiListScreen
 		
 		for (int i = 0; i < entrys.size(); i++)
 		{
-			String s = entrys.get(i);
+			String s = I18n.getString(entrys.get(i));
+			
 			int length = DungeonRun.instance.fontRenderer.getStringWidth(s);
 			int posX = (int) ((par1 - length) / 2F);
 			int posY = (par2 - (entrys.size() * DungeonRun.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
+			
 			DungeonRun.instance.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
 			
 			if (length >= longestStringLength)
@@ -73,7 +76,7 @@ public class GuiMainMenu extends GuiListScreen
 	@Override
 	public String getTitle()
 	{
-		return "";
+		return "mainmenu.title";
 	}
 	
 	@Override
@@ -81,7 +84,7 @@ public class GuiMainMenu extends GuiListScreen
 	{
 		s.add("game.singleplayer");
 		s.add("options.title");
-		s.add("game.exit");
+		s.add("game.quit");
 	}
 	
 	@Override
