@@ -1,6 +1,7 @@
 package com.clashsoft.dungeonrun.engine;
 
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -49,9 +50,7 @@ public class RenderBlocks
 			// Top Face
 			if (topBlock == null || topBlock.isAir())
 			{
-				Image image1 = block.getBlock().getBlockTextureFromSideAndMetadata(0, block.getMetadata()); // 0
-																											// =
-																											// Top
+				Image image1 = block.getBlock().getBlockTextureFromSideAndMetadata(0, block.getMetadata());
 				if (image1 != null)
 				{
 					image1.setImageColor(topLight, topLight, topLight);
@@ -59,6 +58,7 @@ public class RenderBlocks
 					image1.setImageColor(1, 1, 1);
 					if (hover)
 					{
+						DungeonRun.instance.renderEngine.graphics.setColor(Color.black);
 						DungeonRun.instance.renderEngine.graphics.drawRect(posX, posY, 15, 15);
 					}
 				}
@@ -67,9 +67,7 @@ public class RenderBlocks
 			// Front/South Face
 			if (sideBlock == null || sideBlock.isAir())
 			{
-				Image image2 = block.getBlock().getBlockTextureFromSideAndMetadata(4, block.getMetadata()); // 5
-																											// =
-																											// South
+				Image image2 = block.getBlock().getBlockTextureFromSideAndMetadata(4, block.getMetadata());
 				if (image2 != null)
 				{
 					GL11.glScalef(1F, 12F / 16F, 1F);
@@ -79,6 +77,7 @@ public class RenderBlocks
 					image2.setImageColor(1F, 1F, 1F);
 					if (hover)
 					{
+						DungeonRun.instance.renderEngine.graphics.setColor(Color.black);
 						DungeonRun.instance.renderEngine.graphics.drawRect(posX, posY2, 15, 15);
 					}
 					GL11.glScalef(1F, 16F / 12F, 1F);

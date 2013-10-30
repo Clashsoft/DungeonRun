@@ -8,8 +8,8 @@ import com.clashsoft.dungeonrun.world.World;
 
 public class EntityList
 {
-	private static Map<String, Class> nameToClassMap = new HashMap<>();
-	private static Map<Class, String> classToNameMap = new HashMap<>();
+	private static Map<String, Class>	nameToClassMap	= new HashMap<>();
+	private static Map<Class, String>	classToNameMap	= new HashMap<>();
 	
 	static
 	{
@@ -52,7 +52,8 @@ public class EntityList
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace(); //Impossible as long as there is a Entity(World) constructor
+			ex.printStackTrace(); // Impossible as long as there is a
+									// Entity(World) constructor
 		}
 		return null;
 	}

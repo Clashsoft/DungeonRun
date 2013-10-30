@@ -6,7 +6,7 @@ import com.clashsoft.dungeonrun.engine.I18n;
 
 public class GuiInfo extends GuiScreen
 {
-	public String message;
+	public String	message;
 	
 	public GuiInfo(String message)
 	{

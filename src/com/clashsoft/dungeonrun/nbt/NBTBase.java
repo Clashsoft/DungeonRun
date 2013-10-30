@@ -9,24 +9,24 @@ import com.clashsoft.dungeonrun.util.FileCompressing;
 
 public abstract class NBTBase
 {
-	public static final boolean DELETE_COMPRESSED_FILES = false;
+	public static final boolean	DELETE_COMPRESSED_FILES	= false;
 	
-	public static byte TYPE_COMPOUND = 0;
-	public static byte TYPE_LIST = 1;
-	public static byte TYPE_BOOLEAN = 2;
-	public static byte TYPE_BYTE = 3;
-	public static byte TYPE_SHORT = 4;
-	public static byte TYPE_INT = 5;
-	public static byte TYPE_FLOAT = 6;
-	public static byte TYPE_DOUBLE = 7;
-	public static byte TYPE_LONG = 8;
-	public static byte TYPE_STRING = 9;
+	public static byte			TYPE_COMPOUND			= 0;
+	public static byte			TYPE_LIST				= 1;
+	public static byte			TYPE_BOOLEAN			= 2;
+	public static byte			TYPE_BYTE				= 3;
+	public static byte			TYPE_SHORT				= 4;
+	public static byte			TYPE_INT				= 5;
+	public static byte			TYPE_FLOAT				= 6;
+	public static byte			TYPE_DOUBLE				= 7;
+	public static byte			TYPE_LONG				= 8;
+	public static byte			TYPE_STRING				= 9;
 	
-	public static byte TYPE_ARRAY = 20;
+	public static byte			TYPE_ARRAY				= 20;
 	
-	public String name;
-	public byte type;
-	public Object value;
+	public String				name;
+	public byte					type;
+	public Object				value;
 	
 	public NBTBase(byte type, String name, Object value)
 	{
@@ -74,7 +74,7 @@ public abstract class NBTBase
 			return false;
 		return true;
 	}
-
+	
 	public abstract boolean valueEquals(NBTBase that);
 	
 	public boolean serialize(File out, boolean compressed)
@@ -138,25 +138,25 @@ public abstract class NBTBase
 	public static NBTBase createFromObject(String tagName, Object value)
 	{
 		if (value instanceof Boolean)
-			return new NBTTagBoolean(tagName, (boolean)value);
+			return new NBTTagBoolean(tagName, (boolean) value);
 		if (value instanceof Byte)
-			return new NBTTagByte(tagName, (byte)value);
+			return new NBTTagByte(tagName, (byte) value);
 		if (value instanceof Short)
-			return new NBTTagShort(tagName, (short)value);
+			return new NBTTagShort(tagName, (short) value);
 		if (value instanceof Integer)
-			return new NBTTagInteger(tagName, (int)value);
+			return new NBTTagInteger(tagName, (int) value);
 		if (value instanceof Float)
-			return new NBTTagFloat(tagName, (float)value);
+			return new NBTTagFloat(tagName, (float) value);
 		if (value instanceof Double)
-			return new NBTTagDouble(tagName, (double)value);
+			return new NBTTagDouble(tagName, (double) value);
 		if (value instanceof Long)
-			return new NBTTagLong(tagName, (long)value);
+			return new NBTTagLong(tagName, (long) value);
 		if (value instanceof String)
-			return new NBTTagString(tagName, (String)value);
+			return new NBTTagString(tagName, (String) value);
 		if (value instanceof NBTTagCompound)
-			return (NBTTagCompound)value;
+			return (NBTTagCompound) value;
 		if (value instanceof NBTTagList)
-			return (NBTTagList)value;
+			return (NBTTagList) value;
 		return null;
 	}
 	

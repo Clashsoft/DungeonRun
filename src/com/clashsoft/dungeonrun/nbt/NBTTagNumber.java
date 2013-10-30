@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.nbt;
 
 public abstract class NBTTagNumber extends NBTBase
 {
-	private Number value;
+	private Number	value;
 	
 	public NBTTagNumber(byte type, String name, Number value)
 	{
@@ -13,7 +13,7 @@ public abstract class NBTTagNumber extends NBTBase
 	@Override
 	public boolean valueEquals(NBTBase that)
 	{
-		return value.equals(((NBTTagNumber)that).value);
+		return value.equals(((NBTTagNumber) that).value);
 	}
 	
 	public abstract char getPostfixChar();

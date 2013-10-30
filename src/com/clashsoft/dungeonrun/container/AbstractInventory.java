@@ -9,8 +9,11 @@ import com.clashsoft.dungeonrun.nbt.NBTTagList;
 public abstract class AbstractInventory implements INBTSaveable
 {
 	public abstract void setStackInSlot(int slot, ItemStack stack);
+	
 	public abstract ItemStack getStackInSlot(int slot);
+	
 	public abstract int getFirstSlotWithItemStack(ItemStack stack);
+	
 	public abstract int getInventorySize();
 	
 	@Override
@@ -44,7 +47,7 @@ public abstract class AbstractInventory implements INBTSaveable
 				NBTBase base = slots.tagAt(i);
 				if (base instanceof NBTTagCompound)
 				{
-					NBTTagCompound compound = (NBTTagCompound)base;
+					NBTTagCompound compound = (NBTTagCompound) base;
 					
 					int slotID = compound.getInteger("SlotID");
 					ItemStack stack = new ItemStack(null, 0, 0);

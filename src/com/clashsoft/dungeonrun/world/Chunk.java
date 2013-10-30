@@ -8,18 +8,18 @@ import com.clashsoft.dungeonrun.util.ArrayConverter;
 
 public class Chunk implements INBTSaveable
 {
-	public final World		world;
+	public final World	world;
 	
-	public int				chunkX;
-	public int				chunkZ;
+	public int			chunkX;
+	public int			chunkZ;
 	
-	private int[]			blockIDs;
-	private int[]			metadataValues;
+	private int[]		blockIDs;
+	private int[]		metadataValues;
 	
-	private float[]			lightValues;
-	private int[]			maxY;
+	private float[]		lightValues;
+	private int[]		maxY;
 	
-	public boolean dummy;
+	public boolean		dummy;
 	
 	public Chunk(World w, int x, int y)
 	{
@@ -138,7 +138,8 @@ public class Chunk implements INBTSaveable
 		{
 			return this.blockIDs[index];
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 		}
 		return 0;
@@ -202,6 +203,7 @@ public class Chunk implements INBTSaveable
 		return (chunkZ * 16) + z;
 	}
 	
+	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("ChunkX", this.chunkX);
@@ -210,6 +212,7 @@ public class Chunk implements INBTSaveable
 		nbt.setTagList(NBTTagList.fromArray("BlockMs", ArrayConverter.convertIntArray(metadataValues)));
 	}
 	
+	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.chunkX = nbt.getInteger("ChunkX");

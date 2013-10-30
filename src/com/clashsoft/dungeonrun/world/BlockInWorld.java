@@ -7,12 +7,12 @@ import com.clashsoft.dungeonrun.block.Block;
 
 public class BlockInWorld
 {
-	public static BlockInWorld AIR = new BlockInWorld(null, 0, 0);
+	public static BlockInWorld	AIR	= new BlockInWorld(null, 0, 0);
 	
-	public World	world;
-	public int		blockID;
-	public int		metadata;
-	public int		x, y, z;
+	public World				world;
+	public int					blockID;
+	public int					metadata;
+	public int					x, y, z;
 	
 	public BlockInWorld(World w, int id, int metadata)
 	{

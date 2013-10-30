@@ -5,7 +5,7 @@ import com.clashsoft.dungeonrun.world.World;
 
 public abstract class EntityDamagable extends Entity
 {
-	public float health = 20;
+	public float	health	= 20;
 	
 	public EntityDamagable(World world)
 	{

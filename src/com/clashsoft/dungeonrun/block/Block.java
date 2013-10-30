@@ -21,7 +21,7 @@ public class Block implements IStackable
 	public static Block		cobbleStone		= new Block(8).setBlockName("Cobblestone");
 	public static Block		planks			= new Block(9).setBlockName("Planks");
 	public static Block		water			= new Block(10).setBlockName("Water").setNoTop();
-																								
+	
 	public int				blockID;
 	public boolean			canStepOnBlock	= true;
 	public String			blockName;

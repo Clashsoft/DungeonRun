@@ -56,11 +56,9 @@ public abstract class GuiScreen
 				button.render();
 		}
 		
-		if (!dr.debugMode)
-			dr.fontRenderer.drawStringWithShadow(5, 5, String.format("%d FPS", dr.theGameContainer.getFPS()));
-		else
+		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRun.VERSION, dr.theGameContainer.getFPS()));
+		if (dr.gameSettings.debugMode)
 		{
-			dr.fontRenderer.drawStringWithShadow(5, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRun.VERSION, dr.theGameContainer.getFPS()));
 			if (dr.thePlayer != null)
 			{
 				dr.fontRenderer.drawStringWithShadow(5, 25, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));

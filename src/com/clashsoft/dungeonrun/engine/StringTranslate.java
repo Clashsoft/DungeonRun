@@ -7,8 +7,8 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class StringTranslate
 {
-	public String language;
-	public Properties langMap = new Properties();
+	public String		language;
+	public Properties	langMap	= new Properties();
 	
 	public StringTranslate(String lang)
 	{

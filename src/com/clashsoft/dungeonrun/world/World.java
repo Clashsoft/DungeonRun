@@ -15,19 +15,19 @@ import com.clashsoft.dungeonrun.nbt.NBTTagList;
 
 public class World
 {
-	public static final int			WORLDSIZE_X = 1024;
-	public static final int			WORLDSIZE_Z = 1024;
-	public static final int			CHUNKS_X = WORLDSIZE_X / 16;
-	public static final int			CHUNKS_Z = WORLDSIZE_Z / 16;
+	public static final int				WORLDSIZE_X		= 1024;
+	public static final int				WORLDSIZE_Z		= 1024;
+	public static final int				CHUNKS_X		= WORLDSIZE_X / 16;
+	public static final int				CHUNKS_Z		= WORLDSIZE_Z / 16;
 	
-	public WorldInfo				worldInfo = null;
+	public WorldInfo					worldInfo		= null;
 	
-	private NBTTagCompound			worldNBT = new NBTTagCompound("World");
+	private NBTTagCompound				worldNBT		= new NBTTagCompound("World");
 	
-	private Chunk[][]				chunks			= new Chunk[CHUNKS_X * 2][CHUNKS_Z * 2];
-	private Map<Integer, Entity>	entitys			= new HashMap<Integer, Entity>();
-	private Map<String, EntityPlayer> playerEntitys = new HashMap<String, EntityPlayer>();
-	private List<Integer>			entitysToRemove	= new LinkedList<Integer>();
+	private Chunk[][]					chunks			= new Chunk[CHUNKS_X * 2][CHUNKS_Z * 2];
+	private Map<Integer, Entity>		entitys			= new HashMap<Integer, Entity>();
+	private Map<String, EntityPlayer>	playerEntitys	= new HashMap<String, EntityPlayer>();
+	private List<Integer>				entitysToRemove	= new LinkedList<Integer>();
 	
 	public World(WorldInfo info)
 	{
@@ -75,7 +75,7 @@ public class World
 	public void spawnEntityInWorld(Entity e)
 	{
 		if (e instanceof EntityPlayer)
-			this.playerEntitys.put(((EntityPlayer)e).username, DungeonRun.instance.thePlayer = ((EntityPlayer)e));
+			this.playerEntitys.put(((EntityPlayer) e).username, DungeonRun.instance.thePlayer = ((EntityPlayer) e));
 		this.entitys.put(e.entityId, e);
 	}
 	
@@ -84,7 +84,7 @@ public class World
 		this.entitys.remove(id);
 		
 		if (entitys.get(id) instanceof EntityPlayer)
-			this.playerEntitys.remove(((EntityPlayer)entitys.get(id)).username);
+			this.playerEntitys.remove(((EntityPlayer) entitys.get(id)).username);
 	}
 	
 	public void updateWorld() throws SlickException
@@ -205,9 +205,9 @@ public class World
 			{
 				if (base instanceof NBTTagCompound)
 				{
-					String entityType = ((NBTTagCompound)base).getString("EntityType");
+					String entityType = ((NBTTagCompound) base).getString("EntityType");
 					Entity entity = EntityList.constructFromType(entityType, this);
-					entity.readFromNBT((NBTTagCompound)base);
+					entity.readFromNBT((NBTTagCompound) base);
 					this.spawnEntityInWorld(entity);
 				}
 			}
@@ -225,7 +225,7 @@ public class World
 				if (base instanceof NBTTagCompound)
 				{
 					Chunk c = new Chunk(this, 0, 0);
-					c.readFromNBT((NBTTagCompound)base);
+					c.readFromNBT((NBTTagCompound) base);
 					if (!c.dummy)
 						chunks[i][j] = c;
 					else

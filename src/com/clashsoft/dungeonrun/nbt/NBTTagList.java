@@ -6,14 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class NBTTagList extends NBTBase implements Iterable<NBTBase>
-{	
-	private ArrayList<NBTBase> tags;
+{
+	private ArrayList<NBTBase>	tags;
 	
 	public NBTTagList(String name)
 	{
 		this(name, 10);
 	}
-
+	
 	public NBTTagList(String name, int capacity)
 	{
 		super(TYPE_LIST, name, null);
@@ -46,7 +46,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	private void ensureSize(int size)
 	{
 		tags.ensureCapacity(size);
-		while(tags.size() < size)
+		while (tags.size() < size)
 			tags.add(null);
 	}
 	
@@ -142,7 +142,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		}
 		return list;
 	}
-
+	
 	public <T> T[] toArray(Class<T> arrayType)
 	{
 		T[] array = (T[]) Array.newInstance(arrayType, this.tags.size());
@@ -152,7 +152,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		}
 		return array;
 	}
-
+	
 	public <T> T[] toArray()
 	{
 		return (T[]) tags.toArray();
@@ -165,7 +165,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		{
 			NBTBase base = this.tagAt(i);
 			if (base instanceof NBTTagNumber)
-				array[i] = ((NBTTagInteger)base).value;
+				array[i] = ((NBTTagInteger) base).value;
 		}
 		return array;
 	}
@@ -177,7 +177,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		{
 			NBTBase base = this.tagAt(i);
 			if (base instanceof NBTTagNumber)
-				array[i] = ((NBTTagFloat)base).value;
+				array[i] = ((NBTTagFloat) base).value;
 		}
 		return array;
 	}
@@ -185,7 +185,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	@Override
 	public boolean valueEquals(NBTBase that)
 	{
-		return tags.equals(((NBTTagList)that).tags);
+		return tags.equals(((NBTTagList) that).tags);
 	}
 	
 	@Override
@@ -205,7 +205,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		sb.append("\n" + prefix + "]");
 		return sb.toString();
 	}
-
+	
 	@Override
 	public void readValueString(String dataString)
 	{
@@ -215,7 +215,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 			return;
 		dataString = dataString.substring(pos1, pos2).trim();
 		for (String sub : NBTTagCompound.split(dataString))
-		{	
+		{
 			int point = sub.indexOf(':');
 			String tagID = sub.substring(0, point);
 			String tag = sub.substring(point + 1, sub.length());

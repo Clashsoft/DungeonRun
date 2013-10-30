@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.nbt;
 
 public class NBTTagString extends NBTBase
 {
-	public String value;
+	public String	value;
 	
 	public NBTTagString(String name, String value)
 	{
@@ -13,7 +13,7 @@ public class NBTTagString extends NBTBase
 	@Override
 	public boolean valueEquals(NBTBase that)
 	{
-		return value.equals(((NBTTagString)that).value);
+		return value.equals(((NBTTagString) that).value);
 	}
 	
 	@Override
@@ -21,7 +21,7 @@ public class NBTTagString extends NBTBase
 	{
 		return "\"" + value.replace("\"", "\u00a8") + "\"";
 	}
-
+	
 	@Override
 	public void readValueString(String dataString)
 	{

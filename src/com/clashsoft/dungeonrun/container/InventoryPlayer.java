@@ -13,16 +13,18 @@ public class InventoryPlayer extends AbstractInventory
 		player = ep;
 	}
 	
+	@Override
 	public ItemStack getStackInSlot(int i)
 	{
 		return inventory[i];
 	}
 	
+	@Override
 	public void setStackInSlot(int i, ItemStack stack)
 	{
 		inventory[i] = stack;
 	}
-
+	
 	@Override
 	public int getFirstSlotWithItemStack(ItemStack stack)
 	{
@@ -33,7 +35,7 @@ public class InventoryPlayer extends AbstractInventory
 		}
 		return -1;
 	}
-
+	
 	@Override
 	public int getInventorySize()
 	{

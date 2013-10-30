@@ -12,7 +12,7 @@ public abstract class Entity implements INBTSaveable
 {
 	public static int	nextEntityId	= 0;
 	
-	public int	entityId;
+	public int			entityId;
 	
 	public final World	worldObj;
 	
@@ -186,7 +186,8 @@ public abstract class Entity implements INBTSaveable
 	public abstract RenderEntity getRenderer() throws SlickException;
 	
 	public abstract String getTexture();
-
+	
+	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setString("EntityType", EntityList.getNameFromClass(getClass()));

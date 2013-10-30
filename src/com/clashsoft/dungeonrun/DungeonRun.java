@@ -32,8 +32,6 @@ public class DungeonRun extends BasicGame
 	public FontRenderer			fontRenderer;
 	public I18n					i18n;
 	
-	public boolean				debugMode	= true;
-	
 	public int					mousePosX	= 0;
 	public int					mousePosY	= 0;
 	
@@ -69,10 +67,11 @@ public class DungeonRun extends BasicGame
 	{
 		Mouse.setClipMouseCoordinatesToWindow(true);
 		
+		this.gameSettings = new GameSettings();
+		
 		this.renderEngine = new RenderEngine(this);
 		this.soundEngine = new SoundEngine(this);
 		this.fontRenderer = new FontRenderer(this);
-		this.gameSettings = new GameSettings();
 		this.i18n = I18n.instance = new I18n();
 		
 		this.gameSettings.updateGame();
@@ -120,7 +119,7 @@ public class DungeonRun extends BasicGame
 			}
 		}
 		if (input.isKeyPressed(Input.KEY_F3))
-			this.debugMode = !this.debugMode;
+			this.gameSettings.debugMode = !this.gameSettings.debugMode;
 	}
 	
 	public GuiScreen displayGuiScreen(GuiScreen gui) throws SlickException
@@ -193,6 +192,7 @@ public class DungeonRun extends BasicGame
 		this.theWorld = new World(new WorldInfo("TestWorld"));
 		new Thread(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				try
@@ -226,6 +226,7 @@ public class DungeonRun extends BasicGame
 		this.thePlayer = null;
 		new Thread(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				try

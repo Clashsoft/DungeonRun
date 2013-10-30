@@ -7,9 +7,9 @@ import com.clashsoft.dungeonrun.DungeonRun;
 
 public class I18n
 {
-	public static I18n instance;
+	public static I18n					instance;
 	
-	public Map<String, StringTranslate> languages = new HashMap<String, StringTranslate>();
+	public Map<String, StringTranslate>	languages	= new HashMap<String, StringTranslate>();
 	
 	public static String getString(String key)
 	{

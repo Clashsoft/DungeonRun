@@ -24,6 +24,8 @@ public class GameSettings
 	
 	public boolean		renderHitBoxes	= false;
 	
+	public boolean		debugMode		= true;
+	
 	public GameSettings()
 	{
 		load();
@@ -61,6 +63,8 @@ public class GameSettings
 		this.fullScreen = Boolean.parseBoolean(props.getProperty("fullscreen", "false"));
 		this.useVSync = Boolean.parseBoolean(props.getProperty("vsync", "true"));
 		this.renderHitBoxes = Boolean.parseBoolean(props.getProperty("renderhitboxes", "false"));
+		
+		this.debugMode = Boolean.parseBoolean(props.getProperty("debug", "false"));
 	}
 	
 	public void save()
@@ -74,6 +78,9 @@ public class GameSettings
 		props.setProperty("fullscreen", fullScreen + "");
 		props.setProperty("vsync", useVSync + "");
 		props.setProperty("renderhitboxes", renderHitBoxes + "");
+		
+		props.setProperty("debug", debugMode + "");
+		
 		try
 		{
 			props.store(new FileOutputStream(optionsFile), "");

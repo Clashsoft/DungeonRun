@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class NBTTagCompound extends NBTBase
-{	
-	private Map<String, NBTBase> tags = new HashMap<>();
+{
+	private Map<String, NBTBase>	tags	= new HashMap<>();
 	
 	public NBTTagCompound(String name)
 	{
@@ -97,54 +97,54 @@ public class NBTTagCompound extends NBTBase
 	
 	public boolean getBoolean(String name)
 	{
-		return ((NBTTagBoolean)getTag(name)).value;
+		return ((NBTTagBoolean) getTag(name)).value;
 	}
 	
 	public byte getByte(String name)
 	{
-		return ((NBTTagByte)getTag(name)).value;
+		return ((NBTTagByte) getTag(name)).value;
 	}
 	
 	public short getShort(String name)
 	{
-		return ((NBTTagShort)getTag(name)).value;
+		return ((NBTTagShort) getTag(name)).value;
 	}
 	
 	public int getInteger(String name)
 	{
-		return ((NBTTagInteger)getTag(name)).value;
+		return ((NBTTagInteger) getTag(name)).value;
 	}
 	
 	public float getFloat(String name)
 	{
-		return ((NBTTagFloat)getTag(name)).value;
+		return ((NBTTagFloat) getTag(name)).value;
 	}
 	
 	public double getDouble(String name)
 	{
-		return ((NBTTagDouble)getTag(name)).value;
+		return ((NBTTagDouble) getTag(name)).value;
 	}
 	
 	public long getLong(String name)
 	{
-		NBTTagLong tag = (NBTTagLong)getTag(name);
+		NBTTagLong tag = (NBTTagLong) getTag(name);
 		return tag != null ? tag.value : 0L;
 	}
 	
 	public String getString(String name)
 	{
-		NBTTagString tag = (NBTTagString)getTag(name);
+		NBTTagString tag = (NBTTagString) getTag(name);
 		return tag != null ? tag.value : "";
 	}
 	
 	public NBTTagList getTagList(String name)
 	{
-		return (NBTTagList)getTag(name);
+		return (NBTTagList) getTag(name);
 	}
 	
 	public NBTTagCompound getTagCompound(String name)
 	{
-		return (NBTTagCompound)getTag(name);
+		return (NBTTagCompound) getTag(name);
 	}
 	
 	public void clear()
@@ -155,7 +155,7 @@ public class NBTTagCompound extends NBTBase
 	@Override
 	public boolean valueEquals(NBTBase that)
 	{
-		return tags.equals(((NBTTagCompound)that).tags);
+		return tags.equals(((NBTTagCompound) that).tags);
 	}
 	
 	@Override
@@ -185,7 +185,7 @@ public class NBTTagCompound extends NBTBase
 			return;
 		dataString = dataString.substring(pos1, pos2).trim();
 		for (String sub : split(dataString))
-		{	
+		{
 			int point = sub.indexOf(':');
 			String tagName = sub.substring(0, point);
 			String tag = sub.substring(point + 1, sub.length());

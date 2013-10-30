@@ -5,7 +5,7 @@ import java.util.List;
 import org.newdawn.slick.SlickException;
 
 public class GuiPauseMenu extends GuiListScreen
-{	
+{
 	@Override
 	public String getTitle()
 	{

@@ -47,24 +47,15 @@ public class FontRenderer
 	{
 		for (int i = 0; i < 16; i++)
 		{
-			int j = (i >> 3 & 1) * 85;
-			int k = (i >> 2 & 1) * 170 + j;
-			int l = (i >> 1 & 1) * 170 + j;
-			int i1 = (i >> 0 & 1) * 170 + j;
+			int light = (i >> 3 & 1) * 85;
+			int r = (i >> 2 & 1) * 170 + light;
+			int g = (i >> 1 & 1) * 170 + light;
+			int b = (i & 1) * 170 + light;
 			
 			if (i == 6)
-			{
-				k += 85;
-			}
+				r += 85;
 			
-			if (i >= 16)
-			{
-				k /= 4;
-				l /= 4;
-				i1 /= 4;
-			}
-			
-			this.colorTable[i] = (k & 255) << 16 | (l & 255) << 8 | i1 & 255;
+			this.colorTable[i] = (r & 255) << 16 | (g & 255) << 8 | b & 255;
 		}
 	}
 	
@@ -102,7 +93,7 @@ public class FontRenderer
 					}
 				}
 				
-				if (dr.debugMode && c != 0)
+				if (dr.gameSettings.debugMode && c != 0)
 					System.out.println("Unicode char " + c + " [" + key + "] (" + path + ") loaded.");
 			}
 			else
@@ -300,17 +291,20 @@ public class FontRenderer
 	public int getStringWidth(String text)
 	{
 		this.draw = false;
-		int i = (int) drawString(0, 0, text);
+		float f = drawString(0, 0, text);
 		this.draw = true;
-		return i;
+		return (int) f;
 	}
 	
 	public int getCharWidth(char c)
 	{
-		return charMap.get(Character.valueOf(c)).getWidth();
+		this.draw = false;
+		float f = drawChar(0, 0, c);
+		this.draw = true;
+		return (int) f;
 	}
 	
-	public int getStringHeigth(String message)
+	public int getStringHeigth(String text)
 	{
 		return HEIGHT;
 	}

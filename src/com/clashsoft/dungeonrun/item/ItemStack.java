@@ -31,7 +31,7 @@ public class ItemStack implements INBTSaveable
 	{
 		return item.getMaxStackSize(this);
 	}
-
+	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
@@ -40,7 +40,7 @@ public class ItemStack implements INBTSaveable
 		nbt.setInteger("StackSize", this.stackSize);
 		nbt.setInteger("DamageValue", this.metadata);
 	}
-
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{

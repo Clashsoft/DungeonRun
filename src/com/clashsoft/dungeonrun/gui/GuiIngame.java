@@ -25,7 +25,7 @@ public class GuiIngame extends GuiScreen
 	
 	private Map<Pos3<Float>, Entity>	entityMap	= new HashMap<Pos3<Float>, Entity>();
 	
-	private boolean worldSaving = false;
+	private boolean						worldSaving	= false;
 	
 	public GuiIngame(EntityPlayer player)
 	{
@@ -119,7 +119,8 @@ public class GuiIngame extends GuiScreen
 			}
 		}
 		catch (ConcurrentModificationException ex)
-		{}
+		{
+		}
 		
 		if (this.player != null)
 		{
