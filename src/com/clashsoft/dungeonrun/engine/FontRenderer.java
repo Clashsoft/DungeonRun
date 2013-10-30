@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -13,22 +14,58 @@ import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class FontRenderer
 {
-	public static final int				HEIGHT		= 9;
+	public static final int				HEIGHT			= 9;
 	
-	protected Map<Character, String>	charPaths	= new HashMap();
-	protected Map<Character, Image>		charMap		= new HashMap<Character, Image>();
+	protected Map<Character, String>	charPaths		= new HashMap();
+	protected Map<Character, Image>		charMap			= new HashMap<Character, Image>();
 	
 	public DungeonRun					dr;
 	
-	public float						red			= 1F;
-	public float						green		= 1F;
-	public float						blue		= 1F;
+	public int[]						colorTable		= new int[16];
+	
+	public boolean						draw			= true;
+	
+	public float						red				= 1F;
+	public float						green			= 1F;
+	public float						blue			= 1F;
+	
+	public boolean						shadow			= false;
+	public boolean						italic			= false;
+	public boolean						bold			= false;
+	public boolean						strikeThrough	= false;
+	public boolean						underline		= false;
 	
 	public FontRenderer(DungeonRun dr) throws SlickException
 	{
 		this.dr = dr;
+		loadColorTable();
 		loadCharNames();
 		loadChars();
+	}
+	
+	public void loadColorTable()
+	{
+		for (int i = 0; i < 16; i++)
+		{
+			int j = (i >> 3 & 1) * 85;
+			int k = (i >> 2 & 1) * 170 + j;
+			int l = (i >> 1 & 1) * 170 + j;
+			int i1 = (i >> 0 & 1) * 170 + j;
+			
+			if (i == 6)
+			{
+				k += 85;
+			}
+			
+			if (i >= 16)
+			{
+				k /= 4;
+				l /= 4;
+				i1 /= 4;
+			}
+			
+			this.colorTable[i] = (k & 255) << 16 | (l & 255) << 8 | i1 & 255;
+		}
 	}
 	
 	public void loadCharNames() throws SlickException
@@ -36,7 +73,7 @@ public class FontRenderer
 		List<String> lines = ResourceHelper.readAllLines("/resources/text/ascii/charmap.txt");
 		
 		for (String line : lines)
-		{	
+		{
 			if (line.isEmpty())
 				continue;
 			
@@ -94,70 +131,148 @@ public class FontRenderer
 		}
 	}
 	
-	public void drawString(int x, int y, String text)
+	public void setColor_I(int color)
 	{
-		drawString(x, y, text, 0xFFFFFF);
-	}
-	
-	public void drawString(int x, int y, String text, int color)
-	{
-		drawString(x, y, text, color, false);
-	}
-	
-	public void drawStringWithShadow(int x, int y, String text)
-	{
-		drawStringWithShadow(x, y, text, 0xFFFFFF);
-	}
-	
-	public void drawStringWithShadow(int x, int y, String text, int color)
-	{
-		drawString(x, y, text, color, true);
-	}
-	
-	public void drawString(int x, int y, String text, int color, boolean shadow)
-	{
-		GL11.glPushMatrix();
-		
 		red = ((color >> 16) & 255) / 255F;
 		green = ((color >> 8) & 255) / 255F;
 		blue = (color & 255) / 255F;
+	}
+	
+	public void setColor_F(float r, float g, float b)
+	{
+		red = r;
+		green = g;
+		blue = b;
+	}
+	
+	public void resetStyles()
+	{
+		this.shadow = false;
+		this.italic = false;
+		this.bold = false;
+		this.strikeThrough = false;
+		this.underline = false;
+		this.setColor_F(1F, 1F, 1F);
+	}
+	
+	public float drawString(int x, int y, String text)
+	{
+		return drawString(x, y, text, 0xFFFFFF);
+	}
+	
+	public float drawString(int x, int y, String text, int color)
+	{
+		return drawString(x, y, text, color, false);
+	}
+	
+	public float drawStringWithShadow(int x, int y, String text)
+	{
+		return drawStringWithShadow(x, y, text, 0xFFFFFF);
+	}
+	
+	public float drawStringWithShadow(int x, int y, String text, int color)
+	{
+		return drawString(x, y, text, color, true);
+	}
+	
+	public float drawString(float x, float y, String text, int color, boolean shadow)
+	{
+		GL11.glPushMatrix();
+		
+		this.resetStyles();
+		this.setColor_I(color);
+		this.shadow = shadow;
 		
 		for (int i = 0; i < text.length(); i++)
 		{
-			x += drawChar(x, y, text.charAt(i), shadow) + 1;
+			char c = text.charAt(i);
+			
+			if (c == '\u00A7' && i + 2 != text.length())
+			{
+				char c1 = text.charAt(i + 1);
+				int i1 = "0123456789ABCDEFbisSur".indexOf(c1);
+				
+				if (i1 != -1)
+				{
+					if (i1 < 16)
+						this.setColor_I(this.colorTable[i1]);
+					else if (i1 == 16)
+						this.bold = !this.bold;
+					else if (i1 == 17)
+						this.italic = !this.italic;
+					else if (i1 == 18)
+						this.strikeThrough = !this.strikeThrough;
+					else if (i1 == 19)
+						this.shadow = !this.shadow;
+					else if (i1 == 20)
+						this.underline = !this.underline;
+					else if (i1 == 21)
+						this.resetStyles();
+					
+					i++;
+					continue;
+				}
+			}
+			
+			x += drawChar(x, y, c) + 1;
 		}
-		
+		x--;
 		GL11.glPopMatrix();
+		
+		return x;
 	}
 	
-	public int drawChar(int x, int y, char c, boolean shadow)
+	public float drawChar(float x, float y, char c)
 	{
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		Image image = charMap.get(Character.valueOf(c));
 		
-		if (shadow)
+		float b = this.bold ? 1.25F : 1F;
+		
+		if (draw)
 		{
-			image.setImageColor(red / 4F, green / 4F, blue / 4F);
-			image.draw(x + 1, y + 1);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			GL11.glScalef(b, 1F, 1F);
+			
+			if (this.shadow)
+			{
+				this.shadow = false;
+				this.red /= 4;
+				this.green /= 4;
+				this.blue /= 4;
+				
+				this.drawChar(x + 1, y + 1, c);
+				
+				this.red *= 4;
+				this.green *= 4;
+				this.blue *= 4;
+				this.shadow = true;
+			}
+			
+			GL11.glColor3f(red, green, blue);
+			image.drawSheared(x / b, y, this.italic ? -1.5F : 0F, 0, null);
+			
+			if (this.strikeThrough || this.underline)
+			{
+				this.dr.renderEngine.graphics.setColor(new Color(red, green, blue));
+				
+				if (this.strikeThrough)
+					this.dr.renderEngine.graphics.drawLine(x, y + 3, x + image.getWidth(), y + 3);
+				if (this.underline)
+					this.dr.renderEngine.graphics.drawLine(x, y + 8, x + image.getWidth(), y + 8);
+			}
+			
+			GL11.glScalef(1F / b, 1F, 1F);
 		}
 		
-		image.setImageColor(red, green, blue);
-		image.draw(x, y);
-		
-		return image.getWidth();
+		return image.getWidth() * b;
 	}
 	
 	public int getStringWidth(String text)
 	{
-		int width = 0;
-		for (int i = 0; i < text.length(); i++)
-		{
-			char c = text.charAt(i);
-			width += getCharWidth(c);
-			if (i != text.length() - 1)
-				width++;
-		}
-		return width;
+		this.draw = false;
+		int i = (int) drawString(0, 0, text);
+		this.draw = true;
+		return i;
 	}
 	
 	public int getCharWidth(char c)
