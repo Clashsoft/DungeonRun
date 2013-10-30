@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.engine;
+package com.clashsoft.dungeonrun.client.engine;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class FontRenderer
@@ -19,7 +19,7 @@ public class FontRenderer
 	protected Map<Character, String>	charPaths		= new HashMap();
 	protected Map<Character, Image>		charMap			= new HashMap<Character, Image>();
 	
-	public DungeonRun					dr;
+	public DungeonRunServer					dr;
 	
 	public int[]						colorTable		= new int[16];
 	
@@ -35,7 +35,7 @@ public class FontRenderer
 	public boolean						strikeThrough	= false;
 	public boolean						underline		= false;
 	
-	public FontRenderer(DungeonRun dr) throws SlickException
+	public FontRenderer(DungeonRunServer dr) throws SlickException
 	{
 		this.dr = dr;
 		loadColorTable();

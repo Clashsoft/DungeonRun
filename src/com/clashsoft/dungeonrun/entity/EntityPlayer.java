@@ -2,12 +2,12 @@ package com.clashsoft.dungeonrun.entity;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.container.InventoryPlayer;
+import com.clashsoft.dungeonrun.client.gui.GuiDeath;
 import com.clashsoft.dungeonrun.entity.render.RenderEntity;
 import com.clashsoft.dungeonrun.entity.render.RenderPlayer;
-import com.clashsoft.dungeonrun.gui.GuiDeath;
+import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
 import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.world.World;
 
 public class EntityPlayer extends EntityLiving
@@ -68,7 +68,7 @@ public class EntityPlayer extends EntityLiving
 	{
 		try
 		{
-			DungeonRun.instance.displayGuiScreen(new GuiDeath());
+			DungeonRunServer.instance.displayGuiScreen(new GuiDeath());
 		}
 		catch (SlickException e)
 		{

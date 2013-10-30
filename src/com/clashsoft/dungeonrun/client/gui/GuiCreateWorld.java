@@ -1,12 +1,12 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import java.io.File;
 import java.util.List;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.engine.I18n;
+import com.clashsoft.dungeonrun.client.engine.I18n;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class GuiCreateWorld extends GuiListScreen
 {
@@ -53,7 +53,7 @@ public class GuiCreateWorld extends GuiListScreen
 			this.editMode = !this.editMode;
 		else if (i == 1)
 		{
-			File saves = new File(DungeonRun.getSaveDataFolder(), "saves");
+			File saves = new File(DungeonRunServer.getSaveDataFolder(), "saves");
 			File newWorld = new File(saves, worldName.trim());
 			newWorld.mkdirs();
 			

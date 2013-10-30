@@ -1,6 +1,6 @@
 package com.clashsoft.dungeonrun.util;
 
-import com.clashsoft.dungeonrun.gui.GameSettings;
+import com.clashsoft.dungeonrun.client.gui.GameSettings;
 
 public class ScaledResolution
 {

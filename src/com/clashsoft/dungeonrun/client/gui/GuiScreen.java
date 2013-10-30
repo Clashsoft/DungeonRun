@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,15 +8,15 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
 
 public abstract class GuiScreen
 {
 	public static final Color	colorAlpha	= new Color(0F, 0F, 0F, 0.5F);
 	
-	protected DungeonRun		dr;
+	protected DungeonRunServer		dr;
 	
 	protected int				windowWidth;
 	protected int				windowHeight;
@@ -25,7 +25,7 @@ public abstract class GuiScreen
 	
 	protected ScaledResolution	scaledResolution;
 	
-	public final void init(DungeonRun game) throws SlickException
+	public final void init(DungeonRunServer game) throws SlickException
 	{
 		this.dr = game;
 		
@@ -56,7 +56,7 @@ public abstract class GuiScreen
 				button.render();
 		}
 		
-		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRun.VERSION, dr.theGameContainer.getFPS()));
+		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRunServer.VERSION, dr.theGameContainer.getFPS()));
 		if (dr.gameSettings.debugMode)
 		{
 			if (dr.thePlayer != null)
@@ -75,7 +75,7 @@ public abstract class GuiScreen
 		GL11.glPopMatrix();
 	}
 	
-	public final void update(DungeonRun game) throws SlickException
+	public final void update(DungeonRunServer game) throws SlickException
 	{
 		this.updateScreen();
 	}

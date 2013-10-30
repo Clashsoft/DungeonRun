@@ -1,22 +1,22 @@
-package com.clashsoft.dungeonrun.engine;
+package com.clashsoft.dungeonrun.client.engine;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class RenderEngine
 {
-	public DungeonRun	dr;
+	public DungeonRunServer	dr;
 	
 	public Graphics		graphics;
 	
 	public RenderBlocks	blockRenderer;
 	public RenderItems	itemRenderer;
 	
-	public RenderEngine(DungeonRun dungeonRun)
+	public RenderEngine(DungeonRunServer dungeonRunServer)
 	{
-		this.dr = dungeonRun;
+		this.dr = dungeonRunServer;
 		blockRenderer = new RenderBlocks();
 	}
 	

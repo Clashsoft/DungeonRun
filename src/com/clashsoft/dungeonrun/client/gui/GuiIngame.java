@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -8,12 +8,12 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
-import com.clashsoft.dungeonrun.engine.I18n;
-import com.clashsoft.dungeonrun.engine.RenderBlocks;
+import com.clashsoft.dungeonrun.client.engine.I18n;
+import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos3;
 
 public class GuiIngame extends GuiScreen
@@ -31,7 +31,7 @@ public class GuiIngame extends GuiScreen
 	{
 		super();
 		this.player = player;
-		this.renderBlocks = DungeonRun.instance.renderEngine.blockRenderer;
+		this.renderBlocks = DungeonRunServer.instance.renderEngine.blockRenderer;
 	}
 	
 	@Override
@@ -81,8 +81,8 @@ public class GuiIngame extends GuiScreen
 		if (worldSaving)
 		{
 			String text = I18n.getString("world.saving");
-			int width = DungeonRun.instance.fontRenderer.getStringWidth(text);
-			DungeonRun.instance.fontRenderer.drawString(this.windowWidth - 20 - width, windowHeight - 20, text, 0xFFFFFF);
+			int width = DungeonRunServer.instance.fontRenderer.getStringWidth(text);
+			DungeonRunServer.instance.fontRenderer.drawString(this.windowWidth - 20 - width, windowHeight - 20, text, 0xFFFFFF);
 		}
 	}
 	
@@ -147,7 +147,7 @@ public class GuiIngame extends GuiScreen
 				this.player.worldObj.setBlock(Block.stone.blockID, 0, mouseBlockX, mouseBlockY, mouseBlockZ);
 		}
 		if (input.isKeyDown(Input.KEY_ESCAPE))
-			DungeonRun.instance.pauseGame();
+			DungeonRunServer.instance.pauseGame();
 	}
 	
 	@Override

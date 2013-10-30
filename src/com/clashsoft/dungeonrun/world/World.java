@@ -5,13 +5,13 @@ import java.util.*;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.nbt.NBTBase;
 import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.nbt.NBTTagList;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class World
 {
@@ -75,7 +75,7 @@ public class World
 	public void spawnEntityInWorld(Entity e)
 	{
 		if (e instanceof EntityPlayer)
-			this.playerEntitys.put(((EntityPlayer) e).username, DungeonRun.instance.thePlayer = ((EntityPlayer) e));
+			this.playerEntitys.put(((EntityPlayer) e).username, DungeonRunServer.instance.thePlayer = ((EntityPlayer) e));
 		this.entitys.put(e.entityId, e);
 	}
 	
@@ -89,7 +89,7 @@ public class World
 	
 	public void updateWorld() throws SlickException
 	{
-		if (!DungeonRun.instance.isPaused)
+		if (!DungeonRunServer.instance.isPaused)
 		{
 			for (Entity e : this.entitys.values())
 			{

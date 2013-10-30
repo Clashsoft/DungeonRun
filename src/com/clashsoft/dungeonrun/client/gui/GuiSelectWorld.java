@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.WorldInfo;
 
@@ -26,7 +26,7 @@ public class GuiSelectWorld extends GuiListScreen
 	{
 		worlds.clear();
 		
-		File saves = new File(DungeonRun.getSaveDataFolder(), "saves");
+		File saves = new File(DungeonRunServer.getSaveDataFolder(), "saves");
 		
 		for (File f : saves.listFiles())
 		{

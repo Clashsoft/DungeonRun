@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.container;
+package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.item.ItemStack;

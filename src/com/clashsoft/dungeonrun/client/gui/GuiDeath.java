@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import java.util.List;
 

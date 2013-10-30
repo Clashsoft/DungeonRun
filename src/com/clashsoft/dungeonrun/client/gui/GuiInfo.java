@@ -1,8 +1,8 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.engine.I18n;
+import com.clashsoft.dungeonrun.client.engine.I18n;
 
 public class GuiInfo extends GuiScreen
 {

@@ -1,15 +1,15 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import java.io.*;
 import java.util.Properties;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class GameSettings
 {
-	public static File	optionsFile		= new File(DungeonRun.getSaveDataFolder(), "options.txt");
+	public static File	optionsFile		= new File(DungeonRunServer.getSaveDataFolder(), "options.txt");
 	
 	// General Options
 	public String		language		= "en_US";
@@ -33,7 +33,7 @@ public class GameSettings
 	
 	public void updateGame() throws SlickException
 	{
-		DungeonRun dr = DungeonRun.instance;
+		DungeonRunServer dr = DungeonRunServer.instance;
 		if (dr.currentGui != null)
 			dr.currentGui.init(dr);
 		dr.setFullScreen(fullScreen);

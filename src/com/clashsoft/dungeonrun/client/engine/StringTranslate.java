@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.engine;
+package com.clashsoft.dungeonrun.client.engine;
 
 import java.io.IOException;
 import java.util.Properties;

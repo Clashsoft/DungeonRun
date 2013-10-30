@@ -1,11 +1,11 @@
-package com.clashsoft.dungeonrun.engine;
+package com.clashsoft.dungeonrun.client.engine;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
 
@@ -58,8 +58,8 @@ public class RenderBlocks
 					image1.setImageColor(1, 1, 1);
 					if (hover)
 					{
-						DungeonRun.instance.renderEngine.graphics.setColor(Color.black);
-						DungeonRun.instance.renderEngine.graphics.drawRect(posX, posY, 15, 15);
+						DungeonRunServer.instance.renderEngine.graphics.setColor(Color.black);
+						DungeonRunServer.instance.renderEngine.graphics.drawRect(posX, posY, 15, 15);
 					}
 				}
 			}
@@ -77,8 +77,8 @@ public class RenderBlocks
 					image2.setImageColor(1F, 1F, 1F);
 					if (hover)
 					{
-						DungeonRun.instance.renderEngine.graphics.setColor(Color.black);
-						DungeonRun.instance.renderEngine.graphics.drawRect(posX, posY2, 15, 15);
+						DungeonRunServer.instance.renderEngine.graphics.setColor(Color.black);
+						DungeonRunServer.instance.renderEngine.graphics.drawRect(posX, posY2, 15, 15);
 					}
 					GL11.glScalef(1F, 16F / 12F, 1F);
 				}

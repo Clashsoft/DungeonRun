@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.gui;
+package com.clashsoft.dungeonrun.client.gui;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.engine.I18n;
+import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class GuiMainMenu extends GuiListScreen
@@ -34,11 +34,11 @@ public class GuiMainMenu extends GuiListScreen
 		{
 			String s = I18n.getString(entrys.get(i));
 			
-			int length = DungeonRun.instance.fontRenderer.getStringWidth(s);
+			int length = DungeonRunServer.instance.fontRenderer.getStringWidth(s);
 			int posX = (int) ((width - length) / 2F);
-			int posY = (height - (entrys.size() * DungeonRun.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
+			int posY = (height - (entrys.size() * DungeonRunServer.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
 			
-			DungeonRun.instance.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
+			DungeonRunServer.instance.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
 			
 			if (length >= longestStringLength)
 				longestStringLength = length;

@@ -7,8 +7,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
 
-import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class RenderPlayer<T extends EntityPlayer> extends RenderEntity<T>
 {
@@ -41,8 +41,8 @@ public class RenderPlayer<T extends EntityPlayer> extends RenderEntity<T>
 			r = standing[rot];
 		int x = (int)((w / 2F) - 6);
 		int y = (int)((h / 2F) - 28);
-		if (DungeonRun.instance.gameSettings.renderHitBoxes)
-			DungeonRun.instance.theGameContainer.getGraphics().drawRect(x, y, 12, 24);
+		if (DungeonRunServer.instance.gameSettings.renderHitBoxes)
+			DungeonRunServer.instance.theGameContainer.getGraphics().drawRect(x, y, 12, 24);
 		r.draw(x, y);
 		return new Rectangle(x, y, 12, 24);
 	}
