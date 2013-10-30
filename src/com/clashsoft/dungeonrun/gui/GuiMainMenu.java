@@ -25,18 +25,18 @@ public class GuiMainMenu extends GuiListScreen
 	}
 	
 	@Override
-	public void drawScreen(int par1, int par2) throws SlickException
+	public void drawScreen(int width, int height) throws SlickException
 	{
 		int longestStringLength = 0;
-		super.drawBricks(par1, par2);
+		this.drawDefaultBackground(width, height);
 		
 		for (int i = 0; i < entrys.size(); i++)
 		{
 			String s = I18n.getString(entrys.get(i));
 			
 			int length = DungeonRun.instance.fontRenderer.getStringWidth(s);
-			int posX = (int) ((par1 - length) / 2F);
-			int posY = (par2 - (entrys.size() * DungeonRun.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
+			int posX = (int) ((width - length) / 2F);
+			int posY = (height - (entrys.size() * DungeonRun.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
 			
 			DungeonRun.instance.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
 			
@@ -52,7 +52,7 @@ public class GuiMainMenu extends GuiListScreen
 		}
 		
 		int var1 = (int) (player.posX);
-		int var2 = (par2 / 2) - 20;
+		int var2 = (height / 2) - 20;
 		GL11.glTranslated(var1, var2, 0);
 		GL11.glScalef(3F, 3F, 1F);
 		player.getRenderer().render(player, 0, 0);

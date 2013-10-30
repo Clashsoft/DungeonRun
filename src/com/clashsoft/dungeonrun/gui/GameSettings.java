@@ -1,7 +1,6 @@
 package com.clashsoft.dungeonrun.gui;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.util.Properties;
 
 import org.newdawn.slick.SlickException;
@@ -54,8 +53,8 @@ public class GameSettings
 			ex.printStackTrace();
 		}
 		
-		this.musicVolume = Float.parseFloat(props.getProperty("music", "0"));
-		this.soundVolume = Float.parseFloat(props.getProperty("sound", "0"));
+		this.musicVolume = Float.parseFloat(props.getProperty("music", "1"));
+		this.soundVolume = Float.parseFloat(props.getProperty("sound", "1"));
 		
 		this.guiSize = Integer.parseInt(props.getProperty("guisize", "0"));
 		
@@ -75,5 +74,13 @@ public class GameSettings
 		props.setProperty("fullscreen", fullScreen + "");
 		props.setProperty("vsync", useVSync + "");
 		props.setProperty("renderhitboxes", renderHitBoxes + "");
+		try
+		{
+			props.store(new FileOutputStream(optionsFile), "");
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 }

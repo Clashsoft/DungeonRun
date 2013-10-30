@@ -14,6 +14,7 @@ public abstract class GuiListScreen extends GuiScreen
 {
 	protected int			selection	= 0;
 	protected List<String>	entrys		= new ArrayList<String>();
+	protected boolean		drawBricks	= true;
 	
 	@Override
 	public void initGui() throws SlickException
@@ -23,16 +24,17 @@ public abstract class GuiListScreen extends GuiScreen
 	}
 	
 	@Override
-	public void drawScreen(int par1, int par2) throws SlickException
+	public void drawScreen(int width, int height) throws SlickException
 	{
-		drawBricks(par1, par2);
+		if (drawBricks)
+			drawDefaultBackground(width, height);
 		
-		DungeonRun.instance.fontRenderer.drawString((par1 - DungeonRun.instance.fontRenderer.getStringWidth(getTitle())) / 2, 20, I18n.getString(getTitle()), 0x00EFFF, true);
+		DungeonRun.instance.fontRenderer.drawString((width - DungeonRun.instance.fontRenderer.getStringWidth(getTitle())) / 2, 20, I18n.getString(getTitle()), 0x00EFFF, true);
 		for (int i = 0; i < entrys.size(); i++)
 		{
 			String text = getEntry(i);
-			int width = DungeonRun.instance.fontRenderer.getStringWidth(text);
-			DungeonRun.instance.fontRenderer.drawString((par1 - width) / 2 + getFirstEntryPosX(), getFirstEntryPosY() + (i * 20), text, selection == i ? 0xFFFFFF : 0xAAAAAA, true);
+			int i1 = DungeonRun.instance.fontRenderer.getStringWidth(text);
+			DungeonRun.instance.fontRenderer.drawString((width - i1) / 2 + getFirstEntryPosX(), getFirstEntryPosY() + (i * 20), text, selection == i ? 0xFFFFFF : 0xAAAAAA, true);
 		}
 	}
 	

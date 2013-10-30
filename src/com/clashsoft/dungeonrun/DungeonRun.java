@@ -57,8 +57,9 @@ public class DungeonRun extends BasicGame
 	{
 		this.renderEngine.graphics = g;
 		
-		if (this.hasGameStarted)
+		if (this.theIngameGui != null && hasGameStarted)
 			this.theIngameGui.render(gc.getWidth(), gc.getHeight());
+		
 		if (this.currentGui != null)
 			this.currentGui.render(gc.getWidth(), gc.getHeight());
 	}
@@ -188,6 +189,7 @@ public class DungeonRun extends BasicGame
 	{
 		this.displayGuiScreen(new GuiInfo("world.loading"));
 		
+		this.hasGameStarted = true;
 		this.theWorld = new World(new WorldInfo("TestWorld"));
 		new Thread(new Runnable()
 		{
@@ -217,6 +219,11 @@ public class DungeonRun extends BasicGame
 	public void endGame() throws SlickException
 	{
 		this.displayGuiScreen(new GuiInfo("world.saving"));
+		
+		this.theIngameGui = null;
+		this.hasGameStarted = false;
+		this.theWorld = null;
+		this.thePlayer = null;
 		new Thread(new Runnable()
 		{
 			public void run()

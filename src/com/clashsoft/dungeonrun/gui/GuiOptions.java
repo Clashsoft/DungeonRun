@@ -94,9 +94,9 @@ public class GuiOptions extends GuiListScreen
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return I18n.getString("options.soundvolume") + ": " + dr.gameSettings.soundVolume;
+			return String.format(I18n.getString("options.soundvolume") + ": %.2f", dr.gameSettings.soundVolume);
 		if (i == 1)
-			return I18n.getString("options.musicvolume") + ": " + dr.gameSettings.soundVolume;
+			return String.format(I18n.getString("options.musicvolume") + ": %.2f", dr.gameSettings.musicVolume);
 		return super.getEntry(i);
 	}
 }

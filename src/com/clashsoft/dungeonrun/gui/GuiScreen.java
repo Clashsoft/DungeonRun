@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
@@ -14,6 +14,8 @@ import com.clashsoft.dungeonrun.util.ScaledResolution;
 
 public abstract class GuiScreen
 {
+	public static final Color	colorAlpha	= new Color(0F, 0F, 0F, 0.5F);
+	
 	protected DungeonRun		dr;
 	
 	protected int				windowWidth;
@@ -32,14 +34,14 @@ public abstract class GuiScreen
 		this.initGui();
 	}
 	
-	public final void render(int par1, int par2) throws SlickException
+	public final void render(int width, int height) throws SlickException
 	{
-		if (this.windowWidth != par1 || this.windowHeight != par2)
+		if (this.windowWidth != width || this.windowHeight != height)
 		{
-			this.windowWidth = par1;
-			this.windowHeight = par2;
+			this.windowWidth = width;
+			this.windowHeight = height;
 			this.init(dr);
-		}	
+		}
 		
 		GL11.glPushMatrix();
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
@@ -82,7 +84,7 @@ public abstract class GuiScreen
 	
 	public abstract void initGui() throws SlickException;
 	
-	public abstract void drawScreen(int par1, int par2) throws SlickException;
+	public abstract void drawScreen(int width, int height) throws SlickException;
 	
 	public abstract void updateScreen() throws SlickException;
 	
@@ -108,12 +110,12 @@ public abstract class GuiScreen
 		
 	}
 	
-	public void drawBricks(int width, int heigth) throws SlickException
+	public void drawBricks(int width, int height) throws SlickException
 	{
 		GL11.glScalef(2F, 2F, 1F);
 		for (int i = 0; i < width / 8F; i++)
 		{
-			for (int j = 0; j < heigth / 8F; j++)
+			for (int j = 0; j < height / 8F; j++)
 			{
 				Block.brick.getBlockTextureFromSideAndMetadata(0, 0).draw(i * 16, j * 16);
 			}
@@ -121,8 +123,14 @@ public abstract class GuiScreen
 		GL11.glScalef(0.5F, 0.5F, 1F);
 	}
 	
-	public void drawDefaultBackground(int width, int height)
+	public void drawDefaultBackground(int width, int height) throws SlickException
 	{
-		DungeonRun.instance.theGameContainer.getGraphics().fill(new Rectangle(0, 0, width, height));
+		if (this.dr.hasGameStarted)
+		{
+			this.dr.theGameContainer.getGraphics().setColor(colorAlpha);
+			this.dr.theGameContainer.getGraphics().fillRect(0, 0, width, height);
+		}
+		else
+			this.drawBricks(width, height);
 	}
 }

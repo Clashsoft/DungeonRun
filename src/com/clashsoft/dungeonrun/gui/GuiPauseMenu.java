@@ -5,14 +5,7 @@ import java.util.List;
 import org.newdawn.slick.SlickException;
 
 public class GuiPauseMenu extends GuiListScreen
-{
-	@Override
-	public void drawScreen(int par1, int par2) throws SlickException
-	{
-		this.drawDefaultBackground(par1, par2);
-		super.drawScreen(par1, par2);
-	}
-	
+{	
 	@Override
 	public String getTitle()
 	{
