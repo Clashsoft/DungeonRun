@@ -59,17 +59,18 @@ public abstract class GuiScreen
 		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7r\u00a7S %s (%d FPS)", DungeonRunServer.VERSION, dr.theGameContainer.getFPS()));
 		if (dr.gameSettings.debugMode)
 		{
+			int var = 5;
 			if (dr.thePlayer != null)
 			{
-				dr.fontRenderer.drawStringWithShadow(5, 25, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
-				dr.fontRenderer.drawStringWithShadow(5, 35, String.format("PlayerRot: %d", dr.thePlayer.rot));
-				dr.fontRenderer.drawStringWithShadow(5, 45, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
-				dr.fontRenderer.drawStringWithShadow(5, 55, String.format("PlayerWorld: %s", dr.theWorld.worldInfo.getName()));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerRot: %d", dr.thePlayer.rot));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", dr.theWorld.worldInfo.getName()));
 			}
 			
 			if (dr.theIngameGui != null)
 			{
-				dr.fontRenderer.drawStringWithShadow(5, 65, String.format("HoverPos: (%d;%d;%d)", dr.theIngameGui.mouseBlockX, dr.theIngameGui.mouseBlockY, dr.theIngameGui.mouseBlockZ));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("HoverPos: (%d;%d;%d)", dr.theIngameGui.mouseBlockX, dr.theIngameGui.mouseBlockY, dr.theIngameGui.mouseBlockZ));
 			}
 			
 			{
@@ -78,8 +79,8 @@ public abstract class GuiScreen
 				long maxMemory = runtime.maxMemory() / 1024 / 1024;
 				long totalMemory = runtime.totalMemory() / 1024 / 1024;
 				
-				dr.fontRenderer.drawStringWithShadow(5, 80, String.format("Memory: Free: %d MB, Max: %d MB, Total: %d MB", freeMemory, maxMemory, totalMemory));
-				dr.fontRenderer.drawStringWithShadow(5, 90, String.format("Processors: %d", runtime.availableProcessors()));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("Memory: Free: %d MB, Max: %d MB, Total: %d MB", freeMemory, maxMemory, totalMemory));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("Processors: %d", runtime.availableProcessors()));
 			}
 		}
 		GL11.glPopMatrix();

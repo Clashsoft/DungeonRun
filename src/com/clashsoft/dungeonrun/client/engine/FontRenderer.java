@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -14,26 +15,43 @@ import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class FontRenderer
 {
-	public static final int				HEIGHT			= 9;
+	public static final int				HEIGHT		= 9;
 	
-	protected Map<Character, String>	charPaths		= new HashMap();
-	protected Map<Character, Image>		charMap			= new HashMap<Character, Image>();
+	protected Map<Character, String>	charPaths	= new HashMap();
+	protected Map<Character, Image>		charMap		= new HashMap<Character, Image>();
 	
+	/**
+	 * The DungeonRun instance
+	 */
 	public DungeonRunServer				dr;
 	
-	public int[]						colorTable		= new int[16];
+	public boolean						globalUnicode;
 	
-	public boolean						draw			= true;
+	/**
+	 * Color table for predefined color access via §[0-9A-F]
+	 */
+	public int[]						colorTable	= new int[16];
 	
-	public float						red				= 1F;
-	public float						green			= 1F;
-	public float						blue			= 1F;
+	/**
+	 * Used in FontRenderer#getStringWidth(String). Setting this flag to false
+	 * will disable all character rendering.
+	 */
+	public boolean						draw		= true;
 	
-	public boolean						shadow			= false;
-	public boolean						italic			= false;
-	public boolean						bold			= false;
-	public boolean						strikeThrough	= false;
-	public boolean						underline		= false;
+	/**
+	 * Current Font color.
+	 */
+	public float						red			= 1F, green = 1F, blue = 1F;
+	
+	/**
+	 * Determines if the currently rendered string is rendered with a shadow
+	 */
+	public boolean						shadow		= false;
+	
+	/**
+	 * Format flags.
+	 */
+	public boolean						italic, bold, strikeThrough, underline, unicode;
 	
 	public FontRenderer(DungeonRunServer dr) throws SlickException
 	{
@@ -136,19 +154,19 @@ public class FontRenderer
 		blue = b;
 	}
 	
-	public void setColor_S(String text)
+	public void setColor_S(String color)
 	{
 		try
 		{
-			if (text.startsWith("0x"))
-				setColor_I(Integer.parseInt(text.substring(2), 16));
-			else if (text.contains(";"))
+			if (color.startsWith("0x"))
+				setColor_I(Integer.parseInt(color.substring(2), 16));
+			else if (color.contains(";"))
 			{
 				float r = 1F;
 				float g = 1F;
 				float b = 1F;
 				
-				String[] split = text.split(";");
+				String[] split = color.split(";");
 				
 				if (split.length >= 1)
 					r = Float.parseFloat(split[0]);
@@ -160,7 +178,7 @@ public class FontRenderer
 				setColor_F(r, g, b);
 			}
 			else
-				setColor_I(Integer.parseInt(text));
+				setColor_I(Integer.parseInt(color));
 		}
 		catch (NumberFormatException ex)
 		{
@@ -174,6 +192,7 @@ public class FontRenderer
 		this.bold = false;
 		this.strikeThrough = false;
 		this.underline = false;
+		this.unicode = false;
 		this.setColor_F(1F, 1F, 1F);
 	}
 	
@@ -205,7 +224,7 @@ public class FontRenderer
 		this.setColor_I(color);
 		this.shadow = shadow;
 		
-		text = preDraw(text);
+		text = replaceLocalizations(text);
 		
 		for (int i = 0; i < text.length(); i++)
 		{
@@ -214,15 +233,15 @@ public class FontRenderer
 			if (c == '\u00A7' && i + 2 != text.length())
 			{
 				char c1 = text.charAt(i + 1);
-				int i1 = "0123456789ABCDEFbcisSur".indexOf(c1);
+				int i1 = "0123456789ABCDEFbcisSuUr".indexOf(c1);
 				
 				if (i1 != -1)
 				{
-					if (i1 < 16)
+					if (i1 < 16) // 0-9 A-F
 						this.setColor_I(this.colorTable[i1]);
-					else if (i1 == 16)
+					else if (i1 == 16) // b
 						this.bold = !this.bold;
-					else if (i1 == 17)
+					else if (i1 == 17) // c
 					{
 						int i2 = text.indexOf('[', i + 2);
 						int i3 = text.indexOf(']', i + 3);
@@ -234,15 +253,17 @@ public class FontRenderer
 							continue;
 						}
 					}
-					else if (i1 == 18)
+					else if (i1 == 18) // i
 						this.italic = !this.italic;
-					else if (i1 == 19)
+					else if (i1 == 19) // s
 						this.strikeThrough = !this.strikeThrough;
-					else if (i1 == 20)
+					else if (i1 == 20) // S
 						this.shadow = !this.shadow;
-					else if (i1 == 21)
+					else if (i1 == 21) // u
 						this.underline = !this.underline;
-					else if (i1 == 22)
+					else if (i1 == 22) // Us
+						this.unicode = !this.unicode;
+					else if (i1 == 23) // r
 						this.resetStyles();
 					
 					i++;
@@ -260,7 +281,7 @@ public class FontRenderer
 		return x;
 	}
 	
-	public String preDraw(String text)
+	public String replaceLocalizations(String text)
 	{
 		String text1 = new String(text);
 		for (int i = 0; i < text1.length(); i++)
@@ -290,8 +311,8 @@ public class FontRenderer
 	{
 		Image image = charMap.get(Character.valueOf(c));
 		
-		if (image == null)
-			return 0;
+		if (globalUnicode || unicode || image == null)
+			return drawUnicodeChar(x, y, c);
 		
 		int width = image.getWidth();
 		int height = image.getHeight();
@@ -332,6 +353,25 @@ public class FontRenderer
 			}
 			
 			GL11.glScalef(1F / b, height / HEIGHT, 1F);
+		}
+		
+		return width * b;
+	}
+	
+	public float drawUnicodeChar(float x, float y, char c)
+	{
+		Graphics g = this.dr.renderEngine.graphics;
+		
+		String text = String.valueOf(c);
+		float width = g.getFont().getWidth(text) / 2F;
+		
+		float b = this.bold ? 1.25F : 1F;
+		
+		if (draw)
+		{
+			GL11.glScalef(b, 0.5F, 1F);
+			g.drawString(text, x / b, y * 2F);
+			GL11.glScalef(1F / b, 2F, 1F);
 		}
 		
 		return width * b;

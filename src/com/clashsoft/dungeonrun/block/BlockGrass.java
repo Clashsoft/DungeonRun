@@ -10,7 +10,6 @@ public class BlockGrass extends Block
 	public BlockGrass(int id)
 	{
 		super(id);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
