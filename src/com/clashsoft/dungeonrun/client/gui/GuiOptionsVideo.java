@@ -53,7 +53,7 @@ public class GuiOptionsVideo extends GuiListScreen
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return I18n.getString("options.video.guiscale") + ": " + DungeonRunServer.instance.gameSettings.guiSize;
+			return I18n.getString("options.video.guiscale") + ": " + I18n.getString("options.video.guiscale." + DungeonRunServer.instance.gameSettings.guiSize);
 		else if (i == 1)
 			return I18n.getString("options.video.fullscreen") + ": " + DungeonRunServer.instance.gameSettings.fullScreen;
 		else if (i == 2)

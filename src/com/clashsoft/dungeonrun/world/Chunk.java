@@ -221,4 +221,10 @@ public class Chunk implements INBTSaveable
 		this.metadataValues = nbt.getTagList("BlockMs").toIntArray();
 		this.dummy = false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "Chunk[" + chunkX + ";" + chunkZ + "]";
+	}
 }

@@ -57,9 +57,8 @@ public class World
 	
 	public Chunk getChunkAtCoordinates(int x, int z)
 	{
-		// Should be -32 - 31
-		int x1 = (int) Math.floor(x / 16F);
-		int z1 = (int) Math.floor(z / 16F);
+		int x1 = x >> 4;
+		int z1 = z >> 4;
 		int x2 = x1 + (CHUNKS_X);
 		int z2 = z1 + (CHUNKS_Z);
 		
@@ -70,6 +69,16 @@ public class World
 			System.out.println("Generating missing chunk " + c.toString());
 		}
 		return c;
+	}
+	
+	public boolean isChunkLoaded(int x, int z)
+	{
+		int x1 = x >> 4;
+		int z1 = z >> 4;
+		int x2 = x1 + (CHUNKS_X);
+		int z2 = z1 + (CHUNKS_Z);
+		
+		return chunks[x2][z2] != null;
 	}
 	
 	public void spawnEntityInWorld(Entity e)

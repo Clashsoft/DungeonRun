@@ -19,7 +19,7 @@ public class FontRenderer
 	protected Map<Character, String>	charPaths		= new HashMap();
 	protected Map<Character, Image>		charMap			= new HashMap<Character, Image>();
 	
-	public DungeonRunServer					dr;
+	public DungeonRunServer				dr;
 	
 	public int[]						colorTable		= new int[16];
 	
@@ -136,6 +136,37 @@ public class FontRenderer
 		blue = b;
 	}
 	
+	public void setColor_S(String text)
+	{
+		try
+		{
+			if (text.startsWith("0x"))
+				setColor_I(Integer.parseInt(text.substring(2), 16));
+			else if (text.contains(";"))
+			{
+				float r = 1F;
+				float g = 1F;
+				float b = 1F;
+				
+				String[] split = text.split(";");
+				
+				if (split.length >= 1)
+					r = Float.parseFloat(split[0]);
+				if (split.length >= 2)
+					g = Float.parseFloat(split[1]);
+				if (split.length >= 3)
+					b = Float.parseFloat(split[2]);
+				
+				setColor_F(r, g, b);
+			}
+			else
+				setColor_I(Integer.parseInt(text));
+		}
+		catch (NumberFormatException ex)
+		{
+		}
+	}
+	
 	public void resetStyles()
 	{
 		this.shadow = false;
@@ -183,7 +214,7 @@ public class FontRenderer
 			if (c == '\u00A7' && i + 2 != text.length())
 			{
 				char c1 = text.charAt(i + 1);
-				int i1 = "0123456789ABCDEFbisSur".indexOf(c1);
+				int i1 = "0123456789ABCDEFbcisSur".indexOf(c1);
 				
 				if (i1 != -1)
 				{
@@ -192,14 +223,26 @@ public class FontRenderer
 					else if (i1 == 16)
 						this.bold = !this.bold;
 					else if (i1 == 17)
-						this.italic = !this.italic;
+					{
+						int i2 = text.indexOf('[', i + 2);
+						int i3 = text.indexOf(']', i + 3);
+						if (i2 != -1 && i3 != -1)
+						{
+							String s1 = text.substring(i2 + 1, i3);
+							setColor_S(s1);
+							i = i3;
+							continue;
+						}
+					}
 					else if (i1 == 18)
-						this.strikeThrough = !this.strikeThrough;
+						this.italic = !this.italic;
 					else if (i1 == 19)
-						this.shadow = !this.shadow;
+						this.strikeThrough = !this.strikeThrough;
 					else if (i1 == 20)
-						this.underline = !this.underline;
+						this.shadow = !this.shadow;
 					else if (i1 == 21)
+						this.underline = !this.underline;
+					else if (i1 == 22)
 						this.resetStyles();
 					
 					i++;
@@ -250,12 +293,15 @@ public class FontRenderer
 		if (image == null)
 			return 0;
 		
+		int width = image.getWidth();
+		int height = image.getHeight();
+		
 		float b = this.bold ? 1.25F : 1F;
 		
 		if (draw)
 		{
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-			GL11.glScalef(b, 1F, 1F);
+			GL11.glScalef(b, HEIGHT / height, 1F);
 			
 			if (this.shadow)
 			{
@@ -280,15 +326,15 @@ public class FontRenderer
 				this.dr.renderEngine.graphics.setColor(new Color(red, green, blue));
 				
 				if (this.strikeThrough)
-					this.dr.renderEngine.graphics.drawLine(x, y + 3, x + image.getWidth(), y + 3);
+					this.dr.renderEngine.graphics.drawLine(x, y + 3, x + width, y + 3);
 				if (this.underline)
-					this.dr.renderEngine.graphics.drawLine(x, y + 8, x + image.getWidth(), y + 8);
+					this.dr.renderEngine.graphics.drawLine(x, y + 8, x + width, y + 8);
 			}
 			
-			GL11.glScalef(1F / b, 1F, 1F);
+			GL11.glScalef(1F / b, height / HEIGHT, 1F);
 		}
 		
-		return image.getWidth() * b;
+		return width * b;
 	}
 	
 	public int getStringWidth(String text)

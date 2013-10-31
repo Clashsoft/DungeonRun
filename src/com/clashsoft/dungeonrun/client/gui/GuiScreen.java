@@ -56,7 +56,7 @@ public abstract class GuiScreen
 				button.render();
 		}
 		
-		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("Dungeon Run %s (%d FPS)", DungeonRunServer.VERSION, dr.theGameContainer.getFPS()));
+		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7r\u00a7S %s (%d FPS)", DungeonRunServer.VERSION, dr.theGameContainer.getFPS()));
 		if (dr.gameSettings.debugMode)
 		{
 			if (dr.thePlayer != null)
@@ -70,6 +70,16 @@ public abstract class GuiScreen
 			if (dr.theIngameGui != null)
 			{
 				dr.fontRenderer.drawStringWithShadow(5, 65, String.format("HoverPos: (%d;%d;%d)", dr.theIngameGui.mouseBlockX, dr.theIngameGui.mouseBlockY, dr.theIngameGui.mouseBlockZ));
+			}
+			
+			{
+				Runtime runtime = Runtime.getRuntime();
+				long freeMemory = runtime.freeMemory() / 1024 / 1024;
+				long maxMemory = runtime.maxMemory() / 1024 / 1024;
+				long totalMemory = runtime.totalMemory() / 1024 / 1024;
+				
+				dr.fontRenderer.drawStringWithShadow(5, 80, String.format("Memory: Free: %d MB, Max: %d MB, Total: %d MB", freeMemory, maxMemory, totalMemory));
+				dr.fontRenderer.drawStringWithShadow(5, 90, String.format("Processors: %d", runtime.availableProcessors()));
 			}
 		}
 		GL11.glPopMatrix();

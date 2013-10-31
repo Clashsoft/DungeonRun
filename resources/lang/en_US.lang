@@ -18,6 +18,11 @@ options.video.guiscale=GUI Size
 options.video.fullscreen=Fullscreen
 options.video.vsync=Vertical Sync
 
+options.video.guiscale.0=Auto
+options.video.guiscale.1=Small
+options.video.guiscale.2=Medium
+options.video.guiscale.3=Large
+
 gui.cancel=Cancel
 gui.done=Done
 gui.back=Back

@@ -41,7 +41,7 @@ public class GuiCreateWorld extends GuiListScreen
 		{
 			if (key == 14 && !worldName.isEmpty())
 				worldName = worldName.substring(0, worldName.length() - 1);
-			else if (Character.isLetterOrDigit(c) || Character.isWhitespace(c))
+			else if (Character.isLetterOrDigit(c) || c == ' ')
 				worldName += c;
 		}
 	}
