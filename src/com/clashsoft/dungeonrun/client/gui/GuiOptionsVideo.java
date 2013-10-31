@@ -5,7 +5,6 @@ import java.util.List;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.client.engine.I18n;
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class GuiOptionsVideo extends GuiListScreen
 {
@@ -53,11 +52,11 @@ public class GuiOptionsVideo extends GuiListScreen
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return I18n.getString("options.video.guiscale") + ": " + I18n.getString("options.video.guiscale." + DungeonRunServer.instance.gameSettings.guiSize);
+			return I18n.getString("options.video.guiscale") + ": " + I18n.getString("options.video.guiscale." + dr.gameSettings.guiSize);
 		else if (i == 1)
-			return I18n.getString("options.video.fullscreen") + ": " + DungeonRunServer.instance.gameSettings.fullScreen;
+			return I18n.getString("options.video.fullscreen") + ": " + dr.gameSettings.fullScreen;
 		else if (i == 2)
-			return I18n.getString("options.video.vsync") + ": " + DungeonRunServer.instance.gameSettings.useVSync;
+			return I18n.getString("options.video.vsync") + ": " + dr.gameSettings.useVSync;
 		return super.getEntry(i);
 	}
 }

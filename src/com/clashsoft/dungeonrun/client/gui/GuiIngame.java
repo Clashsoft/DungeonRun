@@ -13,7 +13,6 @@ import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos3;
 
 public class GuiIngame extends GuiScreen
@@ -29,14 +28,13 @@ public class GuiIngame extends GuiScreen
 	
 	public GuiIngame(EntityPlayer player)
 	{
-		super();
 		this.player = player;
-		this.renderBlocks = DungeonRunServer.instance.renderEngine.blockRenderer;
 	}
 	
 	@Override
 	public void initGui() throws SlickException
 	{
+		this.renderBlocks = dr.renderEngine.blockRenderer;
 	}
 	
 	@Override
@@ -81,8 +79,8 @@ public class GuiIngame extends GuiScreen
 		if (worldSaving)
 		{
 			String text = I18n.getString("world.saving");
-			int width = DungeonRunServer.instance.fontRenderer.getStringWidth(text);
-			DungeonRunServer.instance.fontRenderer.drawString(this.windowWidth - 20 - width, windowHeight - 20, text, 0xFFFFFF);
+			int width = dr.fontRenderer.getStringWidth(text);
+			dr.fontRenderer.drawString(this.windowWidth - 20 - width, windowHeight - 20, text, 0xFFFFFF);
 		}
 	}
 	
@@ -147,7 +145,7 @@ public class GuiIngame extends GuiScreen
 				this.player.worldObj.setBlock(Block.stone.blockID, 0, mouseBlockX, mouseBlockY, mouseBlockZ);
 		}
 		if (input.isKeyDown(Input.KEY_ESCAPE))
-			DungeonRunServer.instance.pauseGame();
+			dr.pauseGame();
 	}
 	
 	@Override

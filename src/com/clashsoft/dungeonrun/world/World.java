@@ -11,7 +11,6 @@ import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.nbt.NBTBase;
 import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.nbt.NBTTagList;
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class World
 {
@@ -84,7 +83,7 @@ public class World
 	public void spawnEntityInWorld(Entity e)
 	{
 		if (e instanceof EntityPlayer)
-			this.playerEntitys.put(((EntityPlayer) e).username, DungeonRunServer.instance.thePlayer = ((EntityPlayer) e));
+			this.playerEntitys.put(((EntityPlayer) e).username, (EntityPlayer) e);
 		this.entitys.put(e.entityId, e);
 	}
 	
@@ -98,18 +97,15 @@ public class World
 	
 	public void updateWorld() throws SlickException
 	{
-		if (!DungeonRunServer.instance.isPaused)
+		for (Entity e : this.entitys.values())
 		{
-			for (Entity e : this.entitys.values())
-			{
-				e.updateEntity();
-			}
-			for (int i : this.entitysToRemove)
-			{
-				this.entitys.remove(i);
-			}
-			this.entitysToRemove.clear();
+			e.updateEntity();
 		}
+		for (int i : this.entitysToRemove)
+		{
+			this.entitys.remove(i);
+		}
+		this.entitysToRemove.clear();
 	}
 	
 	public Collection<Entity> getEntitys()
@@ -120,6 +116,18 @@ public class World
 	public Collection<EntityPlayer> getPlayers()
 	{
 		return playerEntitys.values();
+	}
+	
+	public EntityPlayer getPlayer(String username) throws SlickException
+	{
+		EntityPlayer player = playerEntitys.get(username);
+		if (player == null)
+		{
+			player = new EntityPlayer(this);
+			player.setLocation(0D, 35D, 0D);
+			this.spawnEntityInWorld(player);
+		}
+		return player;
 	}
 	
 	public float getLightValue(int x, int y, int z)

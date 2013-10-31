@@ -4,17 +4,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
-import org.newdawn.slick.imageout.ImageOut;
 
 import com.clashsoft.dungeonrun.block.Block;
-import com.clashsoft.dungeonrun.client.engine.FontRenderer;
-import com.clashsoft.dungeonrun.client.engine.I18n;
-import com.clashsoft.dungeonrun.client.engine.RenderEngine;
-import com.clashsoft.dungeonrun.client.engine.SoundEngine;
-import com.clashsoft.dungeonrun.client.gui.*;
-import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.world.World;
 
 public class DungeonRunServer extends BasicGame
@@ -26,129 +18,19 @@ public class DungeonRunServer extends BasicGame
 	public AppGameContainer		theGameContainer;
 	public long					tick;
 	
-	public RenderEngine			renderEngine;
-	public SoundEngine			soundEngine;
-	public FontRenderer			fontRenderer;
-	public I18n					i18n;
-	
-	public int					mousePosX	= 0;
-	public int					mousePosY	= 0;
-	
-	public GameSettings			gameSettings;
-	
 	public boolean				hasGameStarted;
-	public GuiIngame			theIngameGui;
-	
-	public boolean				isPaused;
-	public GuiScreen			currentGui;
 	public World				theWorld;
-	public EntityPlayer			thePlayer;
 	
 	public DungeonRunServer() throws SlickException
 	{
-		super("Dungeon Run");
+		this("Dungeon Run Server");
+		
 	}
 	
-	@Override
-	public void render(GameContainer gc, Graphics g) throws SlickException
+	public DungeonRunServer(String title)
 	{
-		this.renderEngine.graphics = g;
-		
-		if (this.theIngameGui != null && hasGameStarted)
-			this.theIngameGui.render(gc.getWidth(), gc.getHeight());
-		
-		if (this.currentGui != null)
-			this.currentGui.render(gc.getWidth(), gc.getHeight());
-	}
-	
-	@Override
-	public void init(GameContainer arg0) throws SlickException
-	{
-		Mouse.setClipMouseCoordinatesToWindow(true);
-		
-		this.gameSettings = new GameSettings();
-		
-		this.renderEngine = new RenderEngine(this);
-		this.soundEngine = new SoundEngine(this);
-		this.fontRenderer = new FontRenderer(this);
-		this.i18n = I18n.instance = new I18n();
-		
-		this.gameSettings.updateGame();
-		
-		this.theGameContainer.getInput().addListener(this);
-		
-		for (Block b : Block.blocksList)
-		{
-			if (b != null)
-				b.registerIcons();
-		}
-		
-		this.displayGuiScreen(new GuiIntro());
-	}
-	
-	public void shutdown() throws SlickException
-	{
-		this.saveWorld(theWorld);
-		this.gameSettings.save();
-		this.theGameContainer.exit();
-	}
-	
-	@Override
-	public void keyPressed(int key, char c)
-	{
-		if (this.currentGui != null)
-			try
-			{
-				this.currentGui.keyTyped(key, c);
-			}
-			catch (SlickException ex)
-			{
-				ex.printStackTrace();
-			}
-	}
-	
-	@Override
-	public void update(GameContainer gc, int tick) throws SlickException
-	{
-		this.tick++;
-		if (this.currentGui != null)
-		{
-			this.currentGui.update(this);
-		}
-		
-		Input input = gc.getInput();
-		if (input.isKeyPressed(Input.KEY_F2))
-		{
-			Image i = new Image(gc.getWidth(), gc.getHeight());
-			gc.getGraphics().copyArea(i, 0, 0);
-			try
-			{
-				File file = new File(getSaveDataFolder(), "screenshots");
-				if (!file.exists())
-					file.mkdir();
-				String path = file.getPath() + "/" + getDateTime() + ".png";
-				ImageOut.write(i, path, false);
-				System.out.println("Screenshot saved as " + path);
-			}
-			catch (Exception ex)
-			{
-				System.out.println("Failed to save screenshot: " + ex.getMessage());
-			}
-		}
-		if (input.isKeyPressed(Input.KEY_F3))
-			this.gameSettings.debugMode = !this.gameSettings.debugMode;
-	}
-	
-	public GuiScreen displayGuiScreen(GuiScreen gui) throws SlickException
-	{
-		this.currentGui = gui;
-		this.currentGui.init(this);
-		return this.currentGui;
-	}
-	
-	public static Input getInput()
-	{
-		return instance.theGameContainer.getInput();
+		super(title);
+		instance = this;
 	}
 	
 	public static void main(String[] args) throws SlickException
@@ -161,6 +43,41 @@ public class DungeonRunServer extends BasicGame
 		instance.theGameContainer.setShowFPS(false);
 		instance.theGameContainer.setResizable(true);
 		instance.theGameContainer.start();
+	}
+	
+	@Override
+	public void init(GameContainer arg0) throws SlickException
+	{	
+		for (Block b : Block.blocksList)
+		{
+			if (b != null)
+				b.registerIcons();
+		}
+	}
+	
+	public void shutdown() throws SlickException
+	{
+		this.saveWorld(theWorld);
+		this.theGameContainer.exit();
+	}
+	
+	@Override
+	public void render(GameContainer gc, Graphics g) throws SlickException
+	{
+		g.setColor(Color.white);
+		g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
+		
+		g.setColor(Color.black);
+		g.drawString("DungeonRun Server " + VERSION, 5, 5);
+	}
+	
+	@Override
+	public void update(GameContainer gc, int tick) throws SlickException
+	{
+		this.tick++;
+		
+		if (this.theWorld != null)
+			this.theWorld.updateWorld();
 	}
 	
 	public static File getSaveDataFolder()
@@ -191,20 +108,8 @@ public class DungeonRunServer extends BasicGame
 		return strDate;
 	}
 	
-	public void setFullScreen(boolean flag) throws SlickException
-	{
-		theGameContainer.setFullscreen(flag);
-	}
-	
-	public void setVSync(boolean flag)
-	{
-		theGameContainer.setVSync(flag);
-	}
-	
 	public void startGame() throws SlickException
-	{
-		this.displayGuiScreen(new GuiInfo("world.loading"));
-		
+	{	
 		this.hasGameStarted = true;
 		new Thread(new Runnable()
 		{
@@ -215,14 +120,7 @@ public class DungeonRunServer extends BasicGame
 				{
 					loadWorld(theWorld);
 					
-					if (DungeonRunServer.this.theWorld.getPlayers().isEmpty())
-					{
-						DungeonRunServer.this.thePlayer = new EntityPlayer(DungeonRunServer.this.theWorld);
-						thePlayer.posY = 34F;
-						DungeonRunServer.this.theWorld.spawnEntityInWorld(DungeonRunServer.this.thePlayer);
-					}
-					
-					DungeonRunServer.this.theIngameGui = (GuiIngame) DungeonRunServer.this.displayGuiScreen(new GuiIngame(DungeonRunServer.this.thePlayer));
+					onStartGame();
 				}
 				catch (SlickException ex)
 				{
@@ -232,10 +130,13 @@ public class DungeonRunServer extends BasicGame
 		}).start();
 	}
 	
-	public void endGame() throws SlickException
+	public void onStartGame() throws SlickException
 	{
-		this.displayGuiScreen(new GuiInfo("world.saving"));
 		
+	}
+	
+	public void endGame() throws SlickException
+	{	
 		new Thread(new Runnable()
 		{
 			@Override
@@ -244,13 +145,7 @@ public class DungeonRunServer extends BasicGame
 				try
 				{
 					DungeonRunServer.this.saveWorld(DungeonRunServer.this.theWorld);
-					
-					DungeonRunServer.this.displayGuiScreen(new GuiMainMenu());
-					
-					DungeonRunServer.this.theIngameGui = null;
-					DungeonRunServer.this.hasGameStarted = false;
-					DungeonRunServer.this.theWorld = null;
-					DungeonRunServer.this.thePlayer = null;
+					onGameEnd();
 				}
 				catch (SlickException ex)
 				{
@@ -260,17 +155,8 @@ public class DungeonRunServer extends BasicGame
 		}).start();
 	}
 	
-	public void pauseGame() throws SlickException
-	{
-		this.isPaused = true;
-		this.displayGuiScreen(new GuiPauseMenu());
-	}
-	
-	public void unpauseGame() throws SlickException
-	{
-		this.isPaused = false;
-		this.displayGuiScreen(theIngameGui);
-	}
+	public void onGameEnd() throws SlickException
+	{}
 	
 	public boolean saveWorld(World world) throws SlickException
 	{	
@@ -303,12 +189,5 @@ public class DungeonRunServer extends BasicGame
 		
 		File worldFile = new File(saves, worldFileName);
 		return world.load(worldFile);
-	}
-	
-	@Override
-	public void mouseMoved(int oldx, int oldy, int newx, int newy)
-	{
-		mousePosX = newx;
-		mousePosY = newy;
 	}
 }

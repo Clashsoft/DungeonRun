@@ -8,7 +8,6 @@ import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class GuiMainMenu extends GuiListScreen
@@ -34,11 +33,11 @@ public class GuiMainMenu extends GuiListScreen
 		{
 			String s = I18n.getString(entrys.get(i));
 			
-			int length = DungeonRunServer.instance.fontRenderer.getStringWidth(s);
+			int length = dr.fontRenderer.getStringWidth(s);
 			int posX = (int) ((width - length) / 2F);
-			int posY = (height - (entrys.size() * DungeonRunServer.instance.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
+			int posY = (height - (entrys.size() * dr.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
 			
-			DungeonRunServer.instance.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
+			dr.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
 			
 			if (length >= longestStringLength)
 				longestStringLength = length;

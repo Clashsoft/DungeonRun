@@ -6,8 +6,10 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
@@ -16,7 +18,9 @@ public abstract class GuiScreen
 {
 	public static final Color	colorAlpha	= new Color(0F, 0F, 0F, 0.5F);
 	
-	protected DungeonRunServer		dr;
+	protected DungeonRun		dr;
+	
+	protected Input				input;
 	
 	protected int				windowWidth;
 	protected int				windowHeight;
@@ -25,9 +29,10 @@ public abstract class GuiScreen
 	
 	protected ScaledResolution	scaledResolution;
 	
-	public final void init(DungeonRunServer game) throws SlickException
+	public final void init(DungeonRun game) throws SlickException
 	{
 		this.dr = game;
+		this.input = DungeonRun.getInput();
 		
 		this.scaledResolution = new ScaledResolution(game.gameSettings, windowWidth, windowHeight);
 		

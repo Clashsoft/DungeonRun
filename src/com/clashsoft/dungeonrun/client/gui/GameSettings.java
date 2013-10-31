@@ -1,10 +1,14 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.newdawn.slick.SlickException;
 
+import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class GameSettings
@@ -33,7 +37,7 @@ public class GameSettings
 	
 	public void updateGame() throws SlickException
 	{
-		DungeonRunServer dr = DungeonRunServer.instance;
+		DungeonRun dr = DungeonRun.instance;
 		if (dr.currentGui != null)
 			dr.currentGui.init(dr);
 		dr.setFullScreen(fullScreen);

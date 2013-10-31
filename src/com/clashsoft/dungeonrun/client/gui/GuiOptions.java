@@ -6,7 +6,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.client.engine.I18n;
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
 
 public class GuiOptions extends GuiListScreen
 {
@@ -35,14 +34,14 @@ public class GuiOptions extends GuiListScreen
 		GameSettings gs = this.dr.gameSettings;
 		super.updateScreen();
 		if (selection == 0)
-			if (DungeonRunServer.getInput().isKeyDown(Input.KEY_RIGHT))
+			if (input.isKeyDown(Input.KEY_RIGHT))
 			{
 				if (this.dr.gameSettings.soundVolume + 0.01F <= 1F)
 					this.dr.gameSettings.soundVolume += 0.01F;
 				else
 					gs.soundVolume = 1F;
 			}
-			else if (DungeonRunServer.getInput().isKeyDown(Input.KEY_LEFT))
+			else if (input.isKeyDown(Input.KEY_LEFT))
 			{
 				if (this.dr.gameSettings.soundVolume - 0.01F >= 0F)
 					this.dr.gameSettings.soundVolume -= 0.01F;
@@ -50,14 +49,14 @@ public class GuiOptions extends GuiListScreen
 					gs.soundVolume = 0F;
 			}
 		if (selection == 1)
-			if (DungeonRunServer.getInput().isKeyDown(Input.KEY_RIGHT))
+			if (input.isKeyDown(Input.KEY_RIGHT))
 			{
 				if (this.dr.gameSettings.musicVolume + 0.01F <= 1F)
 					this.dr.gameSettings.musicVolume += 0.01F;
 				else
 					gs.musicVolume = 1F;
 			}
-			else if (DungeonRunServer.getInput().isKeyDown(Input.KEY_LEFT))
+			else if (input.isKeyDown(Input.KEY_LEFT))
 			{
 				if (this.dr.gameSettings.musicVolume - 0.01F >= 0F)
 					this.dr.gameSettings.musicVolume -= 0.01F;
