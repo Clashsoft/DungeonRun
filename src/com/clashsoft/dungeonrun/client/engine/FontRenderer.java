@@ -217,9 +217,7 @@ public class FontRenderer
 	}
 	
 	public float drawString(float x, float y, String text, int color, boolean shadow)
-	{
-		GL11.glPushMatrix();
-		
+	{	
 		this.resetStyles();
 		this.setColor_I(color);
 		this.shadow = shadow;
@@ -233,15 +231,18 @@ public class FontRenderer
 			if (c == '\u00A7' && i + 2 != text.length())
 			{
 				char c1 = text.charAt(i + 1);
-				int i1 = "0123456789ABCDEFbcisSuUr".indexOf(c1);
+				int i1 = "0123456789ABCDEF".indexOf(c1);
 				
-				if (i1 != -1)
+				if (c1 == '\u00a7')
+					continue;
+				
+				else
 				{
-					if (i1 < 16) // 0-9 A-F
+					if (i1 != -1 && i1 < 16) // 0-9 A-F
 						this.setColor_I(this.colorTable[i1]);
-					else if (i1 == 16) // b
+					else if (c1 == 'b') // b
 						this.bold = !this.bold;
-					else if (i1 == 17) // c
+					else if (c1 == 'c') // c
 					{
 						int i2 = text.indexOf('[', i + 2);
 						int i3 = text.indexOf(']', i + 3);
@@ -253,36 +254,36 @@ public class FontRenderer
 							continue;
 						}
 					}
-					else if (i1 == 18) // i
+					else if (c1 == 'i') // i
 						this.italic = !this.italic;
-					else if (i1 == 19) // s
+					else if (c1 == 's') // s
 						this.strikeThrough = !this.strikeThrough;
-					else if (i1 == 20) // S
+					else if (c1 == 'S') // S
 						this.shadow = !this.shadow;
-					else if (i1 == 21) // u
+					else if (c1 == 'u') // u
 						this.underline = !this.underline;
-					else if (i1 == 22) // Us
+					else if (c1 == 'U') // U
 						this.unicode = !this.unicode;
-					else if (i1 == 23) // r
+					else if (c1 == 'r') // r
 						this.resetStyles();
 					
 					i++;
 					continue;
 				}
-				else if (c1 == '\u00a7')
-					continue;
 			}
 			
 			x += drawChar(x, y, c) + 1;
 		}
 		x--;
-		GL11.glPopMatrix();
 		
 		return x;
 	}
 	
 	public String replaceLocalizations(String text)
 	{
+		if (!text.contains("#"))
+			return text;
+		
 		String text1 = new String(text);
 		for (int i = 0; i < text1.length(); i++)
 		{
@@ -297,7 +298,7 @@ public class FontRenderer
 					continue;
 				
 				String key = text1.substring(i + 1, end);
-				String translatedKey = I18n.getString(key.replace('_', '.'));
+				String translatedKey = I18n.getStringFormatted(key);
 				
 				text = text.replace("#" + key, translatedKey);
 				
@@ -308,6 +309,11 @@ public class FontRenderer
 	}
 	
 	public float drawChar(float x, float y, char c)
+	{
+		return drawChar(x, y, c, this.red, this.green, this.blue);
+	}
+	
+	public float drawChar(float x, float y, char c, float red, float green, float blue)
 	{
 		Image image = charMap.get(Character.valueOf(c));
 		
@@ -321,21 +327,18 @@ public class FontRenderer
 		
 		if (draw)
 		{
+			GL11.glPushMatrix();
+			
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+
 			GL11.glScalef(b, HEIGHT / height, 1F);
 			
 			if (this.shadow)
 			{
 				this.shadow = false;
-				this.red /= 4;
-				this.green /= 4;
-				this.blue /= 4;
 				
-				this.drawChar(x + 1, y + 1, c);
+				this.drawChar(x + 1, y + 1, c, red / 4F, green / 4F, blue / 4F);
 				
-				this.red *= 4;
-				this.green *= 4;
-				this.blue *= 4;
 				this.shadow = true;
 			}
 			
@@ -352,7 +355,7 @@ public class FontRenderer
 					this.dr.renderEngine.graphics.drawLine(x, y + 8, x + width, y + 8);
 			}
 			
-			GL11.glScalef(1F / b, height / HEIGHT, 1F);
+			GL11.glPopMatrix();
 		}
 		
 		return width * b;

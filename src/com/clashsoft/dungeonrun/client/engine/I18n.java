@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.util.StringUtils;
 
 public class I18n
 {
@@ -18,13 +19,41 @@ public class I18n
 	
 	public static String getStringFormatted(String key, Object... args)
 	{
-		try
+		return instance.translate(null, key, args);
+	}
+	
+	public static String getStringFormatted(String key)
+	{
+		String key1 = key.replace('_', '.');
+		
+		int i1 = key.indexOf('[');
+		int i2 = key.indexOf(']');
+		
+		if (i1 == -1 && i2 == -1)
+			return getString(key);
+		else if (i1 != -1 && i2 == -1)
+			return getString(key.substring(0, i1));
+		else if (i1 == -1 && i2 != -1)
+			return getString(key.substring(0, i2));
+		else
 		{
-			return instance.translate(null, key, args);
-		}
-		catch (Exception ex)
-		{
-			return key;
+			key1 = key1.substring(0, i1);
+			String argsText = key.substring(i1 + 1, i2);
+			
+			String[] args = StringUtils.split(argsText, ',');
+			Object[] parsedArgs = new Object[args.length];
+			
+			for (int i = 0; i < args.length; i++)
+			{
+				String arg = args[i];
+				
+				int i3 = arg.indexOf(':');
+				String type = arg.substring(0, i3);
+				String value = arg.substring(i3 + 1);
+				parsedArgs[i] = StringUtils.parse(type, value);
+			}
+			
+			return getStringFormatted(key1, parsedArgs);
 		}
 	}
 	
