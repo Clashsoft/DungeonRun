@@ -209,7 +209,7 @@ public class NBTTagCompound extends NBTBase
 		{
 			char c = text.charAt(i);
 			
-			if (c == '"')
+			if (c == '"' && !(i > 0 && tag.charAt(i - 1) == '\\'))
 				quote = !quote;
 			
 			if (!quote)

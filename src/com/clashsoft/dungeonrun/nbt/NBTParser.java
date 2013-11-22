@@ -30,7 +30,7 @@ public class NBTParser
 		{
 			char c = tag.charAt(i);
 			
-			if (c == '"')
+			if (c == '"' && !(i > 0 && tag.charAt(i - 1) == '\\'))
 				quote = !quote;
 			
 			if (!quote)

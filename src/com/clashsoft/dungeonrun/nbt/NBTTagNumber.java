@@ -16,8 +16,6 @@ public abstract class NBTTagNumber extends NBTBase
 		return value.equals(((NBTTagNumber) that).value);
 	}
 	
-	public abstract char getPostfixChar();
-	
 	@Override
 	public final String writeValueString(String prefix)
 	{
@@ -30,5 +28,6 @@ public abstract class NBTTagNumber extends NBTBase
 		value = readNumber(dataString.substring(0, dataString.indexOf(getPostfixChar())));
 	}
 	
+	public abstract char getPostfixChar();
 	public abstract Number readNumber(String number);
 }

@@ -19,12 +19,12 @@ public class NBTTagString extends NBTBase
 	@Override
 	public String writeValueString(String prefix)
 	{
-		return "\"" + value.replace("\"", "\u00a8") + "\"";
+		return "\"" + value.replace("\"", "\\\"") + "\"";
 	}
 	
 	@Override
 	public void readValueString(String dataString)
 	{
-		this.value = dataString.substring(1, dataString.length() - 1).replace("\u00a8", "\"");
+		this.value = dataString.substring(1, dataString.length() - 1).replace("\\\"", "\"");
 	}
 }

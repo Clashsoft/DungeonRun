@@ -13,7 +13,7 @@ public class NBTTagShort extends NBTTagNumber
 	@Override
 	public char getPostfixChar()
 	{
-		return 0;
+		return 'S';
 	}
 	
 	@Override

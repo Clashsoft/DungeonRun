@@ -19,7 +19,7 @@ public class NBTTagBoolean extends NBTBase
 	@Override
 	public void readValueString(String dataString)
 	{
-		this.value = dataString.equals("t");
+		this.value = "t".equals(dataString);
 	}
 	
 	@Override
