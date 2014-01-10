@@ -25,6 +25,7 @@ public class FontRenderer
 	 */
 	public DungeonRun					dr;
 	
+	public String fontName;
 	public boolean						globalUnicode;
 	
 	/**
@@ -41,7 +42,7 @@ public class FontRenderer
 	/**
 	 * Current Font color.
 	 */
-	public float						red			= 1F, green = 1F, blue = 1F;
+	public float						red			= 1F, green = 1F, blue = 1F, alpha = 1F;
 	
 	/**
 	 * Determines if the currently rendered string is rendered with a shadow
@@ -53,9 +54,11 @@ public class FontRenderer
 	 */
 	public boolean						italic, bold, strikeThrough, underline, unicode;
 	
-	public FontRenderer(DungeonRun dr) throws SlickException
+	public FontRenderer(DungeonRun dr, String fontName) throws SlickException
 	{
 		this.dr = dr;
+		this.fontName = fontName;
+		
 		loadColorTable();
 		loadCharNames();
 		loadChars();
@@ -79,7 +82,7 @@ public class FontRenderer
 	
 	public void loadCharNames() throws SlickException
 	{
-		List<String> lines = ResourceHelper.readAllLines("/resources/text/ascii/charmap.txt");
+		List<String> lines = ResourceHelper.readAllLines("/resources/text/" + fontName + "/charmap.txt");
 		
 		for (String line : lines)
 		{
@@ -126,7 +129,7 @@ public class FontRenderer
 		for (Character character : charPaths.keySet())
 		{
 			String path = charPaths.get(character);
-			String charPath = "resources/text/ascii/" + path;
+			String charPath = "resources/text/" + fontName + "/" + path;
 			
 			try
 			{
@@ -145,13 +148,21 @@ public class FontRenderer
 		red = ((color >> 16) & 255) / 255F;
 		green = ((color >> 8) & 255) / 255F;
 		blue = (color & 255) / 255F;
+		updateColor();
 	}
 	
 	public void setColor_F(float r, float g, float b)
 	{
+		this.setColor_F(r, g, b, alpha);
+	}
+	
+	public void setColor_F(float r, float g, float b, float a)
+	{
 		red = r;
 		green = g;
 		blue = b;
+		alpha = 1F;
+		updateColor();
 	}
 	
 	public void setColor_S(String color)
@@ -165,6 +176,7 @@ public class FontRenderer
 				float r = 1F;
 				float g = 1F;
 				float b = 1F;
+				float a = 1F;
 				
 				String[] split = color.split(";");
 				
@@ -174,8 +186,10 @@ public class FontRenderer
 					g = Float.parseFloat(split[1]);
 				if (split.length >= 3)
 					b = Float.parseFloat(split[2]);
+				if (split.length >= 4)
+					a = Float.parseFloat(split[3]);
 				
-				setColor_F(r, g, b);
+				setColor_F(r, g, b, a);
 			}
 			else
 				setColor_I(Integer.parseInt(color));
@@ -183,6 +197,11 @@ public class FontRenderer
 		catch (NumberFormatException ex)
 		{
 		}
+	}
+	
+	public void updateColor()
+	{
+		//GL11.glColor4f(red, green, blue, alpha);
 	}
 	
 	public void resetStyles()
@@ -193,7 +212,7 @@ public class FontRenderer
 		this.strikeThrough = false;
 		this.underline = false;
 		this.unicode = false;
-		this.setColor_F(1F, 1F, 1F);
+		this.setColor_F(1F, 1F, 1F, 1F);
 	}
 	
 	public float drawString(int x, int y, String text)
@@ -310,10 +329,15 @@ public class FontRenderer
 	
 	public float drawChar(float x, float y, char c)
 	{
-		return drawChar(x, y, c, this.red, this.green, this.blue);
+		if (this.shadow)
+		{
+			drawChar(x + 1, y + 1, c, this.red / 4F, this.green / 4F, this.blue / 4F, this.alpha);
+		}
+		
+		return drawChar(x, y, c, this.red, this.green, this.blue, this.alpha);
 	}
 	
-	public float drawChar(float x, float y, char c, float red, float green, float blue)
+	public float drawChar(float x, float y, char c, float red, float green, float blue, float alpha)
 	{
 		Image image = charMap.get(Character.valueOf(c));
 		
@@ -333,21 +357,12 @@ public class FontRenderer
 
 			GL11.glScalef(b, HEIGHT / height, 1F);
 			
-			if (this.shadow)
-			{
-				this.shadow = false;
-				
-				this.drawChar(x + 1, y + 1, c, red / 4F, green / 4F, blue / 4F);
-				
-				this.shadow = true;
-			}
-			
-			GL11.glColor3f(red, green, blue);
+			GL11.glColor4f(red, green, blue, alpha);
 			image.drawSheared(x / b, y, this.italic ? -1.5F : 0F, 0, null);
 			
 			if (this.strikeThrough || this.underline)
 			{
-				this.dr.renderEngine.graphics.setColor(new Color(red, green, blue));
+				this.dr.renderEngine.graphics.setColor(new Color(red, green, blue, alpha));
 				
 				if (this.strikeThrough)
 					this.dr.renderEngine.graphics.drawLine(x, y + 3, x + width, y + 3);

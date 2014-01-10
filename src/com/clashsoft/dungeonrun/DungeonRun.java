@@ -66,7 +66,7 @@ public class DungeonRun extends DungeonRunServer
 		
 		this.renderEngine = new RenderEngine(this);
 		this.soundEngine = new SoundEngine(this);
-		this.fontRenderer = new FontRenderer(this);
+		this.fontRenderer = new FontRenderer(this, "font1");
 		this.i18n = I18n.instance = new I18n();
 		
 		this.gameSettings.updateGame();
