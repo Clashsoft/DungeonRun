@@ -12,9 +12,9 @@ import com.clashsoft.dungeonrun.world.WorldInfo;
 
 public class GuiSelectWorld extends GuiListScreen
 {
-	public GuiScreen superGui;
+	public GuiScreen	superGui;
 	
-	public List<String> worlds = new ArrayList<String>();
+	public List<String>	worlds	= new ArrayList<String>();
 	
 	public GuiSelectWorld(GuiScreen superGui)
 	{
@@ -28,21 +28,27 @@ public class GuiSelectWorld extends GuiListScreen
 		
 		File saves = new File(DungeonRunServer.getSaveDataFolder(), "saves");
 		
-		for (File f : saves.listFiles())
+		File[] files = saves.listFiles();
+		if (files != null)
 		{
-			if (f.isDirectory())
-				worlds.add(f.getName());
+			for (File f : saves.listFiles())
+			{
+				if (f.isDirectory())
+				{
+					worlds.add(f.getName());
+				}
+			}
 		}
 		
 		super.initGui();
 	}
-
+	
 	@Override
 	public String getTitle()
 	{
 		return "world.select";
 	}
-
+	
 	@Override
 	public void addEntrys(List<String> s)
 	{
@@ -50,7 +56,7 @@ public class GuiSelectWorld extends GuiListScreen
 		s.add("world.create");
 		s.add("gui.cancel");
 	}
-
+	
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
@@ -68,7 +74,7 @@ public class GuiSelectWorld extends GuiListScreen
 			String worldName = worlds.get(i);
 			
 			this.dr.theWorld = new World(new WorldInfo(worldName));
-			this.dr.startGame();
+			this.dr.startWorld();
 		}
 	}
 }

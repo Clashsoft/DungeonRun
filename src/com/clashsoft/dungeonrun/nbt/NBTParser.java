@@ -31,7 +31,9 @@ public class NBTParser
 			char c = tag.charAt(i);
 			
 			if (c == '"' && !(i > 0 && tag.charAt(i - 1) == '\\'))
+			{
 				quote = !quote;
+			}
 			
 			if (!quote)
 			{
@@ -92,10 +94,14 @@ public class NBTParser
 			
 			if (nextValid || quote)
 			{
-				if (SQBDEPTH == 0 && next == 0) // Type
+				if (SQBDEPTH == 0 && next == 0)
+				{
 					tagType.append(c);
-				else if (SQBDEPTH == 1 && next == 1) // Name
+				}
+				else if (SQBDEPTH == 1 && next == 1)
+				{
 					tagName.append(c);
+				}
 				else if (PABDEPTH == 0 && SQBDEPTH == 1 && CUBDEPTH == 1 && next == 2) // Value
 				{
 					int i1 = tag.lastIndexOf("}") - 1;
@@ -113,7 +119,9 @@ public class NBTParser
 		byte type = Byte.parseByte(tagType);
 		NBTBase base = NBTBase.createFromType(tagName, type);
 		if (base != null)
+		{
 			base.readValueString(tagValue);
+		}
 		return base;
 	}
 	

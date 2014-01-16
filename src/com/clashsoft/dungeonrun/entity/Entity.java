@@ -37,9 +37,9 @@ public abstract class Entity implements INBTSaveable
 	
 	public void setLocation(double x, double y, double z)
 	{
-		posX = x;
-		posY = y;
-		posZ = z;
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
 	}
 	
 	public void setRotation(int rot)
@@ -49,38 +49,46 @@ public abstract class Entity implements INBTSaveable
 	
 	public void setVelocity(double x, double y, double z)
 	{
-		velocityX = x;
-		velocityY = y;
-		velocityZ = z;
+		this.velocityX = x;
+		this.velocityY = y;
+		this.velocityZ = z;
 	}
 	
 	public void move(double x, double y, double z)
 	{
-		if (canMove(x, y, z))
+		if (this.canMove(x, y, z))
 		{
-			posX += x;
-			posY += y;
-			posZ += z;
+			this.posX += x;
+			this.posY += y;
+			this.posZ += z;
 		}
 	}
 	
 	public void addVelocity(double x, double y, double z)
 	{
-		velocityX += x;
-		velocityY += y;
-		velocityZ += z;
+		this.velocityX += x;
+		this.velocityY += y;
+		this.velocityZ += z;
 	}
 	
 	public void move(double distance, int dir)
 	{
-		if (dir == 0) // North
-			move(0, 0, -distance);
-		else if (dir == 1) // East
-			move(distance, 0, 0);
+		if (dir == 0)
+		{
+			this.move(0, 0, -distance);
+		}
+		else if (dir == 1)
+		{
+			this.move(distance, 0, 0);
+		}
 		else if (dir == 2)
-			move(0, 0, distance);
+		{
+			this.move(0, 0, distance);
+		}
 		else if (dir == 3)
-			move(-distance, 0, 0);
+		{
+			this.move(-distance, 0, 0);
+		}
 	}
 	
 	public void setDead()
@@ -90,97 +98,121 @@ public abstract class Entity implements INBTSaveable
 	
 	public void updateEntity()
 	{
-		applyGravity();
-		processVelocity();
+		this.applyGravity();
+		this.processVelocity();
 	}
 	
 	protected void applyGravity()
 	{
-		if (!isCollidedVertically())
+		if (!this.isCollidedVertically())
 		{
-			this.posY -= 0.1F + (airTime * 0.1F);
-			airTime++;
+			this.posY -= 0.1F + this.airTime * 0.1F;
+			this.airTime++;
 		}
 		else
-			airTime = 0;
+		{
+			this.airTime = 0;
+		}
 	}
 	
 	protected void processVelocity()
 	{
-		posX += velocityX;
-		posY += velocityY;
-		posZ += velocityZ;
+		this.posX += this.velocityX;
+		this.posY += this.velocityY;
+		this.posZ += this.velocityZ;
 		
-		addVelocity(getNormalizer(velocityX, 0.1F), getNormalizer(velocityY, 0.1F), getNormalizer(velocityZ, 0.1F));
+		this.addVelocity(this.getNormalizer(this.velocityX, 0.1F), this.getNormalizer(this.velocityY, 0.1F), this.getNormalizer(this.velocityZ, 0.1F));
 	}
 	
 	private double getNormalizer(double par1, double par2)
 	{
 		if (par1 >= par2)
+		{
 			return -par2;
+		}
 		else if (par1 <= -par2)
+		{
 			return par2;
+		}
 		else if (par1 < par2 && par1 >= 0)
+		{
 			return 0 - par1;
+		}
 		else if (par1 > -par2 && par1 <= 0)
+		{
 			return par1;
+		}
 		return 0F;
 	}
 	
 	public boolean isCollidedVertically()
 	{
-		if (posY < 64 && posY >= 0)
+		if (this.posY < 64 && this.posY >= 0)
 		{
-			BlockInWorld block = worldObj.getBlock((int) Math.floor(posX), (int) Math.floor(posY), (int) Math.floor(posZ));
-			return canCollideWithBlockVertically(block);
+			BlockInWorld block = this.worldObj.getBlock((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ));
+			return this.canCollideWithBlockVertically(block);
 		}
-		else if (posY <= -64)
+		else if (this.posY <= -64)
+		{
 			this.setDead();
+		}
 		return false;
 	}
 	
 	public boolean canMove(double distance, int dir)
 	{
-		if (dir == 0) // North
-			return canMove(0, 0, -distance);
-		else if (dir == 1) // East
-			return canMove(distance, 0, 0);
+		if (dir == 0)
+		{
+			return this.canMove(0, 0, -distance);
+		}
+		else if (dir == 1)
+		{
+			return this.canMove(distance, 0, 0);
+		}
 		else if (dir == 2)
-			return canMove(0, 0, distance);
+		{
+			return this.canMove(0, 0, distance);
+		}
 		else if (dir == 3)
-			return canMove(-distance, 0, 0);
+		{
+			return this.canMove(-distance, 0, 0);
+		}
 		return false;
 	}
 	
 	public boolean canMove(double x, double y, double z)
 	{
-		double newX = posX + x;
-		double newY = posY + y;
-		double newZ = posZ + z;
+		double newX = this.posX + x;
+		double newY = this.posY + y;
+		double newZ = this.posZ + z;
 		
 		if (newY + 1 >= 64)
+		{
 			return true;
+		}
 		
-		BlockInWorld block1 = worldObj.getBlock((int) Math.floor(newX), (int) Math.floor(newY + 1), (int) Math.floor(newZ));
+		BlockInWorld block1 = this.worldObj.getBlock((int) Math.floor(newX), (int) Math.floor(newY + 1), (int) Math.floor(newZ));
 		
 		if (newY + 2 >= 64)
-			return !canCollideWithBlockHorizontally(block1);
+		{
+			return !this.canCollideWithBlockHorizontally(block1);
+		}
 		
-		BlockInWorld block2 = worldObj.getBlock((int) Math.floor(newX), (int) Math.floor(newY + 2), (int) Math.floor(newZ));
+		BlockInWorld block2 = this.worldObj.getBlock((int) Math.floor(newX), (int) Math.floor(newY + 2), (int) Math.floor(newZ));
 		
-		boolean b1 = !canCollideWithBlockHorizontally(block1);
-		boolean b2 = !canCollideWithBlockHorizontally(block2);
+		boolean b1 = !this.canCollideWithBlockHorizontally(block1);
+		boolean b2 = !this.canCollideWithBlockHorizontally(block2);
 		return b1 && b2;
 	}
 	
 	public boolean canCollideWithBlockVertically(BlockInWorld block)
 	{
-		return (block != null && (block.getBlock() != null && block.getBlock().canCollideVertically(block.getMetadata(), this)));
+		return block != null && block.getBlock() != null && block.getBlock().canCollideVertically(block.getMetadata(), this);
 	}
 	
 	public boolean canCollideWithBlockHorizontally(BlockInWorld block)
 	{
-		return (block != null && (block.getBlock() != null && block.getBlock().canCollideHorizontally(block.getMetadata(), this)));
+		return block != null && block.getBlock() != null && block.getBlock().canCollideHorizontally(block.getMetadata(), this);
 	}
 	
 	public abstract RenderEntity getRenderer() throws SlickException;
@@ -190,7 +222,7 @@ public abstract class Entity implements INBTSaveable
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setString("EntityType", EntityList.getNameFromClass(getClass()));
+		nbt.setString("EntityType", EntityList.getNameFromClass(this.getClass()));
 		nbt.setInteger("EntityID", this.entityId);
 		
 		NBTTagCompound pos = new NBTTagCompound("Position");

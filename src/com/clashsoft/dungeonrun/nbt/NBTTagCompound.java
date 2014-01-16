@@ -1,5 +1,8 @@
 package com.clashsoft.dungeonrun.nbt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,134 +20,138 @@ public class NBTTagCompound extends NBTBase
 	@Override
 	public Map<String, NBTBase> getValue()
 	{
-		return tags;
+		return this.tags;
 	}
 	
 	public boolean setTag(String name, NBTBase tag)
 	{
 		if (name.contains("[") || name.contains("]") || name.contains("{") || name.contains("}"))
+		{
 			throw new IllegalArgumentException("Name must not contain [ ] { } !");
-		boolean ret = tags.containsKey(name);
-		tags.put(name, tag);
+		}
+		boolean ret = this.tags.containsKey(name);
+		this.tags.put(name, tag);
 		return ret;
 	}
 	
 	public boolean setTag(NBTBase tag)
 	{
-		return setTag(tag.name, tag);
+		return this.setTag(tag.name, tag);
 	}
 	
 	public boolean hasTag(String name)
 	{
-		return tags.containsKey(name);
+		return this.tags.containsKey(name);
 	}
 	
 	public NBTBase getTag(String name)
 	{
-		return tags.get(name);
+		return this.tags.get(name);
 	}
 	
 	public void setBoolean(String name, boolean value)
 	{
-		setTag(new NBTTagBoolean(name, value));
+		this.setTag(new NBTTagBoolean(name, value));
 	}
 	
 	public void setByte(String name, byte value)
 	{
-		setTag(new NBTTagByte(name, value));
+		this.setTag(new NBTTagByte(name, value));
 	}
 	
 	public void setShort(String name, short value)
 	{
-		setTag(new NBTTagShort(name, value));
+		this.setTag(new NBTTagShort(name, value));
 	}
 	
 	public void setInteger(String name, int value)
 	{
-		setTag(new NBTTagInteger(name, value));
+		this.setTag(new NBTTagInteger(name, value));
 	}
 	
 	public void setFloat(String name, float value)
 	{
-		setTag(new NBTTagFloat(name, value));
+		this.setTag(new NBTTagFloat(name, value));
 	}
 	
 	public void setDouble(String name, double value)
 	{
-		setTag(new NBTTagDouble(name, value));
+		this.setTag(new NBTTagDouble(name, value));
 	}
 	
 	public void setLong(String name, long value)
 	{
-		setTag(new NBTTagLong(name, value));
+		this.setTag(new NBTTagLong(name, value));
 	}
 	
 	public void setString(String name, String value)
 	{
-		setTag(new NBTTagString(name, value));
+		this.setTag(new NBTTagString(name, value));
 	}
 	
 	public void setTagList(NBTTagList list)
 	{
-		setTag(list);
+		this.setTag(list);
 	}
 	
 	public void setTagCompound(NBTTagCompound compound)
 	{
 		if (compound != this)
-			setTag(compound);
+		{
+			this.setTag(compound);
+		}
 	}
 	
 	public boolean getBoolean(String name)
 	{
-		return ((NBTTagBoolean) getTag(name)).value;
+		return ((NBTTagBoolean) this.getTag(name)).value;
 	}
 	
 	public byte getByte(String name)
 	{
-		return ((NBTTagByte) getTag(name)).value;
+		return ((NBTTagByte) this.getTag(name)).value;
 	}
 	
 	public short getShort(String name)
 	{
-		return ((NBTTagShort) getTag(name)).value;
+		return ((NBTTagShort) this.getTag(name)).value;
 	}
 	
 	public int getInteger(String name)
 	{
-		return ((NBTTagInteger) getTag(name)).value;
+		return ((NBTTagInteger) this.getTag(name)).value;
 	}
 	
 	public float getFloat(String name)
 	{
-		return ((NBTTagFloat) getTag(name)).value;
+		return ((NBTTagFloat) this.getTag(name)).value;
 	}
 	
 	public double getDouble(String name)
 	{
-		return ((NBTTagDouble) getTag(name)).value;
+		return ((NBTTagDouble) this.getTag(name)).value;
 	}
 	
 	public long getLong(String name)
 	{
-		NBTTagLong tag = (NBTTagLong) getTag(name);
+		NBTTagLong tag = (NBTTagLong) this.getTag(name);
 		return tag != null ? tag.value : 0L;
 	}
 	
 	public String getString(String name)
 	{
-		NBTTagString tag = (NBTTagString) getTag(name);
+		NBTTagString tag = (NBTTagString) this.getTag(name);
 		return tag != null ? tag.value : "";
 	}
 	
 	public NBTTagList getTagList(String name)
 	{
-		return (NBTTagList) getTag(name);
+		return (NBTTagList) this.getTag(name);
 	}
 	
 	public NBTTagCompound getTagCompound(String name)
 	{
-		return (NBTTagCompound) getTag(name);
+		return (NBTTagCompound) this.getTag(name);
 	}
 	
 	public void clear()
@@ -155,19 +162,19 @@ public class NBTTagCompound extends NBTBase
 	@Override
 	public boolean valueEquals(NBTBase that)
 	{
-		return tags.equals(((NBTTagCompound) that).tags);
+		return this.tags.equals(((NBTTagCompound) that).tags);
 	}
 	
 	@Override
 	public String writeValueString(String prefix)
 	{
-		StringBuilder sb = new StringBuilder(tags.size() * 100);
+		StringBuilder sb = new StringBuilder(this.tags.size() * 100);
 		
 		sb.append("\n" + prefix + "{");
 		
-		for (String key : tags.keySet())
+		for (String key : this.tags.keySet())
 		{
-			NBTBase value = tags.get(key);
+			NBTBase value = this.tags.get(key);
 			sb.append("\n").append(prefix).append(" (").append(key).append(':');
 			sb.append(value.createString(prefix + " ")).append(')');
 		}
@@ -182,8 +189,12 @@ public class NBTTagCompound extends NBTBase
 		int pos1 = dataString.indexOf('{') + 1;
 		int pos2 = dataString.lastIndexOf('}');
 		if (pos1 < 0 || pos2 < 0)
+		{
 			return;
+		}
+		
 		dataString = dataString.substring(pos1, pos2).trim();
+		
 		for (String sub : split(dataString))
 		{
 			int point = sub.indexOf(':');
@@ -209,15 +220,19 @@ public class NBTTagCompound extends NBTBase
 		{
 			char c = text.charAt(i);
 			
-			if (c == '"' && !(i > 0 && tag.charAt(i - 1) == '\\'))
+			if (c == '"' && !(i > 0 && text.charAt(i - 1) == '\\'))
+			{
 				quote = !quote;
+			}
 			
 			if (!quote)
 			{
 				if (c == '(')
 				{
 					if (PABDEPTH == 0)
+					{
 						index = i;
+					}
 					PABDEPTH++;
 					continue;
 				}
@@ -233,8 +248,36 @@ public class NBTTagCompound extends NBTBase
 				}
 			}
 			else
+			{
 				tag += c;
+			}
 		}
 		return result;
+	}
+	
+	@Override
+	public void writeValue(DataOutput output) throws IOException
+	{
+		for (String key : this.tags.keySet())
+		{
+			NBTBase value = this.tags.get(key);
+			value.write(output);
+		}
+		output.writeByte(0);
+	}
+	
+	@Override
+	public void readValue(DataInput input) throws IOException
+	{
+		while (true)
+		{
+			NBTBase nbt = NBTBase.createFromData(input);
+			
+			if (nbt == null)
+			{
+				break;
+			}
+			this.setTag(nbt);
+		}
 	}
 }

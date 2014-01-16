@@ -37,7 +37,7 @@ public class Block implements IStackable
 	@Override
 	public int getID()
 	{
-		return blockID;
+		return this.blockID;
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class Block implements IStackable
 	{
 		if (this.blockName != null)
 		{
-			texture = getIcon(this.blockName);
+			this.texture = this.getIcon(this.blockName);
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class Block implements IStackable
 	
 	public Image getBlockTextureFromSideAndMetadata(int side, int meta) throws SlickException
 	{
-		return texture;
+		return this.texture;
 	}
 	
 	@Override

@@ -28,6 +28,6 @@ public class GuiPauseMenu extends GuiListScreen
 		else if (i == 1)
 			this.dr.displayGuiScreen(new GuiOptions(this));
 		else if (i == 2)
-			this.dr.endGame();
+			this.dr.stopWorld();
 	}
 }

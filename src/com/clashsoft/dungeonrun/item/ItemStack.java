@@ -29,14 +29,14 @@ public class ItemStack implements INBTSaveable
 	
 	public int getMaxStackSize()
 	{
-		return item.getMaxStackSize(this);
+		return this.item.getMaxStackSize(this);
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("ItemID", item.getID());
-		nbt.setBoolean("IsBlock", item.isBlock());
+		nbt.setInteger("ItemID", this.item.getID());
+		nbt.setBoolean("IsBlock", this.item.isBlock());
 		nbt.setInteger("StackSize", this.stackSize);
 		nbt.setInteger("DamageValue", this.metadata);
 	}
@@ -46,7 +46,7 @@ public class ItemStack implements INBTSaveable
 	{
 		boolean isBlock = nbt.getBoolean("IsBlock");
 		int itemID = nbt.getInteger("ItemID");
-		this.item = (isBlock ? Block.blocksList[itemID] : Item.itemsList[itemID]);
+		this.item = isBlock ? Block.blocksList[itemID] : Item.itemsList[itemID];
 		this.stackSize = nbt.getInteger("StackSize");
 		this.metadata = nbt.getInteger("DamageValue");
 	}

@@ -20,7 +20,7 @@ public class Item implements IStackable
 	@Override
 	public int getID()
 	{
-		return itemID;
+		return this.itemID;
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class Item implements IStackable
 	@Override
 	public int getMaxStackSize(ItemStack stack)
 	{
-		return maxStackSize;
+		return this.maxStackSize;
 	}
 	
 	public float getDamageVsEntity(ItemStack stack)
@@ -54,6 +54,6 @@ public class Item implements IStackable
 	
 	public float getMaxUses(ItemStack stack)
 	{
-		return maxUses;
+		return this.maxUses;
 	}
 }

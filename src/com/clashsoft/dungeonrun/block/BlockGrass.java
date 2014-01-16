@@ -16,12 +16,12 @@ public class BlockGrass extends Block
 	public void registerIcons()
 	{
 		super.registerIcons();
-		sideIcon = getIcon("grass_side");
+		this.sideIcon = this.getIcon("grass_side");
 	}
 	
 	@Override
 	public Image getBlockTextureFromSideAndMetadata(int side, int meta) throws SlickException
 	{
-		return side == 4 ? sideIcon : this.texture;
+		return side == 4 ? this.sideIcon : this.texture;
 	}
 }

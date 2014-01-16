@@ -1,5 +1,9 @@
 package com.clashsoft.dungeonrun.nbt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 public class NBTTagDouble extends NBTTagNumber
 {
 	public double	value;
@@ -19,6 +23,18 @@ public class NBTTagDouble extends NBTTagNumber
 	@Override
 	public Number readNumber(String number)
 	{
-		return value = Double.parseDouble(number);
+		return this.value = Double.parseDouble(number);
+	}
+
+	@Override
+	public void writeNumber(DataOutput output) throws IOException
+	{
+		output.writeDouble(this.value);
+	}
+
+	@Override
+	public Number readNumber(DataInput input) throws IOException
+	{
+		return this.value = input.readDouble();
 	}
 }

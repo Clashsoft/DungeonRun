@@ -24,14 +24,14 @@ public class EntityPlayer extends EntityLiving
 	public EntityPlayer(World world) throws SlickException
 	{
 		super(world);
-		inventory = new InventoryPlayer(this);
-		renderer = new RenderPlayer<EntityPlayer>(this);
+		this.inventory = new InventoryPlayer(this);
+		this.renderer = new RenderPlayer<EntityPlayer>(this);
 	}
 	
 	@Override
 	public RenderEntity getRenderer() throws SlickException
 	{
-		return renderer;
+		return this.renderer;
 	}
 	
 	@Override
@@ -43,22 +43,22 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void updateEntity()
 	{
-		int i = isSprinting ? 2 : 1;
-		float f = Math.abs(rot == 0 || rot == 2 ? (float) posZ % 1F : (float) posX % 1F);
+		int i = this.isSprinting ? 2 : 1;
+		float f = Math.abs(this.rot == 0 || this.rot == 2 ? (float) this.posZ % 1F : (float) this.posX % 1F);
 		
-		boolean b = canMove(f, this.rot) || canMove(1 - f, this.rot);
+		boolean b = this.canMove(f, this.rot) || this.canMove(1 - f, this.rot);
 		
-		if ((stepsWalked >= 5 && (f >= 0.499F && f <= 0.501F)) || !b)
+		if (this.stepsWalked >= 5 && f >= 0.499F && f <= 0.501F || !b)
 		{
 			this.isWalking = false;
 			this.isSprinting = false;
-			stepsWalked = 0;
+			this.stepsWalked = 0;
 		}
 		
-		if (isWalking && b)
+		if (this.isWalking && b)
 		{
 			this.move(0.1F * i, this.rot);
-			stepsWalked += i;
+			this.stepsWalked += i;
 		}
 		super.updateEntity();
 	}
@@ -79,9 +79,9 @@ public class EntityPlayer extends EntityLiving
 	
 	public void walk(int dir)
 	{
-		if (!isWalking)
+		if (!this.isWalking)
 		{
-			stepsWalked = 0;
+			this.stepsWalked = 0;
 			if (this.rot != (byte) (dir % 4))
 			{
 				this.rot = (byte) (dir % 4);

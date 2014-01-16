@@ -44,7 +44,7 @@ public class WorldInfo implements INBTSaveable
 	
 	public String getFileName()
 	{
-		return fileName;
+		return this.fileName;
 	}
 	
 	public void setFileName(String fileName)

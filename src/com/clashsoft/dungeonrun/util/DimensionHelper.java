@@ -8,7 +8,7 @@ public class DimensionHelper
 		
 		public Pos1(T i1)
 		{
-			x = i1;
+			this.x = i1;
 		}
 		
 		@Override
@@ -16,7 +16,7 @@ public class DimensionHelper
 		{
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((this.x == null) ? 0 : this.x.hashCode());
+			result = prime * result + (this.x == null ? 0 : this.x.hashCode());
 			return result;
 		}
 		
@@ -24,19 +24,29 @@ public class DimensionHelper
 		public boolean equals(Object obj)
 		{
 			if (this == obj)
+			{
 				return true;
+			}
 			if (obj == null)
+			{
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass())
+			{
 				return false;
+			}
 			Pos1 other = (Pos1) obj;
 			if (this.x == null)
 			{
 				if (other.x != null)
+				{
 					return false;
+				}
 			}
 			else if (!this.x.equals(other.x))
+			{
 				return false;
+			}
 			return true;
 		}
 	}
@@ -48,7 +58,7 @@ public class DimensionHelper
 		public Pos2(T i1, T i2)
 		{
 			super(i1);
-			y = i2;
+			this.y = i2;
 		}
 		
 		@Override
@@ -56,7 +66,7 @@ public class DimensionHelper
 		{
 			final int prime = 31;
 			int result = super.hashCode();
-			result = prime * result + ((this.y == null) ? 0 : this.y.hashCode());
+			result = prime * result + (this.y == null ? 0 : this.y.hashCode());
 			return result;
 		}
 		
@@ -64,19 +74,29 @@ public class DimensionHelper
 		public boolean equals(Object obj)
 		{
 			if (this == obj)
+			{
 				return true;
+			}
 			if (!super.equals(obj))
+			{
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass())
+			{
 				return false;
+			}
 			Pos2 other = (Pos2) obj;
 			if (this.y == null)
 			{
 				if (other.y != null)
+				{
 					return false;
+				}
 			}
 			else if (!this.y.equals(other.y))
+			{
 				return false;
+			}
 			return true;
 		}
 	}
@@ -88,7 +108,7 @@ public class DimensionHelper
 		public Pos3(T i1, T i2, T i3)
 		{
 			super(i1, i2);
-			z = i3;
+			this.z = i3;
 		}
 		
 		@Override
@@ -96,7 +116,7 @@ public class DimensionHelper
 		{
 			final int prime = 31;
 			int result = super.hashCode();
-			result = prime * result + ((this.z == null) ? 0 : this.z.hashCode());
+			result = prime * result + (this.z == null ? 0 : this.z.hashCode());
 			return result;
 		}
 		
@@ -104,19 +124,29 @@ public class DimensionHelper
 		public boolean equals(Object obj)
 		{
 			if (this == obj)
+			{
 				return true;
+			}
 			if (!super.equals(obj))
+			{
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass())
+			{
 				return false;
+			}
 			Pos3 other = (Pos3) obj;
 			if (this.z == null)
 			{
 				if (other.z != null)
+				{
 					return false;
+				}
 			}
 			else if (!this.z.equals(other.z))
+			{
 				return false;
+			}
 			return true;
 		}
 	}
@@ -127,7 +157,7 @@ public class DimensionHelper
 		
 		public Size1(T i1)
 		{
-			width = i1;
+			this.width = i1;
 		}
 		
 		@Override
@@ -135,7 +165,7 @@ public class DimensionHelper
 		{
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((this.width == null) ? 0 : this.width.hashCode());
+			result = prime * result + (this.width == null ? 0 : this.width.hashCode());
 			return result;
 		}
 		
@@ -143,19 +173,29 @@ public class DimensionHelper
 		public boolean equals(Object obj)
 		{
 			if (this == obj)
+			{
 				return true;
+			}
 			if (obj == null)
+			{
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass())
+			{
 				return false;
+			}
 			Size1 other = (Size1) obj;
 			if (this.width == null)
 			{
 				if (other.width != null)
+				{
 					return false;
+				}
 			}
 			else if (!this.width.equals(other.width))
+			{
 				return false;
+			}
 			return true;
 		}
 	}
@@ -167,7 +207,7 @@ public class DimensionHelper
 		public Size2(T i1, T i2)
 		{
 			super(i1);
-			heigth = i2;
+			this.heigth = i2;
 		}
 		
 		@Override
@@ -175,7 +215,7 @@ public class DimensionHelper
 		{
 			final int prime = 31;
 			int result = super.hashCode();
-			result = prime * result + ((this.heigth == null) ? 0 : this.heigth.hashCode());
+			result = prime * result + (this.heigth == null ? 0 : this.heigth.hashCode());
 			return result;
 		}
 		
@@ -183,19 +223,29 @@ public class DimensionHelper
 		public boolean equals(Object obj)
 		{
 			if (this == obj)
+			{
 				return true;
+			}
 			if (!super.equals(obj))
+			{
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass())
+			{
 				return false;
+			}
 			Size2 other = (Size2) obj;
 			if (this.heigth == null)
 			{
 				if (other.heigth != null)
+				{
 					return false;
+				}
 			}
 			else if (!this.heigth.equals(other.heigth))
+			{
 				return false;
+			}
 			return true;
 		}
 	}
@@ -207,7 +257,7 @@ public class DimensionHelper
 		public Size3(T i1, T i2, T i3)
 		{
 			super(i1, i2);
-			length = i3;
+			this.length = i3;
 		}
 		
 		@Override
@@ -215,7 +265,7 @@ public class DimensionHelper
 		{
 			final int prime = 31;
 			int result = super.hashCode();
-			result = prime * result + ((this.length == null) ? 0 : this.length.hashCode());
+			result = prime * result + (this.length == null ? 0 : this.length.hashCode());
 			return result;
 		}
 		
@@ -223,19 +273,29 @@ public class DimensionHelper
 		public boolean equals(Object obj)
 		{
 			if (this == obj)
+			{
 				return true;
+			}
 			if (!super.equals(obj))
+			{
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (this.getClass() != obj.getClass())
+			{
 				return false;
+			}
 			Size3 other = (Size3) obj;
 			if (this.length == null)
 			{
 				if (other.length != null)
+				{
 					return false;
+				}
 			}
 			else if (!this.length.equals(other.length))
+			{
 				return false;
+			}
 			return true;
 		}
 	}

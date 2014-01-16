@@ -1,5 +1,9 @@
 package com.clashsoft.dungeonrun.nbt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 public class NBTTagString extends NBTBase
 {
 	public String	value;
@@ -13,18 +17,30 @@ public class NBTTagString extends NBTBase
 	@Override
 	public boolean valueEquals(NBTBase that)
 	{
-		return value.equals(((NBTTagString) that).value);
+		return this.value.equals(((NBTTagString) that).value);
 	}
 	
 	@Override
 	public String writeValueString(String prefix)
 	{
-		return "\"" + value.replace("\"", "\\\"") + "\"";
+		return "\"" + this.value.replace("\"", "\\\"") + "\"";
 	}
 	
 	@Override
 	public void readValueString(String dataString)
 	{
 		this.value = dataString.substring(1, dataString.length() - 1).replace("\\\"", "\"");
+	}
+
+	@Override
+	public void writeValue(DataOutput output) throws IOException
+	{
+		output.writeUTF(this.value);
+	}
+
+	@Override
+	public void readValue(DataInput input) throws IOException
+	{
+		this.value = input.readUTF();
 	}
 }

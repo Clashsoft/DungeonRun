@@ -1,5 +1,9 @@
 package com.clashsoft.dungeonrun.nbt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 public class NBTTagBoolean extends NBTBase
 {
 	public boolean	value;
@@ -13,7 +17,7 @@ public class NBTTagBoolean extends NBTBase
 	@Override
 	public String writeValueString(String prefix)
 	{
-		return (value ? "t" : "f");
+		return this.value ? "t" : "f";
 	}
 	
 	@Override
@@ -26,5 +30,17 @@ public class NBTTagBoolean extends NBTBase
 	public boolean valueEquals(NBTBase that)
 	{
 		return this.value == ((NBTTagBoolean) that).value;
+	}
+
+	@Override
+	public void writeValue(DataOutput output) throws IOException
+	{
+		output.writeBoolean(this.value);
+	}
+
+	@Override
+	public void readValue(DataInput input) throws IOException
+	{
+		this.value = input.readBoolean();
 	}
 }

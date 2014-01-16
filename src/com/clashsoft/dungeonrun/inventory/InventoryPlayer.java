@@ -10,28 +10,30 @@ public class InventoryPlayer extends AbstractInventory
 	
 	public InventoryPlayer(EntityPlayer ep)
 	{
-		player = ep;
+		this.player = ep;
 	}
 	
 	@Override
 	public ItemStack getStackInSlot(int i)
 	{
-		return inventory[i];
+		return this.inventory[i];
 	}
 	
 	@Override
 	public void setStackInSlot(int i, ItemStack stack)
 	{
-		inventory[i] = stack;
+		this.inventory[i] = stack;
 	}
 	
 	@Override
 	public int getFirstSlotWithItemStack(ItemStack stack)
 	{
-		for (int i = 0; i < inventory.length; i++)
+		for (int i = 0; i < this.inventory.length; i++)
 		{
-			if (inventory[i].equals(stack))
+			if (this.inventory[i].equals(stack))
+			{
 				return i;
+			}
 		}
 		return -1;
 	}
@@ -39,6 +41,6 @@ public class InventoryPlayer extends AbstractInventory
 	@Override
 	public int getInventorySize()
 	{
-		return inventory.length;
+		return this.inventory.length;
 	}
 }

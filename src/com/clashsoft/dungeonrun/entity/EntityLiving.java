@@ -14,9 +14,9 @@ public abstract class EntityLiving extends EntityDamagable
 	
 	public void jump()
 	{
-		if (!isJumping)
+		if (!this.isJumping)
 		{
-			isJumping = true;
+			this.isJumping = true;
 			this.addVelocity(0, 0.6F, 0);
 		}
 	}
@@ -26,8 +26,10 @@ public abstract class EntityLiving extends EntityDamagable
 	{
 		super.updateEntity();
 		
-		if (isCollidedVertically())
-			isJumping = false;
+		if (this.isCollidedVertically())
+		{
+			this.isJumping = false;
+		}
 	}
 	
 	@Override

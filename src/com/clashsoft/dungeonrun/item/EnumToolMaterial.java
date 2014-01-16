@@ -19,21 +19,21 @@ public enum EnumToolMaterial
 	
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 	
 	public int getMaxUses()
 	{
-		return maxUses;
+		return this.maxUses;
 	}
 	
 	public float getEfficiency()
 	{
-		return efficiency;
+		return this.efficiency;
 	}
 	
 	public float getEntityDamage()
 	{
-		return entityDamage;
+		return this.entityDamage;
 	}
 }

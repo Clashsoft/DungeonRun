@@ -1,5 +1,8 @@
 package com.clashsoft.dungeonrun.nbt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,104 +20,108 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	public NBTTagList(String name, int capacity)
 	{
 		super(TYPE_LIST, name, null);
-		tags = new ArrayList(capacity);
+		this.tags = new ArrayList(capacity);
 	}
 	
 	@Override
 	public ArrayList<NBTBase> getValue()
 	{
-		return tags;
+		return this.tags;
 	}
 	
 	public void addTag(NBTBase tag)
 	{
-		tags.add(tag);
+		this.tags.add(tag);
 	}
 	
 	public void addTag(String name, NBTBase tag)
 	{
 		tag.name = name;
-		addTag(tag);
+		this.addTag(tag);
 	}
 	
 	public void setTag(int index, NBTBase tag)
 	{
-		ensureSize(index + 1);
-		tags.set(index, tag);
+		this.ensureSize(index + 1);
+		this.tags.set(index, tag);
 	}
 	
 	private void ensureSize(int size)
 	{
-		tags.ensureCapacity(size);
-		while (tags.size() < size)
-			tags.add(null);
+		this.tags.ensureCapacity(size);
+		while (this.tags.size() < size)
+		{
+			this.tags.add(null);
+		}
 	}
 	
 	public int tagCount()
 	{
-		return tags.size();
+		return this.tags.size();
 	}
 	
 	public NBTBase tagAt(int index)
 	{
-		return tags.get(index);
+		return this.tags.get(index);
 	}
 	
 	@Override
 	public Iterator iterator()
 	{
-		return tags.iterator();
+		return this.tags.iterator();
 	}
 	
 	public void addBoolean(String name, boolean value)
 	{
-		addTag(name, new NBTTagBoolean(name, value));
+		this.addTag(name, new NBTTagBoolean(name, value));
 	}
 	
 	public void addByte(String name, byte value)
 	{
-		addTag(name, new NBTTagByte(name, value));
+		this.addTag(name, new NBTTagByte(name, value));
 	}
 	
 	public void addShort(String name, short value)
 	{
-		addTag(name, new NBTTagShort(name, value));
+		this.addTag(name, new NBTTagShort(name, value));
 	}
 	
 	public void addInteger(String name, int value)
 	{
-		addTag(name, new NBTTagInteger(name, value));
+		this.addTag(name, new NBTTagInteger(name, value));
 	}
 	
 	public void addFloat(String name, float value)
 	{
-		addTag(name, new NBTTagFloat(name, value));
+		this.addTag(name, new NBTTagFloat(name, value));
 	}
 	
 	public void addDouble(String name, double value)
 	{
-		addTag(name, new NBTTagDouble(name, value));
+		this.addTag(name, new NBTTagDouble(name, value));
 	}
 	
 	public void addLong(String name, long value)
 	{
-		addTag(name, new NBTTagLong(name, value));
+		this.addTag(name, new NBTTagLong(name, value));
 	}
 	
 	public void addString(String name, String value)
 	{
-		addTag(name, new NBTTagString(name, value));
+		this.addTag(name, new NBTTagString(name, value));
 	}
 	
 	public void addTagList(NBTTagList list)
 	{
 		if (list != this)
-			addTag(name, list);
+		{
+			this.addTag(this.name, list);
+		}
 	}
 	
 	public void addTagCompound(NBTTagCompound compound)
 	{
-		addTag(compound);
+		this.addTag(compound);
 	}
 	
 	public static <T> NBTTagList fromArray(String name, T[] args)
@@ -125,7 +132,9 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 			String tagName = name + "@" + i;
 			NBTBase base = NBTBase.createFromObject(tagName, args[i]);
 			if (base != null)
+			{
 				list.addTag(base);
+			}
 		}
 		return list;
 	}
@@ -138,7 +147,9 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 			String tagName = name + "@" + i;
 			NBTBase base = NBTBase.createFromObject(tagName, args.get(i));
 			if (base != null)
+			{
 				list.addTag(base);
+			}
 		}
 		return list;
 	}
@@ -155,7 +166,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	
 	public <T> T[] toArray()
 	{
-		return (T[]) tags.toArray();
+		return (T[]) this.tags.toArray();
 	}
 	
 	public int[] toIntArray()
@@ -165,7 +176,9 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		{
 			NBTBase base = this.tagAt(i);
 			if (base instanceof NBTTagNumber)
+			{
 				array[i] = ((NBTTagInteger) base).value;
+			}
 		}
 		return array;
 	}
@@ -177,7 +190,9 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		{
 			NBTBase base = this.tagAt(i);
 			if (base instanceof NBTTagNumber)
+			{
 				array[i] = ((NBTTagFloat) base).value;
+			}
 		}
 		return array;
 	}
@@ -185,19 +200,19 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	@Override
 	public boolean valueEquals(NBTBase that)
 	{
-		return tags.equals(((NBTTagList) that).tags);
+		return this.tags.equals(((NBTTagList) that).tags);
 	}
 	
 	@Override
 	public String writeValueString(String prefix)
 	{
-		StringBuilder sb = new StringBuilder(tags.toString().length() * 8);
+		StringBuilder sb = new StringBuilder(this.tags.toString().length() * 8);
 		
 		sb.append("\n" + prefix + "[");
 		
-		for (int key = 0; key < tags.size(); key++)
+		for (int key = 0; key < this.tags.size(); key++)
 		{
-			NBTBase value = tags.get(key);
+			NBTBase value = this.tags.get(key);
 			sb.append("\n").append(prefix).append(" (").append(key).append(':');
 			sb.append(value.createString(prefix + " ")).append(')');
 		}
@@ -212,7 +227,9 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		int pos1 = dataString.indexOf('[') + 1;
 		int pos2 = dataString.lastIndexOf(']');
 		if (pos1 < 0 || pos2 < 0)
+		{
 			return;
+		}
 		dataString = dataString.substring(pos1, pos2).trim();
 		for (String sub : NBTTagCompound.split(dataString))
 		{
@@ -221,6 +238,32 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 			String tag = sub.substring(point + 1, sub.length());
 			NBTBase base = NBTParser.parseTag(tag);
 			this.setTag(Integer.parseInt(tagID), base);
+		}
+	}
+	
+	@Override
+	public void writeValue(DataOutput output) throws IOException
+	{
+		for (int i = 0; i < this.tagCount(); i++)
+		{
+			NBTBase value = this.tagAt(i);
+			value.write(output);
+		}
+		output.writeByte(0);
+	}
+	
+	@Override
+	public void readValue(DataInput input) throws IOException
+	{
+		while (true)
+		{
+			NBTBase nbt = NBTBase.createFromData(input);
+			
+			if (nbt == null)
+			{
+				break;
+			}
+			this.addTag(nbt);
 		}
 	}
 }

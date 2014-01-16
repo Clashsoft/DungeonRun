@@ -13,13 +13,13 @@ public class DungeonRunServer extends BasicGame
 {
 	public static DungeonRunServer	instance;
 	
-	public static final String	VERSION		= "v0.4";
+	public static final String		VERSION	= "Alpha 0.1-PRE";
 	
-	public AppGameContainer		theGameContainer;
-	public long					tick;
+	public AppGameContainer			theGameContainer;
+	public long						tick;
 	
-	public boolean				hasGameStarted;
-	public World				theWorld;
+	public boolean					hasGameStarted;
+	public World					theWorld;
 	
 	public DungeonRunServer() throws SlickException
 	{
@@ -47,44 +47,95 @@ public class DungeonRunServer extends BasicGame
 	
 	@Override
 	public void init(GameContainer arg0) throws SlickException
-	{	
-		for (Block b : Block.blocksList)
+	{
+		try
 		{
-			if (b != null)
-				b.registerIcons();
+			for (Block b : Block.blocksList)
+			{
+				if (b != null)
+				{
+					b.registerIcons();
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Initializing Server");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Initializing Server");
 		}
 	}
 	
 	public void shutdown() throws SlickException
 	{
-		this.saveWorld(theWorld);
-		this.theGameContainer.exit();
+		try
+		{
+			this.saveWorld(this.theWorld);
+			this.theGameContainer.exit();
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Server Shutdown");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Server Shutdown");
+		}
 	}
 	
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
-		g.setColor(Color.white);
-		g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
-		
-		g.setColor(Color.black);
-		g.drawString("DungeonRun Server " + VERSION, 5, 5);
+		try
+		{
+			g.setColor(Color.white);
+			g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
+			
+			g.setColor(Color.black);
+			g.drawString("DungeonRun Server " + VERSION, 5, 5);
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Server Screen Rendering");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Server Screen Rendering");
+		}
 	}
 	
 	@Override
 	public void update(GameContainer gc, int tick) throws SlickException
 	{
-		this.tick++;
-		
-		if (this.theWorld != null)
-			this.theWorld.updateWorld();
+		try
+		{
+			this.tick++;
+			
+			if (this.theWorld != null)
+			{
+				this.theWorld.updateWorld();
+			}
+			
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "World Update");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "World Update");
+		}
 	}
 	
 	public static File getSaveDataFolder()
 	{
 		File f = new File(getAppdataDirectory(), "dungeonrun");
 		if (!f.exists())
+		{
 			f.mkdirs();
+		}
 		return f;
 	}
 	
@@ -92,11 +143,17 @@ public class DungeonRunServer extends BasicGame
 	{
 		String OS = System.getProperty("os.name").toUpperCase();
 		if (OS.contains("WIN"))
+		{
 			return System.getenv("APPDATA");
+		}
 		else if (OS.contains("MAC"))
+		{
 			return System.getProperty("user.home") + "/Library/Application Support";
+		}
 		else if (OS.contains("NUX"))
+		{
 			return System.getProperty("user.home");
+		}
 		return System.getProperty("user.dir");
 	}
 	
@@ -108,8 +165,8 @@ public class DungeonRunServer extends BasicGame
 		return strDate;
 	}
 	
-	public void startGame() throws SlickException
-	{	
+	public void startWorld() throws SlickException
+	{
 		this.hasGameStarted = true;
 		new Thread(new Runnable()
 		{
@@ -118,9 +175,9 @@ public class DungeonRunServer extends BasicGame
 			{
 				try
 				{
-					loadWorld(theWorld);
+					DungeonRunServer.this.loadWorld(DungeonRunServer.this.theWorld);
 					
-					onStartGame();
+					DungeonRunServer.this.onStartGame();
 				}
 				catch (SlickException ex)
 				{
@@ -130,13 +187,34 @@ public class DungeonRunServer extends BasicGame
 		}).start();
 	}
 	
+	public void handleException(Exception ex, String s) throws SlickException
+	{
+		ex.printStackTrace();
+		System.exit(-1);
+	}
+	
+	public void handleError(Error error, String s) throws SlickException
+	{
+		if (error instanceof OutOfMemoryError)
+		{
+			DungeonRunServer.this.saveWorld(DungeonRunServer.this.theWorld);
+			this.onGameEnd();
+			System.gc();
+		}
+		else
+		{
+			error.printStackTrace();
+			System.exit(-2);
+		}
+	}
+	
 	public void onStartGame() throws SlickException
 	{
 		
 	}
 	
-	public void endGame() throws SlickException
-	{	
+	public void stopWorld() throws SlickException
+	{
 		new Thread(new Runnable()
 		{
 			@Override
@@ -145,7 +223,7 @@ public class DungeonRunServer extends BasicGame
 				try
 				{
 					DungeonRunServer.this.saveWorld(DungeonRunServer.this.theWorld);
-					onGameEnd();
+					DungeonRunServer.this.onGameEnd();
 				}
 				catch (SlickException ex)
 				{
@@ -156,28 +234,37 @@ public class DungeonRunServer extends BasicGame
 	}
 	
 	public void onGameEnd() throws SlickException
-	{}
+	{
+	}
 	
 	public boolean saveWorld(World world) throws SlickException
-	{	
+	{
 		if (world == null)
+		{
 			return false;
+		}
 		
 		String worldFileName = world.worldInfo.getFileName();
 		File saves = new File(getSaveDataFolder(), "saves");
 		if (!saves.exists())
+		{
 			saves.mkdirs();
+		}
 		
 		File worldDir = new File(saves, worldFileName);
 		if (!worldDir.exists())
+		{
 			worldDir.mkdirs();
+		}
 		return world.save(worldDir);
 	}
 	
 	public boolean loadWorld(World world) throws SlickException
-	{	
+	{
 		if (world == null)
+		{
 			return false;
+		}
 		
 		String worldFileName = world.worldInfo.getFileName();
 		File saves = new File(getSaveDataFolder(), "saves");

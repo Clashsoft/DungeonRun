@@ -14,12 +14,14 @@ public abstract class EntityDamagable extends Entity
 	
 	public void damageEntity(DamageSource source, float damage)
 	{
-		if (canBeDamagedBy(source))
+		if (this.canBeDamagedBy(source))
 		{
-			health -= damage;
+			this.health -= damage;
 			
-			if (health <= 0)
+			if (this.health <= 0)
+			{
 				this.setDead();
+			}
 		}
 	}
 	

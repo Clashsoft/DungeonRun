@@ -50,9 +50,13 @@ public class ResourceHelper
 			{
 				String line = reader.readLine();
 				if (line == null)
+				{
 					break;
+				}
 				else
+				{
 					lines.add(line);
+				}
 			}
 		}
 		catch (Exception ex)

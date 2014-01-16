@@ -22,10 +22,14 @@ public class StringUtils
 				current.delete(0, current.length());
 			}
 			else
+			{
 				current.append(c);
+			}
 			
 			if (c == '"' && i > 0 && text.charAt(i - 1) != '\\')
+			{
 				quote = !quote;
+			}
 		}
 		result.add(current.toString());
 		

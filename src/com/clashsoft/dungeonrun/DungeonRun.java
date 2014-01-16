@@ -33,7 +33,7 @@ public class DungeonRun extends DungeonRunServer
 	public GuiScreen			currentGui;
 	public GuiIngame			theIngameGui;
 	public EntityPlayer			thePlayer;
-
+	
 	public boolean				isPaused;
 	
 	public DungeonRun(String username) throws SlickException
@@ -59,79 +59,139 @@ public class DungeonRun extends DungeonRunServer
 	@Override
 	public void init(GameContainer arg0) throws SlickException
 	{
-		Mouse.setClipMouseCoordinatesToWindow(true);
-		this.theGameContainer.getInput().addListener(this);
-		
-		this.gameSettings = new GameSettings();
-		
-		this.renderEngine = new RenderEngine(this);
-		this.soundEngine = new SoundEngine(this);
-		this.fontRenderer = new FontRenderer(this, "font1");
-		this.i18n = I18n.instance = new I18n();
-		
-		this.gameSettings.updateGame();
-		
-		this.displayGuiScreen(new GuiIntro());
-		
-		super.init(arg0);
+		try
+		{
+			Mouse.setClipMouseCoordinatesToWindow(true);
+			this.theGameContainer.getInput().addListener(this);
+			
+			this.gameSettings = new GameSettings();
+			
+			this.renderEngine = new RenderEngine(this);
+			this.soundEngine = new SoundEngine(this);
+			this.fontRenderer = new FontRenderer(this, "font1");
+			this.i18n = I18n.instance = new I18n();
+			
+			this.gameSettings.updateGame();
+			
+			this.displayGuiScreen(new GuiIntro());
+			
+			super.init(arg0);
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Initializing Game");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Initializing Game");
+		}
 	}
 	
 	@Override
 	public void shutdown() throws SlickException
 	{
-		this.gameSettings.save();
-		super.shutdown();
+		try
+		{
+			this.gameSettings.save();
+			super.shutdown();
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Client Shutdown");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Server Shutdown");
+		}
 	}
 	
 	@Override
 	public void update(GameContainer gc, int tick) throws SlickException
 	{
-		if (this.currentGui != null)
-			this.currentGui.update(this);
-		
-		super.update(gc, tick);
-		
-		Input input = gc.getInput();
-		if (input.isKeyPressed(Input.KEY_F2))
+		try
 		{
-			Image i = new Image(gc.getWidth(), gc.getHeight());
-			gc.getGraphics().copyArea(i, 0, 0);
-			try
+			if (this.currentGui != null)
 			{
-				File file = new File(getSaveDataFolder(), "screenshots");
-				if (!file.exists())
-					file.mkdir();
-				String path = file.getPath() + "/" + getDateTime() + ".png";
-				ImageOut.write(i, path, false);
-				System.out.println("Screenshot saved as " + path);
+				this.currentGui.update(this);
 			}
-			catch (Exception ex)
+			
+			super.update(gc, tick);
+			
+			Input input = gc.getInput();
+			if (input.isKeyPressed(Input.KEY_F2))
 			{
-				System.out.println("Failed to save screenshot: " + ex.getMessage());
+				Image i = new Image(gc.getWidth(), gc.getHeight());
+				gc.getGraphics().copyArea(i, 0, 0);
+				try
+				{
+					File file = new File(getSaveDataFolder(), "screenshots");
+					if (!file.exists())
+					{
+						file.mkdir();
+					}
+					String path = file.getPath() + "/" + getDateTime() + ".png";
+					ImageOut.write(i, path, false);
+					System.out.println("Screenshot saved as " + path);
+				}
+				catch (Exception ex)
+				{
+					System.out.println("Failed to save screenshot: " + ex.getMessage());
+				}
+			}
+			if (input.isKeyPressed(Input.KEY_F3))
+			{
+				this.gameSettings.debugMode = !this.gameSettings.debugMode;
 			}
 		}
-		if (input.isKeyPressed(Input.KEY_F3))
-			this.gameSettings.debugMode = !this.gameSettings.debugMode;
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Client Update");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Client Update");
+		}
 	}
 	
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
-		this.renderEngine.graphics = g;
-		
-		if (this.theIngameGui != null && hasGameStarted)
-			this.theIngameGui.render(gc.getWidth(), gc.getHeight());
-		
-		if (this.currentGui != null)
-			this.currentGui.render(gc.getWidth(), gc.getHeight());
+		try
+		{
+			this.renderEngine.graphics = g;
+			
+			if (this.theIngameGui != null && this.hasGameStarted)
+			{
+				this.theIngameGui.render(gc.getWidth(), gc.getHeight());
+			}
+			
+			if (this.currentGui != null)
+			{
+				this.currentGui.render(gc.getWidth(), gc.getHeight());
+			}
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Rendering Screen");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Rendering Screen");
+		}
 	}
 	
 	@Override
-	public void startGame() throws SlickException
+	public void handleException(Exception ex, String s) throws SlickException
+	{
+		super.handleException(ex, s);
+	}
+	
+	@Override
+	public void startWorld() throws SlickException
 	{
 		this.displayGuiScreen(new GuiInfo("world.loading"));
 		
-		super.startGame();
+		super.startWorld();
 	}
 	
 	@Override
@@ -140,15 +200,15 @@ public class DungeonRun extends DungeonRunServer
 		this.thePlayer = this.theWorld.getPlayer(this.username);
 		
 		this.theIngameGui = new GuiIngame(this.thePlayer);
-		this.displayGuiScreen(theIngameGui);
+		this.displayGuiScreen(this.theIngameGui);
 	}
 	
 	@Override
-	public void endGame() throws SlickException
+	public void stopWorld() throws SlickException
 	{
 		this.displayGuiScreen(new GuiInfo("world.saving"));
 		
-		super.endGame();
+		super.stopWorld();
 	}
 	
 	@Override
@@ -166,6 +226,7 @@ public class DungeonRun extends DungeonRunServer
 	public void keyPressed(int key, char c)
 	{
 		if (this.currentGui != null)
+		{
 			try
 			{
 				this.currentGui.keyTyped(key, c);
@@ -174,6 +235,7 @@ public class DungeonRun extends DungeonRunServer
 			{
 				ex.printStackTrace();
 			}
+		}
 	}
 	
 	public GuiScreen displayGuiScreen(GuiScreen gui) throws SlickException
@@ -190,12 +252,12 @@ public class DungeonRun extends DungeonRunServer
 	
 	public void setFullScreen(boolean flag) throws SlickException
 	{
-		theGameContainer.setFullscreen(flag);
+		this.theGameContainer.setFullscreen(flag);
 	}
 	
 	public void setVSync(boolean flag)
 	{
-		theGameContainer.setVSync(flag);
+		this.theGameContainer.setVSync(flag);
 	}
 	
 	public void pauseGame() throws SlickException
@@ -207,13 +269,13 @@ public class DungeonRun extends DungeonRunServer
 	public void unpauseGame() throws SlickException
 	{
 		this.isPaused = false;
-		this.displayGuiScreen(theIngameGui);
+		this.displayGuiScreen(this.theIngameGui);
 	}
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy)
 	{
-		mousePosX = newx;
-		mousePosY = newy;
+		this.mousePosX = newx;
+		this.mousePosY = newy;
 	}
 }

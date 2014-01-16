@@ -1,5 +1,9 @@
 package com.clashsoft.dungeonrun.nbt;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 public class NBTTagFloat extends NBTTagNumber
 {
 	public float	value;
@@ -20,5 +24,17 @@ public class NBTTagFloat extends NBTTagNumber
 	public Number readNumber(String number)
 	{
 		return Float.parseFloat(number);
+	}
+
+	@Override
+	public void writeNumber(DataOutput output) throws IOException
+	{
+		output.writeFloat(this.value);
+	}
+
+	@Override
+	public Number readNumber(DataInput input) throws IOException
+	{
+		return this.value = input.readFloat();
 	}
 }

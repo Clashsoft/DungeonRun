@@ -37,7 +37,7 @@ public class World
 	{
 		if (x >= -WORLDSIZE_X && x < WORLDSIZE_X && y >= 0 && y < 64 && z >= -WORLDSIZE_Z && z < WORLDSIZE_Z)
 		{
-			Chunk c = getChunkAtCoordinates(x, z);
+			Chunk c = this.getChunkAtCoordinates(x, z);
 			return c.getBlock(x, y, z);
 		}
 		return BlockInWorld.AIR;
@@ -45,12 +45,12 @@ public class World
 	
 	public void setBlock(int block, int meta, int x, int y, int z)
 	{
-		setBlock(block, meta, x, y, z, 1);
+		this.setBlock(block, meta, x, y, z, 1);
 	}
 	
 	public void setBlock(int block, int meta, int x, int y, int z, int flags)
 	{
-		Chunk c = getChunkAtCoordinates(x, z);
+		Chunk c = this.getChunkAtCoordinates(x, z);
 		c.setBlock(block, meta, x, y, z, flags);
 	}
 	
@@ -58,13 +58,13 @@ public class World
 	{
 		int x1 = x >> 4;
 		int z1 = z >> 4;
-		int x2 = x1 + (CHUNKS_X);
-		int z2 = z1 + (CHUNKS_Z);
+		int x2 = x1 + CHUNKS_X;
+		int z2 = z1 + CHUNKS_Z;
 		
-		Chunk c = chunks[x2][z2];
+		Chunk c = this.chunks[x2][z2];
 		if (c == null)
 		{
-			c = chunks[x2][z2] = new Chunk(this, x1, z1).generate();
+			c = this.chunks[x2][z2] = new Chunk(this, x1, z1).generate();
 			System.out.println("Generating missing chunk " + c.toString());
 		}
 		return c;
@@ -74,16 +74,18 @@ public class World
 	{
 		int x1 = x >> 4;
 		int z1 = z >> 4;
-		int x2 = x1 + (CHUNKS_X);
-		int z2 = z1 + (CHUNKS_Z);
+		int x2 = x1 + CHUNKS_X;
+		int z2 = z1 + CHUNKS_Z;
 		
-		return chunks[x2][z2] != null;
+		return this.chunks[x2][z2] != null;
 	}
 	
 	public void spawnEntityInWorld(Entity e)
 	{
 		if (e instanceof EntityPlayer)
+		{
 			this.playerEntitys.put(((EntityPlayer) e).username, (EntityPlayer) e);
+		}
 		this.entitys.put(e.entityId, e);
 	}
 	
@@ -91,8 +93,10 @@ public class World
 	{
 		this.entitys.remove(id);
 		
-		if (entitys.get(id) instanceof EntityPlayer)
-			this.playerEntitys.remove(((EntityPlayer) entitys.get(id)).username);
+		if (this.entitys.get(id) instanceof EntityPlayer)
+		{
+			this.playerEntitys.remove(((EntityPlayer) this.entitys.get(id)).username);
+		}
 	}
 	
 	public void updateWorld() throws SlickException
@@ -110,17 +114,17 @@ public class World
 	
 	public Collection<Entity> getEntitys()
 	{
-		return entitys.values();
+		return this.entitys.values();
 	}
 	
 	public Collection<EntityPlayer> getPlayers()
 	{
-		return playerEntitys.values();
+		return this.playerEntitys.values();
 	}
 	
 	public EntityPlayer getPlayer(String username) throws SlickException
 	{
-		EntityPlayer player = playerEntitys.get(username);
+		EntityPlayer player = this.playerEntitys.get(username);
 		if (player == null)
 		{
 			player = new EntityPlayer(this);
@@ -134,7 +138,7 @@ public class World
 	{
 		if (x >= -WORLDSIZE_X && x < WORLDSIZE_X && y >= 0 && y < 64 && z >= -WORLDSIZE_Z && z < WORLDSIZE_Z)
 		{
-			Chunk c = getChunkAtCoordinates(x, z);
+			Chunk c = this.getChunkAtCoordinates(x, z);
 			if (c != null)
 			{
 				return c.getLightValue(x, y, z);
@@ -147,7 +151,7 @@ public class World
 	{
 		if (x >= -WORLDSIZE_X && x < WORLDSIZE_X && y >= 0 && y < 64 && z >= -WORLDSIZE_Z && z < WORLDSIZE_Z)
 		{
-			Chunk c = getChunkAtCoordinates(x, z);
+			Chunk c = this.getChunkAtCoordinates(x, z);
 			if (c != null)
 			{
 				c.setLightValue(x, y, z, f);
@@ -159,16 +163,18 @@ public class World
 	{
 		boolean success = true;
 		
-		if (worldNBT == null)
-			worldNBT = new NBTTagCompound("World");
+		if (this.worldNBT == null)
+		{
+			this.worldNBT = new NBTTagCompound("World");
+		}
 		
-		worldNBT.clear();
+		this.worldNBT.clear();
 		
 		File level = new File(file, "level.drf");
 		
 		NBTTagCompound infoCompound = new NBTTagCompound("WorldInfo");
-		worldInfo.writeToNBT(infoCompound);
-		worldNBT.setTagCompound(infoCompound);
+		this.worldInfo.writeToNBT(infoCompound);
+		this.worldNBT.setTagCompound(infoCompound);
 		
 		NBTTagList entityDataList = new NBTTagList("EntityData");
 		for (Integer i : this.entitys.keySet())
@@ -178,19 +184,21 @@ public class World
 			entity.writeToNBT(entityNBT);
 			entityDataList.addTagCompound(entityNBT);
 		}
-		worldNBT.setTagList(entityDataList);
+		this.worldNBT.setTagList(entityDataList);
 		
-		success = worldNBT.serialize(level, true);
+		success = this.worldNBT.serialize(level, true);
 		
 		File regionDir = new File(file, "chunks");
 		if (!regionDir.exists())
-			regionDir.mkdirs();
-		
-		for (int i = 0; i < chunks.length; i++)
 		{
-			for (int j = 0; j < chunks[i].length; j++)
+			regionDir.mkdirs();
+		}
+		
+		for (int i = 0; i < this.chunks.length; i++)
+		{
+			for (int j = 0; j < this.chunks[i].length; j++)
 			{
-				Chunk c = chunks[i][j];
+				Chunk c = this.chunks[i][j];
 				if (c != null)
 				{
 					File chunkFile = new File(regionDir, "chunk." + (i - CHUNKS_X) + "." + (j - CHUNKS_Z) + ".drf");
@@ -207,17 +215,22 @@ public class World
 	{
 		File level = new File(file, "level.drf");
 		if (!level.exists())
+		{
 			return false;
+		}
 		
-		worldNBT = (NBTTagCompound) NBTBase.deserialize(level, true);
-		if (worldNBT == null)
+		this.worldNBT = (NBTTagCompound) NBTBase.deserialize(level, true);
+		if (this.worldNBT == null)
+		{
 			return false;
+		}
 		
-		NBTTagCompound infoCompound = worldNBT.getTagCompound("WorldInfo");
-		worldInfo.readFromNBT(infoCompound);
+		NBTTagCompound infoCompound = this.worldNBT.getTagCompound("WorldInfo");
+		this.worldInfo.readFromNBT(infoCompound);
 		
-		NBTTagList entityDataList = worldNBT.getTagList("EntityData");
+		NBTTagList entityDataList = this.worldNBT.getTagList("EntityData");
 		if (entityDataList != null)
+		{
 			for (NBTBase base : entityDataList)
 			{
 				if (base instanceof NBTTagCompound)
@@ -228,14 +241,17 @@ public class World
 					this.spawnEntityInWorld(entity);
 				}
 			}
+		}
 		
 		File regionDir = new File(file, "chunks");
 		if (!regionDir.exists())
-			return false;
-		
-		for (int i = 0; i < chunks.length; i++)
 		{
-			for (int j = 0; j < chunks[i].length; j++)
+			return false;
+		}
+		
+		for (int i = 0; i < this.chunks.length; i++)
+		{
+			for (int j = 0; j < this.chunks[i].length; j++)
 			{
 				File chunkFile = new File(regionDir, "chunk." + (i - CHUNKS_X) + "." + (j - CHUNKS_Z) + ".drf");
 				NBTBase base = NBTBase.deserialize(chunkFile, true);
@@ -244,9 +260,13 @@ public class World
 					Chunk c = new Chunk(this, 0, 0);
 					c.readFromNBT((NBTTagCompound) base);
 					if (!c.dummy)
-						chunks[i][j] = c;
+					{
+						this.chunks[i][j] = c;
+					}
 					else
-						chunks[i][j] = null;
+					{
+						this.chunks[i][j] = null;
+					}
 				}
 			}
 		}

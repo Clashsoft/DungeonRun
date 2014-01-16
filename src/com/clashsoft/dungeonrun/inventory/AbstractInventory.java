@@ -20,9 +20,9 @@ public abstract class AbstractInventory implements INBTSaveable
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		NBTTagList slots = new NBTTagList("Slots");
-		for (int i = 0; i < getInventorySize(); i++)
+		for (int i = 0; i < this.getInventorySize(); i++)
 		{
-			ItemStack stack = getStackInSlot(i);
+			ItemStack stack = this.getStackInSlot(i);
 			if (stack != null)
 			{
 				NBTTagCompound compound = new NBTTagCompound("Slot#" + i);

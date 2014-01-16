@@ -48,11 +48,17 @@ public class Chunk implements INBTSaveable
 				{
 					int blockID = 0;
 					if (y == 31)
+					{
 						blockID = Block.grass.blockID;
+					}
 					else if (y < 31 && y >= 27)
+					{
 						blockID = Block.dirt.blockID;
+					}
 					else if (y < 27)
+					{
 						blockID = Block.stone.blockID;
+					}
 					this.setBlock(blockID, 0, x, y, z, 0);
 				}
 			}
@@ -69,8 +75,8 @@ public class Chunk implements INBTSaveable
 			{
 				for (int k = 0; k < 16; k++)
 				{
-					BlockInWorld block = world.getBlock(chunkPosToWorldPosX(i), j, chunkPosToWorldPosZ(k));
-					lightValues[index(i, j, k)] = (block != null ? block.getLightValue() : 0.1F);
+					BlockInWorld block = this.world.getBlock(this.chunkPosToWorldPosX(i), j, this.chunkPosToWorldPosZ(k));
+					this.lightValues[index(i, j, k)] = block != null ? block.getLightValue() : 0.1F;
 				}
 			}
 		}
@@ -82,13 +88,13 @@ public class Chunk implements INBTSaveable
 		z &= 15;
 		int index = index(x, y, z);
 		
-		blockIDs[index] = blockId;
-		metadataValues[index] = metadata;
+		this.blockIDs[index] = blockId;
+		this.metadataValues[index] = metadata;
 		
 		float f = this.getLightValue(x, y, z);
 		if ((flags & 1) != 0)
 		{
-			updateLightValues(x, y, z, f);
+			this.updateLightValues(x, y, z, f);
 		}
 	}
 	
@@ -97,12 +103,12 @@ public class Chunk implements INBTSaveable
 		int var1 = 8;
 		for (int i = x - 8; i <= x + 8; i++)
 		{
-			for (int j = (y - var1 >= 0 ? y - var1 : 0); j <= (y + var1 < 64 ? y + var1 : 63); j++)
+			for (int j = y - var1 >= 0 ? y - var1 : 0; j <= (y + var1 < 64 ? y + var1 : 63); j++)
 			{
 				for (int k = z - 8; k <= z + 8; k++)
 				{
-					int x1 = i + (chunkX * 16) - 512;
-					int z1 = k + (chunkZ * 16) - 512;
+					int x1 = i + this.chunkX * 16 - 512;
+					int z1 = k + this.chunkZ * 16 - 512;
 					
 					int offX = Math.abs(i - x);
 					int offY = Math.abs(j - y);
@@ -110,8 +116,8 @@ public class Chunk implements INBTSaveable
 					int offset = offX + offY + offZ;
 					float f1 = offset * 0.1F;
 					float f2 = f - f1 * 0.1F;
-					float f3 = Math.max(world.getLightValue(x1, j, z1), f2);
-					world.setLightValue(x1, j, z1, f3);
+					float f3 = Math.max(this.world.getLightValue(x1, j, z1), f2);
+					this.world.setLightValue(x1, j, z1, f3);
 				}
 			}
 		}
@@ -122,7 +128,7 @@ public class Chunk implements INBTSaveable
 		x &= 15;
 		z &= 15;
 		int index = index(x, y, z);
-		return new BlockInWorld(this.world, getBlockID(index), getBlockMetadata(index));
+		return new BlockInWorld(this.world, this.getBlockID(index), this.getBlockMetadata(index));
 	}
 	
 	public int getBlockID(int x, int y, int z)
@@ -161,8 +167,8 @@ public class Chunk implements INBTSaveable
 	{
 		x &= 15;
 		z &= 15;
-		float f = lightValues[index(x, y, z)];
-		return canBlockSeeSky(x, y, z) ? 1F : f;
+		float f = this.lightValues[index(x, y, z)];
+		return this.canBlockSeeSky(x, y, z) ? 1F : f;
 	}
 	
 	private boolean canBlockSeeSky(int x, int y, int z)
@@ -170,14 +176,18 @@ public class Chunk implements INBTSaveable
 		x &= 15;
 		z &= 15;
 		int index = x << 4 | z;
-		if (maxY[index] == y)
+		if (this.maxY[index] == y)
+		{
 			return true;
+		}
 		for (int i = y; i < 64; i++)
 		{
-			if (getBlock(x, i, z) != null && !getBlock(x, i, z).isAir())
+			if (this.getBlock(x, i, z) != null && !this.getBlock(x, i, z).isAir())
+			{
 				return false;
+			}
 		}
-		maxY[index] = y;
+		this.maxY[index] = y;
 		return true;
 	}
 	
@@ -185,7 +195,7 @@ public class Chunk implements INBTSaveable
 	{
 		x &= 15;
 		z &= 15;
-		lightValues[index(x, y, z)] = f;
+		this.lightValues[index(x, y, z)] = f;
 	}
 	
 	protected static int index(int x, int y, int z)
@@ -195,12 +205,12 @@ public class Chunk implements INBTSaveable
 	
 	protected int chunkPosToWorldPosX(int x)
 	{
-		return (chunkX * 16) + x;
+		return this.chunkX * 16 + x;
 	}
 	
 	protected int chunkPosToWorldPosZ(int z)
 	{
-		return (chunkZ * 16) + z;
+		return this.chunkZ * 16 + z;
 	}
 	
 	@Override
@@ -208,8 +218,8 @@ public class Chunk implements INBTSaveable
 	{
 		nbt.setInteger("ChunkX", this.chunkX);
 		nbt.setInteger("ChunkZ", this.chunkZ);
-		nbt.setTagList(NBTTagList.fromArray("BlockIDs", ArrayConverter.convertIntArray(blockIDs)));
-		nbt.setTagList(NBTTagList.fromArray("BlockMs", ArrayConverter.convertIntArray(metadataValues)));
+		nbt.setTagList(NBTTagList.fromArray("BlockIDs", ArrayConverter.convertIntArray(this.blockIDs)));
+		nbt.setTagList(NBTTagList.fromArray("BlockMs", ArrayConverter.convertIntArray(this.metadataValues)));
 	}
 	
 	@Override
@@ -225,6 +235,6 @@ public class Chunk implements INBTSaveable
 	@Override
 	public String toString()
 	{
-		return "Chunk[" + chunkX + ";" + chunkZ + "]";
+		return "Chunk[" + this.chunkX + ";" + this.chunkZ + "]";
 	}
 }
