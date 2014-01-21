@@ -1,48 +1,42 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.List;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
-import com.clashsoft.dungeonrun.util.FileCompressing;
+import com.clashsoft.nbt.loader.NBTSerializer;
 
 public abstract class NBTBase
 {
-	public static boolean	DELETE_COMPRESSED_FILES	= false;
-	public static boolean	BYTE_STORAGE			= true;
+	public static final byte		TYPE_END		= 0;
+	public static final byte		TYPE_COMPOUND	= 1;
+	public static final byte		TYPE_LIST		= 2;
+	public static final byte		TYPE_BOOLEAN	= 3;
+	public static final byte		TYPE_BYTE		= 4;
+	public static final byte		TYPE_SHORT		= 5;
+	public static final byte		TYPE_INT		= 6;
+	public static final byte		TYPE_FLOAT		= 7;
+	public static final byte		TYPE_DOUBLE		= 8;
+	public static final byte		TYPE_LONG		= 9;
+	public static final byte		TYPE_STRING		= 10;
 	
-	public static byte		TYPE_END				= 0;
-	public static byte		TYPE_COMPOUND			= 1;
-	public static byte		TYPE_LIST				= 2;
-	public static byte		TYPE_BOOLEAN			= 3;
-	public static byte		TYPE_BYTE				= 4;
-	public static byte		TYPE_SHORT				= 5;
-	public static byte		TYPE_INT				= 6;
-	public static byte		TYPE_FLOAT				= 7;
-	public static byte		TYPE_DOUBLE				= 8;
-	public static byte		TYPE_LONG				= 9;
-	public static byte		TYPE_STRING				= 10;
+	public static final byte		TYPE_ARRAY		= 20;
 	
-	public static byte		TYPE_ARRAY				= 20;
+	public static final NBTTagEnd	END				= new NBTTagEnd();
 	
-	public String			name;
-	public byte				type;
-	public Object			value;
+	public String					name;
+	public byte						type;
 	
-	public NBTBase(byte type, String name, Object value)
+	public NBTBase(byte type, String name)
 	{
 		this.type = type;
 		this.name = name;
-		if (!BYTE_STORAGE && (name.contains("[") || name.contains("]") || name.contains("{") || name.contains("}")))
+		if (NBTSerializer.useString() && (name.contains("[") || name.contains("]") || name.contains("{") || name.contains("}")))
 		{
 			throw new IllegalArgumentException("Name must not contain [ ] { } !");
 		}
-	}
-	
-	public Object getValue()
-	{
-		return this.value;
 	}
 	
 	@Override
@@ -93,38 +87,11 @@ public abstract class NBTBase
 		return true;
 	}
 	
-	public abstract boolean valueEquals(NBTBase that);
+	public abstract Object getValue();
 	
-	public boolean serialize(File out, boolean compressed)
+	public boolean valueEquals(NBTBase that)
 	{
-		try
-		{
-			if (!out.exists())
-			{
-				out.createNewFile();
-			}
-			
-			BufferedWriter writer = new BufferedWriter(new FileWriter(out));
-			writer.write(this.createString(""));
-			writer.close();
-			
-			if (compressed)
-			{
-				FileCompressing.compressFile(out, new File(out.getAbsolutePath() + ".drc"));
-				// out is just a temporary file used for compressing
-				if (DELETE_COMPRESSED_FILES)
-				{
-					out.delete();
-				}
-			}
-			
-			return true;
-		}
-		catch (IOException ioex)
-		{
-			ioex.printStackTrace();
-			return false;
-		}
+		return Objects.equals(this.getValue(), that.getValue());
 	}
 	
 	public final String createString(String prefix)
@@ -132,56 +99,43 @@ public abstract class NBTBase
 		return "{t:" + this.type + "n:[" + this.name + "]v:[" + this.writeValueString(prefix) + "]}";
 	}
 	
+	public abstract void writeValue(DataOutput output) throws IOException;
+	
+	public abstract void readValue(DataInput input) throws IOException;
+	
+	public abstract String writeValueString(String prefix);
+	
+	public abstract void readValueString(String dataString);
+	
+	public final boolean serialize(File out, boolean compressed)
+	{
+		return NBTSerializer.serialize(this, out, compressed);
+	}
+	
 	public final void write(DataOutput output) throws IOException
 	{
 		output.writeByte(this.type);
-		output.writeUTF(this.name);
-		this.writeValue(output);
+		
+		if (this.type != TYPE_END)
+		{
+			output.writeUTF(this.name);
+			this.writeValue(output);
+		}
 	}
 	
 	public static NBTBase createFromData(DataInput input) throws IOException
 	{
 		byte type = input.readByte();
+		
 		if (type == TYPE_END)
 		{
-			return null;
+			return END;
 		}
 		
 		String name = input.readUTF();
 		NBTBase nbt = createFromType(name, type);
 		nbt.readValue(input);
 		return nbt;
-	}
-	
-	public abstract void writeValue(DataOutput output) throws IOException;
-	public abstract void readValue(DataInput input) throws IOException;
-	
-	public abstract String writeValueString(String prefix);
-	public abstract void readValueString(String dataString);
-	
-	public static NBTBase deserialize(File in, boolean compressed)
-	{
-		File in1 = compressed ? new File(in.getAbsolutePath() + ".drc") : in;
-		
-		if (in1 == null || !in1.exists())
-		{
-			return null;
-		}
-		
-		if (compressed)
-		{
-			in = FileCompressing.decompressFile(in1, in);
-		}
-		
-		try
-		{
-			List<String> lines = Files.readAllLines(in.toPath(), Charset.defaultCharset());
-			return NBTParser.parse(lines);
-		}
-		catch (IOException ioex)
-		{
-			return null;
-		}
 	}
 	
 	public static NBTBase createFromObject(String tagName, Object value)

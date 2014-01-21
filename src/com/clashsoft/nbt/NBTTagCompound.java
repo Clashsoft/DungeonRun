@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -8,13 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.clashsoft.nbt.loader.NBTParser;
+
 public class NBTTagCompound extends NBTBase
 {
 	private Map<String, NBTBase>	tags	= new HashMap<>();
 	
 	public NBTTagCompound(String name)
 	{
-		super(TYPE_COMPOUND, name, null);
+		super(TYPE_COMPOUND, name);
 	}
 	
 	@Override
@@ -104,32 +106,38 @@ public class NBTTagCompound extends NBTBase
 	
 	public boolean getBoolean(String name)
 	{
-		return ((NBTTagBoolean) this.getTag(name)).value;
+		NBTTagBoolean tag = (NBTTagBoolean) this.getTag(name);
+		return tag != null ? tag.value : false;
 	}
 	
 	public byte getByte(String name)
 	{
-		return ((NBTTagByte) this.getTag(name)).value;
+		NBTTagByte tag = (NBTTagByte) this.getTag(name);
+		return tag != null ? tag.value : 0;
 	}
 	
 	public short getShort(String name)
 	{
-		return ((NBTTagShort) this.getTag(name)).value;
+		NBTTagShort tag = (NBTTagShort) this.getTag(name);
+		return tag != null ? tag.value : 0;
 	}
 	
 	public int getInteger(String name)
 	{
-		return ((NBTTagInteger) this.getTag(name)).value;
+		NBTTagInteger tag = (NBTTagInteger) this.getTag(name);
+		return tag != null ? tag.value : 0;
 	}
 	
 	public float getFloat(String name)
 	{
-		return ((NBTTagFloat) this.getTag(name)).value;
+		NBTTagFloat tag = (NBTTagFloat) this.getTag(name);
+		return tag != null ? tag.value : 0F;
 	}
 	
 	public double getDouble(String name)
 	{
-		return ((NBTTagDouble) this.getTag(name)).value;
+		NBTTagDouble tag = (NBTTagDouble) this.getTag(name);
+		return tag != null ? tag.value : 0D;
 	}
 	
 	public long getLong(String name)
@@ -209,9 +217,9 @@ public class NBTTagCompound extends NBTBase
 	{
 		List<String> result = new ArrayList<String>();
 		
-		int PABDEPTH = 0; // Depth of ( )
-		int SQBDEPTH = 0; // Depth of [ ]
-		int CUBDEPTH = 0; // Depth of { }
+		int depth1 = 0; // Depth of ( )
+		int depth2 = 0; // Depth of [ ]
+		int depth3 = 0; // Depth of { }
 		boolean quote = false;
 		
 		String tag = "";
@@ -229,18 +237,18 @@ public class NBTTagCompound extends NBTBase
 			{
 				if (c == '(')
 				{
-					if (PABDEPTH == 0)
+					if (depth1 == 0)
 					{
 						index = i;
 					}
-					PABDEPTH++;
+					depth1++;
 					continue;
 				}
 				else if (c == ')')
 				{
-					PABDEPTH--;
+					depth1--;
 					
-					if (PABDEPTH == 0 && index != -1)
+					if (depth1 == 0 && index != -1)
 					{
 						tag = text.substring(index + 1, i);
 						result.add(tag);
@@ -263,7 +271,7 @@ public class NBTTagCompound extends NBTBase
 			NBTBase value = this.tags.get(key);
 			value.write(output);
 		}
-		output.writeByte(0);
+		END.write(output);
 	}
 	
 	@Override
@@ -273,10 +281,11 @@ public class NBTTagCompound extends NBTBase
 		{
 			NBTBase nbt = NBTBase.createFromData(input);
 			
-			if (nbt == null)
+			if (nbt == NBTBase.END)
 			{
 				break;
 			}
+			
 			this.setTag(nbt);
 		}
 	}

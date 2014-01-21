@@ -3,10 +3,10 @@ package com.clashsoft.dungeonrun.entity;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.entity.render.RenderEntity;
-import com.clashsoft.dungeonrun.nbt.INBTSaveable;
-import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.nbt.INBTSaveable;
+import com.clashsoft.nbt.NBTTagCompound;
 
 public abstract class Entity implements INBTSaveable
 {

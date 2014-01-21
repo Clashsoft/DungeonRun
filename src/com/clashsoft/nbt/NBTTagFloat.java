@@ -1,40 +1,40 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class NBTTagByte extends NBTTagNumber
+public class NBTTagFloat extends NBTTagNumber
 {
-	public byte	value;
+	public float	value;
 	
-	public NBTTagByte(String name, byte value)
+	public NBTTagFloat(String name, float value)
 	{
-		super(TYPE_BYTE, name, value);
+		super(TYPE_FLOAT, name, value);
 		this.value = value;
 	}
 	
 	@Override
 	public char getPostfixChar()
 	{
-		return 'B';
+		return 'F';
 	}
 	
 	@Override
 	public Number readNumber(String number)
 	{
-		return this.value = Byte.parseByte(number);
+		return Float.parseFloat(number);
 	}
 
 	@Override
 	public void writeNumber(DataOutput output) throws IOException
 	{
-		output.writeByte(this.value);
+		output.writeFloat(this.value);
 	}
 
 	@Override
 	public Number readNumber(DataInput input) throws IOException
 	{
-		return this.value = input.readByte();
+		return this.value = input.readFloat();
 	}
 }

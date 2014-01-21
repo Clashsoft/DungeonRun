@@ -1,6 +1,8 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt.loader;
 
 import java.util.Collection;
+
+import com.clashsoft.nbt.NBTBase;
 
 public class NBTParser
 {
@@ -17,9 +19,9 @@ public class NBTParser
 		StringBuilder tagName = new StringBuilder();
 		StringBuilder tagValue = new StringBuilder();
 		
-		int PABDEPTH = 0; // Depth of ( )
-		int SQBDEPTH = 0; // Depth of [ ]
-		int CUBDEPTH = 0; // Depth of { }
+		int depth1 = 0; // Depth of ( )
+		int depth2 = 0; // Depth of [ ]
+		int depth3 = 0; // Depth of { }
 		boolean quote = false;
 		
 		int next = -1;
@@ -39,33 +41,33 @@ public class NBTParser
 			{
 				if (c == '(')
 				{
-					PABDEPTH++;
+					depth1++;
 					continue;
 				}
 				if (c == '[')
 				{
-					SQBDEPTH++;
+					depth2++;
 					continue;
 				}
 				if (c == '{')
 				{
-					CUBDEPTH++;
+					depth3++;
 					continue;
 				}
 				if (c == ')')
 				{
-					PABDEPTH--;
+					depth1--;
 				}
 				if (c == ']')
 				{
-					SQBDEPTH--;
+					depth2--;
 				}
 				if (c == '}')
 				{
-					CUBDEPTH--;
+					depth3--;
 				}
 				
-				if (CUBDEPTH == 1 && PABDEPTH == 0 && SQBDEPTH == 0)
+				if (depth3 == 1 && depth1 == 0 && depth2 == 0)
 				{
 					if (c == ':')
 					{
@@ -94,15 +96,15 @@ public class NBTParser
 			
 			if (nextValid || quote)
 			{
-				if (SQBDEPTH == 0 && next == 0)
+				if (depth2 == 0 && next == 0)
 				{
 					tagType.append(c);
 				}
-				else if (SQBDEPTH == 1 && next == 1)
+				else if (depth2 == 1 && next == 1)
 				{
 					tagName.append(c);
 				}
-				else if (PABDEPTH == 0 && SQBDEPTH == 1 && CUBDEPTH == 1 && next == 2) // Value
+				else if (depth1 == 0 && depth2 == 1 && depth3 == 1 && next == 2) // Value
 				{
 					int i1 = tag.lastIndexOf("}") - 1;
 					tagValue.append(tag.substring(i, i1));

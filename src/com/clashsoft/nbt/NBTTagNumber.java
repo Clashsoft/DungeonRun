@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,16 +6,18 @@ import java.io.IOException;
 
 public abstract class NBTTagNumber extends NBTBase
 {	
+	protected Number value;
+	
 	public NBTTagNumber(byte type, String name, Number value)
 	{
-		super(type, name, value);
+		super(type, name);
 		this.value = value;
 	}
 	
 	@Override
-	public boolean valueEquals(NBTBase that)
+	public Number getValue()
 	{
-		return this.value.equals(((NBTTagNumber) that).value);
+		return this.value;
 	}
 	
 	@Override

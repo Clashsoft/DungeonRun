@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -7,6 +7,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.clashsoft.nbt.loader.NBTParser;
 
 public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 {
@@ -19,7 +21,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	
 	public NBTTagList(String name, int capacity)
 	{
-		super(TYPE_LIST, name, null);
+		super(TYPE_LIST, name);
 		this.tags = new ArrayList(capacity);
 	}
 	
@@ -129,7 +131,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		NBTTagList list = new NBTTagList(name, args.length);
 		for (int i = 0; i < args.length; i++)
 		{
-			String tagName = name + "@" + i;
+			String tagName = name + i;
 			NBTBase base = NBTBase.createFromObject(tagName, args[i]);
 			if (base != null)
 			{
@@ -144,7 +146,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		NBTTagList list = new NBTTagList(name, args.size());
 		for (int i = 0; i < args.size(); i++)
 		{
-			String tagName = name + "@" + i;
+			String tagName = name + i;
 			NBTBase base = NBTBase.createFromObject(tagName, args.get(i));
 			if (base != null)
 			{
@@ -167,34 +169,6 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	public <T> T[] toArray()
 	{
 		return (T[]) this.tags.toArray();
-	}
-	
-	public int[] toIntArray()
-	{
-		int[] array = new int[this.tagCount()];
-		for (int i = 0; i < this.tagCount(); i++)
-		{
-			NBTBase base = this.tagAt(i);
-			if (base instanceof NBTTagNumber)
-			{
-				array[i] = ((NBTTagInteger) base).value;
-			}
-		}
-		return array;
-	}
-	
-	public float[] toFloatArray()
-	{
-		float[] array = new float[this.tagCount()];
-		for (int i = 0; i < this.tagCount(); i++)
-		{
-			NBTBase base = this.tagAt(i);
-			if (base instanceof NBTTagNumber)
-			{
-				array[i] = ((NBTTagFloat) base).value;
-			}
-		}
-		return array;
 	}
 	
 	@Override
@@ -249,7 +223,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 			NBTBase value = this.tagAt(i);
 			value.write(output);
 		}
-		output.writeByte(0);
+		END.write(output);
 	}
 	
 	@Override
@@ -259,10 +233,11 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 		{
 			NBTBase nbt = NBTBase.createFromData(input);
 			
-			if (nbt == null)
+			if (nbt == NBTBase.END)
 			{
 				break;
 			}
+			
 			this.addTag(nbt);
 		}
 	}

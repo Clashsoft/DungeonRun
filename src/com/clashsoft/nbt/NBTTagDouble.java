@@ -1,40 +1,40 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class NBTTagShort extends NBTTagNumber
+public class NBTTagDouble extends NBTTagNumber
 {
-	public short	value;
+	public double	value;
 	
-	public NBTTagShort(String name, short value)
+	public NBTTagDouble(String name, double value)
 	{
-		super(TYPE_SHORT, name, value);
+		super(TYPE_DOUBLE, name, value);
 		this.value = value;
 	}
 	
 	@Override
 	public char getPostfixChar()
 	{
-		return 'S';
+		return 'D';
 	}
 	
 	@Override
 	public Number readNumber(String number)
 	{
-		return this.value = Short.parseShort(number);
+		return this.value = Double.parseDouble(number);
 	}
 
 	@Override
 	public void writeNumber(DataOutput output) throws IOException
 	{
-		output.writeShort(this.value);
+		output.writeDouble(this.value);
 	}
 
 	@Override
 	public Number readNumber(DataInput input) throws IOException
 	{
-		return this.value = input.readShort();
+		return this.value = input.readDouble();
 	}
 }

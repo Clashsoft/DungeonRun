@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -10,8 +10,14 @@ public class NBTTagString extends NBTBase
 	
 	public NBTTagString(String name, String value)
 	{
-		super(TYPE_STRING, name, value);
+		super(TYPE_STRING, name);
 		this.value = value;
+	}
+	
+	@Override
+	public String getValue()
+	{
+		return this.value;
 	}
 	
 	@Override

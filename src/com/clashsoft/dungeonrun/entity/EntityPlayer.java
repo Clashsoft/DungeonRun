@@ -7,8 +7,8 @@ import com.clashsoft.dungeonrun.client.gui.GuiDeath;
 import com.clashsoft.dungeonrun.entity.render.RenderEntity;
 import com.clashsoft.dungeonrun.entity.render.RenderPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
-import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.nbt.NBTTagCompound;
 
 public class EntityPlayer extends EntityLiving
 {

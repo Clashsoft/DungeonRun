@@ -8,9 +8,10 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.nbt.NBTBase;
-import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
-import com.clashsoft.dungeonrun.nbt.NBTTagList;
+import com.clashsoft.nbt.NBTBase;
+import com.clashsoft.nbt.NBTTagCompound;
+import com.clashsoft.nbt.NBTTagList;
+import com.clashsoft.nbt.loader.NBTSerializer;
 
 public class World
 {
@@ -219,7 +220,7 @@ public class World
 			return false;
 		}
 		
-		this.worldNBT = (NBTTagCompound) NBTBase.deserialize(level, true);
+		this.worldNBT = (NBTTagCompound) NBTSerializer.deserialize(level, true);
 		if (this.worldNBT == null)
 		{
 			return false;
@@ -254,7 +255,7 @@ public class World
 			for (int j = 0; j < this.chunks[i].length; j++)
 			{
 				File chunkFile = new File(regionDir, "chunk." + (i - CHUNKS_X) + "." + (j - CHUNKS_Z) + ".drf");
-				NBTBase base = NBTBase.deserialize(chunkFile, true);
+				NBTBase base = NBTSerializer.deserialize(chunkFile, true);
 				if (base instanceof NBTTagCompound)
 				{
 					Chunk c = new Chunk(this, 0, 0);

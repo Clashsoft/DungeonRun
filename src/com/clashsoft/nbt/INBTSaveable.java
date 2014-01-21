@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 public interface INBTSaveable
 {

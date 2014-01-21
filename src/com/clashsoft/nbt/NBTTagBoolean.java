@@ -1,4 +1,4 @@
-package com.clashsoft.dungeonrun.nbt;
+package com.clashsoft.nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -10,8 +10,14 @@ public class NBTTagBoolean extends NBTBase
 	
 	public NBTTagBoolean(String name, boolean value)
 	{
-		super(TYPE_BOOLEAN, name, value);
+		super(TYPE_BOOLEAN, name);
 		this.value = value;
+	}
+	
+	@Override
+	public Object getValue()
+	{
+		return this.value;
 	}
 	
 	@Override

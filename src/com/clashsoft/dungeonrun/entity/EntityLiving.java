@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.entity;
 
-import com.clashsoft.dungeonrun.nbt.NBTTagCompound;
 import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.nbt.NBTTagCompound;
 
 public abstract class EntityLiving extends EntityDamagable
 {
