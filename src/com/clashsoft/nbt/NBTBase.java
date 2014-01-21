@@ -13,16 +13,15 @@ public abstract class NBTBase
 	public static final byte		TYPE_END		= 0;
 	public static final byte		TYPE_COMPOUND	= 1;
 	public static final byte		TYPE_LIST		= 2;
-	public static final byte		TYPE_BOOLEAN	= 3;
-	public static final byte		TYPE_BYTE		= 4;
-	public static final byte		TYPE_SHORT		= 5;
-	public static final byte		TYPE_INT		= 6;
-	public static final byte		TYPE_FLOAT		= 7;
-	public static final byte		TYPE_DOUBLE		= 8;
-	public static final byte		TYPE_LONG		= 9;
-	public static final byte		TYPE_STRING		= 10;
-	
-	public static final byte		TYPE_ARRAY		= 20;
+	public static final byte		TYPE_ARRAY		= 3;
+	public static final byte		TYPE_BOOLEAN	= 4;
+	public static final byte		TYPE_BYTE		= 5;
+	public static final byte		TYPE_SHORT		= 6;
+	public static final byte		TYPE_INT		= 7;
+	public static final byte		TYPE_FLOAT		= 8;
+	public static final byte		TYPE_DOUBLE		= 9;
+	public static final byte		TYPE_LONG		= 10;
+	public static final byte		TYPE_STRING		= 11;
 	
 	public static final NBTTagEnd	END				= new NBTTagEnd();
 	
@@ -100,11 +99,9 @@ public abstract class NBTBase
 	}
 	
 	public abstract void writeValue(DataOutput output) throws IOException;
-	
 	public abstract void readValue(DataInput input) throws IOException;
 	
 	public abstract String writeValueString(String prefix);
-	
 	public abstract void readValueString(String dataString);
 	
 	public final boolean serialize(File out, boolean compressed)
@@ -140,90 +137,98 @@ public abstract class NBTBase
 	
 	public static NBTBase createFromObject(String tagName, Object value)
 	{
-		if (value instanceof Boolean)
-		{
-			return new NBTTagBoolean(tagName, (boolean) value);
-		}
-		if (value instanceof Byte)
-		{
-			return new NBTTagByte(tagName, (byte) value);
-		}
-		if (value instanceof Short)
-		{
-			return new NBTTagShort(tagName, (short) value);
-		}
-		if (value instanceof Integer)
-		{
-			return new NBTTagInteger(tagName, (int) value);
-		}
-		if (value instanceof Float)
-		{
-			return new NBTTagFloat(tagName, (float) value);
-		}
-		if (value instanceof Double)
-		{
-			return new NBTTagDouble(tagName, (double) value);
-		}
-		if (value instanceof Long)
-		{
-			return new NBTTagLong(tagName, (long) value);
-		}
-		if (value instanceof String)
-		{
-			return new NBTTagString(tagName, (String) value);
-		}
 		if (value instanceof NBTTagCompound)
 		{
 			return (NBTTagCompound) value;
 		}
-		if (value instanceof NBTTagList)
+		else if (value instanceof NBTTagList)
 		{
 			return (NBTTagList) value;
+		}
+		else if (value instanceof NBTTagArray)
+		{
+			return (NBTTagArray) value;
+		}
+		else if (value instanceof Boolean)
+		{
+			return new NBTTagBoolean(tagName, (boolean) value);
+		}
+		else if (value instanceof Byte)
+		{
+			return new NBTTagByte(tagName, (byte) value);
+		}
+		else if (value instanceof Short)
+		{
+			return new NBTTagShort(tagName, (short) value);
+		}
+		else if (value instanceof Integer)
+		{
+			return new NBTTagInteger(tagName, (int) value);
+		}
+		else if (value instanceof Float)
+		{
+			return new NBTTagFloat(tagName, (float) value);
+		}
+		else if (value instanceof Double)
+		{
+			return new NBTTagDouble(tagName, (double) value);
+		}
+		else if (value instanceof Long)
+		{
+			return new NBTTagLong(tagName, (long) value);
+		}
+		else if (value instanceof String)
+		{
+			return new NBTTagString(tagName, (String) value);
 		}
 		return null;
 	}
 	
 	public static NBTBase createFromType(String tagName, byte type)
 	{
-		if (type == TYPE_BOOLEAN)
-		{
-			return new NBTTagBoolean(tagName, false);
-		}
-		if (type == TYPE_BYTE)
-		{
-			return new NBTTagByte(tagName, (byte) 0);
-		}
-		if (type == TYPE_SHORT)
-		{
-			return new NBTTagShort(tagName, (short) 0);
-		}
-		if (type == TYPE_INT)
-		{
-			return new NBTTagInteger(tagName, 0);
-		}
-		if (type == TYPE_FLOAT)
-		{
-			return new NBTTagFloat(tagName, 0F);
-		}
-		if (type == TYPE_DOUBLE)
-		{
-			return new NBTTagDouble(tagName, 0D);
-		}
-		if (type == TYPE_LONG)
-		{
-			return new NBTTagLong(tagName, 0L);
-		}
-		if (type == TYPE_STRING)
-		{
-			return new NBTTagString(tagName, "");
-		}
 		if (type == TYPE_COMPOUND)
 		{
 			return new NBTTagCompound(tagName);
 		}
-		if (type == TYPE_LIST)
+		else if (type == TYPE_LIST)
 		{
 			return new NBTTagList(tagName);
+		}
+		else if (type == TYPE_ARRAY)
+		{
+			return new NBTTagArray(tagName);
+		}
+		else if (type == TYPE_BOOLEAN)
+		{
+			return new NBTTagBoolean(tagName, false);
+		}
+		else if (type == TYPE_BYTE)
+		{
+			return new NBTTagByte(tagName, (byte) 0);
+		}
+		else if (type == TYPE_SHORT)
+		{
+			return new NBTTagShort(tagName, (short) 0);
+		}
+		else if (type == TYPE_INT)
+		{
+			return new NBTTagInteger(tagName, 0);
+		}
+		else if (type == TYPE_FLOAT)
+		{
+			return new NBTTagFloat(tagName, 0F);
+		}
+		else if (type == TYPE_DOUBLE)
+		{
+			return new NBTTagDouble(tagName, 0D);
+		}
+		else if (type == TYPE_LONG)
+		{
+			return new NBTTagLong(tagName, 0L);
+		}
+		else if (type == TYPE_STRING)
+		{
+			return new NBTTagString(tagName, "");
 		}
 		return null;
 	}

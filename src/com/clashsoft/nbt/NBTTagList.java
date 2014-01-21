@@ -115,15 +115,17 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	
 	public void addTagList(NBTTagList list)
 	{
-		if (list != this)
-		{
-			this.addTag(this.name, list);
-		}
+		this.addTag(list);
 	}
 	
 	public void addTagCompound(NBTTagCompound compound)
 	{
 		this.addTag(compound);
+	}
+	
+	public void addTagArray(NBTTagArray array)
+	{
+		this.addTag(array);
 	}
 	
 	public static <T> NBTTagList fromArray(String name, T[] args)

@@ -113,9 +113,18 @@ public class NBTTagArray<T extends NBTBase> extends NBTBase
 		return new NBTTagArray(name, TYPE_STRING).setStringArray(array);
 	}
 	
-	protected NBTTagArray(String name, byte type)
+	/**
+	 * Constructor used for deserialization
+	 * @param name
+	 */
+	public NBTTagArray(String name)
 	{
 		super(TYPE_ARRAY, name);
+	}
+	
+	protected NBTTagArray(String name, byte type)
+	{
+		this(name);
 		this.subtype = type;
 		this.length = 0;
 	}

@@ -98,10 +98,12 @@ public class NBTTagCompound extends NBTBase
 	
 	public void setTagCompound(NBTTagCompound compound)
 	{
-		if (compound != this)
-		{
-			this.setTag(compound);
-		}
+		this.setTag(compound);
+	}
+	
+	public void setTagArray(NBTTagArray array)
+	{
+		this.setTag(array);
 	}
 	
 	public boolean getBoolean(String name)
@@ -160,6 +162,11 @@ public class NBTTagCompound extends NBTBase
 	public NBTTagCompound getTagCompound(String name)
 	{
 		return (NBTTagCompound) this.getTag(name);
+	}
+	
+	public NBTTagArray getTagArray(String name)
+	{
+		return (NBTTagArray) this.getTag(name);
 	}
 	
 	public void clear()

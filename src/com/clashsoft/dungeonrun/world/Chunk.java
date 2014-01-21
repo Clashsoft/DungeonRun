@@ -2,6 +2,7 @@ package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.nbt.INBTSaveable;
+import com.clashsoft.nbt.NBTTagArray;
 import com.clashsoft.nbt.NBTTagCompound;
 
 public class Chunk implements INBTSaveable
@@ -216,8 +217,8 @@ public class Chunk implements INBTSaveable
 	{
 		nbt.setInteger("ChunkX", this.chunkX);
 		nbt.setInteger("ChunkZ", this.chunkZ);
-//		nbt.setTagList(NBTTagList.fromArray("BlockIDs", ArrayConverter.convertIntArray(this.blockIDs)));
-//		nbt.setTagList(NBTTagList.fromArray("BlockMs", ArrayConverter.convertIntArray(this.metadataValues)));
+		nbt.setTagArray(NBTTagArray.createInt("BlockIDs", this.blockIDs));
+		nbt.setTagArray(NBTTagArray.createInt("Metadata", this.metadataValues));
 	}
 	
 	@Override
@@ -225,8 +226,8 @@ public class Chunk implements INBTSaveable
 	{
 		this.chunkX = nbt.getInteger("ChunkX");
 		this.chunkZ = nbt.getInteger("ChunkZ");
-//		this.blockIDs = nbt.getTagList("BlockIDs").toIntArray();
-//		this.metadataValues = nbt.getTagList("BlockMs").toIntArray();
+		this.blockIDs = nbt.getTagArray("BlockIDs").getIntArray();
+		this.metadataValues = nbt.getTagArray("Metadata").getIntArray();
 		this.dummy = false;
 	}
 	
