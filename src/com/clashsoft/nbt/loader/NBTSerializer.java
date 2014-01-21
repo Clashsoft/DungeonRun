@@ -9,6 +9,8 @@ import com.clashsoft.nbt.NBTBase;
 
 public class NBTSerializer
 {
+	public static final int	VERSION					= 1;
+	
 	public static boolean	DELETE_COMPRESSED_FILES	= false;
 	public static boolean	BYTE_STORAGE			= true;
 	
@@ -46,7 +48,8 @@ public class NBTSerializer
 			else
 			{
 				DataInputStream input = FileCompressing.inputStream(in, compressed);
-				NBTBase nbt = NBTBase.createFromData(input);
+				readHeader(input);
+				NBTBase nbt = NBTBase.read(input);
 				input.close();
 				return nbt;
 			}
@@ -86,6 +89,7 @@ public class NBTSerializer
 			else
 			{
 				DataOutputStream output = FileCompressing.outputStream(out, compressed);
+				writeHeader(output);
 				nbt.write(output);
 				output.close();
 			}
@@ -97,5 +101,15 @@ public class NBTSerializer
 			ioex.printStackTrace();
 			return false;
 		}
+	}
+	
+	public static void readHeader(DataInput input) throws IOException
+	{
+		int ver = input.readInt();
+	}
+	
+	public static void writeHeader(DataOutput output) throws IOException
+	{
+		output.writeInt(VERSION);
 	}
 }

@@ -233,7 +233,7 @@ public class NBTTagList extends NBTBase implements Iterable<NBTBase>
 	{
 		while (true)
 		{
-			NBTBase nbt = NBTBase.createFromData(input);
+			NBTBase nbt = NBTBase.read(input);
 			
 			if (nbt == NBTBase.END)
 			{

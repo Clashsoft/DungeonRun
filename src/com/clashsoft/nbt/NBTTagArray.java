@@ -226,7 +226,7 @@ public class NBTTagArray<T extends NBTBase> extends NBTBase
 			this.objectArray = new NBTBase[len];
 			for (int i = 0; i < len; i++)
 			{
-				this.objectArray[i] = NBTBase.createFromData(input);
+				this.objectArray[i] = NBTBase.read(input);
 			}
 		}
 		else if (type == TYPE_BOOLEAN)

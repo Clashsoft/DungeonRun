@@ -120,7 +120,7 @@ public abstract class NBTBase
 		}
 	}
 	
-	public static NBTBase createFromData(DataInput input) throws IOException
+	public static NBTBase read(DataInput input) throws IOException
 	{
 		byte type = input.readByte();
 		
