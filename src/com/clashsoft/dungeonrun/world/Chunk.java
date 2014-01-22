@@ -217,8 +217,8 @@ public class Chunk implements INBTSaveable
 	{
 		nbt.setInteger("ChunkX", this.chunkX);
 		nbt.setInteger("ChunkZ", this.chunkZ);
-		nbt.setTagArray(NBTTagArray.createInt("BlockIDs", this.blockIDs));
-		nbt.setTagArray(NBTTagArray.createInt("Metadata", this.metadataValues));
+		nbt.setTagArray(new NBTTagArray("BlockIDs", this.blockIDs));
+		nbt.setTagArray(new NBTTagArray("Metadata", this.metadataValues));
 	}
 	
 	@Override

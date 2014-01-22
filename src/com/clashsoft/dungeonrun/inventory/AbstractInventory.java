@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.nbt.INBTSaveable;
-import com.clashsoft.nbt.NBTBase;
+import com.clashsoft.nbt.NamedBinaryTag;
 import com.clashsoft.nbt.NBTTagCompound;
 import com.clashsoft.nbt.NBTTagList;
 
@@ -44,7 +44,7 @@ public abstract class AbstractInventory implements INBTSaveable
 		{
 			for (int i = 0; i < slots.tagCount(); i++)
 			{
-				NBTBase base = slots.tagAt(i);
+				NamedBinaryTag base = slots.tagAt(i);
 				if (base instanceof NBTTagCompound)
 				{
 					NBTTagCompound compound = (NBTTagCompound) base;

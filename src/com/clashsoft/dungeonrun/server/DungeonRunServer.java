@@ -190,7 +190,7 @@ public class DungeonRunServer extends BasicGame
 	public void handleException(Exception ex, String s) throws SlickException
 	{
 		ex.printStackTrace();
-		System.exit(-1);
+		//System.exit(-1);
 	}
 	
 	public void handleError(Error error, String s) throws SlickException
@@ -204,7 +204,7 @@ public class DungeonRunServer extends BasicGame
 		else
 		{
 			error.printStackTrace();
-			System.exit(-2);
+			//System.exit(-2);
 		}
 	}
 	

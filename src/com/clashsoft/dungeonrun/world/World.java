@@ -8,7 +8,7 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.nbt.NBTBase;
+import com.clashsoft.nbt.NamedBinaryTag;
 import com.clashsoft.nbt.NBTTagCompound;
 import com.clashsoft.nbt.NBTTagList;
 import com.clashsoft.nbt.loader.NBTSerializer;
@@ -232,7 +232,7 @@ public class World
 		NBTTagList entityDataList = this.worldNBT.getTagList("EntityData");
 		if (entityDataList != null)
 		{
-			for (NBTBase base : entityDataList)
+			for (NamedBinaryTag base : entityDataList)
 			{
 				if (base instanceof NBTTagCompound)
 				{
@@ -255,7 +255,7 @@ public class World
 			for (int j = 0; j < this.chunks[i].length; j++)
 			{
 				File chunkFile = new File(regionDir, "chunk." + (i - CHUNKS_X) + "." + (j - CHUNKS_Z) + ".drf");
-				NBTBase base = NBTSerializer.deserialize(chunkFile, true);
+				NamedBinaryTag base = NBTSerializer.deserialize(chunkFile, true);
 				if (base instanceof NBTTagCompound)
 				{
 					Chunk c = new Chunk(this, 0, 0);
