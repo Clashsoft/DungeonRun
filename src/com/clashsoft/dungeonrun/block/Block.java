@@ -80,7 +80,7 @@ public class Block implements IStackable
 		return null;
 	}
 	
-	public Image getBlockTextureFromSideAndMetadata(int side, int meta) throws SlickException
+	public Image getTexture(int side, int meta) throws SlickException
 	{
 		return this.texture;
 	}

@@ -117,17 +117,17 @@ public class Chunk implements INBTSaveable
 	
 	public int worldPosX(int x)
 	{
-		return this.chunkX << 4 | x;
+		return (this.chunkX << 4) | x;
 	}
 	
 	public int worldPosY(int y)
 	{
-		return this.chunkY << 4 | y;
+		return (this.chunkY << 4) | y;
 	}
 	
 	public int worldPosZ(int z)
 	{
-		return this.chunkZ << 4 | z;
+		return (this.chunkZ << 4) | z;
 	}
 	
 	public BlockInWorld getBlock(int x, int y, int z)
@@ -187,25 +187,27 @@ public class Chunk implements INBTSaveable
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("ChunkX", this.chunkX);
-		nbt.setInteger("ChunkZ", this.chunkZ);
-		nbt.setTagArray(new NBTTagArray("BlockIDs", this.blockIDs));
-		nbt.setTagArray(new NBTTagArray("Metadata", this.metadataValues));
+		nbt.setInteger("x", this.chunkX);
+		nbt.setInteger("y", this.chunkY);
+		nbt.setInteger("z", this.chunkZ);
+		nbt.setTagArray(new NBTTagArray("ids", this.blockIDs));
+		nbt.setTagArray(new NBTTagArray("data", this.metadataValues));
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		this.chunkX = nbt.getInteger("ChunkX");
-		this.chunkZ = nbt.getInteger("ChunkZ");
-		this.blockIDs = nbt.getTagArray("BlockIDs").getIntArray();
-		this.metadataValues = nbt.getTagArray("Metadata").getIntArray();
+		this.chunkX = nbt.getInteger("x");
+		this.chunkY = nbt.getInteger("y");
+		this.chunkZ = nbt.getInteger("z");
+		this.blockIDs = nbt.getTagArray("ids").getIntArray();
+		this.metadataValues = nbt.getTagArray("data").getIntArray();
 		this.dummy = false;
 	}
 	
 	@Override
 	public String toString()
 	{
-		return "Chunk[" + this.chunkX + ";" + this.chunkZ + "]";
+		return "Chunk[" + this.chunkX + ";" + this.chunkY + ";" + this.chunkZ + "]";
 	}
 }

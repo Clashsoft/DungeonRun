@@ -146,6 +146,7 @@ public class World
 		{
 			e = iterator.next();
 			Entity entity = e.getValue();
+			entity.updateEntity();
 			if (entity.isDead())
 			{
 				iterator.remove();
@@ -165,14 +166,7 @@ public class World
 	
 	public EntityPlayer getPlayer(String username) throws SlickException
 	{
-		EntityPlayer player = this.playerEntitys.get(username);
-		if (player == null)
-		{
-			player = new EntityPlayer(this);
-			player.setLocation(0D, 35D, 0D);
-			this.spawnEntityInWorld(player);
-		}
-		return player;
+		return this.playerEntitys.get(username);
 	}
 	
 	public BlockInWorld getBlock(int x, int y, int z)

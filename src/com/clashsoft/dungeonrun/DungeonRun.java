@@ -25,7 +25,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	
 	public DungeonRun()
 	{
-		super("DungeonRun" + VERSION);
+		super("DungeonRun " + VERSION);
 	}
 	
 	public static DungeonRun getInstance()

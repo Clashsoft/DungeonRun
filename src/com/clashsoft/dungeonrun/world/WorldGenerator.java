@@ -11,16 +11,20 @@ public class WorldGenerator
 	
 	public static void generateChunk(Chunk chunk)
 	{
-		int cy = chunk.chunkY;
 		for (int y = 0; y < 16; y++)
 		{
-			int i = cy + y;
+			int i = chunk.worldPosY(y);
 			int blockID = Block.stone.blockID;
-			if (i == 64)
+			
+			if (i > 64)
+			{
+				break;
+			}
+			else if (i == 64)
 			{
 				blockID = Block.grass.blockID;
 			}
-			else if (i > 48)
+			else if (i > 47)
 			{
 				blockID = Block.dirt.blockID;
 			}

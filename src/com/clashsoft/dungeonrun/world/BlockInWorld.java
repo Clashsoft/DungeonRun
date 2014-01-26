@@ -13,7 +13,6 @@ public class BlockInWorld
 	public int					blockID;
 	public int					metadata;
 	public float lightValue;
-	public int					x, y, z;
 	
 	public BlockInWorld(World w, int id, int metadata, float lightValue)
 	{
@@ -49,6 +48,7 @@ public class BlockInWorld
 	
 	public Image getBlockTexture(int side) throws SlickException
 	{
-		return this.getBlock().getBlockTextureFromSideAndMetadata(side, this.metadata);
+		Block block = this.getBlock();
+		return block == null ? null : block.getTexture(side, this.metadata);
 	}
 }

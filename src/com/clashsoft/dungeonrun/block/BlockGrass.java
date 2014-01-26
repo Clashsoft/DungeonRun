@@ -20,7 +20,7 @@ public class BlockGrass extends Block
 	}
 	
 	@Override
-	public Image getBlockTextureFromSideAndMetadata(int side, int meta) throws SlickException
+	public Image getTexture(int side, int meta) throws SlickException
 	{
 		return side == 4 ? this.sideIcon : this.texture;
 	}
