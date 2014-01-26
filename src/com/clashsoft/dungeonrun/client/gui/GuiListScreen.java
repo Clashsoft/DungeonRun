@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -30,12 +31,25 @@ public abstract class GuiListScreen extends GuiScreen
 			this.drawDefaultBackground(width, height);
 		}
 		
-		this.dr.fontRenderer.drawString((width - this.dr.fontRenderer.getStringWidth(this.getTitle())) / 2, 20, I18n.getString(this.getTitle()), 0x00EFFF, true);
+		String title = I18n.getString(this.getTitle());
+		
+		this.dr.fontRenderer.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, 20, title, 0x00EFFF, true);
+		
 		for (int i = 0; i < this.entrys.size(); i++)
 		{
 			String text = this.getEntry(i);
+			boolean selected = this.selection == i;
 			int i1 = this.dr.fontRenderer.getStringWidth(text);
-			this.dr.fontRenderer.drawString((width - i1) / 2 + this.getFirstEntryPosX(), this.getFirstEntryPosY() + i * 20, text, this.selection == i ? 0xFFFFFF : 0xAAAAAA, true);
+			int x = (width - i1) / 2 + this.getXOffset();
+			int y = i * 20 + this.getYOffset();
+			
+			if (this.isMouseInRegion(x - 5, y, i1, 20))
+			{
+				this.selection = i;
+				selected = true;
+			}
+			
+			this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFFFF : 0xAAAAAA, true);
 		}
 	}
 	
@@ -65,7 +79,7 @@ public abstract class GuiListScreen extends GuiScreen
 			}
 		}
 		
-		if (this.input.isKeyPressed(Input.KEY_ENTER))
+		if (this.input.isKeyPressed(Input.KEY_ENTER) || Mouse.isButtonDown(0))
 		{
 			this.onEntryUsed(this.selection);
 			this.dr.soundEngine.playSoundEffect("resources/audio/click.wav", SoundEngine.DEFAULT_LOCATION);
@@ -83,12 +97,12 @@ public abstract class GuiListScreen extends GuiScreen
 	
 	public abstract void onEntryUsed(int i) throws SlickException;
 	
-	public int getFirstEntryPosX()
+	public int getXOffset()
 	{
 		return 0;
 	}
 	
-	public int getFirstEntryPosY()
+	public int getYOffset()
 	{
 		return 40;
 	}

@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 
@@ -30,20 +29,26 @@ public class GuiMainMenu extends GuiListScreen
 		
 		for (int i = 0; i < this.entrys.size(); i++)
 		{
-			String s = I18n.getString(this.entrys.get(i));
+			String text = this.getEntry(i);
+			boolean selected = this.selection == i;
+			int i1 = this.dr.fontRenderer.getStringWidth(text);
+			int x = (width - i1) / 2;
+			int y = i * 20 + 120;
 			
-			int length = this.dr.fontRenderer.getStringWidth(s);
-			int posX = (int) ((width - length) / 2F);
-			int posY = (height - this.entrys.size() * this.dr.fontRenderer.getStringHeigth(s)) / 2 + i * 20;
-			
-			if (this.selection == i)
+			if (this.isMouseInRegion(x - 10, y, i1, 10))
 			{
-				Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
-				torch.draw(posX - torch.getWidth(), posY - 4);
-				torch.draw(posX + length, posY - 4);
+				this.selection = i;
+				selected = true;
 			}
 			
-			this.dr.fontRenderer.drawString(posX, posY, s, this.selection == i ? 0xFFFF00 : 0x00EFFF, true);
+			if (selected)
+			{
+				Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
+				torch.draw(x - torch.getWidth(), y - 4);
+				torch.draw(x + i1, y - 4);
+			}
+			
+			this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);
 		}
 		
 		int var1 = (int) this.player.posX;
@@ -100,7 +105,7 @@ public class GuiMainMenu extends GuiListScreen
 	}
 	
 	@Override
-	public int getFirstEntryPosY()
+	public int getYOffset()
 	{
 		return 60;
 	}

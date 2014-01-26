@@ -77,11 +77,6 @@ public abstract class GuiScreen
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", this.dr.getWorld().worldInfo.getName()));
 			}
 			
-			if (this.dr.theIngameGui != null)
-			{
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("HoverPos: (%d;%d;%d)", this.dr.theIngameGui.mouseBlockX, this.dr.theIngameGui.mouseBlockY, this.dr.theIngameGui.mouseBlockZ));
-			}
-			
 			{
 				Runtime runtime = Runtime.getRuntime();
 				long freeMemory = runtime.freeMemory() / 1024 / 1024;
@@ -118,11 +113,11 @@ public abstract class GuiScreen
 		return this.scaledResolution.scaleFactor;
 	}
 	
-	public boolean isMouseInRegion(float x, float y, float sizeX, float sizeY)
+	public boolean isMouseInRegion(float x, float y, float width, float height)
 	{
-		double mouseX = Mouse.getX() / this.getRescaleFactorX(this.windowWidth);
-		double mouseY = (this.windowHeight - Mouse.getY()) / this.getRescaleFactorY(this.windowHeight);
-		return mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY;
+		double mouseX = Mouse.getX() / this.scaledResolution.scaleFactor;
+		double mouseY = this.scaledResolution.scaledHeightD - (Mouse.getY() / this.scaledResolution.scaleFactor);
+		return mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
 	}
 	
 	public void setWorldSaving(boolean state)
@@ -133,11 +128,14 @@ public abstract class GuiScreen
 	public void drawBricks(int width, int height) throws SlickException
 	{
 		GL11.glScalef(2F, 2F, 1F);
-		for (int i = 0; i < width / 8F; i++)
+		int k = width >> 1;
+		int l = height >> 1;
+		
+		for (int i = 0; i < k; i += 16)
 		{
-			for (int j = 0; j < height / 8F; j++)
+			for (int j = 0; j < l; j += 16)
 			{
-				Block.brick.getTexture(0, 0).draw(i * 16, j * 16);
+				Block.brick.getTexture(0, 0).draw(i, j);
 			}
 		}
 		GL11.glScalef(0.5F, 0.5F, 1F);
