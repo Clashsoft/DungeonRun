@@ -26,7 +26,6 @@ public class GuiMainMenu extends GuiListScreen
 	@Override
 	public void drawScreen(int width, int height) throws SlickException
 	{
-		int longestStringLength = 0;
 		this.drawDefaultBackground(width, height);
 		
 		for (int i = 0; i < this.entrys.size(); i++)
@@ -37,19 +36,14 @@ public class GuiMainMenu extends GuiListScreen
 			int posX = (int) ((width - length) / 2F);
 			int posY = (height - this.entrys.size() * this.dr.fontRenderer.getStringHeigth(s)) / 2 + i * 20;
 			
-			this.dr.fontRenderer.drawString(posX, posY, s, this.selection == i ? 0xFFFF00 : 0x00EFFF, true);
-			
-			if (length >= longestStringLength)
-			{
-				longestStringLength = length;
-			}
-			
 			if (this.selection == i)
 			{
 				Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
 				torch.draw(posX - torch.getWidth(), posY - 4);
 				torch.draw(posX + length, posY - 4);
 			}
+			
+			this.dr.fontRenderer.drawString(posX, posY, s, this.selection == i ? 0xFFFF00 : 0x00EFFF, true);
 		}
 		
 		int var1 = (int) this.player.posX;

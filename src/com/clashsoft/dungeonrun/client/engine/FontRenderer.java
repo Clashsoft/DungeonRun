@@ -267,7 +267,6 @@ public class FontRenderer
 	
 	public float drawString(float x, float y, String text, int color, boolean shadow)
 	{
-		this.reset();
 		this.setColor_I(color);
 		this.globalShadow = shadow;
 		
@@ -344,10 +343,10 @@ public class FontRenderer
 			
 			if (this.obfuscated)
 			{
-				int k = this.getCharWidth(c);
-				if (k != 3)
+				if (c != ' ')
 				{
-					int j = this.fontRandom.nextInt(this.chars.size());
+					int k = this.getCharWidth(c);
+					int j = this.fontRandom.nextInt(64);
 					int l = 0;
 					for (Character character : this.chars)
 					{
@@ -368,7 +367,7 @@ public class FontRenderer
 			x += this.drawChar(x, y, c) + 1;
 		}
 		x--;
-		
+		this.reset();
 		return x;
 	}
 	
