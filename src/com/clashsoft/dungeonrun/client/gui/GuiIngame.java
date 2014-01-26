@@ -1,9 +1,5 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -13,16 +9,16 @@ import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.util.DimensionHelper.Pos3;
+import com.clashsoft.dungeonrun.world.BlockInWorld;
+import com.clashsoft.dungeonrun.world.World;
 
 public class GuiIngame extends GuiScreen
 {
-	public EntityPlayer					player;
 	public RenderBlocks					renderBlocks;
 	
 	public int							mouseBlockX, mouseBlockY, mouseBlockZ;
 	
-	private Map<Pos3<Float>, Entity>	entityMap	= new HashMap<Pos3<Float>, Entity>();
+	public int							displayMode = 1;
 	
 	private boolean						worldSaving	= false;
 	
@@ -34,53 +30,115 @@ public class GuiIngame extends GuiScreen
 	@Override
 	public void initGui() throws SlickException
 	{
-		this.renderBlocks = dr.renderEngine.blockRenderer;
+		this.renderBlocks = this.dr.renderEngine.blockRenderer;
 	}
 	
 	@Override
-	public void drawScreen(int par1, int par2) throws SlickException
+	public void drawScreen(int width, int height) throws SlickException
 	{
 		GL11.glColor3f(1F, 1F, 1F);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		
-		if (player != null)
+		this.renderBlocks.width = width;
+		this.renderBlocks.height = height;
+		
+		if (this.player != null)
 		{
-			renderBlocks.width = par1;
-			renderBlocks.heigth = par2;
+			int mode = this.displayMode;
+			World world = this.player.worldObj;
+			float camX = (float) this.player.posX;
+			float camY = (float) this.player.posY;
+			float camZ = (float) this.player.posZ;
+			int posX = (int) camX;
+			int posY = (int) camY + 1;
+			int posZ = (int) camZ;
+			int maxX = RenderBlocks.BLOCKS_X;
+			int maxY = RenderBlocks.BLOCKS_Y;
+			int minX = -RenderBlocks.BLOCKS_X;
+			int minY = -RenderBlocks.BLOCKS_Y;
 			
-			for (int x = (int) (player.posX + RenderBlocks.BLOCKS_X); x > player.posX - RenderBlocks.BLOCKS_X; x--)
+			if (mode == 1) // Top view
 			{
-				for (int z = (int) (player.posZ + RenderBlocks.BLOCKS_Z); z > player.posZ - RenderBlocks.BLOCKS_Z - 4; z--)
+				for (int i = minX; i <= maxX; i++)
 				{
-					for (int y = 0; y < 64; y++)
+					for (int j = minY; j <= maxY; j++)
 					{
-						Entity e = entityMap.get(new Pos3<Float>((float) x, (float) y, (float) z));
-						if (e != null)
-							e.getRenderer().render(e, par1, par2);
-						
-						boolean hover = isMouseOverBlock(x, y, z);
-						if (player.worldObj.getBlock(x, y, z) != null && !player.worldObj.getBlock(x, y, z).isAir())
-						{
-							if (hover)
-							{
-								mouseBlockX = x;
-								mouseBlockY = y;
-								mouseBlockZ = z;
-							}
-							
-							if (renderBlocks.canSeeBlock(player.worldObj, x, y, z, player.posX, player.posY, player.posZ))
-								renderBlocks.renderBlock(player.worldObj.getBlock(x, y, z), x, y, z, player.posX, player.posY, player.posZ, hover);
-						}
+						int x = posX + i;
+						int y = posY + 0;
+						int z = posZ + j;
+						BlockInWorld block = world.getBlock(x, y, z);
+						this.renderBlocks.renderBlock(block, x, z, camX, camZ, mode);
 					}
 				}
 			}
+			else if (mode == 2)
+			{
+				for (int i = minX; i <= maxX; i++)
+				{
+					for (int j = minY; j <= maxY; j++)
+					{
+						int x = posX + i;
+						int y = posY + j;
+						int z = posZ + 0;
+						BlockInWorld block = world.getBlock(x, y, z);
+						this.renderBlocks.renderBlock(block, x, y, camX, camY, mode);
+					}
+				}
+			}
+			else if (mode == 3)
+			{
+				for (int i = minX; i <= maxX; i++)
+				{
+					for (int j = minY; j <= maxY; j++)
+					{
+						int x = posX + 0;
+						int y = posY + j;
+						int z = posZ + i;
+						BlockInWorld block = world.getBlock(x, y, z);
+						this.renderBlocks.renderBlock(block, z, y, camZ, camY, mode);
+					}
+				}
+			}
+			else if (mode == 4)
+			{
+				for (int i = minX; i <= maxX; i++)
+				{
+					for (int j = minY; j <= maxY; j++)
+					{
+						int x = posX - i;
+						int y = posY + j;
+						int z = posZ + 0;
+						BlockInWorld block = world.getBlock(x, y, z);
+						this.renderBlocks.renderBlock(block, x, y, camX, camY, mode);
+					}
+				}
+			}
+			else if (mode == 5)
+			{
+				for (int i = minX; i <= maxX; i++)
+				{
+					for (int j = minY; j <= maxY; j++)
+					{
+						int x = posX + 0;
+						int y = posY + j;
+						int z = posZ - i;
+						BlockInWorld block = world.getBlock(x, y, z);
+						this.renderBlocks.renderBlock(block, z, y, camZ, camY, mode);
+					}
+				}
+			}
+			
+			for (Entity entity : world.getEntitys())
+			{
+				entity.getRenderer().render(entity, width, height);
+			}
 		}
 		
-		if (worldSaving)
+		if (this.worldSaving)
 		{
 			String text = I18n.getString("world.saving");
-			int width = dr.fontRenderer.getStringWidth(text);
-			dr.fontRenderer.drawString(this.windowWidth - 20 - width, windowHeight - 20, text, 0xFFFFFF);
+			int w = this.dr.fontRenderer.getStringWidth(text);
+			this.dr.fontRenderer.drawString(width - 20 - w, height - 20, text, 0xFFFFFF);
 		}
 	}
 	
@@ -89,63 +147,48 @@ public class GuiIngame extends GuiScreen
 	{
 	}
 	
-	private boolean isMouseOverBlock(int x, int y, int z)
-	{
-		float offsetX = renderBlocks.getOffset(x, player.posX);
-		float offsetY = renderBlocks.getOffset(z, player.posZ) + 1.5F;
-		float offsetZ = renderBlocks.getOffset(y, player.posY);
-		
-		float posX = renderBlocks.getRenderPosX(renderBlocks.getMiddleBlockX(), offsetX);
-		float posY = renderBlocks.getRenderPosY(renderBlocks.getMiddleBlockY(), offsetY, offsetZ);
-		
-		return isMouseInRegion(posX + 8F, posY, 16F, 16F) && renderBlocks.canSeeBlock(player.worldObj, x, y, z, player.posX, player.posY, player.posZ);
-	}
-	
 	@Override
 	public void updateScreen() throws SlickException
 	{
 		Input input = this.dr.getInput();
 		
-		try
-		{
-			entityMap.clear();
-			for (Entity e : this.dr.getWorld().getEntitys())
-			{
-				e.updateEntity();
-				float x = (int) Math.floor(e.posX);
-				float y = (int) Math.floor(e.posY);
-				float z = (int) Math.floor(e.posZ);
-				entityMap.put(new Pos3<Float>(x, y, z), e);
-				entityMap.put(new Pos3<Float>(x + 1F, y, z), e);
-				// entityMap.put(new Pos3<Float>(x - 1F, y, z), e);
-				entityMap.put(new Pos3<Float>(x, y, z - 1), e);
-			}
-		}
-		catch (ConcurrentModificationException ex)
-		{
-		}
-		
 		if (this.player != null)
 		{
 			if (input.isKeyDown(Input.KEY_W))
+			{
 				this.player.walk(2);
+			}
 			if (input.isKeyDown(Input.KEY_D))
+			{
 				this.player.walk(1);
+			}
 			if (input.isKeyDown(Input.KEY_S))
+			{
 				this.player.walk(0);
+			}
 			if (input.isKeyDown(Input.KEY_A))
+			{
 				this.player.walk(3);
+			}
 			if (input.isKeyDown(Input.KEY_SPACE))
+			{
 				this.player.jump();
+			}
 			this.player.isSprinting = input.isKeyDown(Input.KEY_LSHIFT);
 			
 			if (input.isMousePressed(0))
-				this.player.worldObj.setBlock(0, 0, mouseBlockX, mouseBlockY, mouseBlockZ);
+			{
+				this.player.worldObj.setBlock(0, 0, this.mouseBlockX, this.mouseBlockY, this.mouseBlockZ);
+			}
 			if (input.isMousePressed(1))
-				this.player.worldObj.setBlock(Block.stone.blockID, 0, mouseBlockX, mouseBlockY, mouseBlockZ);
+			{
+				this.player.worldObj.setBlock(Block.stone.blockID, 0, this.mouseBlockX, this.mouseBlockY, this.mouseBlockZ);
+			}
 		}
 		if (input.isKeyDown(Input.KEY_ESCAPE))
-			dr.pauseGame();
+		{
+			this.dr.pauseGame();
+		}
 	}
 	
 	@Override

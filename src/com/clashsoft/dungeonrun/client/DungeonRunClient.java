@@ -86,7 +86,7 @@ public class DungeonRunClient extends DungeonRun implements IServer
 			this.renderEngine = new RenderEngine(this);
 			this.soundEngine = new SoundEngine(this);
 			this.fontRenderer = new FontRenderer(this, "font1");
-			this.i18n = I18n.instance = new I18n();
+			this.i18n = new I18n();
 			
 			this.gameSettings.updateGame();
 			
@@ -218,7 +218,15 @@ public class DungeonRunClient extends DungeonRun implements IServer
 		this.displayGuiScreen(new GuiInfo("world.loading"));
 		super.startGame();
 		
-		this.thePlayer = this.getWorld().getPlayer(this.username);
+		this.thePlayer = this.theWorld.getPlayer(this.username);
+		
+		if (this.thePlayer == null)
+		{
+			this.thePlayer = new EntityPlayer(this.theWorld);
+			this.thePlayer.setLocation(0D, 128D, 0D);
+			this.theWorld.spawnEntityInWorld(this.thePlayer);
+		}
+		
 		this.theIngameGui = new GuiIngame(this.thePlayer);
 		this.displayGuiScreen(this.theIngameGui);
 	}

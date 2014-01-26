@@ -53,8 +53,8 @@ public abstract class GuiListScreen extends GuiScreen
 		
 		if (input.isKeyPressed(Input.KEY_ENTER))
 		{
-			this.dr.soundEngine.playSoundEffect("resources/audio/click.wav", SoundEngine.DEFAULT_LOCATION);
 			this.onEntryUsed(selection);
+			this.dr.soundEngine.playSoundEffect("resources/audio/click.wav", SoundEngine.DEFAULT_LOCATION);
 		}
 	}
 	

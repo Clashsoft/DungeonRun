@@ -135,7 +135,7 @@ public abstract class GuiScreen
 		{
 			for (int j = 0; j < height / 8F; j++)
 			{
-				Block.brick.getBlockTextureFromSideAndMetadata(0, 0).draw(i * 16, j * 16);
+				Block.brick.getTexture(0, 0).draw(i * 16, j * 16);
 			}
 		}
 		GL11.glScalef(0.5F, 0.5F, 1F);

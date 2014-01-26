@@ -12,6 +12,11 @@ public class I18n
 	
 	public Map<String, StringTranslate>	languages	= new HashMap<String, StringTranslate>();
 	
+	public I18n()
+	{
+		instance = this;
+	}
+	
 	public static String getString(String key)
 	{
 		return instance.translate(null, key);

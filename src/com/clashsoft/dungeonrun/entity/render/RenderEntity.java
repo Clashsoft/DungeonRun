@@ -7,5 +7,5 @@ import com.clashsoft.dungeonrun.entity.Entity;
 
 public abstract class RenderEntity<T extends Entity>
 {
-	public abstract Rectangle render(T entity, int width, int heigth) throws SlickException;
+	public abstract Rectangle render(T entity, int width, int height) throws SlickException;
 }
