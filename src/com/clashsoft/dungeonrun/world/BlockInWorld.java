@@ -7,23 +7,24 @@ import com.clashsoft.dungeonrun.block.Block;
 
 public class BlockInWorld
 {
-	public static BlockInWorld	AIR	= new BlockInWorld(null, 0, 0);
+	public static BlockInWorld	AIR	= new BlockInWorld(null, 0, 0, 1F);
 	
 	public World				world;
 	public int					blockID;
 	public int					metadata;
+	public float lightValue;
 	public int					x, y, z;
 	
-	public BlockInWorld(World w, int id, int metadata)
+	public BlockInWorld(World w, int id, int metadata, float lightValue)
 	{
 		this.blockID = id;
 		this.metadata = metadata;
 		this.world = w;
 	}
 	
-	public BlockInWorld(World w, Block block, int metadata)
+	public BlockInWorld(World w, Block block, int metadata, float lightValue)
 	{
-		this(w, block.blockID, metadata);
+		this(w, block.blockID, metadata, lightValue);
 	}
 	
 	public Block getBlock()
@@ -36,6 +37,11 @@ public class BlockInWorld
 		return this.metadata;
 	}
 	
+	public float getLightValue()
+	{
+		return this.lightValue;
+	}
+	
 	public boolean isAir()
 	{
 		return this.blockID == 0 || this == AIR;
@@ -44,18 +50,5 @@ public class BlockInWorld
 	public Image getBlockTexture(int side) throws SlickException
 	{
 		return this.getBlock().getBlockTextureFromSideAndMetadata(side, this.metadata);
-	}
-	
-	public float getLightValue()
-	{
-		float f = this.getBlock() != null ? this.getBlock().getLightValue() : 0.1F;
-		float f1 = this.world.getLightValue(this.x + 1, this.y, this.z);
-		float f2 = this.world.getLightValue(this.x - 1, this.y, this.z);
-		float f3 = this.world.getLightValue(this.x, this.y + 1, this.z);
-		float f4 = this.world.getLightValue(this.x, this.y - 1, this.z);
-		float f5 = this.world.getLightValue(this.x, this.y, this.z + 1);
-		float f6 = this.world.getLightValue(this.x, this.y, this.z - 1);
-		float f7 = (f1 + f2 + f3 + f4 + f5 + f6) / 6F;
-		return f7;
 	}
 }

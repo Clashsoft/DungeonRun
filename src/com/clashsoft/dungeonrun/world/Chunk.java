@@ -6,6 +6,11 @@ import com.clashsoft.nbt.util.INBTSaveable;
 
 public class Chunk implements INBTSaveable
 {
+	public static int NO_UPDATE = 0;
+	public static int UPDATE_NEIGHBORS = 1;
+	public static int UPDATE_LIGHT = 2;
+	public static int UPDATE = UPDATE_NEIGHBORS | UPDATE_LIGHT;
+	
 	public final World	world;
 	
 	public int			chunkX;
@@ -26,42 +31,57 @@ public class Chunk implements INBTSaveable
 		this.chunkY = y;
 		this.chunkZ = z;
 		
-		int length = index(15, 15, 15) + 1;
+		this.blockIDs = new int[4096];
+		this.metadataValues = new int[4096];
 		
-		this.blockIDs = new int[length];
-		this.metadataValues = new int[length];
-		
-		this.lightValues = new float[length];
+		this.lightValues = new float[4096];
 		
 		this.dummy = true;
 	}
 	
-	protected void initializeLightValues(boolean flag)
+	protected void initializeLightValues()
 	{
-		for (int i = 0; i < 16; i++)
+		for (int x = 0; x < 16; x++)
 		{
-			for (int j = 0; j < 64; j++)
+			for (int y = 0; y < 16; y++)
 			{
-				for (int k = 0; k < 16; k++)
+				for (int z = 0; z < 16; z++)
 				{
-					BlockInWorld block = this.world.getBlock(this.chunkPosToWorldPosX(i), j, this.chunkPosToWorldPosZ(k));
-					this.lightValues[index(i, j, k)] = block != null ? block.getLightValue() : 0.1F;
+					BlockInWorld block = this.getBlock(x, y, z);
+					this.lightValues[index(x, y, z)] = block != null ? block.getLightValue() : 0.1F;
 				}
 			}
 		}
 	}
 	
-	public void setBlock(int blockId, int metadata, int x, int y, int z, int flags)
+	/**
+	 * Sets the block at the position.<p>
+	 * Flags:<p>
+	 * 1: update neighbor blocks<p>
+	 * 2: update light values<p>
+	 * 
+	 * @param blockID
+	 *            the block id
+	 * @param metadata
+	 *            the block metadata
+	 * @param x
+	 *            x coord
+	 * @param y
+	 *            y coord
+	 * @param z
+	 *            z coord
+	 * @param flags
+	 *            placement args
+	 */
+	public void setBlock(int blockID, int metadata, int x, int y, int z, int flags)
 	{
-		x &= 15;
-		z &= 15;
 		int index = index(x, y, z);
 		
-		this.blockIDs[index] = blockId;
+		this.blockIDs[index] = blockID;
 		this.metadataValues[index] = metadata;
 		
 		float f = this.getLightValue(x, y, z);
-		if ((flags & 1) != 0)
+		if ((flags & 2) != 0)
 		{
 			this.updateLightValues(x, y, z, f);
 		}
@@ -70,40 +90,54 @@ public class Chunk implements INBTSaveable
 	public void updateLightValues(int x, int y, int z, float f)
 	{
 		int var1 = 8;
-		for (int i = x - 8; i <= x + 8; i++)
+		for (int i = x - 12; i <= x + 12; i++)
 		{
-			for (int j = y - var1 >= 0 ? y - var1 : 0; j <= (y + var1 < 64 ? y + var1 : 63); j++)
+			for (int j = y - 12; j <= y + 12; j++)
 			{
-				for (int k = z - 8; k <= z + 8; k++)
+				for (int k = z - 12; k <= z + 12; k++)
 				{
-					int x1 = i + this.chunkX * 16 - 512;
-					int z1 = k + this.chunkZ * 16 - 512;
+					int x1 = this.worldPosX(i);
+					int y1 = this.worldPosY(j);
+					int z1 = this.worldPosZ(k);
 					
 					int offX = Math.abs(i - x);
 					int offY = Math.abs(j - y);
 					int offZ = Math.abs(k - z);
 					int offset = offX + offY + offZ;
-					float f1 = offset * 0.1F;
-					float f2 = f - f1 * 0.1F;
-					float f3 = Math.max(this.world.getLightValue(x1, j, z1), f2);
-					this.world.setLightValue(x1, j, z1, f3);
+					
+					float f0 = this.world.getLightValue(x1, y1, z1);
+					float f1 = offset / 16F;
+					float f2 = f - f1;
+					float f3 = Math.max(f0, f2);
+					this.world.setLightValue(x1, y1, z1, f3);
 				}
 			}
 		}
 	}
 	
+	public int worldPosX(int x)
+	{
+		return this.chunkX << 4 | x;
+	}
+	
+	public int worldPosY(int y)
+	{
+		return this.chunkY << 4 | y;
+	}
+	
+	public int worldPosZ(int z)
+	{
+		return this.chunkZ << 4 | z;
+	}
+	
 	public BlockInWorld getBlock(int x, int y, int z)
 	{
-		x &= 15;
-		z &= 15;
 		int index = index(x, y, z);
-		return new BlockInWorld(this.world, this.getBlockID(index), this.getBlockMetadata(index));
+		return new BlockInWorld(this.world, this.getBlockID(index), this.getBlockMetadata(index), this.getLightValue(index));
 	}
 	
 	public int getBlockID(int x, int y, int z)
 	{
-		x &= 15;
-		z &= 15;
 		return this.getBlockID(index(x, y, z));
 	}
 	
@@ -122,8 +156,6 @@ public class Chunk implements INBTSaveable
 	
 	public int getBlockMetadata(int x, int y, int z)
 	{
-		x &= 15;
-		z &= 15;
 		return this.getBlockMetadata(index(x, y, z));
 	}
 	
@@ -134,32 +166,22 @@ public class Chunk implements INBTSaveable
 	
 	public float getLightValue(int x, int y, int z)
 	{
-		x &= 15;
-		z &= 15;
-		float f = this.lightValues[index(x, y, z)];
-		return f;
+		return this.getLightValue(index(x, y, z));
+	}
+	
+	protected float getLightValue(int index)
+	{
+		return 1F; //this.lightValues[index];
 	}
 	
 	public void setLightValue(int x, int y, int z, float f)
 	{
-		x &= 15;
-		z &= 15;
 		this.lightValues[index(x, y, z)] = f;
 	}
 	
 	protected static int index(int x, int y, int z)
 	{
 		return x << 0 | y << 4 | z << 8;
-	}
-	
-	protected int chunkPosToWorldPosX(int x)
-	{
-		return this.chunkX * 16 + x;
-	}
-	
-	protected int chunkPosToWorldPosZ(int z)
-	{
-		return this.chunkZ * 16 + z;
 	}
 	
 	@Override

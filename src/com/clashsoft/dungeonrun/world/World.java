@@ -76,6 +76,7 @@ public class World
 		int z = pos.getZ();
 		
 		Chunk c = new Chunk(this, x, y, z);
+		WorldGenerator.generateChunk(c);
 		this.setChunk(pos, c);
 		return c;
 	}
