@@ -1,6 +1,5 @@
 package com.clashsoft.dungeonrun.world;
 
-import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.nbt.NBTTagArray;
 import com.clashsoft.nbt.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
@@ -10,60 +9,31 @@ public class Chunk implements INBTSaveable
 	public final World	world;
 	
 	public int			chunkX;
+	public int			chunkY;
 	public int			chunkZ;
 	
 	private int[]		blockIDs;
 	private int[]		metadataValues;
 	
 	private float[]		lightValues;
-	private int[]		maxY;
 	
 	public boolean		dummy;
 	
-	public Chunk(World w, int x, int y)
+	public Chunk(World w, int x, int y, int z)
 	{
 		this.world = w;
 		this.chunkX = x;
-		this.chunkZ = y;
+		this.chunkY = y;
+		this.chunkZ = z;
 		
-		int length = index(15, 63, 15) + 1;
+		int length = index(15, 15, 15) + 1;
 		
 		this.blockIDs = new int[length];
 		this.metadataValues = new int[length];
 		
 		this.lightValues = new float[length];
-		this.maxY = new int[16 * 16];
 		
 		this.dummy = true;
-	}
-	
-	protected Chunk generate()
-	{
-		for (int x = 0; x < 16; ++x)
-		{
-			for (int y = 0; y < 32; ++y)
-			{
-				for (int z = 0; z < 16; ++z)
-				{
-					int blockID = 0;
-					if (y == 31)
-					{
-						blockID = Block.grass.blockID;
-					}
-					else if (y < 31 && y >= 27)
-					{
-						blockID = Block.dirt.blockID;
-					}
-					else if (y < 27)
-					{
-						blockID = Block.stone.blockID;
-					}
-					this.setBlock(blockID, 0, x, y, z, 0);
-				}
-			}
-		}
-		this.dummy = false;
-		return this;
 	}
 	
 	protected void initializeLightValues(boolean flag)
@@ -167,27 +137,7 @@ public class Chunk implements INBTSaveable
 		x &= 15;
 		z &= 15;
 		float f = this.lightValues[index(x, y, z)];
-		return this.canBlockSeeSky(x, y, z) ? 1F : f;
-	}
-	
-	private boolean canBlockSeeSky(int x, int y, int z)
-	{
-		x &= 15;
-		z &= 15;
-		int index = x << 4 | z;
-		if (this.maxY[index] == y)
-		{
-			return true;
-		}
-		for (int i = y; i < 64; i++)
-		{
-			if (this.getBlock(x, i, z) != null && !this.getBlock(x, i, z).isAir())
-			{
-				return false;
-			}
-		}
-		this.maxY[index] = y;
-		return true;
+		return f;
 	}
 	
 	public void setLightValue(int x, int y, int z, float f)
@@ -199,7 +149,7 @@ public class Chunk implements INBTSaveable
 	
 	protected static int index(int x, int y, int z)
 	{
-		return (x << 6 | y) << 4 | z;
+		return x << 0 | y << 4 | z << 8;
 	}
 	
 	protected int chunkPosToWorldPosX(int x)

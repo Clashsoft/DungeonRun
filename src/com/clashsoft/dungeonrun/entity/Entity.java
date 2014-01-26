@@ -16,6 +16,8 @@ public abstract class Entity implements INBTSaveable
 	
 	public final World	worldObj;
 	
+	private boolean		isDead;
+	
 	public double		posX			= 0.5;
 	public double		posY			= 32;
 	public double		posZ			= 0.5;
@@ -93,7 +95,12 @@ public abstract class Entity implements INBTSaveable
 	
 	public void setDead()
 	{
-		this.worldObj.removeEntity(this.entityId);
+		this.isDead = true;
+	}
+	
+	public boolean isDead()
+	{
+		return this.isDead;
 	}
 	
 	public void updateEntity()
@@ -222,47 +229,47 @@ public abstract class Entity implements INBTSaveable
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setString("EntityType", EntityList.getNameFromClass(this.getClass()));
-		nbt.setInteger("EntityID", this.entityId);
+		nbt.setString("type", EntityList.getNameFromClass(this.getClass()));
+		nbt.setInteger("id", this.entityId);
 		
-		NBTTagCompound pos = new NBTTagCompound("Position");
-		pos.setDouble("X", this.posX);
-		pos.setDouble("Y", this.posY);
-		pos.setDouble("Z", this.posZ);
+		NBTTagCompound pos = new NBTTagCompound("pos");
+		pos.setDouble("x", this.posX);
+		pos.setDouble("y", this.posY);
+		pos.setDouble("z", this.posZ);
 		nbt.setTagCompound(pos);
 		
-		NBTTagCompound momentum = new NBTTagCompound("Momentum");
-		momentum.setDouble("X", this.velocityX);
-		momentum.setDouble("Y", this.velocityY);
-		momentum.setDouble("Z", this.velocityZ);
+		NBTTagCompound momentum = new NBTTagCompound("velocity");
+		momentum.setDouble("x", this.velocityX);
+		momentum.setDouble("y", this.velocityY);
+		momentum.setDouble("z", this.velocityZ);
 		nbt.setTagCompound(momentum);
 		
-		nbt.setByte("Rotation", this.rot);
-		nbt.setInteger("AirTime", this.airTime);
+		nbt.setByte("rot", this.rot);
+		nbt.setInteger("airtime", this.airTime);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		this.entityId = nbt.getInteger("EntityID");
+		this.entityId = nbt.getInteger("id");
 		
-		NBTTagCompound pos = nbt.getTagCompound("Position");
+		NBTTagCompound pos = nbt.getTagCompound("pos");
 		if (pos != null)
 		{
-			this.posX = pos.getDouble("X");
-			this.posY = pos.getDouble("Y");
-			this.posZ = pos.getDouble("Z");
+			this.posX = pos.getDouble("x");
+			this.posY = pos.getDouble("y");
+			this.posZ = pos.getDouble("z");
 		}
 		
-		NBTTagCompound momentum = nbt.getTagCompound("Momentum");
+		NBTTagCompound momentum = nbt.getTagCompound("velocity");
 		if (momentum != null)
 		{
-			this.velocityX = momentum.getDouble("X");
-			this.velocityY = momentum.getDouble("Y");
-			this.velocityZ = momentum.getDouble("Z");
+			this.velocityX = momentum.getDouble("x");
+			this.velocityY = momentum.getDouble("y");
+			this.velocityZ = momentum.getDouble("z");
 		}
 		
-		this.rot = nbt.getByte("Rotation");
-		this.airTime = nbt.getInteger("AirTime");
+		this.rot = nbt.getByte("rot");
+		this.airTime = nbt.getInteger("airtime");
 	}
 }

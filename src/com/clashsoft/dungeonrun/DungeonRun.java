@@ -10,6 +10,10 @@ import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.server.IServer;
 import com.clashsoft.dungeonrun.world.World;
 
+/**
+ * Common DungeonRun game container.
+ *
+ */
 public abstract class DungeonRun extends BasicGame implements IServer
 {
 	public static final String		VERSION	= "Alpha 0.1-PRE";

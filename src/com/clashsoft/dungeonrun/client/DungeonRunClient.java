@@ -96,11 +96,11 @@ public class DungeonRunClient extends DungeonRun implements IServer
 		}
 		catch (Exception ex)
 		{
-			this.handleException(ex, "Initializing Game");
+			this.handleException(ex, "Initializing");
 		}
 		catch (Error error)
 		{
-			this.handleError(error, "Initializing Game");
+			this.handleError(error, "Initializing");
 		}
 	}
 	
@@ -114,11 +114,11 @@ public class DungeonRunClient extends DungeonRun implements IServer
 		}
 		catch (Exception ex)
 		{
-			this.handleException(ex, "Client Shutdown");
+			this.handleException(ex, "World Shutdown");
 		}
 		catch (Error error)
 		{
-			this.handleError(error, "Server Shutdown");
+			this.handleError(error, "World Shutdown");
 		}
 	}
 	

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.nbt.NBTTagCompound;
 
 public class EntityList
 {
@@ -56,5 +57,12 @@ public class EntityList
 									// Entity(World) constructor
 		}
 		return null;
+	}
+	
+	public static Entity constructFromNBT(NBTTagCompound nbt, World world)
+	{
+		String entityType = nbt.getString("type");
+		Entity entity = EntityList.constructFromType(entityType, world);
+		return entity;
 	}
 }
