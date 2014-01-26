@@ -1,8 +1,6 @@
 package com.clashsoft.dungeonrun.client.engine;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
@@ -18,6 +16,7 @@ public class FontRenderer
 	public static final int				HEIGHT		= 9;
 	
 	protected Map<Character, String>	charPaths	= new HashMap();
+	protected List<Character>			chars		= new ArrayList();
 	protected Map<Character, Image>		charMap		= new HashMap<Character, Image>();
 	
 	/**
@@ -25,8 +24,10 @@ public class FontRenderer
 	 */
 	public DungeonRunClient				dr;
 	
+	public Graphics						graphics;
+	public Random						fontRandom;
+	
 	public String						fontName;
-	public boolean						globalUnicode;
 	
 	/**
 	 * Color table for predefined color access via §[0-9A-F]
@@ -45,18 +46,25 @@ public class FontRenderer
 	public float						red			= 1F, green = 1F, blue = 1F, alpha = 1F;
 	
 	/**
+	 * Determines if this FontRenderer uses unicode font rendering
+	 */
+	public boolean						globalUnicode;
+	
+	/**
 	 * Determines if the currently rendered string is rendered with a shadow
 	 */
-	public boolean						shadow		= false;
+	public boolean						globalShadow		= false;
 	
 	/**
 	 * Format flags.
 	 */
-	public boolean						italic, bold, strikeThrough, underline, unicode;
+	public boolean						italic, bold, strikeThrough, underline, shadow, unicode, obfuscated;
 	
 	public FontRenderer(DungeonRunClient dr, String fontName) throws SlickException
 	{
 		this.dr = dr;
+		this.graphics = dr.getGraphics();
+		this.fontRandom = new Random(fontName.hashCode());
 		this.fontName = fontName;
 		
 		this.loadColorTable();
@@ -132,13 +140,15 @@ public class FontRenderer
 				c = key.charAt(0);
 			}
 			
-			this.charPaths.put(Character.valueOf(c), path);
+			Character character = Character.valueOf(c);
+			this.chars.add(character);
+			this.charPaths.put(character, path);
 		}
 	}
 	
 	public void loadChars() throws SlickException
 	{
-		for (Character character : this.charPaths.keySet())
+		for (Character character : this.chars)
 		{
 			String path = this.charPaths.get(character);
 			String charPath = "resources/text/" + this.fontName + "/" + path;
@@ -157,10 +167,11 @@ public class FontRenderer
 	
 	public void setColor_I(int color)
 	{
-		this.red = (color >> 16 & 255) / 255F;
-		this.green = (color >> 8 & 255) / 255F;
-		this.blue = (color & 255) / 255F;
-		this.updateColor();
+		float a = (color >> 24 & 255) / 255F;
+		float r = (color >> 16 & 255) / 255F;
+		float g = (color >> 8 & 255) / 255F;
+		float b = (color & 255) / 255F;
+		this.setColor_F(r, g, b, a == 0F ? 1F : a);
 	}
 	
 	public void setColor_F(float r, float g, float b)
@@ -173,8 +184,7 @@ public class FontRenderer
 		this.red = r;
 		this.green = g;
 		this.blue = b;
-		this.alpha = 1F;
-		this.updateColor();
+		this.alpha = a;
 	}
 	
 	public void setColor_S(String color)
@@ -223,19 +233,15 @@ public class FontRenderer
 		}
 	}
 	
-	public void updateColor()
+	public void reset()
 	{
-		// GL11.glColor4f(red, green, blue, alpha);
-	}
-	
-	public void resetStyles()
-	{
-		this.shadow = false;
 		this.italic = false;
 		this.bold = false;
 		this.strikeThrough = false;
 		this.underline = false;
+		this.shadow = false;
 		this.unicode = false;
+		this.obfuscated = false;
 		this.setColor_F(1F, 1F, 1F, 1F);
 	}
 	
@@ -261,9 +267,9 @@ public class FontRenderer
 	
 	public float drawString(float x, float y, String text, int color, boolean shadow)
 	{
-		this.resetStyles();
+		this.reset();
 		this.setColor_I(color);
-		this.shadow = shadow;
+		this.globalShadow = shadow;
 		
 		text = this.replaceLocalizations(text);
 		
@@ -322,13 +328,40 @@ public class FontRenderer
 					{
 						this.unicode = !this.unicode;
 					}
+					else if (c1 == 'o')
+					{
+						this.obfuscated = !this.obfuscated;
+					}
 					else if (c1 == 'r')
 					{
-						this.resetStyles();
+						this.reset();
 					}
 					
 					i++;
 					continue;
+				}
+			}
+			
+			if (this.obfuscated)
+			{
+				int k = this.getCharWidth(c);
+				if (k != 3)
+				{
+					int j = this.fontRandom.nextInt(this.chars.size());
+					int l = 0;
+					for (Character character : this.chars)
+					{
+						char c1 = character.charValue();
+						if (this.getCharWidth(c1) == k)
+						{
+							l++;
+						}
+						if (l == j)
+						{
+							c = c1;
+							break;
+						}
+					}
 				}
 			}
 			
@@ -346,7 +379,7 @@ public class FontRenderer
 			return text;
 		}
 		
-		String text1 = new String(text);
+		String text1 = text;
 		for (int i = 0; i < text1.length(); i++)
 		{
 			char c = text1.charAt(i);
@@ -376,7 +409,7 @@ public class FontRenderer
 	
 	public float drawChar(float x, float y, char c)
 	{
-		if (this.shadow)
+		if (this.globalShadow || this.shadow)
 		{
 			this.drawChar(x + 1, y + 1, c, this.red / 4F, this.green / 4F, this.blue / 4F, this.alpha);
 		}
@@ -411,15 +444,15 @@ public class FontRenderer
 			
 			if (this.strikeThrough || this.underline)
 			{
-				this.dr.renderEngine.graphics.setColor(new Color(red, green, blue, alpha));
+				this.graphics.setColor(new Color(red, green, blue, alpha));
 				
 				if (this.strikeThrough)
 				{
-					this.dr.renderEngine.graphics.drawLine(x, y + 3, x + width, y + 3);
+					this.graphics.drawLine(x, y + 3, x + width, y + 3);
 				}
 				if (this.underline)
 				{
-					this.dr.renderEngine.graphics.drawLine(x, y + 8, x + width, y + 8);
+					this.graphics.drawLine(x, y + 8, x + width, y + 8);
 				}
 			}
 			

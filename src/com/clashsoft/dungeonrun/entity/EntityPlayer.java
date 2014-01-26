@@ -24,7 +24,7 @@ public class EntityPlayer extends EntityLiving
 	{
 		super(world);
 		this.inventory = new InventoryPlayer(this);
-		this.renderer = new RenderPlayer();
+		this.renderer = new RenderPlayer(this);
 	}
 	
 	@Override

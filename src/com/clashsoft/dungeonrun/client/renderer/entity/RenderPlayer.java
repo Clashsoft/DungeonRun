@@ -8,15 +8,17 @@ import com.clashsoft.dungeonrun.entity.EntityPlayer;
 
 public class RenderPlayer extends Render
 {
-	public EntityPlayer	player;
+	public final EntityPlayer	player;
 	
-	SpriteSheet			textures;
-	Image[]				standing	= new Image[4];
-	Animation[]			walking		= new Animation[4];
+	private SpriteSheet		textures;
+	private Image[]			standing	= new Image[4];
+	private Animation[]		walking		= new Animation[4];
 	
-	public RenderPlayer() throws SlickException
+	public RenderPlayer(EntityPlayer player) throws SlickException
 	{
-		this.textures = new SpriteSheet(new Image(this.player.getTexture()), 12, 24);
+		this.player = player;
+		
+		this.textures = new SpriteSheet(new Image(player.getTexture()), 12, 24);
 		for (int i = 0; i < 4; i++)
 		{
 			this.walking[i] = new Animation(new Image[] { this.textures.getSprite(1, i), this.textures.getSprite(2, i) }, 200, true);
