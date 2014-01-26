@@ -3,20 +3,20 @@ package com.clashsoft.dungeonrun.client.engine;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 
 public class RenderEngine
 {
-	public DungeonRunServer	dr;
+	public DungeonRunClient	dr;
 	
 	public Graphics		graphics;
 	
 	public RenderBlocks	blockRenderer;
 	public RenderItems	itemRenderer;
 	
-	public RenderEngine(DungeonRunServer dungeonRunServer)
+	public RenderEngine(DungeonRunClient dungeonRun)
 	{
-		this.dr = dungeonRunServer;
+		this.dr = dungeonRun;
 		blockRenderer = new RenderBlocks();
 	}
 	

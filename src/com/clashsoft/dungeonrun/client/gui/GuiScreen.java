@@ -9,8 +9,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
+import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
 
@@ -18,7 +19,8 @@ public abstract class GuiScreen
 {
 	public static final Color	colorAlpha	= new Color(0F, 0F, 0F, 0.5F);
 	
-	protected DungeonRun		dr;
+	protected DungeonRunClient	dr;
+	protected EntityPlayer		player;
 	
 	protected Input				input;
 	
@@ -29,10 +31,10 @@ public abstract class GuiScreen
 	
 	protected ScaledResolution	scaledResolution;
 	
-	public final void init(DungeonRun game) throws SlickException
+	public final void init(DungeonRunClient game) throws SlickException
 	{
 		this.dr = game;
-		this.input = DungeonRun.getInput();
+		this.input = this.dr.getInput();
 		
 		this.scaledResolution = new ScaledResolution(game.gameSettings, windowWidth, windowHeight);
 		
@@ -45,7 +47,7 @@ public abstract class GuiScreen
 		{
 			this.windowWidth = width;
 			this.windowHeight = height;
-			this.init(dr);
+			this.init(this.dr);
 		}
 		
 		GL11.glPushMatrix();
@@ -61,16 +63,16 @@ public abstract class GuiScreen
 				button.render();
 		}
 		
-		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7r\u00a7S %s (%d FPS)", DungeonRunServer.VERSION, dr.theGameContainer.getFPS()));
+		dr.fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7r\u00a7S %s (%d FPS)", DungeonRunServer.VERSION, dr.getFPS()));
 		if (dr.gameSettings.debugMode)
 		{
 			int var = 5;
-			if (dr.thePlayer != null)
+			if (player != null)
 			{
-				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerPos: (%.2f;%.2f;%.2f)", dr.thePlayer.posX, dr.thePlayer.posY, dr.thePlayer.posZ));
-				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerRot: %d", dr.thePlayer.rot));
-				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", dr.thePlayer.velocityX, dr.thePlayer.velocityY, dr.thePlayer.velocityZ));
-				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", dr.theWorld.worldInfo.getName()));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerPos: (%.2f;%.2f;%.2f)", player.posX, player.posY, player.posZ));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerRot: %d", player.rot));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", player.velocityX, player.velocityY, player.velocityZ));
+				dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", dr.getWorld().worldInfo.getName()));
 			}
 			
 			if (dr.theIngameGui != null)
@@ -91,7 +93,7 @@ public abstract class GuiScreen
 		GL11.glPopMatrix();
 	}
 	
-	public final void update(DungeonRunServer game) throws SlickException
+	public final void update(DungeonRunClient game) throws SlickException
 	{
 		this.updateScreen();
 	}
@@ -141,10 +143,10 @@ public abstract class GuiScreen
 	
 	public void drawDefaultBackground(int width, int height) throws SlickException
 	{
-		if (this.dr.hasGameStarted)
+		if (this.dr.isGameRunning())
 		{
-			this.dr.theGameContainer.getGraphics().setColor(colorAlpha);
-			this.dr.theGameContainer.getGraphics().fillRect(0, 0, width, height);
+			this.dr.getGraphics().setColor(colorAlpha);
+			this.dr.getGraphics().fillRect(0, 0, width, height);
 		}
 		else
 			this.drawBricks(width, height);

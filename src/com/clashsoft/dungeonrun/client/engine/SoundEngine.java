@@ -7,7 +7,7 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 
 public class SoundEngine
 {
@@ -27,12 +27,12 @@ public class SoundEngine
 	
 	public static final SoundLocation	DEFAULT_LOCATION	= new SoundLocation(0, 0, 0);
 	
-	public final DungeonRun				dr;
+	public final DungeonRunClient				dr;
 	
 	private Map<String, Sound>			sounds				= new HashMap<String, Sound>();
 	private Map<String, Music>			musics				= new HashMap<String, Music>();
 	
-	public SoundEngine(DungeonRun dr)
+	public SoundEngine(DungeonRunClient dr)
 	{
 		this.dr = dr;
 	}

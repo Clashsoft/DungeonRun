@@ -24,10 +24,10 @@ public class GuiPauseMenu extends GuiListScreen
 	public void onEntryUsed(int i) throws SlickException
 	{
 		if (i == 0)
-			this.dr.unpauseGame();
+			this.dr.resumeGame();
 		else if (i == 1)
 			this.dr.displayGuiScreen(new GuiOptions(this));
 		else if (i == 2)
-			this.dr.stopWorld();
+			this.dr.stopGame();
 	}
 }

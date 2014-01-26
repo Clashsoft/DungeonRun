@@ -3,7 +3,7 @@ package com.clashsoft.dungeonrun.client.engine;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.util.StringUtils;
 
 public class I18n
@@ -60,7 +60,7 @@ public class I18n
 	protected StringTranslate getLanguage(String lang)
 	{
 		if (lang == null)
-			lang = DungeonRun.instance.gameSettings.language;
+			lang = DungeonRunClient.instance.gameSettings.language;
 		
 		StringTranslate st = languages.get(lang);
 		if (st == null)

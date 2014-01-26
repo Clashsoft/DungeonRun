@@ -1,89 +1,75 @@
 package com.clashsoft.dungeonrun;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
-import org.newdawn.slick.imageout.ImageOut;
 
-import com.clashsoft.dungeonrun.client.engine.FontRenderer;
-import com.clashsoft.dungeonrun.client.engine.I18n;
-import com.clashsoft.dungeonrun.client.engine.RenderEngine;
-import com.clashsoft.dungeonrun.client.engine.SoundEngine;
-import com.clashsoft.dungeonrun.client.gui.*;
-import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
+import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.server.IServer;
+import com.clashsoft.dungeonrun.world.World;
 
-public class DungeonRun extends DungeonRunServer
+public abstract class DungeonRun extends BasicGame implements IServer
 {
-	public static DungeonRun	instance;
+	public static final String		VERSION	= "Alpha 0.1-PRE";
 	
-	public String				username;
+	protected static DungeonRun instance;
 	
-	public RenderEngine			renderEngine;
-	public SoundEngine			soundEngine;
-	public FontRenderer			fontRenderer;
-	public I18n					i18n;
+	protected AppGameContainer			theGameContainer;
+	protected long						tick;
 	
-	public int					mousePosX	= 0;
-	public int					mousePosY	= 0;
-	
-	public GameSettings			gameSettings;
-	
-	public GuiScreen			currentGui;
-	public GuiIngame			theIngameGui;
-	public EntityPlayer			thePlayer;
-	
-	public boolean				isPaused;
-	
-	public DungeonRun(String username) throws SlickException
+	public DungeonRun()
 	{
-		super("Dungeon Run");
-		this.username = username;
+		super("DungeonRun" + VERSION);
 	}
 	
-	public static void main(String[] args) throws SlickException
+	public static DungeonRun getInstance()
 	{
-		String username = args[0];
-		
-		instance = new DungeonRun(username);
-		instance.theGameContainer = new AppGameContainer(instance);
-		instance.theGameContainer.setDisplayMode(800, 450, false);
-		instance.theGameContainer.setMinimumLogicUpdateInterval(50);
-		instance.theGameContainer.setMaximumLogicUpdateInterval(50);
-		instance.theGameContainer.setShowFPS(false);
-		instance.theGameContainer.setResizable(true);
-		instance.theGameContainer.start();
+		return instance;
 	}
+	
+	public static final void exit()
+	{
+		AppGameContainer container = instance == null ? null : instance.theGameContainer;
+		if (container != null)
+		{
+			container.destroy();
+		}
+		else
+		{
+			System.exit(0);
+		}
+	}
+	
+	/**
+	 * Initialize the main slick library and app container
+	 * @throws SlickException
+	 */
+	public abstract void initGame() throws SlickException;
+	
+	public abstract World getWorld();
 	
 	@Override
-	public void init(GameContainer arg0) throws SlickException
+	public void init(GameContainer gc) throws SlickException
 	{
 		try
 		{
-			Mouse.setClipMouseCoordinatesToWindow(true);
-			this.theGameContainer.getInput().addListener(this);
-			
-			this.gameSettings = new GameSettings();
-			
-			this.renderEngine = new RenderEngine(this);
-			this.soundEngine = new SoundEngine(this);
-			this.fontRenderer = new FontRenderer(this, "font1");
-			this.i18n = I18n.instance = new I18n();
-			
-			this.gameSettings.updateGame();
-			
-			this.displayGuiScreen(new GuiIntro());
-			
-			super.init(arg0);
+			for (Block b : Block.blocksList)
+			{
+				if (b != null)
+				{
+					b.registerIcons();
+				}
+			}
 		}
 		catch (Exception ex)
 		{
-			this.handleException(ex, "Initializing Game");
+			this.handleException(ex, "Initializing Server");
 		}
 		catch (Error error)
 		{
-			this.handleError(error, "Initializing Game");
+			this.handleError(error, "Initializing Server");
 		}
 	}
 	
@@ -92,12 +78,12 @@ public class DungeonRun extends DungeonRunServer
 	{
 		try
 		{
-			this.gameSettings.save();
-			super.shutdown();
+			this.saveWorld(this.getWorld());
+			this.theGameContainer.exit();
 		}
 		catch (Exception ex)
 		{
-			this.handleException(ex, "Client Shutdown");
+			this.handleException(ex, "Server Shutdown");
 		}
 		catch (Error error)
 		{
@@ -106,176 +92,156 @@ public class DungeonRun extends DungeonRunServer
 	}
 	
 	@Override
-	public void update(GameContainer gc, int tick) throws SlickException
-	{
-		try
-		{
-			if (this.currentGui != null)
-			{
-				this.currentGui.update(this);
-			}
-			
-			super.update(gc, tick);
-			
-			Input input = gc.getInput();
-			if (input.isKeyPressed(Input.KEY_F2))
-			{
-				Image i = new Image(gc.getWidth(), gc.getHeight());
-				gc.getGraphics().copyArea(i, 0, 0);
-				try
-				{
-					File file = new File(getSaveDataFolder(), "screenshots");
-					if (!file.exists())
-					{
-						file.mkdir();
-					}
-					String path = file.getPath() + "/" + getDateTime() + ".png";
-					ImageOut.write(i, path, false);
-					System.out.println("Screenshot saved as " + path);
-				}
-				catch (Exception ex)
-				{
-					System.out.println("Failed to save screenshot: " + ex.getMessage());
-				}
-			}
-			if (input.isKeyPressed(Input.KEY_F3))
-			{
-				this.gameSettings.debugMode = !this.gameSettings.debugMode;
-			}
-		}
-		catch (Exception ex)
-		{
-			this.handleException(ex, "Client Update");
-		}
-		catch (Error error)
-		{
-			this.handleError(error, "Client Update");
-		}
-	}
-	
-	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
 		try
 		{
-			this.renderEngine.graphics = g;
+			g.setColor(Color.white);
+			g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
 			
-			if (this.theIngameGui != null && this.hasGameStarted)
+			g.setColor(Color.black);
+			g.drawString("DungeonRun Server " + VERSION, 5, 5);
+		}
+		catch (Exception ex)
+		{
+			this.handleException(ex, "Server Screen Rendering");
+		}
+		catch (Error error)
+		{
+			this.handleError(error, "Server Screen Rendering");
+		}
+	}
+	
+	@Override
+	public void update(GameContainer gc, int tick) throws SlickException
+	{
+		try
+		{
+			this.tick++;
+			World world = this.getWorld();
+			if (world != null)
 			{
-				this.theIngameGui.render(gc.getWidth(), gc.getHeight());
-			}
-			
-			if (this.currentGui != null)
-			{
-				this.currentGui.render(gc.getWidth(), gc.getHeight());
+				world.updateWorld();
 			}
 		}
 		catch (Exception ex)
 		{
-			this.handleException(ex, "Rendering Screen");
+			this.handleException(ex, "World Update");
 		}
 		catch (Error error)
 		{
-			this.handleError(error, "Rendering Screen");
+			this.handleError(error, "World Update");
 		}
 	}
 	
 	@Override
-	public void handleException(Exception ex, String s) throws SlickException
+	public File getSaveDataFolder()
 	{
-		super.handleException(ex, s);
-	}
-	
-	@Override
-	public void startWorld() throws SlickException
-	{
-		this.displayGuiScreen(new GuiInfo("world.loading"));
-		
-		super.startWorld();
-	}
-	
-	@Override
-	public void onStartGame() throws SlickException
-	{
-		this.thePlayer = this.theWorld.getPlayer(this.username);
-		
-		this.theIngameGui = new GuiIngame(this.thePlayer);
-		this.displayGuiScreen(this.theIngameGui);
-	}
-	
-	@Override
-	public void stopWorld() throws SlickException
-	{
-		this.displayGuiScreen(new GuiInfo("world.saving"));
-		
-		super.stopWorld();
-	}
-	
-	@Override
-	public void onGameEnd() throws SlickException
-	{
-		this.displayGuiScreen(new GuiMainMenu());
-		
-		this.theIngameGui = null;
-		this.hasGameStarted = false;
-		this.theWorld = null;
-		this.thePlayer = null;
-	}
-	
-	@Override
-	public void keyPressed(int key, char c)
-	{
-		if (this.currentGui != null)
+		File f = new File(getAppdataDirectory(), "dungeonrun");
+		if (!f.exists())
 		{
-			try
-			{
-				this.currentGui.keyTyped(key, c);
-			}
-			catch (SlickException ex)
-			{
-				ex.printStackTrace();
-			}
+			f.mkdirs();
 		}
+		return f;
 	}
 	
-	public GuiScreen displayGuiScreen(GuiScreen gui) throws SlickException
+	public static String getAppdataDirectory()
 	{
-		this.currentGui = gui;
-		this.currentGui.init(this);
-		return gui;
+		String OS = System.getProperty("os.name").toUpperCase();
+		if (OS.contains("WIN"))
+		{
+			return System.getenv("APPDATA");
+		}
+		else if (OS.contains("MAC"))
+		{
+			return System.getProperty("user.home") + "/Library/Application Support";
+		}
+		else if (OS.contains("NUX"))
+		{
+			return System.getProperty("user.home");
+		}
+		return System.getProperty("user.dir");
 	}
 	
-	public static Input getInput()
+	public static String getDateTime()
 	{
-		return instance.theGameContainer.getInput();
-	}
-	
-	public void setFullScreen(boolean flag) throws SlickException
-	{
-		this.theGameContainer.setFullscreen(flag);
-	}
-	
-	public void setVSync(boolean flag)
-	{
-		this.theGameContainer.setVSync(flag);
-	}
-	
-	public void pauseGame() throws SlickException
-	{
-		this.isPaused = true;
-		this.displayGuiScreen(new GuiPauseMenu());
-	}
-	
-	public void unpauseGame() throws SlickException
-	{
-		this.isPaused = false;
-		this.displayGuiScreen(this.theIngameGui);
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+		Date now = new Date();
+		String strDate = sdfDate.format(now);
+		return strDate;
 	}
 	
 	@Override
-	public void mouseMoved(int oldx, int oldy, int newx, int newy)
+	public void startGame() throws SlickException
 	{
-		this.mousePosX = newx;
-		this.mousePosY = newy;
+		this.loadWorld(this.getWorld());
+	}
+	
+	public void handleException(Throwable ex, String s) throws SlickException
+	{
+		ex.printStackTrace();
+		exit();
+	}
+	
+	public void handleError(Error error, String s) throws SlickException
+	{
+		if (error instanceof OutOfMemoryError)
+		{
+			this.stopGame();
+			System.gc();
+		}
+		else
+		{
+			handleException(error, s);
+		}
+	}
+	
+	@Override
+	public void stopGame() throws SlickException
+	{
+		this.saveWorld(this.getWorld());
+	}
+	
+	@Override
+	public boolean saveWorld(World world) throws SlickException
+	{
+		if (world == null)
+		{
+			return false;
+		}
+		
+		String worldFileName = world.worldInfo.getFileName();
+		File saves = new File(getSaveDataFolder(), "saves");
+		if (!saves.exists())
+		{
+			saves.mkdirs();
+		}
+		
+		File worldDir = new File(saves, worldFileName);
+		if (!worldDir.exists())
+		{
+			worldDir.mkdirs();
+		}
+		return world.save(worldDir);
+	}
+	
+	@Override
+	public boolean loadWorld(World world) throws SlickException
+	{
+		if (world == null)
+		{
+			return false;
+		}
+		
+		String worldFileName = world.worldInfo.getFileName();
+		File saves = new File(getSaveDataFolder(), "saves");
+		if (!saves.exists())
+		{
+			saves.mkdirs();
+			return false;
+		}
+		
+		File worldFile = new File(saves, worldFileName);
+		return world.load(worldFile);
 	}
 }

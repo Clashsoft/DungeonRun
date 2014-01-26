@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.entity;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.client.gui.GuiDeath;
 import com.clashsoft.dungeonrun.entity.render.RenderEntity;
 import com.clashsoft.dungeonrun.entity.render.RenderPlayer;
@@ -68,7 +68,7 @@ public class EntityPlayer extends EntityLiving
 	{
 		try
 		{
-			DungeonRun.instance.displayGuiScreen(new GuiDeath());
+			DungeonRunClient.instance.displayGuiScreen(new GuiDeath());
 		}
 		catch (SlickException e)
 		{

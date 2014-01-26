@@ -104,12 +104,12 @@ public class GuiIngame extends GuiScreen
 	@Override
 	public void updateScreen() throws SlickException
 	{
-		Input input = this.dr.theGameContainer.getInput();
+		Input input = this.dr.getInput();
 		
 		try
 		{
 			entityMap.clear();
-			for (Entity e : this.dr.theWorld.getEntitys())
+			for (Entity e : this.dr.getWorld().getEntitys())
 			{
 				e.updateEntity();
 				float x = (int) Math.floor(e.posX);

@@ -10,7 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class FontRenderer
@@ -23,7 +23,7 @@ public class FontRenderer
 	/**
 	 * The DungeonRun instance
 	 */
-	public DungeonRun					dr;
+	public DungeonRunClient					dr;
 	
 	public String fontName;
 	public boolean						globalUnicode;
@@ -54,7 +54,7 @@ public class FontRenderer
 	 */
 	public boolean						italic, bold, strikeThrough, underline, unicode;
 	
-	public FontRenderer(DungeonRun dr, String fontName) throws SlickException
+	public FontRenderer(DungeonRunClient dr, String fontName) throws SlickException
 	{
 		this.dr = dr;
 		this.fontName = fontName;

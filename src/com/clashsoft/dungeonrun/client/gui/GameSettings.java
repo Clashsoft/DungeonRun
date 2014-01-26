@@ -9,37 +9,39 @@ import java.util.Properties;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 
 public class GameSettings
 {
-	public static File	optionsFile		= new File(DungeonRunServer.getSaveDataFolder(), "options.txt");
+	protected DungeonRun	dr;
+	
+	protected final File	optionsFile;
 	
 	// General Options
-	public String		language		= "en_US";
+	public String			language		= "en_US";
 	
-	public float		musicVolume		= 1F;
-	public float		soundVolume		= 1F;
+	public float			musicVolume		= 1F;
+	public float			soundVolume		= 1F;
 	
 	// Video options
-	public int			guiSize			= 0;
-	public boolean		fullScreen		= false;
-	public boolean		useVSync		= true;
+	public int				guiSize			= 0;
+	public boolean			fullScreen		= false;
+	public boolean			useVSync		= true;
 	
-	public boolean		renderHitBoxes	= false;
+	public boolean			renderHitBoxes	= false;
 	
-	public boolean		debugMode		= true;
+	public boolean			debugMode		= true;
 	
-	public GameSettings()
+	public GameSettings(DungeonRun dr)
 	{
-		load();
+		this.dr = dr;
+		this.optionsFile = new File(dr.getSaveDataFolder(), "options.txt");
+		this.load();
 	}
 	
 	public void updateGame() throws SlickException
 	{
-		DungeonRun dr = DungeonRun.instance;
-		if (dr.currentGui != null)
-			dr.currentGui.init(dr);
+		DungeonRunClient dr = DungeonRunClient.instance;
 		dr.setFullScreen(fullScreen);
 		dr.setVSync(useVSync);
 	}

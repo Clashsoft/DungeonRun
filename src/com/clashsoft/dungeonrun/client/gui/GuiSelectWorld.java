@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.server.DungeonRunServer;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.WorldInfo;
 
@@ -26,7 +25,7 @@ public class GuiSelectWorld extends GuiListScreen
 	{
 		worlds.clear();
 		
-		File saves = new File(DungeonRunServer.getSaveDataFolder(), "saves");
+		File saves = new File(this.dr.getSaveDataFolder(), "saves");
 		
 		File[] files = saves.listFiles();
 		if (files != null)
@@ -72,9 +71,7 @@ public class GuiSelectWorld extends GuiListScreen
 		else
 		{
 			String worldName = worlds.get(i);
-			
-			this.dr.theWorld = new World(new WorldInfo(worldName));
-			this.dr.startWorld();
+			this.dr.startWorld(new World(new WorldInfo(worldName)));
 		}
 	}
 }
