@@ -7,13 +7,10 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.world.BlockInWorld;
 
-public class RenderBlocks implements Render
+public class RenderBlocks extends Render
 {
 	public static final int	BLOCKS_X	= 16;
 	public static final int	BLOCKS_Y	= 9;
-	
-	public int				width;
-	public int				height;
 	
 	public RenderBlocks()
 	{

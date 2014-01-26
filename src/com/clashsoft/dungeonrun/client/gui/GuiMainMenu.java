@@ -54,7 +54,7 @@ public class GuiMainMenu extends GuiListScreen
 		int var2 = (height / 2) - 20;
 		GL11.glTranslated(var1, var2, 0);
 		GL11.glScalef(3F, 3F, 1F);
-		player.getRenderer().render(player, 0, 0);
+		player.getRenderer().render(this.player, 0, 0);
 		GL11.glScalef(1F / 3F, 1F / 3F, 1F);
 		GL11.glTranslated(-var1, -var2, 0);
 	}

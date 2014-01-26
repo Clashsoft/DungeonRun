@@ -4,15 +4,14 @@ import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.client.gui.GuiDeath;
-import com.clashsoft.dungeonrun.entity.render.RenderEntity;
-import com.clashsoft.dungeonrun.entity.render.RenderPlayer;
+import com.clashsoft.dungeonrun.client.renderer.entity.RenderPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.NBTTagCompound;
 
 public class EntityPlayer extends EntityLiving
 {
-	public RenderPlayer<EntityPlayer>	renderer;
+	public RenderPlayer	renderer;
 	
 	public String						username	= "";
 	
@@ -25,11 +24,11 @@ public class EntityPlayer extends EntityLiving
 	{
 		super(world);
 		this.inventory = new InventoryPlayer(this);
-		this.renderer = new RenderPlayer<EntityPlayer>(this);
+		this.renderer = new RenderPlayer();
 	}
 	
 	@Override
-	public RenderEntity getRenderer() throws SlickException
+	public RenderPlayer getRenderer() throws SlickException
 	{
 		return this.renderer;
 	}

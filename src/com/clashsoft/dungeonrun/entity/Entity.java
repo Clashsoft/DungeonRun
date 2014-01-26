@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.entity;
 
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.entity.render.RenderEntity;
+import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.NBTTagCompound;
@@ -222,7 +222,7 @@ public abstract class Entity implements INBTSaveable
 		return block != null && block.getBlock() != null && block.getBlock().canCollideHorizontally(block.getMetadata(), this);
 	}
 	
-	public abstract RenderEntity getRenderer() throws SlickException;
+	public abstract Render getRenderer() throws SlickException;
 	
 	public abstract String getTexture();
 	

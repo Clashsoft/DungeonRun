@@ -1,12 +1,12 @@
-package com.clashsoft.dungeonrun.entity.render;
+package com.clashsoft.dungeonrun.client.renderer.entity;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Rectangle;
 
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
+import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 
-public class RenderPlayer<T extends EntityPlayer> extends RenderEntity<T>
+public class RenderPlayer extends Render
 {
 	public EntityPlayer player;
 	
@@ -14,10 +14,8 @@ public class RenderPlayer<T extends EntityPlayer> extends RenderEntity<T>
 	Image[] standing = new Image[4];
 	Animation[] walking = new Animation[4];
 	
-	public RenderPlayer(T p) throws SlickException
+	public RenderPlayer() throws SlickException
 	{
-		super();
-		this.player = p;
 		textures = new SpriteSheet(new Image(player.getTexture()), 12, 24);
 		for (int i = 0; i < 4; i++)
 		{
@@ -27,7 +25,12 @@ public class RenderPlayer<T extends EntityPlayer> extends RenderEntity<T>
 	}
 	
 	@Override
-	public Rectangle render(EntityPlayer player, int w, int h) throws SlickException
+	public void render(Object renderable, int x, int y, float camX, float camY, int face) throws SlickException
+	{
+		this.render((EntityPlayer) player, this.width, this.height);
+	}
+	
+	public void render(EntityPlayer player, int w, int h) throws SlickException
 	{
 		int rot = player.rot;
 		Renderable r;
@@ -40,6 +43,5 @@ public class RenderPlayer<T extends EntityPlayer> extends RenderEntity<T>
 		if (DungeonRunClient.instance.gameSettings.renderHitBoxes)
 			DungeonRunClient.instance.getGraphics().drawRect(x, y, 12, 24);
 		r.draw(x, y);
-		return new Rectangle(x, y, 12, 24);
 	}
 }

@@ -130,7 +130,7 @@ public class GuiIngame extends GuiScreen
 			
 			for (Entity entity : world.getEntitys())
 			{
-				entity.getRenderer().render(entity, width, height);
+				entity.getRenderer().render(entity, 0, 0, camX, camY, mode);
 			}
 		}
 		
