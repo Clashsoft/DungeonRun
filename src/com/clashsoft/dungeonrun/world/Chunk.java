@@ -1,9 +1,9 @@
 package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
-import com.clashsoft.nbt.INBTSaveable;
 import com.clashsoft.nbt.NBTTagArray;
 import com.clashsoft.nbt.NBTTagCompound;
+import com.clashsoft.nbt.util.INBTSaveable;
 
 public class Chunk implements INBTSaveable
 {

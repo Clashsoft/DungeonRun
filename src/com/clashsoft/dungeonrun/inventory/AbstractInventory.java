@@ -1,10 +1,10 @@
 package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.item.ItemStack;
-import com.clashsoft.nbt.INBTSaveable;
-import com.clashsoft.nbt.NamedBinaryTag;
 import com.clashsoft.nbt.NBTTagCompound;
 import com.clashsoft.nbt.NBTTagList;
+import com.clashsoft.nbt.NamedBinaryTag;
+import com.clashsoft.nbt.util.INBTSaveable;
 
 public abstract class AbstractInventory implements INBTSaveable
 {

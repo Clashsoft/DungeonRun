@@ -2,8 +2,8 @@ package com.clashsoft.dungeonrun.world;
 
 import java.util.Date;
 
-import com.clashsoft.nbt.INBTSaveable;
 import com.clashsoft.nbt.NBTTagCompound;
+import com.clashsoft.nbt.util.INBTSaveable;
 
 public class WorldInfo implements INBTSaveable
 {
