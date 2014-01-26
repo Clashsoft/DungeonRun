@@ -40,31 +40,31 @@ public class DungeonRunServer extends DungeonRun implements IServer
 			DungeonRun.exit();
 		}
 	}
-
+	
 	@Override
 	public void startWorld(World world) throws SlickException
 	{
 		this.theWorld = world;
 		this.startGame();
 	}
-
+	
 	@Override
 	public boolean isGameRunning() throws SlickException
 	{
 		return true;
 	}
-
+	
 	@Override
 	public World getWorld()
 	{
 		return this.theWorld;
 	}
-
+	
 	@Override
 	public void pauseGame() throws SlickException
 	{
 	}
-
+	
 	@Override
 	public void resumeGame() throws SlickException
 	{

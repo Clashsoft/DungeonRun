@@ -6,10 +6,10 @@ import com.clashsoft.nbt.util.INBTSaveable;
 
 public class Chunk implements INBTSaveable
 {
-	public static int NO_UPDATE = 0;
-	public static int UPDATE_NEIGHBORS = 1;
-	public static int UPDATE_LIGHT = 2;
-	public static int UPDATE = UPDATE_NEIGHBORS | UPDATE_LIGHT;
+	public static int	NO_UPDATE			= 0;
+	public static int	UPDATE_NEIGHBORS	= 1;
+	public static int	UPDATE_LIGHT		= 2;
+	public static int	UPDATE				= UPDATE_NEIGHBORS | UPDATE_LIGHT;
 	
 	public final World	world;
 	
@@ -55,10 +55,14 @@ public class Chunk implements INBTSaveable
 	}
 	
 	/**
-	 * Sets the block at the position.<p>
-	 * Flags:<p>
-	 * 1: update neighbor blocks<p>
-	 * 2: update light values<p>
+	 * Sets the block at the position.
+	 * <p>
+	 * Flags:
+	 * <p>
+	 * 1: update neighbor blocks
+	 * <p>
+	 * 2: update light values
+	 * <p>
 	 * 
 	 * @param blockID
 	 *            the block id
@@ -117,17 +121,17 @@ public class Chunk implements INBTSaveable
 	
 	public int worldPosX(int x)
 	{
-		return (this.chunkX << 4) | x;
+		return this.chunkX << 4 | x;
 	}
 	
 	public int worldPosY(int y)
 	{
-		return (this.chunkY << 4) | y;
+		return this.chunkY << 4 | y;
 	}
 	
 	public int worldPosZ(int z)
 	{
-		return (this.chunkZ << 4) | z;
+		return this.chunkZ << 4 | z;
 	}
 	
 	public BlockInWorld getBlock(int x, int y, int z)
@@ -171,7 +175,7 @@ public class Chunk implements INBTSaveable
 	
 	protected float getLightValue(int index)
 	{
-		return 1F; //this.lightValues[index];
+		return 1F; // this.lightValues[index];
 	}
 	
 	public void setLightValue(int x, int y, int z, float f)

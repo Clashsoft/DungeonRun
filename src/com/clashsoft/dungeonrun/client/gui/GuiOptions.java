@@ -33,36 +33,56 @@ public class GuiOptions extends GuiListScreen
 	{
 		GameSettings gs = this.dr.gameSettings;
 		super.updateScreen();
-		if (selection == 0)
-			if (input.isKeyDown(Input.KEY_RIGHT))
+		if (this.selection == 0)
+		{
+			if (this.input.isKeyDown(Input.KEY_RIGHT))
 			{
 				if (this.dr.gameSettings.soundVolume + 0.01F <= 1F)
+				{
 					this.dr.gameSettings.soundVolume += 0.01F;
+				}
 				else
+				{
 					gs.soundVolume = 1F;
+				}
 			}
-			else if (input.isKeyDown(Input.KEY_LEFT))
+			else if (this.input.isKeyDown(Input.KEY_LEFT))
 			{
 				if (this.dr.gameSettings.soundVolume - 0.01F >= 0F)
+				{
 					this.dr.gameSettings.soundVolume -= 0.01F;
+				}
 				else
+				{
 					gs.soundVolume = 0F;
+				}
 			}
-		if (selection == 1)
-			if (input.isKeyDown(Input.KEY_RIGHT))
+		}
+		if (this.selection == 1)
+		{
+			if (this.input.isKeyDown(Input.KEY_RIGHT))
 			{
 				if (this.dr.gameSettings.musicVolume + 0.01F <= 1F)
+				{
 					this.dr.gameSettings.musicVolume += 0.01F;
+				}
 				else
+				{
 					gs.musicVolume = 1F;
+				}
 			}
-			else if (input.isKeyDown(Input.KEY_LEFT))
+			else if (this.input.isKeyDown(Input.KEY_LEFT))
 			{
 				if (this.dr.gameSettings.musicVolume - 0.01F >= 0F)
+				{
 					this.dr.gameSettings.musicVolume -= 0.01F;
+				}
 				else
+				{
 					gs.musicVolume = 0F;
+				}
 			}
+		}
 	}
 	
 	@Override
@@ -84,18 +104,26 @@ public class GuiOptions extends GuiListScreen
 	public void onEntryUsed(int i) throws SlickException
 	{
 		if (i == 2)
+		{
 			this.dr.displayGuiScreen(new GuiOptionsVideo(this));
+		}
 		if (i == 3)
-			this.dr.displayGuiScreen(superGui);
+		{
+			this.dr.displayGuiScreen(this.superGui);
+		}
 	}
 	
 	@Override
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return String.format(I18n.getString("options.soundvolume") + ": %.2f", dr.gameSettings.soundVolume);
+		{
+			return String.format(I18n.getString("options.soundvolume") + ": %.2f", this.dr.gameSettings.soundVolume);
+		}
 		if (i == 1)
-			return String.format(I18n.getString("options.musicvolume") + ": %.2f", dr.gameSettings.musicVolume);
+		{
+			return String.format(I18n.getString("options.musicvolume") + ": %.2f", this.dr.gameSettings.musicVolume);
+		}
 		return super.getEntry(i);
 	}
 }

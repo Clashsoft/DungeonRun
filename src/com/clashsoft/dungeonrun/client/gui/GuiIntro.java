@@ -18,12 +18,16 @@ public class GuiIntro extends GuiScreen
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
-		float f = tick / 40F;
+		float f = this.tick / 40F;
 		
-		if (tick > 60)
+		if (this.tick > 60)
+		{
 			f = 2.5F - f;
-		else if (tick > 40)
+		}
+		else if (this.tick > 40)
+		{
 			f = 1F;
+		}
 		
 		GL11.glPushMatrix();
 		GL11.glScalef(par1 / 1600F, par2 / 1200F, 1F);
@@ -35,10 +39,14 @@ public class GuiIntro extends GuiScreen
 	@Override
 	public void updateScreen() throws SlickException
 	{
-		if (tick < 100)
-			tick++;
+		if (this.tick < 100)
+		{
+			this.tick++;
+		}
 		else
+		{
 			this.dr.displayGuiScreen(new GuiMainMenu());
+		}
 	}
 	
 	@Override

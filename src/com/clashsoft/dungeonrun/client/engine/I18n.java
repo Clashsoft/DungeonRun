@@ -35,11 +35,17 @@ public class I18n
 		int i2 = key.indexOf(']');
 		
 		if (i1 == -1 && i2 == -1)
+		{
 			return getString(key);
+		}
 		else if (i1 != -1 && i2 == -1)
+		{
 			return getString(key.substring(0, i1));
+		}
 		else if (i1 == -1 && i2 != -1)
+		{
 			return getString(key.substring(0, i2));
+		}
 		else
 		{
 			key1 = key1.substring(0, i1);
@@ -65,24 +71,26 @@ public class I18n
 	protected StringTranslate getLanguage(String lang)
 	{
 		if (lang == null)
+		{
 			lang = DungeonRunClient.instance.gameSettings.language;
+		}
 		
-		StringTranslate st = languages.get(lang);
+		StringTranslate st = this.languages.get(lang);
 		if (st == null)
 		{
 			st = new StringTranslate(lang);
-			languages.put(lang, st);
+			this.languages.put(lang, st);
 		}
 		return st;
 	}
 	
 	protected String translate(String lang, String key)
 	{
-		return getLanguage(lang).translate(key);
+		return this.getLanguage(lang).translate(key);
 	}
 	
 	protected String translate(String lang, String key, Object[] args)
 	{
-		return getLanguage(lang).translate(key, args);
+		return this.getLanguage(lang).translate(key, args);
 	}
 }

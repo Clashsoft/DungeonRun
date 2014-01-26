@@ -12,7 +12,7 @@ public class BlockInWorld
 	public World				world;
 	public int					blockID;
 	public int					metadata;
-	public float lightValue;
+	public float				lightValue;
 	
 	public BlockInWorld(World w, int id, int metadata, float lightValue)
 	{

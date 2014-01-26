@@ -80,7 +80,7 @@ public class World
 		this.setChunk(pos, c);
 		return c;
 	}
-
+	
 	protected void updateChunkBounds(ChunkPosition c)
 	{
 		int x = c.getX();
@@ -112,7 +112,7 @@ public class World
 			this.maxChunkZ = z;
 		}
 	}
-
+	
 	public boolean isChunkLoaded(int x, int y, int z)
 	{
 		return this.getChunkAtCoordinates(x, y, z) != null;
@@ -181,12 +181,12 @@ public class World
 			return BlockInWorld.AIR;
 		}
 	}
-
+	
 	public void setBlock(int block, int meta, int x, int y, int z)
 	{
 		this.setBlock(block, meta, x, y, z, 1);
 	}
-
+	
 	public void setBlock(int block, int meta, int x, int y, int z, int flags)
 	{
 		Chunk c = this.getChunkAtCoordinates(x, y, z);
@@ -195,7 +195,7 @@ public class World
 			c.setBlock(block, meta, x & 15, y & 15, z & 15, flags);
 		}
 	}
-
+	
 	public float getLightValue(int x, int y, int z)
 	{
 		Chunk c = this.getChunkAtCoordinates(x, y, z);

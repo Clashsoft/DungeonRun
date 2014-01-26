@@ -13,25 +13,25 @@ public class StringTranslate
 	public StringTranslate(String lang)
 	{
 		this.language = lang;
-		loadLanguage(lang);
+		this.loadLanguage(lang);
 	}
 	
 	public String translate(String key)
 	{
-		String s = langMap.getProperty(key);
+		String s = this.langMap.getProperty(key);
 		return s == null ? key : s;
 	}
 	
 	public String translate(String key, Object[] args)
 	{
-		return String.format(langMap.getProperty(key), args);
+		return String.format(this.langMap.getProperty(key), args);
 	}
 	
 	public void loadLanguage(String lang)
 	{
 		try
 		{
-			langMap.load(ResourceLoader.getResourceAsStream("/resources/lang/" + lang + ".lang"));
+			this.langMap.load(ResourceLoader.getResourceAsStream("/resources/lang/" + lang + ".lang"));
 		}
 		catch (IOException ex)
 		{

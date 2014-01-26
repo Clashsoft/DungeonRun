@@ -2,9 +2,9 @@ package com.clashsoft.dungeonrun.world;
 
 public class ChunkPosition
 {
-	private final int x;
-	private final int y;
-	private final int z;
+	private final int	x;
+	private final int	y;
+	private final int	z;
 	
 	public ChunkPosition(int x, int y, int z)
 	{
@@ -27,7 +27,7 @@ public class ChunkPosition
 	{
 		return this.z;
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
@@ -38,26 +38,38 @@ public class ChunkPosition
 		result = prime * result + this.z;
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj)
 	{
 		if (this == obj)
+		{
 			return true;
+		}
 		if (obj == null)
+		{
 			return false;
+		}
 		if (!(obj instanceof ChunkPosition))
+		{
 			return false;
+		}
 		ChunkPosition other = (ChunkPosition) obj;
 		if (this.x != other.x)
+		{
 			return false;
+		}
 		if (this.y != other.y)
+		{
 			return false;
+		}
 		if (this.z != other.z)
+		{
 			return false;
+		}
 		return true;
 	}
-
+	
 	@Override
 	public String toString()
 	{

@@ -23,7 +23,7 @@ public class GuiSelectWorld extends GuiListScreen
 	@Override
 	public void initGui() throws SlickException
 	{
-		worlds.clear();
+		this.worlds.clear();
 		
 		File saves = new File(this.dr.getSaveDataFolder(), "saves");
 		
@@ -34,7 +34,7 @@ public class GuiSelectWorld extends GuiListScreen
 			{
 				if (f.isDirectory())
 				{
-					worlds.add(f.getName());
+					this.worlds.add(f.getName());
 				}
 			}
 		}
@@ -51,7 +51,7 @@ public class GuiSelectWorld extends GuiListScreen
 	@Override
 	public void addEntrys(List<String> s)
 	{
-		s.addAll(worlds);
+		s.addAll(this.worlds);
 		s.add("world.create");
 		s.add("gui.cancel");
 	}
@@ -59,18 +59,22 @@ public class GuiSelectWorld extends GuiListScreen
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
-		if (i >= worlds.size())
+		if (i >= this.worlds.size())
 		{
-			i -= worlds.size();
+			i -= this.worlds.size();
 			
 			if (i == 0)
+			{
 				this.dr.displayGuiScreen(new GuiCreateWorld(this));
+			}
 			else if (i == 1)
-				this.dr.displayGuiScreen(superGui);
+			{
+				this.dr.displayGuiScreen(this.superGui);
+			}
 		}
 		else
 		{
-			String worldName = worlds.get(i);
+			String worldName = this.worlds.get(i);
 			this.dr.startWorld(new World(new WorldInfo(worldName)));
 		}
 	}

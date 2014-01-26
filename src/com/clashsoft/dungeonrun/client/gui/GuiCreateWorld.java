@@ -36,12 +36,16 @@ public class GuiCreateWorld extends GuiListScreen
 	@Override
 	public void keyTyped(int key, char c) throws SlickException
 	{
-		if (editMode && this.selection == 0)
+		if (this.editMode && this.selection == 0)
 		{
-			if (key == 14 && !worldName.isEmpty())
-				worldName = worldName.substring(0, worldName.length() - 1);
+			if (key == 14 && !this.worldName.isEmpty())
+			{
+				this.worldName = this.worldName.substring(0, this.worldName.length() - 1);
+			}
 			else if (Character.isLetterOrDigit(c) || c == ' ')
-				worldName += c;
+			{
+				this.worldName += c;
+			}
 		}
 	}
 	
@@ -49,24 +53,30 @@ public class GuiCreateWorld extends GuiListScreen
 	public void onEntryUsed(int i) throws SlickException
 	{
 		if (i == 0)
+		{
 			this.editMode = !this.editMode;
+		}
 		else if (i == 1)
 		{
 			File saves = new File(this.dr.getSaveDataFolder(), "saves");
-			File newWorld = new File(saves, worldName.trim());
+			File newWorld = new File(saves, this.worldName.trim());
 			newWorld.mkdirs();
 			
-			this.dr.displayGuiScreen(superGui);
+			this.dr.displayGuiScreen(this.superGui);
 		}
 		else if (i == 2)
-			this.dr.displayGuiScreen(superGui);
+		{
+			this.dr.displayGuiScreen(this.superGui);
+		}
 	}
 	
 	@Override
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return worldName;
+		{
+			return this.worldName;
+		}
 		return super.getEntry(i);
 	}
 }

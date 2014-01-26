@@ -11,14 +11,14 @@ import com.clashsoft.nbt.NBTTagCompound;
 
 public class EntityPlayer extends EntityLiving
 {
-	public RenderPlayer	renderer;
+	public RenderPlayer		renderer;
 	
-	public String						username	= "";
+	public String			username	= "";
 	
-	public InventoryPlayer				inventory;
-	public boolean						isWalking	= false;
-	public boolean						isSprinting	= false;
-	private int							stepsWalked	= 0;
+	public InventoryPlayer	inventory;
+	public boolean			isWalking	= false;
+	public boolean			isSprinting	= false;
+	private int				stepsWalked	= 0;
 	
 	public EntityPlayer(World world) throws SlickException
 	{

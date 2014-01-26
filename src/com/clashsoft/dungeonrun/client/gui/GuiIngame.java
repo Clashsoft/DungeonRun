@@ -14,13 +14,13 @@ import com.clashsoft.dungeonrun.world.World;
 
 public class GuiIngame extends GuiScreen
 {
-	public RenderBlocks					renderBlocks;
+	public RenderBlocks	renderBlocks;
 	
-	public int							mouseBlockX, mouseBlockY, mouseBlockZ;
+	public int			mouseBlockX, mouseBlockY, mouseBlockZ;
 	
-	public int							displayMode = 1;
+	public int			displayMode	= 1;
 	
-	private boolean						worldSaving	= false;
+	private boolean		worldSaving	= false;
 	
 	public GuiIngame(EntityPlayer player)
 	{

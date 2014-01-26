@@ -42,8 +42,8 @@ public class GameSettings
 	public void updateGame() throws SlickException
 	{
 		DungeonRunClient dr = DungeonRunClient.instance;
-		dr.setFullScreen(fullScreen);
-		dr.setVSync(useVSync);
+		dr.setFullScreen(this.fullScreen);
+		dr.setVSync(this.useVSync);
 	}
 	
 	public void load()
@@ -51,10 +51,12 @@ public class GameSettings
 		Properties props = new Properties();
 		try
 		{
-			if (!optionsFile.exists())
-				optionsFile.createNewFile();
+			if (!this.optionsFile.exists())
+			{
+				this.optionsFile.createNewFile();
+			}
 			
-			props.load(new FileInputStream(optionsFile));
+			props.load(new FileInputStream(this.optionsFile));
 		}
 		catch (Exception ex)
 		{
@@ -76,20 +78,20 @@ public class GameSettings
 	public void save()
 	{
 		Properties props = new Properties();
-		props.setProperty("music", musicVolume + "");
-		props.setProperty("sound", soundVolume + "");
+		props.setProperty("music", this.musicVolume + "");
+		props.setProperty("sound", this.soundVolume + "");
 		
-		props.setProperty("guisize", guiSize + "");
+		props.setProperty("guisize", this.guiSize + "");
 		
-		props.setProperty("fullscreen", fullScreen + "");
-		props.setProperty("vsync", useVSync + "");
-		props.setProperty("renderhitboxes", renderHitBoxes + "");
+		props.setProperty("fullscreen", this.fullScreen + "");
+		props.setProperty("vsync", this.useVSync + "");
+		props.setProperty("renderhitboxes", this.renderHitBoxes + "");
 		
-		props.setProperty("debug", debugMode + "");
+		props.setProperty("debug", this.debugMode + "");
 		
 		try
 		{
-			props.store(new FileOutputStream(optionsFile), "");
+			props.store(new FileOutputStream(this.optionsFile), "");
 		}
 		catch (IOException ex)
 		{

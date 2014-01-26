@@ -18,42 +18,56 @@ public abstract class GuiListScreen extends GuiScreen
 	@Override
 	public void initGui() throws SlickException
 	{
-		entrys.clear();
-		this.addEntrys(entrys);
+		this.entrys.clear();
+		this.addEntrys(this.entrys);
 	}
 	
 	@Override
 	public void drawScreen(int width, int height) throws SlickException
 	{
-		if (drawBricks)
-			drawDefaultBackground(width, height);
-		
-		dr.fontRenderer.drawString((width - dr.fontRenderer.getStringWidth(getTitle())) / 2, 20, I18n.getString(getTitle()), 0x00EFFF, true);
-		for (int i = 0; i < entrys.size(); i++)
+		if (this.drawBricks)
 		{
-			String text = getEntry(i);
-			int i1 = dr.fontRenderer.getStringWidth(text);
-			dr.fontRenderer.drawString((width - i1) / 2 + getFirstEntryPosX(), getFirstEntryPosY() + (i * 20), text, selection == i ? 0xFFFFFF : 0xAAAAAA, true);
+			this.drawDefaultBackground(width, height);
+		}
+		
+		this.dr.fontRenderer.drawString((width - this.dr.fontRenderer.getStringWidth(this.getTitle())) / 2, 20, I18n.getString(this.getTitle()), 0x00EFFF, true);
+		for (int i = 0; i < this.entrys.size(); i++)
+		{
+			String text = this.getEntry(i);
+			int i1 = this.dr.fontRenderer.getStringWidth(text);
+			this.dr.fontRenderer.drawString((width - i1) / 2 + this.getFirstEntryPosX(), this.getFirstEntryPosY() + i * 20, text, this.selection == i ? 0xFFFFFF : 0xAAAAAA, true);
 		}
 	}
 	
 	@Override
 	public void updateScreen() throws SlickException
 	{
-		if (input.isKeyPressed(Input.KEY_DOWN))
-			if (selection == entrys.size() - 1)
-				selection = 0;
-			else
-				selection++;
-		if (input.isKeyPressed(Input.KEY_UP))
-			if (selection == 0)
-				selection = entrys.size() - 1;
-			else
-				selection--;
-		
-		if (input.isKeyPressed(Input.KEY_ENTER))
+		if (this.input.isKeyPressed(Input.KEY_DOWN))
 		{
-			this.onEntryUsed(selection);
+			if (this.selection == this.entrys.size() - 1)
+			{
+				this.selection = 0;
+			}
+			else
+			{
+				this.selection++;
+			}
+		}
+		if (this.input.isKeyPressed(Input.KEY_UP))
+		{
+			if (this.selection == 0)
+			{
+				this.selection = this.entrys.size() - 1;
+			}
+			else
+			{
+				this.selection--;
+			}
+		}
+		
+		if (this.input.isKeyPressed(Input.KEY_ENTER))
+		{
+			this.onEntryUsed(this.selection);
 			this.dr.soundEngine.playSoundEffect("resources/audio/click.wav", SoundEngine.DEFAULT_LOCATION);
 		}
 	}
@@ -81,6 +95,6 @@ public abstract class GuiListScreen extends GuiScreen
 	
 	public String getEntry(int i)
 	{
-		return I18n.getString(entrys.get(i));
+		return I18n.getString(this.entrys.get(i));
 	}
 }

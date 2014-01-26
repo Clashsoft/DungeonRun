@@ -12,16 +12,15 @@ import com.clashsoft.dungeonrun.world.World;
 
 /**
  * Common DungeonRun game container.
- *
  */
 public abstract class DungeonRun extends BasicGame implements IServer
 {
-	public static final String		VERSION	= "Alpha 0.1-PRE";
+	public static final String	VERSION	= "Alpha 0.1-PRE";
 	
-	protected static DungeonRun instance;
+	protected static DungeonRun	instance;
 	
-	protected AppGameContainer			theGameContainer;
-	protected long						tick;
+	protected AppGameContainer	theGameContainer;
+	protected long				tick;
 	
 	public DungeonRun()
 	{
@@ -48,6 +47,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	
 	/**
 	 * Initialize the main slick library and app container
+	 * 
 	 * @throws SlickException
 	 */
 	public abstract void initGame() throws SlickException;
@@ -196,7 +196,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		}
 		else
 		{
-			handleException(error, s);
+			this.handleException(error, s);
 		}
 	}
 	
@@ -215,7 +215,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		}
 		
 		String worldFileName = world.worldInfo.getFileName();
-		File saves = new File(getSaveDataFolder(), "saves");
+		File saves = new File(this.getSaveDataFolder(), "saves");
 		if (!saves.exists())
 		{
 			saves.mkdirs();
@@ -238,7 +238,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		}
 		
 		String worldFileName = world.worldInfo.getFileName();
-		File saves = new File(getSaveDataFolder(), "saves");
+		File saves = new File(this.getSaveDataFolder(), "saves");
 		if (!saves.exists())
 		{
 			saves.mkdirs();

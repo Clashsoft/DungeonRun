@@ -40,11 +40,17 @@ public class GuiOptionsVideo extends GuiListScreen
 			this.dr.gameSettings.guiSize %= 4;
 		}
 		else if (i == 1)
+		{
 			this.dr.gameSettings.fullScreen = !this.dr.gameSettings.fullScreen;
+		}
 		else if (i == 2)
+		{
 			this.dr.gameSettings.useVSync = !this.dr.gameSettings.useVSync;
+		}
 		else if (i == 3)
-			this.dr.displayGuiScreen(superGui);
+		{
+			this.dr.displayGuiScreen(this.superGui);
+		}
 		this.dr.gameSettings.updateGame();
 	}
 	
@@ -52,11 +58,17 @@ public class GuiOptionsVideo extends GuiListScreen
 	public String getEntry(int i)
 	{
 		if (i == 0)
-			return I18n.getString("options.video.guiscale") + ": " + I18n.getString("options.video.guiscale." + dr.gameSettings.guiSize);
+		{
+			return I18n.getString("options.video.guiscale") + ": " + I18n.getString("options.video.guiscale." + this.dr.gameSettings.guiSize);
+		}
 		else if (i == 1)
-			return I18n.getString("options.video.fullscreen") + ": " + dr.gameSettings.fullScreen;
+		{
+			return I18n.getString("options.video.fullscreen") + ": " + this.dr.gameSettings.fullScreen;
+		}
 		else if (i == 2)
-			return I18n.getString("options.video.vsync") + ": " + dr.gameSettings.useVSync;
+		{
+			return I18n.getString("options.video.vsync") + ": " + this.dr.gameSettings.useVSync;
+		}
 		return super.getEntry(i);
 	}
 }

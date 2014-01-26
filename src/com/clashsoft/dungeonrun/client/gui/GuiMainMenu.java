@@ -19,8 +19,8 @@ public class GuiMainMenu extends GuiListScreen
 	{
 		super.initGui();
 		this.dr.soundEngine.playMusic("resources/audio/music/music1.wav", true);
-		player = new EntityPlayer(null);
-		player.rot = 1;
+		this.player = new EntityPlayer(null);
+		this.player.rot = 1;
 	}
 	
 	@Override
@@ -29,20 +29,22 @@ public class GuiMainMenu extends GuiListScreen
 		int longestStringLength = 0;
 		this.drawDefaultBackground(width, height);
 		
-		for (int i = 0; i < entrys.size(); i++)
+		for (int i = 0; i < this.entrys.size(); i++)
 		{
-			String s = I18n.getString(entrys.get(i));
+			String s = I18n.getString(this.entrys.get(i));
 			
-			int length = dr.fontRenderer.getStringWidth(s);
+			int length = this.dr.fontRenderer.getStringWidth(s);
 			int posX = (int) ((width - length) / 2F);
-			int posY = (height - (entrys.size() * dr.fontRenderer.getStringHeigth(s))) / 2 + (i * 20);
+			int posY = (height - this.entrys.size() * this.dr.fontRenderer.getStringHeigth(s)) / 2 + i * 20;
 			
-			dr.fontRenderer.drawString(posX, posY, s, selection == i ? 0xFFFF00 : 0x00EFFF, true);
+			this.dr.fontRenderer.drawString(posX, posY, s, this.selection == i ? 0xFFFF00 : 0x00EFFF, true);
 			
 			if (length >= longestStringLength)
+			{
 				longestStringLength = length;
+			}
 			
-			if (selection == i)
+			if (this.selection == i)
 			{
 				Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
 				torch.draw(posX - torch.getWidth(), posY - 4);
@@ -50,11 +52,11 @@ public class GuiMainMenu extends GuiListScreen
 			}
 		}
 		
-		int var1 = (int) (player.posX);
-		int var2 = (height / 2) - 20;
+		int var1 = (int) this.player.posX;
+		int var2 = height / 2 - 20;
 		GL11.glTranslated(var1, var2, 0);
 		GL11.glScalef(3F, 3F, 1F);
-		player.getRenderer().render(this.player, 0, 0);
+		this.player.getRenderer().render(this.player, 0, 0);
 		GL11.glScalef(1F / 3F, 1F / 3F, 1F);
 		GL11.glTranslated(-var1, -var2, 0);
 	}
@@ -64,11 +66,11 @@ public class GuiMainMenu extends GuiListScreen
 	{
 		super.updateScreen();
 		
-		if (player != null)
+		if (this.player != null)
 		{
-			player.posX += 4;
-			player.posX %= 700;
-			player.isWalking = true;
+			this.player.posX += 4;
+			this.player.posX %= 700;
+			this.player.isWalking = true;
 		}
 	}
 	
@@ -90,11 +92,17 @@ public class GuiMainMenu extends GuiListScreen
 	public void onEntryUsed(int i) throws SlickException
 	{
 		if (i == 0)
+		{
 			this.dr.displayGuiScreen(new GuiSelectWorld(this));
+		}
 		else if (i == 1)
+		{
 			this.dr.displayGuiScreen(new GuiOptions(this));
+		}
 		else if (i == 2)
+		{
 			this.dr.shutdown();
+		}
 	}
 	
 	@Override

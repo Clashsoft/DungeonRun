@@ -8,26 +8,26 @@ import com.clashsoft.dungeonrun.entity.EntityPlayer;
 
 public class RenderPlayer extends Render
 {
-	public EntityPlayer player;
+	public EntityPlayer	player;
 	
-	SpriteSheet textures;
-	Image[] standing = new Image[4];
-	Animation[] walking = new Animation[4];
+	SpriteSheet			textures;
+	Image[]				standing	= new Image[4];
+	Animation[]			walking		= new Animation[4];
 	
 	public RenderPlayer() throws SlickException
 	{
-		textures = new SpriteSheet(new Image(player.getTexture()), 12, 24);
+		this.textures = new SpriteSheet(new Image(this.player.getTexture()), 12, 24);
 		for (int i = 0; i < 4; i++)
 		{
-			walking[i] = new Animation(new Image[] {textures.getSprite(1, i), textures.getSprite(2, i)}, 200, true);
-			standing[i] = textures.getSprite(0, i);
+			this.walking[i] = new Animation(new Image[] { this.textures.getSprite(1, i), this.textures.getSprite(2, i) }, 200, true);
+			this.standing[i] = this.textures.getSprite(0, i);
 		}
 	}
 	
 	@Override
 	public void render(Object renderable, int x, int y, float camX, float camY, int face) throws SlickException
 	{
-		this.render((EntityPlayer) player, this.width, this.height);
+		this.render(this.player, this.width, this.height);
 	}
 	
 	public void render(EntityPlayer player, int w, int h) throws SlickException
@@ -35,13 +35,19 @@ public class RenderPlayer extends Render
 		int rot = player.rot;
 		Renderable r;
 		if (player.isWalking)
-			r = walking[rot];
+		{
+			r = this.walking[rot];
+		}
 		else
-			r = standing[rot];
-		int x = (int)((w / 2F) - 6);
-		int y = (int)((h / 2F) - 28);
+		{
+			r = this.standing[rot];
+		}
+		int x = (int) (w / 2F - 6);
+		int y = (int) (h / 2F - 28);
 		if (DungeonRunClient.instance.gameSettings.renderHitBoxes)
+		{
 			DungeonRunClient.instance.getGraphics().drawRect(x, y, 12, 24);
+		}
 		r.draw(x, y);
 	}
 }

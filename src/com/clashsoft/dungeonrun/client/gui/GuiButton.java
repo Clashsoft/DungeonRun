@@ -26,17 +26,19 @@ public class GuiButton
 	
 	public void render() throws SlickException
 	{
-		if (!isInvisible)
+		if (!this.isInvisible)
 		{
-			if (isLocked)
+			if (this.isLocked)
+			{
 				GL11.glColor4f(0.8F, 0.8F, 0.8F, 1F);
-			int texture = isMouseHovering() ? 40 : 0;
-			DungeonRunClient.instance.renderEngine.drawTexture(ResourceHelper.buttons, pos.x, pos.y, 0, texture, 200, 40);
+			}
+			int texture = this.isMouseHovering() ? 40 : 0;
+			DungeonRunClient.instance.renderEngine.drawTexture(ResourceHelper.buttons, this.pos.x, this.pos.y, 0, texture, 200, 40);
 		}
 	}
 	
 	public boolean isMouseHovering()
 	{
-		return DungeonRunClient.instance.currentGui.isMouseInRegion(pos.x, pos.y, 200, 40);
+		return DungeonRunClient.instance.currentGui.isMouseInRegion(this.pos.x, this.pos.y, 200, 40);
 	}
 }

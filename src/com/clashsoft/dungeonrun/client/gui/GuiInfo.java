@@ -22,7 +22,7 @@ public class GuiInfo extends GuiScreen
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
 		this.drawBricks(par1, par2);
-		this.dr.fontRenderer.drawStringWithShadow((par1 - (this.dr.fontRenderer.getStringWidth(message))) / 2, (par2 - this.dr.fontRenderer.getStringHeigth(message)) / 2, message, 0xFFFFFF);
+		this.dr.fontRenderer.drawStringWithShadow((par1 - this.dr.fontRenderer.getStringWidth(this.message)) / 2, (par2 - this.dr.fontRenderer.getStringHeigth(this.message)) / 2, this.message, 0xFFFFFF);
 	}
 	
 	@Override

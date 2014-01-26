@@ -23,9 +23,13 @@ public class GuiDeath extends GuiListScreen
 	public void onEntryUsed(int i) throws SlickException
 	{
 		if (i == 0)
+		{
 			this.dr.startGame();
+		}
 		else
+		{
 			this.dr.stopGame();
+		}
 	}
 	
 }

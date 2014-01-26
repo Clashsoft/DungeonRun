@@ -9,19 +9,19 @@ public class RenderEngine
 {
 	public DungeonRunClient	dr;
 	
-	public Graphics		graphics;
+	public Graphics			graphics;
 	
-	public RenderBlocks	blockRenderer;
-	public RenderItems	itemRenderer;
+	public RenderBlocks		blockRenderer;
+	public RenderItems		itemRenderer;
 	
 	public RenderEngine(DungeonRunClient dungeonRun)
 	{
 		this.dr = dungeonRun;
-		blockRenderer = new RenderBlocks();
+		this.blockRenderer = new RenderBlocks();
 	}
 	
 	public void drawTexture(Image image, int x, int y, int u, int v, int sx, int sy)
 	{
-		graphics.drawImage(image, x, y, x + sx, y + sy, u, v, sx, sy);
+		this.graphics.drawImage(image, x, y, x + sx, y + sy, u, v, sx, sy);
 	}
 }

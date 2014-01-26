@@ -23,9 +23,9 @@ public class FontRenderer
 	/**
 	 * The DungeonRun instance
 	 */
-	public DungeonRunClient					dr;
+	public DungeonRunClient				dr;
 	
-	public String fontName;
+	public String						fontName;
 	public boolean						globalUnicode;
 	
 	/**
@@ -59,9 +59,9 @@ public class FontRenderer
 		this.dr = dr;
 		this.fontName = fontName;
 		
-		loadColorTable();
-		loadCharNames();
-		loadChars();
+		this.loadColorTable();
+		this.loadCharNames();
+		this.loadChars();
 	}
 	
 	public void loadColorTable()
@@ -74,7 +74,9 @@ public class FontRenderer
 			int b = (i & 1) * 170 + light;
 			
 			if (i == 6)
+			{
 				r += 85;
+			}
 			
 			this.colorTable[i] = (r & 255) << 16 | (g & 255) << 8 | b & 255;
 		}
@@ -82,17 +84,21 @@ public class FontRenderer
 	
 	public void loadCharNames() throws SlickException
 	{
-		List<String> lines = ResourceHelper.readAllLines("/resources/text/" + fontName + "/charmap.txt");
+		List<String> lines = ResourceHelper.readAllLines("/resources/text/" + this.fontName + "/charmap.txt");
 		
 		for (String line : lines)
 		{
 			if (line.isEmpty())
+			{
 				continue;
+			}
 			
 			int equalsSignIndex = line.indexOf('=', 1);
 			
 			if (equalsSignIndex == -1)
+			{
 				continue;
+			}
 			
 			char c = 0;
 			String key = line.substring(0, equalsSignIndex);
@@ -101,7 +107,9 @@ public class FontRenderer
 			if (key.length() > 1)
 			{
 				if (key.startsWith("0x"))
+				{
 					c = (char) Integer.parseInt(key.substring(2), 16);
+				}
 				else
 				{
 					try
@@ -114,27 +122,31 @@ public class FontRenderer
 					}
 				}
 				
-				if (dr.gameSettings.debugMode && c != 0)
+				if (this.dr.gameSettings.debugMode && c != 0)
+				{
 					System.out.println("Unicode char " + c + " [" + key + "] (" + path + ") loaded.");
+				}
 			}
 			else
+			{
 				c = key.charAt(0);
+			}
 			
-			charPaths.put(Character.valueOf(c), path);
+			this.charPaths.put(Character.valueOf(c), path);
 		}
 	}
 	
 	public void loadChars() throws SlickException
 	{
-		for (Character character : charPaths.keySet())
+		for (Character character : this.charPaths.keySet())
 		{
-			String path = charPaths.get(character);
-			String charPath = "resources/text/" + fontName + "/" + path;
+			String path = this.charPaths.get(character);
+			String charPath = "resources/text/" + this.fontName + "/" + path;
 			
 			try
 			{
 				Image image = new Image(charPath);
-				charMap.put(character, image);
+				this.charMap.put(character, image);
 			}
 			catch (Exception ex)
 			{
@@ -145,24 +157,24 @@ public class FontRenderer
 	
 	public void setColor_I(int color)
 	{
-		red = ((color >> 16) & 255) / 255F;
-		green = ((color >> 8) & 255) / 255F;
-		blue = (color & 255) / 255F;
-		updateColor();
+		this.red = (color >> 16 & 255) / 255F;
+		this.green = (color >> 8 & 255) / 255F;
+		this.blue = (color & 255) / 255F;
+		this.updateColor();
 	}
 	
 	public void setColor_F(float r, float g, float b)
 	{
-		this.setColor_F(r, g, b, alpha);
+		this.setColor_F(r, g, b, this.alpha);
 	}
 	
 	public void setColor_F(float r, float g, float b, float a)
 	{
-		red = r;
-		green = g;
-		blue = b;
-		alpha = 1F;
-		updateColor();
+		this.red = r;
+		this.green = g;
+		this.blue = b;
+		this.alpha = 1F;
+		this.updateColor();
 	}
 	
 	public void setColor_S(String color)
@@ -170,7 +182,9 @@ public class FontRenderer
 		try
 		{
 			if (color.startsWith("0x"))
-				setColor_I(Integer.parseInt(color.substring(2), 16));
+			{
+				this.setColor_I(Integer.parseInt(color.substring(2), 16));
+			}
 			else if (color.contains(";"))
 			{
 				float r = 1F;
@@ -181,18 +195,28 @@ public class FontRenderer
 				String[] split = color.split(";");
 				
 				if (split.length >= 1)
+				{
 					r = Float.parseFloat(split[0]);
+				}
 				if (split.length >= 2)
+				{
 					g = Float.parseFloat(split[1]);
+				}
 				if (split.length >= 3)
+				{
 					b = Float.parseFloat(split[2]);
+				}
 				if (split.length >= 4)
+				{
 					a = Float.parseFloat(split[3]);
+				}
 				
-				setColor_F(r, g, b, a);
+				this.setColor_F(r, g, b, a);
 			}
 			else
-				setColor_I(Integer.parseInt(color));
+			{
+				this.setColor_I(Integer.parseInt(color));
+			}
 		}
 		catch (NumberFormatException ex)
 		{
@@ -201,7 +225,7 @@ public class FontRenderer
 	
 	public void updateColor()
 	{
-		//GL11.glColor4f(red, green, blue, alpha);
+		// GL11.glColor4f(red, green, blue, alpha);
 	}
 	
 	public void resetStyles()
@@ -217,31 +241,31 @@ public class FontRenderer
 	
 	public float drawString(int x, int y, String text)
 	{
-		return drawString(x, y, text, 0xFFFFFF);
+		return this.drawString(x, y, text, 0xFFFFFF);
 	}
 	
 	public float drawString(int x, int y, String text, int color)
 	{
-		return drawString(x, y, text, color, false);
+		return this.drawString(x, y, text, color, false);
 	}
 	
 	public float drawStringWithShadow(int x, int y, String text)
 	{
-		return drawStringWithShadow(x, y, text, 0xFFFFFF);
+		return this.drawStringWithShadow(x, y, text, 0xFFFFFF);
 	}
 	
 	public float drawStringWithShadow(int x, int y, String text, int color)
 	{
-		return drawString(x, y, text, color, true);
+		return this.drawString(x, y, text, color, true);
 	}
 	
 	public float drawString(float x, float y, String text, int color, boolean shadow)
-	{	
+	{
 		this.resetStyles();
 		this.setColor_I(color);
 		this.shadow = shadow;
 		
-		text = replaceLocalizations(text);
+		text = this.replaceLocalizations(text);
 		
 		for (int i = 0; i < text.length(); i++)
 		{
@@ -253,14 +277,19 @@ public class FontRenderer
 				int i1 = "0123456789ABCDEF".indexOf(c1);
 				
 				if (c1 == '\u00a7')
+				{
 					continue;
-				
+				}
 				else
 				{
-					if (i1 != -1 && i1 < 16) // 0-9 A-F
+					if (i1 != -1 && i1 < 16)
+					{
 						this.setColor_I(this.colorTable[i1]);
-					else if (c1 == 'b') // b
+					}
+					else if (c1 == 'b')
+					{
 						this.bold = !this.bold;
+					}
 					else if (c1 == 'c') // c
 					{
 						int i2 = text.indexOf('[', i + 2);
@@ -268,30 +297,42 @@ public class FontRenderer
 						if (i2 != -1 && i3 != -1)
 						{
 							String s1 = text.substring(i2 + 1, i3);
-							setColor_S(s1);
+							this.setColor_S(s1);
 							i = i3;
 							continue;
 						}
 					}
-					else if (c1 == 'i') // i
+					else if (c1 == 'i')
+					{
 						this.italic = !this.italic;
-					else if (c1 == 's') // s
+					}
+					else if (c1 == 's')
+					{
 						this.strikeThrough = !this.strikeThrough;
-					else if (c1 == 'S') // S
+					}
+					else if (c1 == 'S')
+					{
 						this.shadow = !this.shadow;
-					else if (c1 == 'u') // u
+					}
+					else if (c1 == 'u')
+					{
 						this.underline = !this.underline;
-					else if (c1 == 'U') // U
+					}
+					else if (c1 == 'U')
+					{
 						this.unicode = !this.unicode;
-					else if (c1 == 'r') // r
+					}
+					else if (c1 == 'r')
+					{
 						this.resetStyles();
+					}
 					
 					i++;
 					continue;
 				}
 			}
 			
-			x += drawChar(x, y, c) + 1;
+			x += this.drawChar(x, y, c) + 1;
 		}
 		x--;
 		
@@ -301,7 +342,9 @@ public class FontRenderer
 	public String replaceLocalizations(String text)
 	{
 		if (!text.contains("#"))
+		{
 			return text;
+		}
 		
 		String text1 = new String(text);
 		for (int i = 0; i < text1.length(); i++)
@@ -312,9 +355,13 @@ public class FontRenderer
 			{
 				int end = text1.indexOf(' ', i + 1);
 				if (end == -1)
+				{
 					end = text1.length();
+				}
 				if (end == i + 1)
+				{
 					continue;
+				}
 				
 				String key = text1.substring(i + 1, end);
 				String translatedKey = I18n.getStringFormatted(key);
@@ -331,30 +378,32 @@ public class FontRenderer
 	{
 		if (this.shadow)
 		{
-			drawChar(x + 1, y + 1, c, this.red / 4F, this.green / 4F, this.blue / 4F, this.alpha);
+			this.drawChar(x + 1, y + 1, c, this.red / 4F, this.green / 4F, this.blue / 4F, this.alpha);
 		}
 		
-		return drawChar(x, y, c, this.red, this.green, this.blue, this.alpha);
+		return this.drawChar(x, y, c, this.red, this.green, this.blue, this.alpha);
 	}
 	
 	public float drawChar(float x, float y, char c, float red, float green, float blue, float alpha)
 	{
-		Image image = charMap.get(Character.valueOf(c));
+		Image image = this.charMap.get(Character.valueOf(c));
 		
-		if (globalUnicode || unicode || image == null)
-			return drawUnicodeChar(x, y, c);
+		if (this.globalUnicode || this.unicode || image == null)
+		{
+			return this.drawUnicodeChar(x, y, c);
+		}
 		
 		int width = image.getWidth();
 		int height = image.getHeight();
 		
 		float b = this.bold ? 1.25F : 1F;
 		
-		if (draw)
+		if (this.draw)
 		{
 			GL11.glPushMatrix();
 			
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-
+			
 			GL11.glScalef(b, HEIGHT / height, 1F);
 			
 			GL11.glColor4f(red, green, blue, alpha);
@@ -365,9 +414,13 @@ public class FontRenderer
 				this.dr.renderEngine.graphics.setColor(new Color(red, green, blue, alpha));
 				
 				if (this.strikeThrough)
+				{
 					this.dr.renderEngine.graphics.drawLine(x, y + 3, x + width, y + 3);
+				}
 				if (this.underline)
+				{
 					this.dr.renderEngine.graphics.drawLine(x, y + 8, x + width, y + 8);
+				}
 			}
 			
 			GL11.glPopMatrix();
@@ -385,7 +438,7 @@ public class FontRenderer
 		
 		float b = this.bold ? 1.25F : 1F;
 		
-		if (draw)
+		if (this.draw)
 		{
 			GL11.glScalef(b, 0.5F, 1F);
 			g.drawString(text, x / b, y * 2F);
@@ -398,7 +451,7 @@ public class FontRenderer
 	public int getStringWidth(String text)
 	{
 		this.draw = false;
-		float f = drawString(0, 0, text);
+		float f = this.drawString(0, 0, text);
 		this.draw = true;
 		return (int) f;
 	}
@@ -406,7 +459,7 @@ public class FontRenderer
 	public int getCharWidth(char c)
 	{
 		this.draw = false;
-		float f = drawChar(0, 0, c);
+		float f = this.drawChar(0, 0, c);
 		this.draw = true;
 		return (int) f;
 	}

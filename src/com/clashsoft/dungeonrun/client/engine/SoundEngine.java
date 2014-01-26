@@ -44,26 +44,30 @@ public class SoundEngine
 	
 	public void playSoundEffect(String sound, SoundLocation sl, float volume) throws SlickException
 	{
-		Sound s = sounds.get(sound);
+		Sound s = this.sounds.get(sound);
 		if (s == null)
 		{
 			s = new Sound(sound);
-			sounds.put(sound, s);
+			this.sounds.put(sound, s);
 		}
-		//s.playAt(1F, volume, sl.x, sl.y, sl.z);
+		// s.playAt(1F, volume, sl.x, sl.y, sl.z);
 	}
 	
 	public void stopSoundEffect(String sound)
 	{
-		Sound s = sounds.get(sound);
+		Sound s = this.sounds.get(sound);
 		if (s != null)
+		{
 			s.stop();
+		}
 	}
 	
 	public void stopAllSoundEffects()
 	{
 		for (Sound s : this.sounds.values())
+		{
 			s.stop();
+		}
 	}
 	
 	public void playMusic(String music, boolean repeat) throws SlickException
@@ -73,34 +77,38 @@ public class SoundEngine
 	
 	public void playMusic(String music, boolean repeat, float volume) throws SlickException
 	{
-		Music m = musics.get(music);
+		Music m = this.musics.get(music);
 		if (m == null)
 		{
 			m = new Music(music);
-			musics.put(music, m);
+			this.musics.put(music, m);
 		}
-//		if (repeat)
-//			m.loop(1F, volume);
-//		else
-//			m.play(1F, volume);
+		// if (repeat)
+		// m.loop(1F, volume);
+		// else
+		// m.play(1F, volume);
 	}
 	
 	public void stopMusic(String music)
 	{
-		Music m = musics.get(music);
+		Music m = this.musics.get(music);
 		if (m != null)
+		{
 			m.stop();
+		}
 	}
 	
 	public void stopAllMusics()
 	{
 		for (Music m : this.musics.values())
+		{
 			m.stop();
+		}
 	}
 	
 	public void stopAllSounds()
 	{
-		stopAllSoundEffects();
-		stopAllMusics();
+		this.stopAllSoundEffects();
+		this.stopAllMusics();
 	}
 }

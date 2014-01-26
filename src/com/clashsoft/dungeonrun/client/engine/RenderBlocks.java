@@ -19,7 +19,7 @@ public class RenderBlocks extends Render
 	@Override
 	public void render(Object renderable, int x, int y, float camX, float camY, int face) throws SlickException
 	{
-		this.render((BlockInWorld) renderable, x, y, camX, camY, face);
+		this.render(renderable, x, y, camX, camY, face);
 	}
 	
 	public void renderBlock(BlockInWorld block, int x, int y, float camX, float camY, int face) throws SlickException
@@ -31,8 +31,8 @@ public class RenderBlocks extends Render
 			float offX = camX - x;
 			float offY = camY - y;
 			
-			float renderX = (this.width / 2F) - (offX * 16F);
-			float renderY = (this.height / 2F) + (offY * 16F);
+			float renderX = this.width / 2F - offX * 16F;
+			float renderY = this.height / 2F + offY * 16F;
 			
 			if (image != null)
 			{

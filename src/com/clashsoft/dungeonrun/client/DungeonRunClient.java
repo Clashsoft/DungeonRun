@@ -141,7 +141,7 @@ public class DungeonRunClient extends DungeonRun implements IServer
 				gc.getGraphics().copyArea(i, 0, 0);
 				try
 				{
-					File file = new File(getSaveDataFolder(), "screenshots");
+					File file = new File(this.getSaveDataFolder(), "screenshots");
 					if (!file.exists())
 					{
 						file.mkdir();
