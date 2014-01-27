@@ -175,6 +175,11 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		return strDate;
 	}
 	
+	public long getTick()
+	{
+		return this.tick;
+	}
+	
 	@Override
 	public void startGame() throws SlickException
 	{

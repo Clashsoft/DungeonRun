@@ -245,22 +245,22 @@ public class FontRenderer
 		this.setColor_F(1F, 1F, 1F, 1F);
 	}
 	
-	public float drawString(int x, int y, String text)
+	public float drawString(float x, float y, String text)
 	{
 		return this.drawString(x, y, text, 0xFFFFFF);
 	}
 	
-	public float drawString(int x, int y, String text, int color)
+	public float drawString(float x, float y, String text, int color)
 	{
 		return this.drawString(x, y, text, color, false);
 	}
 	
-	public float drawStringWithShadow(int x, int y, String text)
+	public float drawStringWithShadow(float x, float y, String text)
 	{
 		return this.drawStringWithShadow(x, y, text, 0xFFFFFF);
 	}
 	
-	public float drawStringWithShadow(int x, int y, String text, int color)
+	public float drawStringWithShadow(float x, float y, String text, int color)
 	{
 		return this.drawString(x, y, text, color, true);
 	}
@@ -271,12 +271,40 @@ public class FontRenderer
 		this.globalShadow = shadow;
 		
 		text = this.replaceLocalizations(text);
+		int len = text.length();
 		
-		for (int i = 0; i < text.length(); i++)
+		float x1 = x;
+		float y1 = y;
+		float width = 0;
+		float width1 = 0;
+		
+		for (int i = 0; i < len; i++)
 		{
 			char c = text.charAt(i);
 			
-			if (c == '\u00A7' && i + 2 != text.length())
+			if (c == '\n')
+			{
+				width1 = Math.max(width, width1);
+				width = 0;
+				
+				x = x1;
+				y += 10;
+				continue;
+			}
+			else if (c == '\t')
+			{
+				width = (i + 4 - (i & 3)) * 6;
+				x = x1 + width;
+				continue;
+			}
+			else if (c == '\r')
+			{
+				width1 = Math.max(width, width1);
+				width = 0;
+				x = x1;
+				continue;
+			}
+			else if (c == '\u00A7' && i + 1 < len)
 			{
 				char c1 = text.charAt(i + 1);
 				int i1 = "0123456789ABCDEF".indexOf(c1);
@@ -364,22 +392,20 @@ public class FontRenderer
 				}
 			}
 			
-			x += this.drawChar(x, y, c) + 1;
+			width += this.drawChar(x, y, c) + 1;
+			x = x1 + width;
 		}
-		x--;
+		
 		this.reset();
-		return x;
+		return Math.max(width, width1) - 1;
 	}
 	
 	public String replaceLocalizations(String text)
 	{
-		if (!text.contains("#"))
-		{
-			return text;
-		}
-		
 		String text1 = text;
-		for (int i = 0; i < text1.length(); i++)
+		int len = text.length();
+		
+		for (int i = 0; i < len; i++)
 		{
 			char c = text1.charAt(i);
 			
@@ -388,7 +414,7 @@ public class FontRenderer
 				int end = text1.indexOf(' ', i + 1);
 				if (end == -1)
 				{
-					end = text1.length();
+					end = len;
 				}
 				if (end == i + 1)
 				{

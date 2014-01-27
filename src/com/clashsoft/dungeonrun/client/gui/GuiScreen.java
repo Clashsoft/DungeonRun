@@ -65,7 +65,7 @@ public abstract class GuiScreen
 			}
 		}
 		
-		this.dr.fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7r %s (%d FPS)", DungeonRun.VERSION, this.dr.getFPS()));
+		this.dr.fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7i %s (%d FPS)", DungeonRun.VERSION, this.dr.getFPS()));
 		if (this.dr.gameSettings.debugMode)
 		{
 			int var = 5;
