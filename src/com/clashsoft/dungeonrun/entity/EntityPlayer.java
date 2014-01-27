@@ -36,7 +36,7 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public String getTexture()
 	{
-		return "resources/entity/knights.png";
+		return "resources/textures/entity/knights.png";
 	}
 	
 	@Override

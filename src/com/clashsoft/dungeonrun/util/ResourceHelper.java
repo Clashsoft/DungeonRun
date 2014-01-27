@@ -32,9 +32,9 @@ public class ResourceHelper
 	
 	public static void setupTextures() throws SlickException
 	{
-		chaotic_development_bg = new Image("resources/gui/cdbg.png");
-		buttons = new Image("resources/gui/buttons.png");
-		icons = new Image("resources/gui/icons.png");
+		chaotic_development_bg = new Image("resources/textures/gui/cdbg.png");
+		buttons = new Image("resources/textures/gui/buttons.png");
+		icons = new Image("resources/textures/gui/icons.png");
 		iconsSprite = new SpriteSheet(icons, 18, 18);
 	}
 	

@@ -22,8 +22,6 @@ public class Chunk implements INBTSaveable
 	
 	private float[]		lightValues;
 	
-	public boolean		dummy;
-	
 	public Chunk(World w, int x, int y, int z)
 	{
 		this.world = w;
@@ -35,8 +33,6 @@ public class Chunk implements INBTSaveable
 		this.metadataValues = new int[4096];
 		
 		this.lightValues = new float[4096];
-		
-		this.dummy = true;
 	}
 	
 	protected void initializeLightValues()
@@ -206,7 +202,6 @@ public class Chunk implements INBTSaveable
 		this.chunkZ = nbt.getInteger("z");
 		this.blockIDs = nbt.getTagArray("ids").getIntArray();
 		this.metadataValues = nbt.getTagArray("data").getIntArray();
-		this.dummy = false;
 	}
 	
 	@Override

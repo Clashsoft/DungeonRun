@@ -154,9 +154,9 @@ public class World
 		}
 	}
 	
-	public Collection<Entity> getEntitys()
+	public List<Entity> getEntitys()
 	{
-		return this.entitys.values();
+		return new ArrayList(this.entitys.values());
 	}
 	
 	public Collection<EntityPlayer> getPlayers()

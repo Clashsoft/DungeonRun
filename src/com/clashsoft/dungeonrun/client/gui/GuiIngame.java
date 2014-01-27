@@ -1,5 +1,9 @@
 package com.clashsoft.dungeonrun.client.gui;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -7,6 +11,7 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
+import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.world.BlockInWorld;
@@ -16,11 +21,18 @@ public class GuiIngame extends GuiScreen
 {
 	public RenderBlocks	renderBlocks;
 	
+	public Comparator	entitySorterTop	= new Comparator<Entity>()
+										{
+											@Override
+											public int compare(Entity o1, Entity o2)
+											{
+												return -Double.compare(o1.posZ, o2.posZ);
+											};
+										};
+	
 	public int			mouseBlockX, mouseBlockY, mouseBlockZ;
-	
-	public int			displayMode	= 1;
-	
-	private boolean		worldSaving	= false;
+	public int			displayMode		= 1;
+	private boolean		worldSaving		= false;
 	
 	public GuiIngame(EntityPlayer player)
 	{
@@ -46,9 +58,9 @@ public class GuiIngame extends GuiScreen
 		{
 			int mode = this.displayMode;
 			World world = this.player.worldObj;
-			float camX = (float) this.player.posX;
-			float camY = (float) this.player.posY;
-			float camZ = (float) this.player.posZ;
+			double camX = this.player.posX;
+			double camY = this.player.posY;
+			double camZ = this.player.posZ;
 			int posX = (int) camX;
 			int posY = (int) camY + 1;
 			int posZ = (int) camZ;
@@ -63,74 +75,32 @@ public class GuiIngame extends GuiScreen
 				{
 					for (int j = minY; j <= maxY; j++)
 					{
-						int x = posX + i;
-						int y = posY + 0;
-						int z = posZ + j;
-						BlockInWorld block = world.getBlock(x, y, z);
-						this.renderBlocks.renderBlock(block, x, z, camX, camZ, mode);
+						for (int k = 0;; k++)
+						{
+							int x = posX + i;
+							int y = posY - k;
+							int z = posZ + j;
+							
+							BlockInWorld block = world.getBlock(x, y, z);
+							if (block != null && !block.isAir())
+							{
+								this.renderBlocks.renderBlock(block, x, z, camX, camZ, mode);
+								break;
+							}
+						}
 					}
 				}
-			}
-			else if (mode == 2)
-			{
-				for (int i = minX; i <= maxX; i++)
+				
+				List<Entity> entities = world.getEntitys();
+				Collections.sort(entities, this.entitySorterTop);
+				
+				for (Entity entity : entities)
 				{
-					for (int j = minY; j <= maxY; j++)
-					{
-						int x = posX + i;
-						int y = posY + j;
-						int z = posZ + 0;
-						BlockInWorld block = world.getBlock(x, y, z);
-						this.renderBlocks.renderBlock(block, x, y, camX, camY, mode);
-					}
+					Render render = entity.getRenderer();
+					render.width = width;
+					render.height = height;
+					entity.getRenderer().render(entity, entity.posX, entity.posZ, camX, camZ, mode);
 				}
-			}
-			else if (mode == 3)
-			{
-				for (int i = minX; i <= maxX; i++)
-				{
-					for (int j = minY; j <= maxY; j++)
-					{
-						int x = posX + 0;
-						int y = posY + j;
-						int z = posZ + i;
-						BlockInWorld block = world.getBlock(x, y, z);
-						this.renderBlocks.renderBlock(block, z, y, camZ, camY, mode);
-					}
-				}
-			}
-			else if (mode == 4)
-			{
-				for (int i = minX; i <= maxX; i++)
-				{
-					for (int j = minY; j <= maxY; j++)
-					{
-						int x = posX - i;
-						int y = posY + j;
-						int z = posZ + 0;
-						BlockInWorld block = world.getBlock(x, y, z);
-						this.renderBlocks.renderBlock(block, x, y, camX, camY, mode);
-					}
-				}
-			}
-			else if (mode == 5)
-			{
-				for (int i = minX; i <= maxX; i++)
-				{
-					for (int j = minY; j <= maxY; j++)
-					{
-						int x = posX + 0;
-						int y = posY + j;
-						int z = posZ - i;
-						BlockInWorld block = world.getBlock(x, y, z);
-						this.renderBlocks.renderBlock(block, z, y, camZ, camY, mode);
-					}
-				}
-			}
-			
-			for (Entity entity : world.getEntitys())
-			{
-				entity.getRenderer().render(entity, 0, 0, camX, camY, mode);
 			}
 		}
 		

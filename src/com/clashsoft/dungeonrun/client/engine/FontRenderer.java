@@ -185,8 +185,6 @@ public class FontRenderer
 		this.green = g;
 		this.blue = b;
 		this.alpha = a;
-		
-		this.graphics.setColor(new Color(r, g, b, a));
 	}
 	
 	public void setColor_S(String color)
@@ -471,6 +469,7 @@ public class FontRenderer
 			
 			if (this.strikeThrough || this.underline)
 			{
+				this.graphics.setColor(new Color(red, green, blue, alpha));
 				if (this.strikeThrough)
 				{
 					this.graphics.drawLine(x, y + 3, x + width, y + 3);

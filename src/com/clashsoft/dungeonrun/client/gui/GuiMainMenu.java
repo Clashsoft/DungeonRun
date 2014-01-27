@@ -51,13 +51,9 @@ public class GuiMainMenu extends GuiListScreen
 			this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);
 		}
 		
-		int var1 = (int) this.player.posX;
-		int var2 = height / 2 - 20;
-		GL11.glTranslated(var1, var2, 0);
 		GL11.glScalef(3F, 3F, 1F);
-		this.player.getRenderer().render(this.player, 0, 0);
+		this.player.getRenderer().render(this.player, player.posX, height / 2D - 20D, 2);
 		GL11.glScalef(1F / 3F, 1F / 3F, 1F);
-		GL11.glTranslated(-var1, -var2, 0);
 	}
 	
 	@Override
