@@ -13,11 +13,11 @@ import com.clashsoft.dungeonrun.util.ResourceHelper;
 
 public class FontRenderer
 {
-	public static final int				HEIGHT		= 9;
+	private static final int			HEIGHT			= 9;
 	
-	protected Map<Character, String>	charPaths	= new HashMap();
-	protected List<Character>			chars		= new ArrayList();
-	protected Map<Character, Image>		charMap		= new HashMap<Character, Image>();
+	protected Map<Character, String>	charPaths		= new HashMap();
+	protected List<Character>			chars			= new ArrayList();
+	protected Map<Character, Image>		charMap			= new HashMap<Character, Image>();
 	
 	/**
 	 * The DungeonRun instance
@@ -32,18 +32,18 @@ public class FontRenderer
 	/**
 	 * Color table for predefined color access via §[0-9A-F]
 	 */
-	public int[]						colorTable	= new int[16];
+	public int[]						colorTable		= new int[16];
 	
 	/**
 	 * Used in FontRenderer#getStringWidth(String). Setting this flag to false
 	 * will disable all character rendering.
 	 */
-	public boolean						draw		= true;
+	public boolean						draw			= true;
 	
 	/**
 	 * Current Font color.
 	 */
-	public float						red			= 1F, green = 1F, blue = 1F, alpha = 1F;
+	public float						red				= 1F, green = 1F, blue = 1F, alpha = 1F;
 	
 	/**
 	 * Determines if this FontRenderer uses unicode font rendering
@@ -53,7 +53,7 @@ public class FontRenderer
 	/**
 	 * Determines if the currently rendered string is rendered with a shadow
 	 */
-	public boolean						globalShadow		= false;
+	public boolean						globalShadow	= false;
 	
 	/**
 	 * Format flags.
@@ -185,6 +185,8 @@ public class FontRenderer
 		this.green = g;
 		this.blue = b;
 		this.alpha = a;
+		
+		this.graphics.setColor(new Color(r, g, b, a));
 	}
 	
 	public void setColor_S(String color)
@@ -288,7 +290,7 @@ public class FontRenderer
 				width = 0;
 				
 				x = x1;
-				y += 10;
+				y += this.getHeight();
 				continue;
 			}
 			else if (c == '\t')
@@ -462,15 +464,13 @@ public class FontRenderer
 			
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			
-			GL11.glScalef(b, HEIGHT / height, 1F);
+			GL11.glScalef(b, this.getHeight() / height, 1F);
 			
 			GL11.glColor4f(red, green, blue, alpha);
 			image.drawSheared(x / b, y, this.italic ? -1.5F : 0F, 0, null);
 			
 			if (this.strikeThrough || this.underline)
 			{
-				this.graphics.setColor(new Color(red, green, blue, alpha));
-				
 				if (this.strikeThrough)
 				{
 					this.graphics.drawLine(x, y + 3, x + width, y + 3);
@@ -523,6 +523,11 @@ public class FontRenderer
 	}
 	
 	public int getStringHeigth(String text)
+	{
+		return this.getHeight();
+	}
+	
+	public int getHeight()
 	{
 		return HEIGHT;
 	}
