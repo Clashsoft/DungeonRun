@@ -39,11 +39,11 @@ public abstract class GuiListScreen extends GuiScreen
 		{
 			String text = this.getEntry(i);
 			boolean selected = this.selection == i;
-			int i1 = this.dr.fontRenderer.getStringWidth(text);
-			int x = (width - i1) / 2 + this.getXOffset();
-			int y = i * 20 + this.getYOffset();
+			float textWidth = this.dr.fontRenderer.getStringWidth(text);
+			float x = (width - textWidth) / 2 + this.getXOffset();
+			float y = i * 20 + this.getYOffset();
 			
-			if (this.isMouseInRegion(x - 5, y, i1, 20))
+			if (this.isMouseInRegion(x - 5, y, textWidth, 20))
 			{
 				this.selection = i;
 				selected = true;

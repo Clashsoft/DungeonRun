@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.client.renderer.entity;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
@@ -7,9 +8,9 @@ import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 
 public class RenderPlayer extends Render<EntityPlayer>
-{	
+{
 	private SpriteSheet		textures;
-	private Renderable[] sprites = new Renderable[16];
+	private Renderable[]	sprites	= new Renderable[16];
 	
 	public RenderPlayer(EntityPlayer player) throws SlickException
 	{
@@ -21,20 +22,20 @@ public class RenderPlayer extends Render<EntityPlayer>
 		sprites[2] = this.textures.getSprite(0, 2);
 		sprites[3] = this.textures.getSprite(0, 3);
 		// 4 - 7 -> Top walking
-		sprites[4] = new Animation(new Image[] {this.textures.getSprite(1, 0), this.textures.getSprite(2, 0)}, 200);
-		sprites[5] = new Animation(new Image[] {this.textures.getSprite(1, 1), this.textures.getSprite(2, 1)}, 200);
-		sprites[6] = new Animation(new Image[] {this.textures.getSprite(1, 2), this.textures.getSprite(2, 2)}, 200);
-		sprites[7] = new Animation(new Image[] {this.textures.getSprite(1, 3), this.textures.getSprite(2, 3)}, 200);
+		sprites[4] = new Animation(new Image[] { this.textures.getSprite(1, 0), this.textures.getSprite(2, 0) }, 200);
+		sprites[5] = new Animation(new Image[] { this.textures.getSprite(1, 1), this.textures.getSprite(2, 1) }, 200);
+		sprites[6] = new Animation(new Image[] { this.textures.getSprite(1, 2), this.textures.getSprite(2, 2) }, 200);
+		sprites[7] = new Animation(new Image[] { this.textures.getSprite(1, 3), this.textures.getSprite(2, 3) }, 200);
 		// 8 - 11 -> Side standing
 		sprites[8] = this.textures.getSprite(3, 0);
 		sprites[9] = this.textures.getSprite(3, 1);
 		sprites[10] = this.textures.getSprite(3, 2);
 		sprites[11] = this.textures.getSprite(3, 3);
 		// 12 - 15 -> Side walking
-		sprites[12] = new Animation(new Image[] {this.textures.getSprite(4, 0), this.textures.getSprite(5, 0)}, 200);
-		sprites[13] = new Animation(new Image[] {this.textures.getSprite(4, 1), this.textures.getSprite(5, 1)}, 200);
-		sprites[14] = new Animation(new Image[] {this.textures.getSprite(4, 2), this.textures.getSprite(5, 2)}, 200);
-		sprites[15] = new Animation(new Image[] {this.textures.getSprite(4, 3), this.textures.getSprite(5, 3)}, 200);
+		sprites[12] = new Animation(new Image[] { this.textures.getSprite(4, 0), this.textures.getSprite(5, 0) }, 200);
+		sprites[13] = new Animation(new Image[] { this.textures.getSprite(4, 1), this.textures.getSprite(5, 1) }, 200);
+		sprites[14] = new Animation(new Image[] { this.textures.getSprite(4, 2), this.textures.getSprite(5, 2) }, 200);
+		sprites[15] = new Animation(new Image[] { this.textures.getSprite(4, 3), this.textures.getSprite(5, 3) }, 200);
 	}
 	
 	@Override
@@ -55,12 +56,13 @@ public class RenderPlayer extends Render<EntityPlayer>
 			index = (player.isWalking ? 12 : 8) + ((rot + face) % 4);
 		}
 		
-		Renderable r = this.sprites[index];
+		float width = DungeonRunClient.instance.fontRenderer.getStringWidth(player.username);
 		
-		if (DungeonRunClient.instance.gameSettings.renderHitBoxes)
-		{
-			DungeonRunClient.instance.getGraphics().drawRect(fx, fy, 12F, 24F);
-		}
-		r.draw(fx, fy);
+		GL11.glTranslatef(fx, fy, 0F);
+		this.sprites[index].draw(-6F, -12F);
+		GL11.glScalef(0.5F, 0.5F, 1F);
+		DungeonRunClient.instance.fontRenderer.drawString(width / -2F, -4F, player.username);
+		GL11.glScalef(2F, 2F, 1F);
+		GL11.glTranslatef(-fx, -fy, 0F);
 	}
 }

@@ -31,11 +31,11 @@ public class GuiMainMenu extends GuiListScreen
 		{
 			String text = this.getEntry(i);
 			boolean selected = this.selection == i;
-			int i1 = this.dr.fontRenderer.getStringWidth(text);
-			int x = (width - i1) / 2;
-			int y = i * 20 + 120;
+			float textWidth = this.dr.fontRenderer.getStringWidth(text);
+			float x = (width - textWidth) / 2;
+			float y = i * 20 + 120;
 			
-			if (this.isMouseInRegion(x - 10, y, i1, 10))
+			if (this.isMouseInRegion(x - 10, y, textWidth, 10))
 			{
 				this.selection = i;
 				selected = true;
@@ -45,7 +45,7 @@ public class GuiMainMenu extends GuiListScreen
 			{
 				Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
 				torch.draw(x - torch.getWidth(), y - 4);
-				torch.draw(x + i1, y - 4);
+				torch.draw(x + textWidth, y - 4);
 			}
 			
 			this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);

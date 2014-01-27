@@ -505,12 +505,12 @@ public class FontRenderer
 		return width * b;
 	}
 	
-	public int getStringWidth(String text)
+	public float getStringWidth(String text)
 	{
 		this.draw = false;
 		float f = this.drawString(0, 0, text);
 		this.draw = true;
-		return (int) f;
+		return f;
 	}
 	
 	public int getCharWidth(char c)

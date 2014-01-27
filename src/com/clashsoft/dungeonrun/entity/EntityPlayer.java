@@ -22,7 +22,13 @@ public class EntityPlayer extends EntityLiving
 	
 	public EntityPlayer(World world) throws SlickException
 	{
+		this(world, "");
+	}
+	
+	public EntityPlayer(World world, String username) throws SlickException
+	{
 		super(world);
+		this.username = username;
 		this.inventory = new InventoryPlayer(this);
 		this.renderer = new RenderPlayer(this);
 	}
@@ -45,9 +51,9 @@ public class EntityPlayer extends EntityLiving
 		int i = this.isSprinting ? 2 : 1;
 		float f = Math.abs(this.rot == 0 || this.rot == 2 ? (float) this.posZ % 1F : (float) this.posX % 1F);
 		
-		boolean b = this.canMove(f, this.rot) || this.canMove(1 - f, this.rot);
+		boolean b = this.canMove(f, this.rot) || this.canMove(1F - f, this.rot);
 		
-		if (this.stepsWalked >= 5 && f >= 0.499F && f <= 0.501F || !b)
+		if (!b || (this.stepsWalked >= 5 && f >= 0.499F && f <= 0.501F))
 		{
 			this.isWalking = false;
 			this.isSprinting = false;
@@ -81,9 +87,9 @@ public class EntityPlayer extends EntityLiving
 		if (!this.isWalking)
 		{
 			this.stepsWalked = 0;
-			if (this.rot != (byte) (dir % 4))
+			if (this.rot != (byte) (dir & 3))
 			{
-				this.rot = (byte) (dir % 4);
+				this.rot = (byte) (dir & 3);
 				this.isWalking = false;
 				return;
 			}
@@ -104,17 +110,20 @@ public class EntityPlayer extends EntityLiving
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		nbt.setInteger("StepsWalked", this.stepsWalked);
+		
+		NBTTagCompound inventory = new NBTTagCompound("Inventory");
+		this.inventory.writeToNBT(inventory);
+		nbt.setTagCompound(inventory);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		this.stepsWalked = nbt.getInteger("StepsWalked");
 		
-		NBTTagCompound inventory = new NBTTagCompound("Inventory");
-		this.inventory.writeToNBT(inventory);
-		nbt.setTagCompound(inventory);
+		this.username = nbt.getString("Username");
+		
+		NBTTagCompound inventory = nbt.getTagCompound("Inventory");
+		this.inventory.readFromNBT(inventory);
 	}
 }

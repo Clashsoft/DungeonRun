@@ -48,7 +48,7 @@ public class DungeonRunClient extends DungeonRun implements IServer
 	
 	public static void main(String[] args)
 	{
-		String username = args[0];
+		String username = "Clashsoft";
 		try
 		{
 			instance = new DungeonRunClient(username);
@@ -222,8 +222,8 @@ public class DungeonRunClient extends DungeonRun implements IServer
 		
 		if (this.thePlayer == null)
 		{
-			this.thePlayer = new EntityPlayer(this.theWorld);
-			this.thePlayer.setLocation(0D, 128D, 0D);
+			this.thePlayer = new EntityPlayer(this.theWorld, this.username);
+			this.thePlayer.setLocation(0D, 64D, 0D);
 			this.theWorld.spawnEntityInWorld(this.thePlayer);
 		}
 		

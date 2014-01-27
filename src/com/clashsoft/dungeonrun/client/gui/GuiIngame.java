@@ -107,8 +107,8 @@ public class GuiIngame extends GuiScreen
 		if (this.worldSaving)
 		{
 			String text = I18n.getString("world.saving");
-			int w = this.dr.fontRenderer.getStringWidth(text);
-			this.dr.fontRenderer.drawString(width - 20 - w, height - 20, text, 0xFFFFFF);
+			float w = this.dr.fontRenderer.getStringWidth(text);
+			this.dr.fontRenderer.drawString(width - 20F - w, height - 20F, text, 0xFFFFFF);
 		}
 	}
 	

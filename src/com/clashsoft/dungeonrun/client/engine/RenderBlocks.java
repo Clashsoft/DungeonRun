@@ -11,8 +11,8 @@ public class RenderBlocks
 	public static final int	BLOCKS_X	= 16;
 	public static final int	BLOCKS_Y	= 9;
 	
-	public int width;
-	public int height;
+	public int				width;
+	public int				height;
 	
 	public RenderBlocks()
 	{
