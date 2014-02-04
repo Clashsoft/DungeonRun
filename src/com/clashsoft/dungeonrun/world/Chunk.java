@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.world;
 
-import com.clashsoft.nbt.NBTTagArray;
-import com.clashsoft.nbt.NBTTagCompound;
+import com.clashsoft.nbt.tags.collection.NBTTagArray;
+import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
 
 public class Chunk implements INBTSaveable

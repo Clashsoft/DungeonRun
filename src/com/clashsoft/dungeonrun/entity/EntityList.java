@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.nbt.NBTTagCompound;
+import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 
 public class EntityList
 {

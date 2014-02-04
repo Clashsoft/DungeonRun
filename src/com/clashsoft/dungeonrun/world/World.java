@@ -8,9 +8,9 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.nbt.NBTTagCompound;
-import com.clashsoft.nbt.NBTTagList;
 import com.clashsoft.nbt.NamedBinaryTag;
+import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import com.clashsoft.nbt.tags.collection.NBTTagList;
 import com.clashsoft.nbt.util.NBTSerializer;
 
 public class World

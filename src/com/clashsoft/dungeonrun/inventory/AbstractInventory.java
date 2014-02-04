@@ -1,9 +1,9 @@
 package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.item.ItemStack;
-import com.clashsoft.nbt.NBTTagCompound;
-import com.clashsoft.nbt.NBTTagList;
 import com.clashsoft.nbt.NamedBinaryTag;
+import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import com.clashsoft.nbt.tags.collection.NBTTagList;
 import com.clashsoft.nbt.util.INBTSaveable;
 
 public abstract class AbstractInventory implements INBTSaveable
@@ -25,7 +25,7 @@ public abstract class AbstractInventory implements INBTSaveable
 			ItemStack stack = this.getStackInSlot(i);
 			if (stack != null)
 			{
-				NBTTagCompound compound = new NBTTagCompound("Slot#" + i);
+				NBTTagCompound compound = new NBTTagCompound("#" + i);
 				stack.writeToNBT(compound);
 				compound.setInteger("SlotID", i);
 				
@@ -42,14 +42,14 @@ public abstract class AbstractInventory implements INBTSaveable
 		NBTTagList slots = nbt.getTagList("Slots");
 		if (slots != null)
 		{
-			for (int i = 0; i < slots.tagCount(); i++)
+			for (int i = 0; i < slots.size(); i++)
 			{
 				NamedBinaryTag base = slots.tagAt(i);
 				if (base instanceof NBTTagCompound)
 				{
 					NBTTagCompound compound = (NBTTagCompound) base;
 					
-					int slotID = compound.getInteger("SlotID");
+					int slotID = compound.getInteger("id");
 					ItemStack stack = new ItemStack(null, 0, 0);
 					stack.readFromNBT(compound);
 					

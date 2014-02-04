@@ -60,9 +60,7 @@ public class RenderPlayer extends Render<EntityPlayer>
 		
 		GL11.glTranslatef(fx, fy, 0F);
 		this.sprites[index].draw(-6F, -12F);
-		GL11.glScalef(0.5F, 0.5F, 1F);
-		DungeonRunClient.instance.fontRenderer.drawString(width / -2F, -4F, player.username);
-		GL11.glScalef(2F, 2F, 1F);
+		DungeonRunClient.instance.fontRenderer.drawStringWithShadow(width / -2F, -8F, player.username);
 		GL11.glTranslatef(-fx, -fy, 0F);
 	}
 }

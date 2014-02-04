@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.item;
 
 import com.clashsoft.dungeonrun.block.Block;
-import com.clashsoft.nbt.NBTTagCompound;
+import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
 
 public class ItemStack implements INBTSaveable
