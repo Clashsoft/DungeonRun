@@ -111,6 +111,8 @@ public class EntityPlayer extends EntityLiving
 	{
 		super.writeToNBT(nbt);
 		
+		nbt.setString("Username", this.username);
+		
 		NBTTagCompound inventory = new NBTTagCompound("Inventory");
 		this.inventory.writeToNBT(inventory);
 		nbt.setTagCompound(inventory);

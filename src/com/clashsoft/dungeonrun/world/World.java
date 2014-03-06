@@ -9,9 +9,9 @@ import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.nbt.NamedBinaryTag;
+import com.clashsoft.nbt.io.NBTSerializer;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.tags.collection.NBTTagList;
-import com.clashsoft.nbt.util.NBTSerializer;
 
 public class World
 {
@@ -258,7 +258,7 @@ public class World
 		
 		// Save world NBT
 		
-		success = this.worldNBT.serialize(level, true);
+		success = NBTSerializer.serialize(this.worldNBT, level);
 		
 		// -- Chunks --
 		
@@ -282,7 +282,7 @@ public class World
 						File chunkFile = new File(regionDir, s + CHUNK_EXTENSION);
 						NBTTagCompound chunkCompound = new NBTTagCompound(s);
 						c.writeToNBT(chunkCompound);
-						chunkCompound.serialize(chunkFile, true);
+						NBTSerializer.serialize(chunkCompound, chunkFile);
 					}
 				}
 			}
@@ -301,7 +301,7 @@ public class World
 			return false;
 		}
 		
-		this.worldNBT = (NBTTagCompound) NBTSerializer.deserialize(level, true);
+		this.worldNBT = (NBTTagCompound) NBTSerializer.deserialize(level);
 		if (this.worldNBT == null)
 		{
 			return false;
@@ -359,7 +359,7 @@ public class World
 						
 						if (chunkFile.exists())
 						{
-							NBTTagCompound nbt = (NBTTagCompound) NBTSerializer.deserialize(chunkFile, true);
+							NBTTagCompound nbt = (NBTTagCompound) NBTSerializer.deserialize(chunkFile);
 							Chunk chunk = new Chunk(this, i, j, k);
 						}
 					}
