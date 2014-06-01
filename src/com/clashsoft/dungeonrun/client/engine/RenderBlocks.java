@@ -9,7 +9,7 @@ import com.clashsoft.dungeonrun.world.BlockInWorld;
 public class RenderBlocks
 {
 	public static final int	BLOCKS_X	= 16;
-	public static final int	BLOCKS_Y	= 9;
+	public static final int	BLOCKS_Y	= 10;
 	
 	public int				width;
 	public int				height;

@@ -22,6 +22,8 @@ public class Chunk implements INBTSaveable
 	
 	private float[]		lightValues;
 	
+	private boolean		hasChanged;
+	
 	public Chunk(World w, int x, int y, int z)
 	{
 		this.world = w;
@@ -50,29 +52,6 @@ public class Chunk implements INBTSaveable
 		}
 	}
 	
-	/**
-	 * Sets the block at the position.
-	 * <p>
-	 * Flags:
-	 * <p>
-	 * 1: update neighbor blocks
-	 * <p>
-	 * 2: update light values
-	 * <p>
-	 * 
-	 * @param blockID
-	 *            the block id
-	 * @param metadata
-	 *            the block metadata
-	 * @param x
-	 *            x coord
-	 * @param y
-	 *            y coord
-	 * @param z
-	 *            z coord
-	 * @param flags
-	 *            placement args
-	 */
 	public void setBlock(int blockID, int metadata, int x, int y, int z, int flags)
 	{
 		int index = index(x, y, z);
@@ -85,6 +64,15 @@ public class Chunk implements INBTSaveable
 		{
 			this.updateLightValues(x, y, z, f);
 		}
+		
+		this.hasChanged = true;
+	}
+	
+	public void setLightValue(int x, int y, int z, float f)
+	{
+		this.lightValues[index(x, y, z)] = f;
+		
+		this.hasChanged = true;
 	}
 	
 	public void updateLightValues(int x, int y, int z, float f)
@@ -174,11 +162,6 @@ public class Chunk implements INBTSaveable
 		return 1F; // this.lightValues[index];
 	}
 	
-	public void setLightValue(int x, int y, int z, float f)
-	{
-		this.lightValues[index(x, y, z)] = f;
-	}
-	
 	protected static int index(int x, int y, int z)
 	{
 		return x << 0 | y << 4 | z << 8;
@@ -208,5 +191,20 @@ public class Chunk implements INBTSaveable
 	public String toString()
 	{
 		return "Chunk[" + this.chunkX + ";" + this.chunkY + ";" + this.chunkZ + "]";
+	}
+	
+	public boolean isDirty()
+	{
+		return this.hasChanged;
+	}
+	
+	public void markDirty()
+	{
+		this.hasChanged = true;
+	}
+	
+	public void markClean()
+	{
+		this.hasChanged = false;
 	}
 }

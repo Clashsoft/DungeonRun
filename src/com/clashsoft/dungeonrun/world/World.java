@@ -109,7 +109,7 @@ public class World
 		}
 		if (z < this.maxChunkZ)
 		{
-			this.maxChunkZ = z;
+			this.minChunkZ = z;
 		}
 	}
 	
@@ -219,6 +219,7 @@ public class World
 	public boolean save(File file)
 	{
 		boolean success = true;
+		long now = System.currentTimeMillis();
 		
 		if (this.worldNBT == null)
 		{
@@ -268,25 +269,36 @@ public class World
 			regionDir.mkdirs();
 		}
 		
-		for (int i = this.minChunkX; i < this.maxChunkX; i++)
+		int chunks = 0;
+		
+		for (int i = this.minChunkX; i <= this.maxChunkX; i++)
 		{
-			for (int j = this.minChunkY; j < this.maxChunkY; j++)
+			for (int j = this.minChunkY; j <= this.maxChunkY; j++)
 			{
-				for (int k = this.minChunkZ; k < this.maxChunkZ; k++)
+				for (int k = this.minChunkZ; k <= this.maxChunkZ; k++)
 				{
 					ChunkPosition pos = new ChunkPosition(i, j, k);
 					Chunk c = this.chunks.get(pos);
-					if (c != null)
+					if (c != null && c.isDirty())
 					{
-						String s = "chunk." + i + "." + j + "." + k;
-						File chunkFile = new File(regionDir, s + CHUNK_EXTENSION);
-						NBTTagCompound chunkCompound = new NBTTagCompound(s);
+						String fileName = "chunk." + i + "." + j + "." + k;
+						File chunkFile = new File(regionDir, fileName + CHUNK_EXTENSION);
+						NBTTagCompound chunkCompound = new NBTTagCompound(fileName);
+						
+						chunks++;
 						c.writeToNBT(chunkCompound);
 						NBTSerializer.serialize(chunkCompound, chunkFile);
+						
+						c.markClean();
 					}
 				}
 			}
 		}
+		
+		now = System.currentTimeMillis() - now;
+		
+		System.out.println("World Saved (" + now + " ms).");
+		System.out.println("Saved " + chunks + " Chunks.");
 		
 		return success;
 	}

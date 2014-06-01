@@ -32,7 +32,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		return instance;
 	}
 	
-	public static final void exit()
+	public static void exit()
 	{
 		AppGameContainer container = instance == null ? null : instance.theGameContainer;
 		if (container != null)

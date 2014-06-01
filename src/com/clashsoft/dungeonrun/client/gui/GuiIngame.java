@@ -19,20 +19,13 @@ import com.clashsoft.dungeonrun.world.World;
 
 public class GuiIngame extends GuiScreen
 {
-	public RenderBlocks	renderBlocks;
+	public RenderBlocks			renderBlocks;
 	
-	public Comparator	entitySorterTop	= new Comparator<Entity>()
-										{
-											@Override
-											public int compare(Entity o1, Entity o2)
-											{
-												return -Double.compare(o1.posZ, o2.posZ);
-											};
-										};
+	public Comparator<Entity>	entitySorterTop	= (e1, e2) -> Double.compare(e2.posZ, e1.posZ);
 	
-	public int			mouseBlockX, mouseBlockY, mouseBlockZ;
-	public int			displayMode		= 1;
-	private boolean		worldSaving		= false;
+	public int					mouseBlockX, mouseBlockY, mouseBlockZ;
+	public int					displayMode		= 1;
+	private boolean				worldSaving		= false;
 	
 	public GuiIngame(EntityPlayer player)
 	{
@@ -61,46 +54,45 @@ public class GuiIngame extends GuiScreen
 			double camX = this.player.posX;
 			double camY = this.player.posY;
 			double camZ = this.player.posZ;
-			int posX = (int) camX;
-			int posY = (int) camY + 1;
-			int posZ = (int) camZ;
-			int maxX = RenderBlocks.BLOCKS_X;
-			int maxY = RenderBlocks.BLOCKS_Y;
-			int minX = -RenderBlocks.BLOCKS_X;
-			int minY = -RenderBlocks.BLOCKS_Y;
 			
-			if (mode == 1) // Top view
+			int minI = -RenderBlocks.BLOCKS_X;
+			int maxI = RenderBlocks.BLOCKS_X;
+			int minJ = -RenderBlocks.BLOCKS_Y;
+			int maxJ = RenderBlocks.BLOCKS_Y;
+			
+			int posX = (int) camX;
+			int posY = (int) camY + 64;
+			int posZ = (int) camZ;
+			
+			for (int i = minI; i <= maxI; i++)
 			{
-				for (int i = minX; i <= maxX; i++)
+				for (int j = minJ; j <= maxJ; j++)
 				{
-					for (int j = minY; j <= maxY; j++)
+					for (int k = 0; k < 128; k++)
 					{
-						for (int k = 0;; k++)
+						int x = posX + i;
+						int y = posY - k;
+						int z = posZ + j;
+						
+						BlockInWorld block = world.getBlock(x, y, z);
+						if (block != null && !block.isAir())
 						{
-							int x = posX + i;
-							int y = posY - k;
-							int z = posZ + j;
-							
-							BlockInWorld block = world.getBlock(x, y, z);
-							if (block != null && !block.isAir())
-							{
-								this.renderBlocks.renderBlock(block, x, z, camX, camZ, mode);
-								break;
-							}
+							this.renderBlocks.renderBlock(block, x, z, camX, camZ, mode);
+							break;
 						}
 					}
 				}
-				
-				List<Entity> entities = world.getEntitys();
-				Collections.sort(entities, this.entitySorterTop);
-				
-				for (Entity entity : entities)
-				{
-					Render render = entity.getRenderer();
-					render.width = width;
-					render.height = height;
-					entity.getRenderer().render(entity, entity.posX, entity.posZ, camX, camZ, mode);
-				}
+			}
+			
+			List<Entity> entities = world.getEntitys();
+			Collections.sort(entities, this.entitySorterTop);
+			
+			for (Entity entity : entities)
+			{
+				Render render = entity.getRenderer();
+				render.width = width;
+				render.height = height;
+				entity.getRenderer().render(entity, entity.posX, entity.posZ, camX, camZ, mode);
 			}
 		}
 		
@@ -108,7 +100,7 @@ public class GuiIngame extends GuiScreen
 		{
 			String text = I18n.getString("world.saving");
 			float w = this.dr.fontRenderer.getStringWidth(text);
-			this.dr.fontRenderer.drawString(width - 20F - w, height - 20F, text, 0xFFFFFF);
+			this.dr.fontRenderer.drawStringWithShadow(width - 20F - w, height - 20F, text, 0xFFFFFF);
 		}
 	}
 	
@@ -154,6 +146,12 @@ public class GuiIngame extends GuiScreen
 			{
 				this.player.worldObj.setBlock(Block.stone.blockID, 0, this.mouseBlockX, this.mouseBlockY, this.mouseBlockZ);
 			}
+			
+			// if (input.isKeyPressed(Input.KEY_TAB))
+			// {
+			// this.displayMode %= 5;
+			// this.displayMode++;
+			// }
 		}
 		if (input.isKeyDown(Input.KEY_ESCAPE))
 		{

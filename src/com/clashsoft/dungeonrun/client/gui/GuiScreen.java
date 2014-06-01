@@ -13,6 +13,7 @@ import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.util.Direction;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
 
 public abstract class GuiScreen
@@ -69,12 +70,17 @@ public abstract class GuiScreen
 		if (this.dr.gameSettings.debugMode)
 		{
 			int var = 5;
+			
+			this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("Tick: %d", this.dr.getTick()));
 			if (this.player != null)
 			{
+				int displayMode = this.dr.theIngameGui.displayMode;
+				
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerPos: (%.2f;%.2f;%.2f)", this.player.posX, this.player.posY, this.player.posZ));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerRot: %d", this.player.rot));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", this.player.velocityX, this.player.velocityY, this.player.velocityZ));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", this.dr.getWorld().worldInfo.getName()));
+				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("RenderMode: %d (%s)", displayMode, Direction.get(displayMode)));
 			}
 			
 			{

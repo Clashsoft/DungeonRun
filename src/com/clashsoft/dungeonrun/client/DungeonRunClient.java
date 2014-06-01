@@ -134,6 +134,11 @@ public class DungeonRunClient extends DungeonRun implements IServer
 			
 			super.update(gc, tick);
 			
+			if (this.theWorld != null && this.tick % 200 == 0)
+			{
+				new ClientSaveThread(this).start();
+			}
+			
 			Input input = gc.getInput();
 			if (input.isKeyPressed(Input.KEY_F2))
 			{
@@ -250,6 +255,7 @@ public class DungeonRunClient extends DungeonRun implements IServer
 	public void pauseGame() throws SlickException
 	{
 		this.isPaused = true;
+		new ClientSaveThread(this).start();
 		this.displayGuiScreen(new GuiPauseMenu());
 	}
 	
