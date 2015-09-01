@@ -15,9 +15,9 @@ import com.clashsoft.dungeonrun.world.World;
  */
 public abstract class DungeonRun extends BasicGame implements IServer
 {
-	public static final String	VERSION	= "Alpha 0.1-PRE";
+	public static final String VERSION = "Alpha 0.1-PRE";
 	
-	protected static DungeonRun	instance;
+	protected static DungeonRun instance;
 	
 	protected AppGameContainer	theGameContainer;
 	protected long				tick;

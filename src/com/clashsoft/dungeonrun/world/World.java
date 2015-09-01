@@ -15,24 +15,24 @@ import com.clashsoft.nbt.tags.collection.NBTTagList;
 
 public class World
 {
-	private static final String			CHUNKS_DIRNAME	= "chunks";
-	private static final String			LEVEL_FILENAME	= "level.drf";
-	private static final String			CHUNK_EXTENSION	= ".chk";
+	private static final String	CHUNKS_DIRNAME	= "chunks";
+	private static final String	LEVEL_FILENAME	= "level.drf";
+	private static final String	CHUNK_EXTENSION	= ".chk";
 	
-	public WorldInfo					worldInfo		= null;
+	public WorldInfo worldInfo = null;
 	
-	private NBTTagCompound				worldNBT		= new NBTTagCompound("World");
+	private NBTTagCompound worldNBT = new NBTTagCompound("World");
 	
 	private Map<ChunkPosition, Chunk>	chunks			= new HashMap();
 	private Map<Integer, Entity>		entitys			= new HashMap<Integer, Entity>();
 	private Map<String, EntityPlayer>	playerEntitys	= new HashMap<String, EntityPlayer>();
 	
-	public int							minChunkX		= 0;
-	public int							minChunkY		= 0;
-	public int							minChunkZ		= 0;
-	public int							maxChunkX		= 0;
-	public int							maxChunkY		= 0;
-	public int							maxChunkZ		= 0;
+	public int	minChunkX	= 0;
+	public int	minChunkY	= 0;
+	public int	minChunkZ	= 0;
+	public int	maxChunkX	= 0;
+	public int	maxChunkY	= 0;
+	public int	maxChunkZ	= 0;
 	
 	public World(WorldInfo info)
 	{
@@ -176,10 +176,7 @@ public class World
 		{
 			return c.getBlock(x & 15, y & 15, z & 15);
 		}
-		else
-		{
-			return BlockInWorld.AIR;
-		}
+		return BlockInWorld.AIR;
 	}
 	
 	public void setBlock(int block, int meta, int x, int y, int z)
@@ -281,7 +278,7 @@ public class World
 					Chunk c = this.chunks.get(pos);
 					if (c != null && c.isDirty())
 					{
-						String fileName = "chunk." + i + "." + j + "." + k;
+						String fileName = "chunk_" + i + "." + j + "." + k;
 						File chunkFile = new File(regionDir, fileName + CHUNK_EXTENSION);
 						NBTTagCompound chunkCompound = new NBTTagCompound(fileName);
 						
@@ -364,17 +361,22 @@ public class World
 				{
 					ChunkPosition pos = new ChunkPosition(i, j, k);
 					Chunk c = this.chunks.get(pos);
-					if (c != null)
+					if (c == null)
 					{
-						String s = "chunk." + i + "." + j + "." + k;
-						File chunkFile = new File(regionDir, s + CHUNK_EXTENSION);
-						
-						if (chunkFile.exists())
-						{
-							NBTTagCompound nbt = (NBTTagCompound) NBTSerializer.deserialize(chunkFile);
-							Chunk chunk = new Chunk(this, i, j, k);
-						}
+						continue;
 					}
+					
+					String s = "chunk_" + i + "." + j + "." + k;
+					File chunkFile = new File(regionDir, s + CHUNK_EXTENSION);
+					if (!chunkFile.exists())
+					{
+						continue;
+					}
+					
+					NBTTagCompound nbt = (NBTTagCompound) NBTSerializer.deserialize(chunkFile);
+					Chunk chunk = new Chunk(this, i, j, k);
+					chunk.readFromNBT(nbt);
+					this.chunks.put(pos, chunk);
 				}
 			}
 		}

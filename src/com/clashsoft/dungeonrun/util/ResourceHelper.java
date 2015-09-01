@@ -49,11 +49,7 @@ public class ResourceHelper
 			while (true)
 			{
 				String line = reader.readLine();
-				if (line == null)
-				{
-					break;
-				}
-				else
+				if (line != null)
 				{
 					lines.add(line);
 				}

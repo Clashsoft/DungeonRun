@@ -11,9 +11,9 @@ import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 
 public class EntityPlayer extends EntityLiving
 {
-	public RenderPlayer		renderer;
+	public RenderPlayer renderer;
 	
-	public String			username	= "";
+	public String username = "";
 	
 	public InventoryPlayer	inventory;
 	public boolean			isWalking	= false;
@@ -84,20 +84,19 @@ public class EntityPlayer extends EntityLiving
 	
 	public void walk(int dir)
 	{
-		if (!this.isWalking)
+		if (this.isWalking)
 		{
-			this.stepsWalked = 0;
-			if (this.rot != (byte) (dir & 3))
-			{
-				this.rot = (byte) (dir & 3);
-				this.isWalking = false;
-				return;
-			}
-			else
-			{
-				this.isWalking = true;
-			}
+			return;
 		}
+		
+		this.stepsWalked = 0;
+		if (this.rot != (byte) (dir & 3))
+		{
+			this.rot = (byte) (dir & 3);
+			this.isWalking = false;
+			return;
+		}
+		this.isWalking = true;
 	}
 	
 	@Override

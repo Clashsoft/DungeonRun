@@ -274,7 +274,6 @@ public class FontRenderer
 		int len = text.length();
 		
 		float x1 = x;
-		float y1 = y;
 		float width = 0;
 		float width1 = 0;
 		
@@ -313,81 +312,76 @@ public class FontRenderer
 				{
 					continue;
 				}
-				else
+				
+				if (i1 != -1 && i1 < 16)
 				{
-					if (i1 != -1 && i1 < 16)
-					{
-						this.setColor_I(this.colorTable[i1]);
-					}
-					else if (c1 == 'b')
-					{
-						this.bold = !this.bold;
-					}
-					else if (c1 == 'c') // c
-					{
-						int i2 = text.indexOf('[', i + 2);
-						int i3 = text.indexOf(']', i + 3);
-						if (i2 != -1 && i3 != -1)
-						{
-							String s1 = text.substring(i2 + 1, i3);
-							this.setColor_S(s1);
-							i = i3;
-							continue;
-						}
-					}
-					else if (c1 == 'i')
-					{
-						this.italic = !this.italic;
-					}
-					else if (c1 == 's')
-					{
-						this.strikeThrough = !this.strikeThrough;
-					}
-					else if (c1 == 'S')
-					{
-						this.shadow = !this.shadow;
-					}
-					else if (c1 == 'u')
-					{
-						this.underline = !this.underline;
-					}
-					else if (c1 == 'U')
-					{
-						this.unicode = !this.unicode;
-					}
-					else if (c1 == 'o')
-					{
-						this.obfuscated = !this.obfuscated;
-					}
-					else if (c1 == 'r')
-					{
-						this.reset();
-					}
-					
-					i++;
-					continue;
+					this.setColor_I(this.colorTable[i1]);
 				}
+				else if (c1 == 'b')
+				{
+					this.bold = !this.bold;
+				}
+				else if (c1 == 'c') // c
+				{
+					int i2 = text.indexOf('[', i + 2);
+					int i3 = text.indexOf(']', i + 3);
+					if (i2 != -1 && i3 != -1)
+					{
+						String s1 = text.substring(i2 + 1, i3);
+						this.setColor_S(s1);
+						i = i3;
+						continue;
+					}
+				}
+				else if (c1 == 'i')
+				{
+					this.italic = !this.italic;
+				}
+				else if (c1 == 's')
+				{
+					this.strikeThrough = !this.strikeThrough;
+				}
+				else if (c1 == 'S')
+				{
+					this.shadow = !this.shadow;
+				}
+				else if (c1 == 'u')
+				{
+					this.underline = !this.underline;
+				}
+				else if (c1 == 'U')
+				{
+					this.unicode = !this.unicode;
+				}
+				else if (c1 == 'o')
+				{
+					this.obfuscated = !this.obfuscated;
+				}
+				else if (c1 == 'r')
+				{
+					this.reset();
+				}
+				
+				i++;
+				continue;
 			}
 			
-			if (this.obfuscated)
+			if (this.obfuscated && c != ' ')
 			{
-				if (c != ' ')
+				int k = this.getCharWidth(c);
+				int j = this.fontRandom.nextInt(64);
+				int l = 0;
+				for (Character character : this.chars)
 				{
-					int k = this.getCharWidth(c);
-					int j = this.fontRandom.nextInt(64);
-					int l = 0;
-					for (Character character : this.chars)
+					char c1 = character.charValue();
+					if (this.getCharWidth(c1) == k)
 					{
-						char c1 = character.charValue();
-						if (this.getCharWidth(c1) == k)
-						{
-							l++;
-						}
-						if (l == j)
-						{
-							c = c1;
-							break;
-						}
+						l++;
+					}
+					if (l == j)
+					{
+						c = c1;
+						break;
 					}
 				}
 			}

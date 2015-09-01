@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.world.World;
 
-public class DungeonRunServer extends DungeonRun implements IServer
+public class DungeonRunServer extends DungeonRun
 {
 	public World	theWorld;
 	

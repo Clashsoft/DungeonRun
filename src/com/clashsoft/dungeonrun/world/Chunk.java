@@ -77,7 +77,6 @@ public class Chunk implements INBTSaveable
 	
 	public void updateLightValues(int x, int y, int z, float f)
 	{
-		int var1 = 8;
 		for (int i = x - 12; i <= x + 12; i++)
 		{
 			for (int j = y - 12; j <= y + 12; j++)

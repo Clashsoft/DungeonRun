@@ -13,10 +13,9 @@ import com.clashsoft.dungeonrun.client.engine.RenderEngine;
 import com.clashsoft.dungeonrun.client.engine.SoundEngine;
 import com.clashsoft.dungeonrun.client.gui.*;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.server.IServer;
 import com.clashsoft.dungeonrun.world.World;
 
-public class DungeonRunClient extends DungeonRun implements IServer
+public class DungeonRunClient extends DungeonRun
 {
 	public static DungeonRunClient	instance;
 	
