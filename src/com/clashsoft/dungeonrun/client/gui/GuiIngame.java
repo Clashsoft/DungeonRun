@@ -24,7 +24,6 @@ public class GuiIngame extends GuiScreen
 	public Comparator<Entity>	entitySorterTop	= (e1, e2) -> Double.compare(e2.posZ, e1.posZ);
 	
 	public int					mouseBlockX, mouseBlockY, mouseBlockZ;
-	public int					displayMode		= 1;
 	private boolean				worldSaving		= false;
 	
 	public GuiIngame(EntityPlayer player)
@@ -52,7 +51,6 @@ public class GuiIngame extends GuiScreen
 		
 		if (this.player != null)
 		{
-			int mode = this.displayMode;
 			World world = this.player.worldObj;
 			double camX = this.player.posX;
 			double camY = this.player.posY;
@@ -82,7 +80,7 @@ public class GuiIngame extends GuiScreen
 						BlockInWorld block = world.getBlock(x, y, z);
 						if (block != null && !block.isAir())
 						{
-							this.renderBlocks.renderBlock(block, x, z, camX, camZ, mode);
+							this.renderBlocks.renderBlock(block, x, z, camX, camZ);
 							break;
 						}
 					}
@@ -98,7 +96,7 @@ public class GuiIngame extends GuiScreen
 				Render render = entity.getRenderer();
 				render.width = width;
 				render.height = height;
-				entity.getRenderer().render(entity, entity.posX, entity.posZ, camX, camZ, mode);
+				entity.getRenderer().render(entity, entity.posX, entity.posZ, camX, camZ);
 			}
 		}
 		

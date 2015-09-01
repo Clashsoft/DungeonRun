@@ -57,7 +57,7 @@ public class GuiMainMenu extends GuiListScreen
 		}
 		
 		GL11.glScalef(3F, 3F, 1F);
-		this.player.getRenderer().render(this.player, player.posX, height / 2D - 20D, 2);
+		this.player.getRenderer().render(this.player, player.posX, height / 2D - 20D);
 		GL11.glScalef(1F / 3F, 1F / 3F, 1F);
 	}
 	

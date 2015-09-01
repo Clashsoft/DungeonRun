@@ -3,7 +3,6 @@ package com.clashsoft.dungeonrun.client.renderer.entity;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 
-import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 
@@ -39,28 +38,15 @@ public class RenderPlayer extends Render<EntityPlayer>
 	}
 	
 	@Override
-	public void render(EntityPlayer player, double x, double y, int face)
+	public void render(EntityPlayer player, double x, double y)
 	{
 		float fx = (float) x;
 		float fy = (float) y;
 		
-		int rot = player.rot;
-		int index = 0;
-		
-		if (face == 1)
-		{
-			index = (player.isWalking ? 4 : 0) + rot;
-		}
-		else
-		{
-			index = (player.isWalking ? 12 : 8) + ((rot + face) % 4);
-		}
-		
-		float width = DungeonRunClient.instance.fontRenderer.getStringWidth(player.username);
+		int index = (player.isWalking ? 12 : 8) + (player.rot % 4);
 		
 		GL11.glTranslatef(fx, fy, 0F);
 		this.sprites[index].draw(-6F, -12F);
-		DungeonRunClient.instance.fontRenderer.drawStringWithShadow(width / -2F, -8F, player.username);
 		GL11.glTranslatef(-fx, -fy, 0F);
 	}
 }

@@ -18,7 +18,7 @@ public class RenderBlocks
 	{
 	}
 	
-	public void renderBlock(BlockInWorld block, int x, int y, double camX, double camY, int mode) throws SlickException
+	public void renderBlock(BlockInWorld block, int x, int y, double camX, double camY) throws SlickException
 	{
 		if (block != null)
 		{
@@ -28,13 +28,13 @@ public class RenderBlocks
 			float renderX = (float) (this.width / 2D - offX * 16F);
 			float renderY = (float) (this.height / 2D + offY * 16F);
 			
-			this.renderBlock(block, renderX, renderY, mode);
+			this.renderBlock(block, renderX, renderY);
 		}
 	}
 	
-	protected void renderBlock(BlockInWorld block, float x, float y, int mode) throws SlickException
+	protected void renderBlock(BlockInWorld block, float x, float y) throws SlickException
 	{
-		Image image = block.getBlockTexture(mode);
+		Image image = block.getBlockTexture(0);
 		if (image != null)
 		{
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
