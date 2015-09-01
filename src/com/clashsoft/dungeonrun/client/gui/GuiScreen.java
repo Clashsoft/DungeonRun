@@ -18,28 +18,34 @@ import com.clashsoft.dungeonrun.util.ScaledResolution;
 
 public abstract class GuiScreen
 {
-	public static final Color	colorAlpha	= new Color(0F, 0F, 0F, 0.5F);
+	public static final Color colorAlpha = new Color(0F, 0F, 0F, 0.5F);
 	
 	protected DungeonRunClient	dr;
 	protected EntityPlayer		player;
 	
-	protected Input				input;
+	protected Input input;
 	
-	protected int				windowWidth;
-	protected int				windowHeight;
+	protected int	windowWidth;
+	protected int	windowHeight;
 	
-	protected List<GuiButton>	buttonList	= new LinkedList<GuiButton>();
+	protected List<GuiButton> buttonList = new LinkedList<GuiButton>();
 	
-	protected ScaledResolution	scaledResolution;
+	protected ScaledResolution scaledResolution;
 	
 	public final void init(DungeonRunClient game) throws SlickException
 	{
 		this.dr = game;
 		this.input = this.dr.getInput();
 		
-		this.scaledResolution = new ScaledResolution(game.gameSettings, this.windowWidth, this.windowHeight);
+		this.initGUI();
+		this.reload();
+	}
+	
+	public final void reload() throws SlickException
+	{
+		this.scaledResolution = new ScaledResolution(this.dr.gameSettings, this.windowWidth, this.windowHeight);
 		
-		this.initGui();
+		this.reloadGUI();
 	}
 	
 	public final void render(int width, int height) throws SlickException
@@ -48,7 +54,7 @@ public abstract class GuiScreen
 		{
 			this.windowWidth = width;
 			this.windowHeight = height;
-			this.init(this.dr);
+			this.reload();
 		}
 		
 		GL11.glPushMatrix();
@@ -76,9 +82,11 @@ public abstract class GuiScreen
 			{
 				int displayMode = this.dr.theIngameGui.displayMode;
 				
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerPos: (%.2f;%.2f;%.2f)", this.player.posX, this.player.posY, this.player.posZ));
+				this.dr.fontRenderer.drawStringWithShadow(5, var += 10,
+						String.format("PlayerPos: (%.2f;%.2f;%.2f)", this.player.posX, this.player.posY, this.player.posZ));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerRot: %d", this.player.rot));
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", this.player.velocityX, this.player.velocityY, this.player.velocityZ));
+				this.dr.fontRenderer.drawStringWithShadow(5, var += 10,
+						String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", this.player.velocityX, this.player.velocityY, this.player.velocityZ));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", this.dr.getWorld().worldInfo.getName()));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("RenderMode: %d (%s)", displayMode, Direction.get(displayMode)));
 			}
@@ -89,21 +97,24 @@ public abstract class GuiScreen
 				long maxMemory = runtime.maxMemory() / 1024 / 1024;
 				long totalMemory = runtime.totalMemory() / 1024 / 1024;
 				
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("Memory: Free: %d MB, Max: %d MB, Total: %d MB", freeMemory, maxMemory, totalMemory));
+				this.dr.fontRenderer.drawStringWithShadow(5, var += 10,
+						String.format("Memory: Free: %d MB, Max: %d MB, Total: %d MB", freeMemory, maxMemory, totalMemory));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("Processors: %d", runtime.availableProcessors()));
 			}
 		}
 		GL11.glPopMatrix();
 	}
 	
-	public final void update(DungeonRunClient game) throws SlickException
+	public void initGUI() throws SlickException
 	{
-		this.updateScreen();
 	}
 	
 	public abstract void keyTyped(int key, char c) throws SlickException;
 	
-	public abstract void initGui() throws SlickException;
+	public void reloadGUI() throws SlickException
+	{
+	
+	}
 	
 	public abstract void drawScreen(int width, int height) throws SlickException;
 	
@@ -128,7 +139,7 @@ public abstract class GuiScreen
 	
 	public void setWorldSaving(boolean state)
 	{
-		
+	
 	}
 	
 	public void drawBricks(int width, int height) throws SlickException

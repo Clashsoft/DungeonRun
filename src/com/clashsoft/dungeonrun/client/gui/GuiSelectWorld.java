@@ -21,7 +21,7 @@ public class GuiSelectWorld extends GuiListScreen
 	}
 	
 	@Override
-	public void initGui() throws SlickException
+	public void reloadGUI() throws SlickException
 	{
 		this.worlds.clear();
 		
@@ -39,7 +39,7 @@ public class GuiSelectWorld extends GuiListScreen
 			}
 		}
 		
-		super.initGui();
+		super.reloadGUI();
 	}
 	
 	@Override

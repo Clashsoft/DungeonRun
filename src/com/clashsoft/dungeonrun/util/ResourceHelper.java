@@ -49,10 +49,11 @@ public class ResourceHelper
 			while (true)
 			{
 				String line = reader.readLine();
-				if (line != null)
+				if (line == null)
 				{
-					lines.add(line);
+					break;
 				}
+				lines.add(line);
 			}
 		}
 		catch (Exception ex)

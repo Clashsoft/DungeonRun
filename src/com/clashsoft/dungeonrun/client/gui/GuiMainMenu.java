@@ -13,11 +13,16 @@ public class GuiMainMenu extends GuiListScreen
 {
 	private EntityPlayer	player;
 	
-	@Override
-	public void initGui() throws SlickException
+	public GuiMainMenu()
 	{
-		super.initGui();
-		this.dr.soundEngine.playMusic("resources/audio/music/music1.wav", true);
+	}
+	
+	@Override
+	public void initGUI() throws SlickException
+	{
+		this.dr.soundEngine.stopAllMusics();
+		this.dr.soundEngine.playMusic("main_menu", true);
+		
 		this.player = new EntityPlayer(null);
 		this.player.rot = 1;
 	}
@@ -86,17 +91,17 @@ public class GuiMainMenu extends GuiListScreen
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
-		if (i == 0)
+		switch (i)
 		{
+		case 0:
 			this.dr.displayGuiScreen(new GuiSelectWorld(this));
-		}
-		else if (i == 1)
-		{
+			break;
+		case 1:
 			this.dr.displayGuiScreen(new GuiOptions(this));
-		}
-		else if (i == 2)
-		{
+			break;
+		case 2:
 			this.dr.shutdown();
+			break;
 		}
 	}
 	

@@ -25,12 +25,12 @@ public class SoundEngine
 		}
 	}
 	
-	public static final SoundLocation	DEFAULT_LOCATION	= new SoundLocation(0, 0, 0);
+	public static final SoundLocation DEFAULT_LOCATION = new SoundLocation(0, 0, 0);
 	
-	public final DungeonRunClient		dr;
+	public final DungeonRunClient dr;
 	
-	private Map<String, Sound>			sounds				= new HashMap<String, Sound>();
-	private Map<String, Music>			musics				= new HashMap<String, Music>();
+	private Map<String, Sound>	sounds	= new HashMap<String, Sound>();
+	private Map<String, Music>	musics	= new HashMap<String, Music>();
 	
 	public SoundEngine(DungeonRunClient dr)
 	{
@@ -47,10 +47,10 @@ public class SoundEngine
 		Sound s = this.sounds.get(sound);
 		if (s == null)
 		{
-			s = new Sound(sound);
+			s = new Sound("resources/audio/" + sound.replace('.', '/') + ".ogg");
 			this.sounds.put(sound, s);
 		}
-		// s.playAt(1F, volume, sl.x, sl.y, sl.z);
+		s.playAt(1F, volume, sl.x, sl.y, sl.z);
 	}
 	
 	public void stopSoundEffect(String sound)
@@ -80,13 +80,17 @@ public class SoundEngine
 		Music m = this.musics.get(music);
 		if (m == null)
 		{
-			m = new Music(music);
+			m = new Music("resources/audio/music/" + music.replace('.', '/') + ".ogg");
 			this.musics.put(music, m);
 		}
-		// if (repeat)
-		// m.loop(1F, volume);
-		// else
-		// m.play(1F, volume);
+		if (repeat)
+		{
+			m.loop(1F, volume);
+		}
+		else
+		{
+			m.play(1F, volume);
+		}
 	}
 	
 	public void stopMusic(String music)

@@ -17,9 +17,9 @@ public class GuiOptions extends GuiListScreen
 	}
 	
 	@Override
-	public void initGui() throws SlickException
+	public void reloadGUI() throws SlickException
 	{
-		super.initGui();
+		super.reloadGUI();
 	}
 	
 	@Override

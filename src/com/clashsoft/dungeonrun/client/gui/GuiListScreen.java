@@ -17,7 +17,7 @@ public abstract class GuiListScreen extends GuiScreen
 	protected boolean		drawBricks	= true;
 	
 	@Override
-	public void initGui() throws SlickException
+	public void reloadGUI() throws SlickException
 	{
 		this.entrys.clear();
 		this.addEntrys(this.entrys);
@@ -82,7 +82,7 @@ public abstract class GuiListScreen extends GuiScreen
 		if (this.input.isKeyPressed(Input.KEY_ENTER) || Mouse.isButtonDown(0))
 		{
 			this.onEntryUsed(this.selection);
-			this.dr.soundEngine.playSoundEffect("resources/audio/click.wav", SoundEngine.DEFAULT_LOCATION);
+			this.dr.soundEngine.playSoundEffect("click", SoundEngine.DEFAULT_LOCATION);
 		}
 	}
 	

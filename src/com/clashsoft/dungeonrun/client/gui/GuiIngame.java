@@ -1,6 +1,6 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -33,9 +33,12 @@ public class GuiIngame extends GuiScreen
 	}
 	
 	@Override
-	public void initGui() throws SlickException
+	public void initGUI() throws SlickException
 	{
 		this.renderBlocks = this.dr.renderEngine.blockRenderer;
+		
+		this.dr.soundEngine.stopAllMusics();
+		this.dr.soundEngine.playMusic("ingame_1", true);
 	}
 	
 	@Override
@@ -55,10 +58,12 @@ public class GuiIngame extends GuiScreen
 			double camY = this.player.posY;
 			double camZ = this.player.posZ;
 			
-			int minI = -RenderBlocks.BLOCKS_X;
-			int maxI = RenderBlocks.BLOCKS_X;
-			int minJ = -RenderBlocks.BLOCKS_Y;
-			int maxJ = RenderBlocks.BLOCKS_Y;
+			int blocksX = width / 32;
+			int blocksY = height / 32;
+			int minI = -blocksX - 2;
+			int maxI = blocksX;
+			int minJ = -blocksY;
+			int maxJ = blocksY + 2;
 			
 			int posX = (int) camX;
 			int posY = (int) camY + 64;
@@ -85,9 +90,10 @@ public class GuiIngame extends GuiScreen
 			}
 			
 			List<Entity> entities = world.getEntitys();
-			Collections.sort(entities, this.entitySorterTop);
+			Entity[] entityArray = entities.toArray(new Entity[entities.size()]);
+			Arrays.sort(entityArray, this.entitySorterTop);
 			
-			for (Entity entity : entities)
+			for (Entity entity : entityArray)
 			{
 				Render render = entity.getRenderer();
 				render.width = width;

@@ -14,7 +14,7 @@ public class GuiInfo extends GuiScreen
 	}
 	
 	@Override
-	public void initGui() throws SlickException
+	public void reloadGUI() throws SlickException
 	{
 	}
 	

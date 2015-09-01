@@ -10,7 +10,7 @@ public class GuiIntro extends GuiScreen
 	private int	tick	= 0;
 	
 	@Override
-	public void initGui()
+	public void reloadGUI()
 	{
 		
 	}

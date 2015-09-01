@@ -20,6 +20,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	protected static DungeonRun instance;
 	
 	protected AppGameContainer	theGameContainer;
+	
 	protected long				tick;
 	
 	public DungeonRun()

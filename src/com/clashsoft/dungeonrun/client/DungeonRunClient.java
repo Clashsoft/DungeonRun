@@ -17,27 +17,30 @@ import com.clashsoft.dungeonrun.world.World;
 
 public class DungeonRunClient extends DungeonRun
 {
-	public static DungeonRunClient	instance;
+	public static DungeonRunClient instance;
 	
-	public String					username;
+	public String username;
 	
-	public RenderEngine				renderEngine;
-	public SoundEngine				soundEngine;
-	public FontRenderer				fontRenderer;
-	public I18n						i18n;
+	public RenderEngine	renderEngine;
+	public SoundEngine	soundEngine;
+	public FontRenderer	fontRenderer;
+	public I18n			i18n;
 	
-	public int						mousePosX	= 0;
-	public int						mousePosY	= 0;
+	public int	mousePosX	= 0;
+	public int	mousePosY	= 0;
 	
-	public GameSettings				gameSettings;
+	public GameSettings gameSettings;
 	
-	public GuiScreen				currentGui;
-	public GuiIngame				theIngameGui;
-	protected EntityPlayer			thePlayer;
-	protected World					theWorld;
-	protected boolean				isGameRunning;
+	public GuiScreen		currentGui;
+	public GuiIngame		theIngameGui;
+	protected EntityPlayer	thePlayer;
+	protected World			theWorld;
+	protected boolean		isGameRunning;
 	
-	public boolean					isPaused;
+	public boolean isPaused;
+	
+	protected int	screenWidth;
+	protected int	screenHeight;
 	
 	public DungeonRunClient(String username) throws SlickException
 	{
@@ -64,6 +67,8 @@ public class DungeonRunClient extends DungeonRun
 	public void initGame() throws SlickException
 	{
 		this.theGameContainer = new AppGameContainer(this);
+		this.screenWidth = this.theGameContainer.getScreenWidth();
+		this.screenHeight = this.theGameContainer.getScreenHeight();
 		this.theGameContainer.setDisplayMode(800, 450, false);
 		this.theGameContainer.setMinimumLogicUpdateInterval(50);
 		this.theGameContainer.setMaximumLogicUpdateInterval(50);
@@ -128,7 +133,7 @@ public class DungeonRunClient extends DungeonRun
 		{
 			if (this.currentGui != null)
 			{
-				this.currentGui.update(this);
+				this.currentGui.updateScreen();
 			}
 			
 			super.update(gc, tick);
@@ -220,6 +225,8 @@ public class DungeonRunClient extends DungeonRun
 	public void startGame() throws SlickException
 	{
 		this.displayGuiScreen(new GuiInfo("world.loading"));
+		
+		this.soundEngine.stopAllMusics();
 		super.startGame();
 		
 		this.thePlayer = this.theWorld.getPlayer(this.username);
@@ -280,7 +287,7 @@ public class DungeonRunClient extends DungeonRun
 	
 	public void setFullScreen(boolean flag) throws SlickException
 	{
-		this.theGameContainer.setFullscreen(flag);
+		this.theGameContainer.setDisplayMode(this.screenWidth, this.screenHeight, flag);
 	}
 	
 	public void setVSync(boolean flag)
