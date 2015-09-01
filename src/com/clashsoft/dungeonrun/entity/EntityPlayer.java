@@ -18,7 +18,6 @@ public class EntityPlayer extends EntityLiving
 	public InventoryPlayer	inventory;
 	public boolean			isWalking	= false;
 	public boolean			isSprinting	= false;
-	private int				stepsWalked	= 0;
 	
 	public EntityPlayer(World world) throws SlickException
 	{
@@ -53,17 +52,9 @@ public class EntityPlayer extends EntityLiving
 		
 		boolean b = this.canMove(f, this.rot) || this.canMove(1F - f, this.rot);
 		
-		if (!b || (this.stepsWalked >= 5 && f >= 0.499F && f <= 0.501F))
-		{
-			this.isWalking = false;
-			this.isSprinting = false;
-			this.stepsWalked = 0;
-		}
-		
 		if (this.isWalking && b)
 		{
 			this.move(0.1F * i, this.rot);
-			this.stepsWalked += i;
 		}
 		super.updateEntity();
 	}
@@ -84,18 +75,7 @@ public class EntityPlayer extends EntityLiving
 	
 	public void walk(int dir)
 	{
-		if (this.isWalking)
-		{
-			return;
-		}
-		
-		this.stepsWalked = 0;
-		if (this.rot != (byte) (dir & 3))
-		{
-			this.rot = (byte) (dir & 3);
-			this.isWalking = false;
-			return;
-		}
+		this.rot = (byte) (dir & 3);
 		this.isWalking = true;
 	}
 	

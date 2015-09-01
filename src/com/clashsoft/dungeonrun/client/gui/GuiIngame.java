@@ -124,18 +124,22 @@ public class GuiIngame extends GuiScreen
 			{
 				this.player.walk(2);
 			}
-			if (input.isKeyDown(Input.KEY_D))
+			else if (input.isKeyDown(Input.KEY_D))
 			{
 				this.player.walk(1);
 			}
-			if (input.isKeyDown(Input.KEY_S))
+			else if (input.isKeyDown(Input.KEY_S))
 			{
 				this.player.walk(0);
 			}
-			if (input.isKeyDown(Input.KEY_A))
+			else if (input.isKeyDown(Input.KEY_A))
 			{
 				this.player.walk(3);
 			}
+			else {
+				this.player.isWalking = false;
+			}
+			
 			if (input.isKeyDown(Input.KEY_SPACE))
 			{
 				this.player.jump();

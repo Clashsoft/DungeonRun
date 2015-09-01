@@ -6,23 +6,23 @@ import com.clashsoft.nbt.util.INBTSaveable;
 
 public class Chunk implements INBTSaveable
 {
-	public static int	NO_UPDATE			= 0;
-	public static int	UPDATE_NEIGHBORS	= 1;
-	public static int	UPDATE_LIGHT		= 2;
-	public static int	UPDATE				= UPDATE_NEIGHBORS | UPDATE_LIGHT;
+	public static final int	NO_UPDATE			= 0;
+	public static final int	UPDATE_NEIGHBORS	= 1;
+	public static final int	UPDATE_LIGHT		= 2;
+	public static final int	UPDATE				= UPDATE_NEIGHBORS | UPDATE_LIGHT;
 	
-	public final World	world;
+	public final World world;
 	
-	public int			chunkX;
-	public int			chunkY;
-	public int			chunkZ;
+	public int	chunkX;
+	public int	chunkY;
+	public int	chunkZ;
 	
-	private int[]		blockIDs;
-	private int[]		metadataValues;
+	private int[]	blockIDs;
+	private int[]	metadataValues;
 	
-	private float[]		lightValues;
+	private float[] lightValues;
 	
-	private boolean		hasChanged;
+	private boolean hasChanged;
 	
 	public Chunk(World w, int x, int y, int z)
 	{
@@ -79,7 +79,7 @@ public class Chunk implements INBTSaveable
 	{
 		for (int i = x - 12; i <= x + 12; i++)
 		{
-			for (int j = y - 12; j <= y + 12; j++)
+			for (int j = 0; j < 16; j++)
 			{
 				for (int k = z - 12; k <= z + 12; k++)
 				{
@@ -158,7 +158,7 @@ public class Chunk implements INBTSaveable
 	
 	protected float getLightValue(int index)
 	{
-		return 1F; // this.lightValues[index];
+		return this.lightValues[index];
 	}
 	
 	protected static int index(int x, int y, int z)

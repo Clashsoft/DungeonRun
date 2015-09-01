@@ -128,10 +128,10 @@ public abstract class Entity implements INBTSaveable
 		this.posY += this.velocityY;
 		this.posZ += this.velocityZ;
 		
-		this.addVelocity(this.getNormalizer(this.velocityX, 0.1F), this.getNormalizer(this.velocityY, 0.1F), this.getNormalizer(this.velocityZ, 0.1F));
+		this.addVelocity(getNormalizer(this.velocityX, 0.1F), getNormalizer(this.velocityY, 0.1F), getNormalizer(this.velocityZ, 0.1F));
 	}
 	
-	private double getNormalizer(double par1, double par2)
+	private static double getNormalizer(double par1, double par2)
 	{
 		if (par1 >= par2)
 		{
@@ -143,7 +143,7 @@ public abstract class Entity implements INBTSaveable
 		}
 		else if (par1 < par2 && par1 >= 0)
 		{
-			return 0 - par1;
+			return -par1;
 		}
 		else if (par1 > -par2 && par1 <= 0)
 		{
