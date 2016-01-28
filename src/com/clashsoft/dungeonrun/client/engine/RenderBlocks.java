@@ -18,7 +18,7 @@ public class RenderBlocks
 	{
 	}
 	
-	public void renderBlock(BlockInWorld block, int x, int y, double camX, double camY) throws SlickException
+	public void renderBlock(BlockInWorld block, int x, int y, int z, double camX, double camY, double camZ) throws SlickException
 	{
 		if (block != null)
 		{

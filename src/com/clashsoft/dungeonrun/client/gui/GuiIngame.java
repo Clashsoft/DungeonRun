@@ -1,14 +1,13 @@
 package com.clashsoft.dungeonrun.client.gui;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.client.renderer.Render;
@@ -19,12 +18,13 @@ import com.clashsoft.dungeonrun.world.World;
 
 public class GuiIngame extends GuiScreen
 {
-	public RenderBlocks			renderBlocks;
+	private static final Comparator<Entity> entitySorterTop = (e1, e2) -> Double.compare(e2.posZ, e1.posZ);
 	
-	public Comparator<Entity>	entitySorterTop	= (e1, e2) -> Double.compare(e2.posZ, e1.posZ);
+	public RenderBlocks renderBlocks;
 	
-	public int					mouseBlockX, mouseBlockY, mouseBlockZ;
-	private boolean				worldSaving		= false;
+	private Entity[]	entities	= new Entity[0];
+	private int			entityCount;
+	private boolean		worldSaving	= false;
 	
 	public GuiIngame(EntityPlayer player)
 	{
@@ -51,53 +51,7 @@ public class GuiIngame extends GuiScreen
 		
 		if (this.player != null)
 		{
-			World world = this.player.worldObj;
-			double camX = this.player.posX;
-			double camY = this.player.posY;
-			double camZ = this.player.posZ;
-			
-			int blocksX = width / 32;
-			int blocksY = height / 32;
-			int minI = -blocksX - 2;
-			int maxI = blocksX;
-			int minJ = -blocksY;
-			int maxJ = blocksY + 2;
-			
-			int posX = (int) camX;
-			int posY = (int) camY + 64;
-			int posZ = (int) camZ;
-			
-			for (int i = minI; i <= maxI; i++)
-			{
-				for (int j = minJ; j <= maxJ; j++)
-				{
-					for (int k = 0; k < 128; k++)
-					{
-						int x = posX + i;
-						int y = posY - k;
-						int z = posZ + j;
-						
-						BlockInWorld block = world.getBlock(x, y, z);
-						if (block != null && !block.isAir())
-						{
-							this.renderBlocks.renderBlock(block, x, z, camX, camZ);
-							break;
-						}
-					}
-				}
-			}
-			
-			List<Entity> entities = world.getEntitys();
-			Entity[] entityArray = entities.toArray(new Entity[entities.size()]);
-			Arrays.sort(entityArray, this.entitySorterTop);
-			
-			for (Entity entity : entityArray)
-			{
-				Render render = entity.getRenderer();
-				render.width = width;
-				render.height = height;
-				entity.getRenderer().render(entity, entity.posX, entity.posZ, camX, camZ);
-			}
+			this.renderLevel(width, height);
 		}
 		
 		if (this.worldSaving)
@@ -105,6 +59,62 @@ public class GuiIngame extends GuiScreen
 			String text = I18n.getString("world.saving");
 			float w = this.dr.fontRenderer.getStringWidth(text);
 			this.dr.fontRenderer.drawStringWithShadow(width - 20F - w, height - 20F, text, 0xFFFFFF);
+		}
+	}
+	
+	private void renderLevel(int width, int height) throws SlickException
+	{
+		World world = this.player.worldObj;
+		double camX = this.player.posX;
+		double camY = this.player.posY;
+		double camZ = this.player.posZ;
+		
+		int blocksX = width / 32;
+		int blocksY = height / 32;
+		int minX = -blocksX - 2;
+		int maxX = blocksX;
+		int minZ = -blocksY;
+		int maxZ = blocksY + 2;
+		
+		int posX = (int) camX;
+		int posY = (int) camY;
+		int posZ = (int) camZ;
+		
+		int entityIndex = 0;
+		
+		for (int z = minZ; z <= maxZ; z++)
+		{
+			int z1 = posZ + z;
+			for (int x = minX; x <= maxX; x++)
+			{
+				int x1 = posX + x;
+				int y1 = posY;
+				
+				BlockInWorld block = world.getBlock(x1, y1, z1);
+				if (block != null && !block.isAir())
+				{
+					this.renderBlocks.renderBlock(block, x1, y1, z1, camX, camY, camZ);
+					break;
+				}
+			}
+			
+			for (; entityIndex < this.entityCount; entityIndex++)
+			{
+				Entity entity = this.entities[entityIndex];
+				if (entity.posZ < z1)
+				{
+					continue;
+				}
+				if (entity.posZ > z1 + 1)
+				{
+					break;
+				}
+				
+				Render render = entity.getRenderer();
+				render.width = width;
+				render.height = height;
+				render.render(entity, entity.posX, entity.posZ, camX, camZ);
+			}
 		}
 	}
 	
@@ -136,7 +146,8 @@ public class GuiIngame extends GuiScreen
 			{
 				this.player.walk(3);
 			}
-			else {
+			else
+			{
 				this.player.isWalking = false;
 			}
 			
@@ -145,26 +156,17 @@ public class GuiIngame extends GuiScreen
 				this.player.jump();
 			}
 			this.player.isSprinting = input.isKeyDown(Input.KEY_LSHIFT);
-			
-			if (input.isMousePressed(0))
-			{
-				this.player.worldObj.setBlock(0, 0, this.mouseBlockX, this.mouseBlockY, this.mouseBlockZ);
-			}
-			if (input.isMousePressed(1))
-			{
-				this.player.worldObj.setBlock(Block.stone.blockID, 0, this.mouseBlockX, this.mouseBlockY, this.mouseBlockZ);
-			}
-			
-			// if (input.isKeyPressed(Input.KEY_TAB))
-			// {
-			// this.displayMode %= 5;
-			// this.displayMode++;
-			// }
 		}
 		if (input.isKeyDown(Input.KEY_ESCAPE))
 		{
 			this.dr.pauseGame();
 		}
+		
+		// Update entities
+		Collection<Entity> entities = this.player.worldObj.getEntitys();
+		this.entityCount = entities.size();
+		this.entities = entities.toArray(this.entities);
+		Arrays.sort(this.entities, entitySorterTop);
 	}
 	
 	@Override
