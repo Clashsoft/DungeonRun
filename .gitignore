@@ -1,8 +1,11 @@
-
-bin/.DS_Store
 bin/
+.gradle/
 .classpath
 .DS_Store
 .project
 .settings/
 resources/audio/music/music_1/
+
+DungeonRun.iml
+DungeonRun.ipr
+DungeonRun.iws
