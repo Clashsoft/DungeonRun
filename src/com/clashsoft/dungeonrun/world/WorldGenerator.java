@@ -40,6 +40,19 @@ public class WorldGenerator
 
 				chunk.setBlock(blockID, 0, x, y, 0);
 			}
+
+			if (x > 2 && x < 15 && random.nextInt(14) == 0)
+			{
+				int height = random.nextInt(2) + 3;
+				for (int i = 1; i <= height; i++)
+				{
+					chunk.setBlock(Block.log.blockID, 0, x, top + i, 0);
+				}
+
+				chunk.setBlock(Block.leaves.blockID, 0, x - 1, top + height, 0);
+				chunk.setBlock(Block.leaves.blockID, 0, x + 1, top + height, 0);
+				chunk.setBlock(Block.leaves.blockID, 0, x, top + height + 1, 0);
+			}
 		}
 		chunk.initializeLightValues();
 	}
