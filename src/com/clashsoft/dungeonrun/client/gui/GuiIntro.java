@@ -1,45 +1,47 @@
 package com.clashsoft.dungeonrun.client.gui;
 
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.util.ResourceHelper;
-
 public class GuiIntro extends GuiScreen
 {
-	private int	tick	= 0;
-	
+	private static final int   MAX_TICK = 25;
+	private static final float FADEIN   = 0.25F;
+
+	private int tick = 0;
+
 	@Override
 	public void reloadGUI()
 	{
-		
+
 	}
-	
+
 	@Override
 	public void drawScreen(int par1, int par2) throws SlickException
 	{
-		float f = this.tick / 40F;
-		
-		if (this.tick > 60)
+		float alpha;
+
+		if (this.tick > MAX_TICK * FADEIN)
 		{
-			f = 2.5F - f;
+			alpha = 1F;
 		}
-		else if (this.tick > 40)
+		else
 		{
-			f = 1F;
+			alpha = this.tick / (MAX_TICK * FADEIN);
 		}
-		
+
 		GL11.glPushMatrix();
-		GL11.glScalef(par1 / 1600F, par2 / 1200F, 1F);
-		ResourceHelper.chaotic_development_bg.setAlpha(f);
-		ResourceHelper.chaotic_development_bg.draw(0, 0);
+		GL11.glScalef(par1 / 1920, par2 / 1080, 1F);
+		ResourceHelper.introBackground.setAlpha(alpha);
+		ResourceHelper.introBackground.draw(0, 0);
 		GL11.glPopMatrix();
 	}
-	
+
 	@Override
 	public void updateScreen() throws SlickException
 	{
-		if (this.tick < 100)
+		if (this.tick < MAX_TICK)
 		{
 			this.tick++;
 		}
@@ -48,7 +50,7 @@ public class GuiIntro extends GuiScreen
 			this.dr.displayGuiScreen(new GuiMainMenu());
 		}
 	}
-	
+
 	@Override
 	public void keyTyped(int key, char c) throws SlickException
 	{
