@@ -1,11 +1,18 @@
 bin/
+build/
 .gradle/
-.classpath
 .DS_Store
+
+# Eclipse
+.classpath
 .project
 .settings/
-resources/audio/music/music_1/
 
+# IntelliJ
+.idea/
 DungeonRun.iml
 DungeonRun.ipr
 DungeonRun.iws
+
+# Misc.
+resources/audio/music/music_1/

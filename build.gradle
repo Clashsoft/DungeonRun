@@ -1,0 +1,48 @@
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+group = 'com.clashsoft'
+version = 'v0.1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+		resources {
+			srcDir 'resources'
+		}
+	}
+}
+
+dependencies {
+	// https://mvnrepository.com/artifact/org.slick2d/slick2d-core
+	compile group: 'org.slick2d', name: 'slick2d-core', version: '1.0.0'
+	
+	compile fileTree('libs/')
+}
+
+task natives {
+	def resolvedArtifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
+	osNatives('windows', resolvedArtifacts)
+	osNatives('linux', resolvedArtifacts)
+	osNatives('osx', resolvedArtifacts)
+}
+
+def osNatives(os, artifacts)
+{
+	copy {
+		def classifier = 'natives-' + os
+		def matches = artifacts.findAll { it.classifier == classifier }
+		from matches.collect { it.file }.collect { zipTree(it) }
+		into "$buildDir/natives/" + os
+	}
+}
