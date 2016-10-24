@@ -2,6 +2,7 @@ package com.clashsoft.dungeonrun.client.gui;
 
 import java.util.List;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -23,9 +24,9 @@ public class GuiOptions extends GuiListScreen
 	}
 	
 	@Override
-	public void drawScreen(int par1, int par2) throws SlickException
+	public void drawScreen(Graphics g, int par1, int par2) throws SlickException
 	{
-		super.drawScreen(par1, par2);
+		super.drawScreen(g, par1, par2);
 	}
 	
 	@Override

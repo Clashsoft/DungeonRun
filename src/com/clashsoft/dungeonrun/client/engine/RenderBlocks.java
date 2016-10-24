@@ -1,37 +1,33 @@
 package com.clashsoft.dungeonrun.client.engine;
 
+import com.clashsoft.dungeonrun.world.BlockInWorld;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.world.BlockInWorld;
-
 public class RenderBlocks
 {
-	public static final int	BLOCKS_X	= 16;
-	public static final int	BLOCKS_Y	= 10;
-	
-	public int				width;
-	public int				height;
-	
+	public int width;
+	public int height;
+
 	public RenderBlocks()
 	{
 	}
-	
-	public void renderBlock(BlockInWorld block, int x, int y, int z, double camX, double camY, double camZ) throws SlickException
+
+	public void renderBlock(BlockInWorld block, int x, int y, int z, double camX, double camY) throws SlickException
 	{
 		if (block != null)
 		{
 			double offX = camX - x;
 			double offY = camY - y;
-			
+
 			float renderX = (float) (this.width / 2D - offX * 16F);
 			float renderY = (float) (this.height / 2D + offY * 16F);
-			
+
 			this.renderBlock(block, renderX, renderY);
 		}
 	}
-	
+
 	protected void renderBlock(BlockInWorld block, float x, float y) throws SlickException
 	{
 		Image image = block.getBlockTexture(0);

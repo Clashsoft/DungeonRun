@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.client.gui;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import com.clashsoft.dungeonrun.client.engine.I18n;
@@ -19,7 +20,7 @@ public class GuiInfo extends GuiScreen
 	}
 	
 	@Override
-	public void drawScreen(int par1, int par2) throws SlickException
+	public void drawScreen(Graphics g, int par1, int par2) throws SlickException
 	{
 		this.drawBricks(par1, par2);
 		this.dr.fontRenderer.drawStringWithShadow((par1 - this.dr.fontRenderer.getStringWidth(this.message)) / 2, (par2 - this.dr.fontRenderer.getStringHeigth(this.message)) / 2, this.message, 0xFFFFFF);

@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.client.renderer;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public abstract class Render<T>
@@ -7,7 +8,7 @@ public abstract class Render<T>
 	public int	width;
 	public int	height;
 	
-	public void render(T renderable, double x, double y, double camX, double camY) throws SlickException
+	public void render(T renderable, Graphics g, double x, double y, double camX, double camY) throws SlickException
 	{
 		double offX = camX - x;
 		double offY = camY - y;
@@ -15,8 +16,8 @@ public abstract class Render<T>
 		double renderX = this.width / 2D - offX * 16F;
 		double renderY = this.height / 2D + offY * 16F;
 		
-		this.render(renderable, renderX, renderY);
+		this.render(renderable, g, renderX, renderY);
 	}
 	
-	public abstract void render(T renderable, double x, double y);
+	public abstract void render(T renderable, Graphics g, double x, double y);
 }

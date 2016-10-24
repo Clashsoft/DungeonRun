@@ -1,11 +1,5 @@
 package com.clashsoft.dungeonrun.client;
 
-import java.io.File;
-
-import org.lwjgl.input.Mouse;
-import org.newdawn.slick.*;
-import org.newdawn.slick.imageout.ImageOut;
-
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.client.engine.FontRenderer;
 import com.clashsoft.dungeonrun.client.engine.I18n;
@@ -14,6 +8,11 @@ import com.clashsoft.dungeonrun.client.engine.SoundEngine;
 import com.clashsoft.dungeonrun.client.gui.*;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.world.World;
+import org.lwjgl.input.Mouse;
+import org.newdawn.slick.*;
+import org.newdawn.slick.imageout.ImageOut;
+
+import java.io.File;
 
 public class DungeonRunClient extends DungeonRun
 {
@@ -73,7 +72,6 @@ public class DungeonRunClient extends DungeonRun
 		this.theGameContainer.setMinimumLogicUpdateInterval(50);
 		this.theGameContainer.setMaximumLogicUpdateInterval(50);
 		this.theGameContainer.setShowFPS(false);
-		this.theGameContainer.setResizable(true);
 		this.theGameContainer.start();
 	}
 	
@@ -188,12 +186,12 @@ public class DungeonRunClient extends DungeonRun
 			
 			if (this.theIngameGui != null && this.isGameRunning())
 			{
-				this.theIngameGui.render(gc.getWidth(), gc.getHeight());
+				this.theIngameGui.render(g, gc.getWidth(), gc.getHeight());
 			}
 			
 			if (this.currentGui != null)
 			{
-				this.currentGui.render(gc.getWidth(), gc.getHeight());
+				this.currentGui.render(g, gc.getWidth(), gc.getHeight());
 			}
 		}
 		catch (Exception ex)
@@ -234,7 +232,7 @@ public class DungeonRunClient extends DungeonRun
 		if (this.thePlayer == null)
 		{
 			this.thePlayer = new EntityPlayer(this.theWorld, this.username);
-			this.thePlayer.setLocation(0D, 64D, 0D);
+			this.thePlayer.setLocation(0D, 64D);
 			this.theWorld.spawnEntityInWorld(this.thePlayer);
 		}
 		

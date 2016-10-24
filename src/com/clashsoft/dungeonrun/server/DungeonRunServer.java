@@ -23,7 +23,6 @@ public class DungeonRunServer extends DungeonRun
 		this.theGameContainer.setMinimumLogicUpdateInterval(50);
 		this.theGameContainer.setMaximumLogicUpdateInterval(50);
 		this.theGameContainer.setShowFPS(false);
-		this.theGameContainer.setResizable(true);
 		this.theGameContainer.start();
 	}
 	

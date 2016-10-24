@@ -1,19 +1,19 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class GuiScreen
 {
@@ -47,7 +47,7 @@ public abstract class GuiScreen
 		this.reloadGUI();
 	}
 	
-	public final void render(int width, int height) throws SlickException
+	public final void render(Graphics g, int width, int height) throws SlickException
 	{
 		if (this.windowWidth != width || this.windowHeight != height)
 		{
@@ -61,7 +61,7 @@ public abstract class GuiScreen
 		
 		GL11.glScalef(this.scaledResolution.scaleFactor, this.scaledResolution.scaleFactor, 1F);
 		
-		this.drawScreen(this.scaledResolution.scaledWidth, this.scaledResolution.scaledHeight);
+		this.drawScreen(g, this.scaledResolution.scaledWidth, this.scaledResolution.scaledHeight);
 		
 		for (GuiButton button : this.buttonList)
 		{
@@ -80,10 +80,10 @@ public abstract class GuiScreen
 			if (this.player != null)
 			{
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10,
-						String.format("PlayerPos: (%.2f;%.2f;%.2f)", this.player.posX, this.player.posY, this.player.posZ));
+						String.format("PlayerPos: (%.2f;%.2f)", this.player.posX, this.player.posY));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerRot: %d", this.player.rot));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10,
-						String.format("PlayerVelocity: (%.2f;%.2f;%.2f)", this.player.velocityX, this.player.velocityY, this.player.velocityZ));
+						String.format("PlayerVelocity: (%.2f;%.2f)", this.player.velocityX, this.player.velocityY));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", this.dr.getWorld().worldInfo.getName()));
 			}
 			
@@ -112,7 +112,7 @@ public abstract class GuiScreen
 	
 	}
 	
-	public abstract void drawScreen(int width, int height) throws SlickException;
+	public abstract void drawScreen(Graphics g, int width, int height) throws SlickException;
 	
 	public abstract void updateScreen() throws SlickException;
 	

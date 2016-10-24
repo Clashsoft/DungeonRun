@@ -1,13 +1,13 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import java.util.List;
-
+import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.util.ResourceHelper;
+import java.util.List;
 
 public class GuiMainMenu extends GuiListScreen
 {
@@ -28,7 +28,7 @@ public class GuiMainMenu extends GuiListScreen
 	}
 	
 	@Override
-	public void drawScreen(int width, int height) throws SlickException
+	public void drawScreen(Graphics g, int width, int height) throws SlickException
 	{
 		this.drawDefaultBackground(width, height);
 		
@@ -57,7 +57,7 @@ public class GuiMainMenu extends GuiListScreen
 		}
 		
 		GL11.glScalef(3F, 3F, 1F);
-		this.player.getRenderer().render(this.player, player.posX, height / 2D - 20D);
+		this.player.getRenderer().render(this.player, g, this.player.posX, height / 2D - 20D);
 		GL11.glScalef(1F / 3F, 1F / 3F, 1F);
 	}
 	

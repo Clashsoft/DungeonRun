@@ -6,37 +6,35 @@ import com.clashsoft.nbt.util.INBTSaveable;
 
 public class Chunk implements INBTSaveable
 {
-	public static final int	NO_UPDATE			= 0;
-	public static final int	UPDATE_NEIGHBORS	= 1;
-	public static final int	UPDATE_LIGHT		= 2;
-	public static final int	UPDATE				= UPDATE_NEIGHBORS | UPDATE_LIGHT;
-	
+	public static final int UPDATE_NEIGHBORS = 1;
+	public static final int UPDATE_LIGHT     = 2;
+	public static final int UPDATE           = UPDATE_NEIGHBORS | UPDATE_LIGHT;
+
+	public static final int WIDTH = 16;
+	public static final int HEIGHT = 256;
+
 	public final World world;
-	
-	public int	chunkX;
-	public int	chunkY;
-	public int	chunkZ;
-	
-	private int[]	blockIDs;
-	private int[]	metadataValues;
-	
+
+	public int chunkX;
+
+	private int[] blockIDs;
+	private int[] metadataValues;
+
 	private float[] lightValues;
-	
+
 	private boolean hasChanged;
-	
-	public Chunk(World w, int x, int y, int z)
+
+	public Chunk(World w, int x)
 	{
 		this.world = w;
 		this.chunkX = x;
-		this.chunkY = y;
-		this.chunkZ = z;
-		
-		this.blockIDs = new int[4096];
-		this.metadataValues = new int[4096];
-		
-		this.lightValues = new float[4096];
+
+		this.blockIDs = new int[WIDTH * HEIGHT];
+		this.metadataValues = new int[WIDTH * HEIGHT];
+
+		this.lightValues = new float[WIDTH * HEIGHT];
 	}
-	
+
 	protected void initializeLightValues()
 	{
 		for (int x = 0; x < 16; x++)
@@ -45,89 +43,74 @@ public class Chunk implements INBTSaveable
 			{
 				for (int z = 0; z < 16; z++)
 				{
-					BlockInWorld block = this.getBlock(x, y, z);
-					this.lightValues[index(x, y, z)] = block != null ? block.getLightValue() : 0.1F;
+					BlockInWorld block = this.getBlock(x, y);
+					this.lightValues[index(x, y)] = block != null ? block.getLightValue() : 0.1F;
 				}
 			}
 		}
 	}
-	
-	public void setBlock(int blockID, int metadata, int x, int y, int z, int flags)
+
+	public void setBlock(int blockID, int metadata, int x, int y, int flags)
 	{
-		int index = index(x, y, z);
-		
+		int index = index(x, y);
+
 		this.blockIDs[index] = blockID;
 		this.metadataValues[index] = metadata;
-		
-		float f = this.getLightValue(x, y, z);
-		if ((flags & 2) != 0)
+
+		float f = this.getLightValue(x, y);
+		if ((flags & UPDATE_LIGHT) != 0)
 		{
-			this.updateLightValues(x, y, z, f);
+			this.updateLightValues(x, y, f);
 		}
-		
+
 		this.hasChanged = true;
 	}
-	
-	public void setLightValue(int x, int y, int z, float f)
+
+	public void setLightValue(int x, int y, float f)
 	{
-		this.lightValues[index(x, y, z)] = f;
-		
+		this.lightValues[index(x, y)] = f;
+
 		this.hasChanged = true;
 	}
-	
-	public void updateLightValues(int x, int y, int z, float f)
+
+	public void updateLightValues(int x, int y, float newValue)
 	{
-		for (int i = x - 12; i <= x + 12; i++)
+		for (int dx = -12; dx <= +12; dx++)
 		{
-			for (int j = 0; j < 16; j++)
+			for (int dy = -12; dy <= 12; dy++)
 			{
-				for (int k = z - 12; k <= z + 12; k++)
-				{
-					int x1 = this.worldPosX(i);
-					int y1 = this.worldPosY(j);
-					int z1 = this.worldPosZ(k);
-					
-					int offX = Math.abs(i - x);
-					int offY = Math.abs(j - y);
-					int offZ = Math.abs(k - z);
-					int offset = offX + offY + offZ;
-					
-					float f0 = this.world.getLightValue(x1, y1, z1);
-					float f1 = offset / 16F;
-					float f2 = f - f1;
-					float f3 = Math.max(f0, f2);
-					this.world.setLightValue(x1, y1, z1, f3);
-				}
+				final int x1 = this.worldPosX(x + dx);
+				final int y1 = y + dy;
+
+				final int offset = Math.abs(dx) + Math.abs(dy);
+
+				float localLight = this.world.getLightValue(x1, y1);
+				float scaledOffset = offset / 16F;
+				float offsetLight = newValue - scaledOffset;
+				float maxLight = Math.max(localLight, offsetLight);
+
+				this.world.setLightValue(x1, y1, maxLight);
 			}
 		}
 	}
-	
+
 	public int worldPosX(int x)
 	{
 		return this.chunkX << 4 | x;
 	}
-	
-	public int worldPosY(int y)
+
+	public BlockInWorld getBlock(int x, int y)
 	{
-		return this.chunkY << 4 | y;
+		int index = index(x, y);
+		return new BlockInWorld(this.world, this.getBlockID(index), this.getBlockMetadata(index),
+		                        this.getLightValue(index));
 	}
-	
-	public int worldPosZ(int z)
+
+	public int getBlockID(int x, int y)
 	{
-		return this.chunkZ << 4 | z;
+		return this.getBlockID(index(x, y));
 	}
-	
-	public BlockInWorld getBlock(int x, int y, int z)
-	{
-		int index = index(x, y, z);
-		return new BlockInWorld(this.world, this.getBlockID(index), this.getBlockMetadata(index), this.getLightValue(index));
-	}
-	
-	public int getBlockID(int x, int y, int z)
-	{
-		return this.getBlockID(index(x, y, z));
-	}
-	
+
 	protected int getBlockID(int index)
 	{
 		try
@@ -140,68 +123,64 @@ public class Chunk implements INBTSaveable
 		}
 		return 0;
 	}
-	
-	public int getBlockMetadata(int x, int y, int z)
+
+	public int getBlockMetadata(int x, int y)
 	{
-		return this.getBlockMetadata(index(x, y, z));
+		return this.getBlockMetadata(index(x, y));
 	}
-	
+
 	protected int getBlockMetadata(int index)
 	{
 		return this.metadataValues[index];
 	}
-	
-	public float getLightValue(int x, int y, int z)
+
+	public float getLightValue(int x, int y)
 	{
-		return this.getLightValue(index(x, y, z));
+		return this.getLightValue(index(x, y));
 	}
-	
+
 	protected float getLightValue(int index)
 	{
 		return this.lightValues[index];
 	}
-	
-	protected static int index(int x, int y, int z)
+
+	protected static int index(int x, int y)
 	{
-		return x << 0 | y << 4 | z << 8;
+		return x << 0 | y << 4;
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("x", this.chunkX);
-		nbt.setInteger("y", this.chunkY);
-		nbt.setInteger("z", this.chunkZ);
 		nbt.setTagArray(new NBTTagArray("ids", this.blockIDs));
 		nbt.setTagArray(new NBTTagArray("data", this.metadataValues));
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.chunkX = nbt.getInteger("x");
-		this.chunkY = nbt.getInteger("y");
-		this.chunkZ = nbt.getInteger("z");
 		this.blockIDs = nbt.getTagArray("ids").getIntArray();
 		this.metadataValues = nbt.getTagArray("data").getIntArray();
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return "Chunk[" + this.chunkX + ";" + this.chunkY + ";" + this.chunkZ + "]";
+		return "Chunk[" + this.chunkX + "]";
 	}
-	
+
 	public boolean isDirty()
 	{
 		return this.hasChanged;
 	}
-	
+
 	public void markDirty()
 	{
 		this.hasChanged = true;
 	}
-	
+
 	public void markClean()
 	{
 		this.hasChanged = false;

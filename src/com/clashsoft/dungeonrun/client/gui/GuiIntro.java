@@ -2,6 +2,7 @@ package com.clashsoft.dungeonrun.client.gui;
 
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public class GuiIntro extends GuiScreen
@@ -18,7 +19,7 @@ public class GuiIntro extends GuiScreen
 	}
 
 	@Override
-	public void drawScreen(int par1, int par2) throws SlickException
+	public void drawScreen(Graphics g, int par1, int par2) throws SlickException
 	{
 		float alpha;
 

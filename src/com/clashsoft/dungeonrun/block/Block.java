@@ -91,12 +91,7 @@ public class Block implements IStackable
 		return 64;
 	}
 	
-	public boolean canCollideVertically(int metadata, Entity entity)
-	{
-		return true;
-	}
-	
-	public boolean canCollideHorizontally(int metadata, Entity entity)
+	public boolean canCollide(int metadata, Entity entity)
 	{
 		return true;
 	}

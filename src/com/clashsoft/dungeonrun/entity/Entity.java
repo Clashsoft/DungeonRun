@@ -1,136 +1,125 @@
 package com.clashsoft.dungeonrun.entity;
 
-import org.newdawn.slick.SlickException;
-
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
+import org.newdawn.slick.SlickException;
 
 public abstract class Entity implements INBTSaveable
 {
-	public static int	nextEntityId	= 0;
-	
-	public int			entityId;
-	
-	public final World	worldObj;
-	
-	private boolean		isDead;
-	
-	public double		posX			= 0.5;
-	public double		posY			= 32;
-	public double		posZ			= 0.5;
-	public double		velocityX		= 0;
-	public double		velocityY		= 0;
-	public double		velocityZ		= 0;
-	public byte			rot				= 3;
-	
-	public int			airTime			= 0;
-	
+	public static int nextEntityId = 0;
+
+	public int entityId;
+
+	public final World worldObj;
+
+	private boolean isDead;
+
+	public double posX      = 0.5;
+	public double posY      = 70;
+	public double velocityX = 0;
+	public double velocityY = 0;
+	public byte   rot       = 3;
+
+	public int airTime = 0;
+
 	public Entity(World world)
 	{
 		this.entityId = nextEntityId++;
 		this.worldObj = world;
-		this.setLocation(0.5F, 32, 0.5F);
-		this.setVelocity(0, 0, 0);
+		this.setLocation(0.5F, 32);
+		this.setVelocity(0, 0);
 		this.setRotation(3); // South
 	}
-	
-	public void setLocation(double x, double y, double z)
+
+	public void setLocation(double x, double y)
 	{
 		this.posX = x;
 		this.posY = y;
-		this.posZ = z;
 	}
-	
+
 	public void setRotation(int rot)
 	{
 		this.rot = (byte) (rot % 4);
 	}
-	
-	public void setVelocity(double x, double y, double z)
+
+	public void setVelocity(double x, double y)
 	{
 		this.velocityX = x;
 		this.velocityY = y;
-		this.velocityZ = z;
 	}
-	
-	public void move(double x, double y, double z)
+
+	public void move(double x, double y)
 	{
-		if (this.canMove(x, y, z))
-		{
-			this.posX += x;
-			this.posY += y;
-			this.posZ += z;
-		}
+		this.posX += x;
+		this.posY += y;
 	}
-	
-	public void addVelocity(double x, double y, double z)
+
+	public void addVelocity(double x, double y)
 	{
 		this.velocityX += x;
 		this.velocityY += y;
-		this.velocityZ += z;
 	}
-	
+
 	public void move(double distance, int dir)
 	{
-		if (dir == 0)
+		switch (dir)
 		{
-			this.move(0, 0, -distance);
-		}
-		else if (dir == 1)
-		{
-			this.move(distance, 0, 0);
-		}
-		else if (dir == 2)
-		{
-			this.move(0, 0, distance);
-		}
-		else if (dir == 3)
-		{
-			this.move(-distance, 0, 0);
+		case 1:
+			this.move(distance, 0D);
+			break;
+		case 3:
+			this.move(-distance, 0D);
+			break;
 		}
 	}
-	
+
+	public abstract float getWidth();
+
+	public abstract float getHeight();
+
 	public void setDead()
 	{
 		this.isDead = true;
 	}
-	
+
 	public boolean isDead()
 	{
 		return this.isDead;
 	}
-	
+
 	public void updateEntity()
 	{
 		this.applyGravity();
 		this.processVelocity();
 	}
-	
+
 	protected void applyGravity()
 	{
-		if (!this.isCollidedVertically())
+		final float offset = 0.1F + this.airTime * 0.1F;
+		this.posY -= offset;
+
+		if (this.isCollided())
 		{
-			this.posY -= 0.1F + this.airTime * 0.1F;
-			this.airTime++;
+			this.posY += offset;
+			this.airTime = 0;
 		}
 		else
 		{
-			this.airTime = 0;
+			this.airTime++;
 		}
 	}
-	
+
 	protected void processVelocity()
 	{
 		this.posX += this.velocityX;
 		this.posY += this.velocityY;
-		this.posZ += this.velocityZ;
-		
-		this.addVelocity(getNormalizer(this.velocityX, 0.1F), getNormalizer(this.velocityY, 0.1F), getNormalizer(this.velocityZ, 0.1F));
+
+		this.addVelocity(getNormalizer(this.velocityX, 0.1F), getNormalizer(this.velocityY, 0.1F));
 	}
-	
+
 	private static double getNormalizer(double par1, double par2)
 	{
 		if (par1 >= par2)
@@ -151,124 +140,82 @@ public abstract class Entity implements INBTSaveable
 		}
 		return 0F;
 	}
-	
-	public boolean isCollidedVertically()
+
+	public boolean isCollided()
 	{
-		if (this.posY < 64 && this.posY >= 0)
+		if (this.posY < 0)
 		{
-			BlockInWorld block = this.worldObj.getBlock((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ));
-			return this.canCollideWithBlockVertically(block);
+			return false;
 		}
-		else if (this.posY <= -64)
+
+		final double width = this.getWidth();
+		int x1 = (int) Math.floor(this.posX - width / 2);
+		int x2 = (int) Math.floor(this.posX + width / 2);
+		int y1 = (int) (Math.ceil(this.posY));
+		int y2 = (int) Math.floor(this.posY + this.getHeight());
+
+		for (int x = x1; x <= x2; x++)
 		{
-			this.setDead();
+			for (int y = y1; y <= y2; y++)
+			{
+				BlockInWorld block = this.worldObj.getBlock(x, y);
+				if (this.canCollide(block))
+				{
+					return true;
+				}
+			}
 		}
 		return false;
 	}
-	
-	public boolean canMove(double distance, int dir)
+
+	public boolean canCollide(BlockInWorld block)
 	{
-		if (dir == 0)
-		{
-			return this.canMove(0, 0, -distance);
-		}
-		else if (dir == 1)
-		{
-			return this.canMove(distance, 0, 0);
-		}
-		else if (dir == 2)
-		{
-			return this.canMove(0, 0, distance);
-		}
-		else if (dir == 3)
-		{
-			return this.canMove(-distance, 0, 0);
-		}
-		return false;
+		return block != null && block.getBlock() != null && block.getBlock().canCollide(block.getMetadata(), this);
 	}
-	
-	public boolean canMove(double x, double y, double z)
-	{
-		double newX = this.posX + x;
-		double newY = this.posY + y;
-		double newZ = this.posZ + z;
-		
-		if (newY + 1 >= 64)
-		{
-			return true;
-		}
-		
-		BlockInWorld block1 = this.worldObj.getBlock((int) Math.floor(newX), (int) Math.floor(newY + 1), (int) Math.floor(newZ));
-		
-		if (newY + 2 >= 64)
-		{
-			return !this.canCollideWithBlockHorizontally(block1);
-		}
-		
-		BlockInWorld block2 = this.worldObj.getBlock((int) Math.floor(newX), (int) Math.floor(newY + 2), (int) Math.floor(newZ));
-		
-		boolean b1 = !this.canCollideWithBlockHorizontally(block1);
-		boolean b2 = !this.canCollideWithBlockHorizontally(block2);
-		return b1 && b2;
-	}
-	
-	public boolean canCollideWithBlockVertically(BlockInWorld block)
-	{
-		return block != null && block.getBlock() != null && block.getBlock().canCollideVertically(block.getMetadata(), this);
-	}
-	
-	public boolean canCollideWithBlockHorizontally(BlockInWorld block)
-	{
-		return block != null && block.getBlock() != null && block.getBlock().canCollideHorizontally(block.getMetadata(), this);
-	}
-	
+
 	public abstract Render getRenderer() throws SlickException;
-	
+
 	public abstract String getTexture();
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setString("type", EntityList.getNameFromClass(this.getClass()));
 		nbt.setInteger("id", this.entityId);
-		
+
 		NBTTagCompound pos = new NBTTagCompound("pos");
 		pos.setDouble("x", this.posX);
 		pos.setDouble("y", this.posY);
-		pos.setDouble("z", this.posZ);
 		nbt.setTagCompound(pos);
-		
+
 		NBTTagCompound momentum = new NBTTagCompound("velocity");
 		momentum.setDouble("x", this.velocityX);
 		momentum.setDouble("y", this.velocityY);
-		momentum.setDouble("z", this.velocityZ);
 		nbt.setTagCompound(momentum);
-		
+
 		nbt.setByte("rot", this.rot);
 		nbt.setInteger("airtime", this.airTime);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.entityId = nbt.getInteger("id");
-		
+
 		NBTTagCompound pos = nbt.getTagCompound("pos");
 		if (pos != null)
 		{
 			this.posX = pos.getDouble("x");
 			this.posY = pos.getDouble("y");
-			this.posZ = pos.getDouble("z");
 		}
-		
+
 		NBTTagCompound momentum = nbt.getTagCompound("velocity");
 		if (momentum != null)
 		{
 			this.velocityX = momentum.getDouble("x");
 			this.velocityY = momentum.getDouble("y");
-			this.velocityZ = momentum.getDouble("z");
 		}
-		
+
 		this.rot = nbt.getByte("rot");
 		this.airTime = nbt.getInteger("airtime");
 	}

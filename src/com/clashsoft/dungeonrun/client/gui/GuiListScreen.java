@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.client.gui;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.SoundEngine;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -23,7 +24,7 @@ public abstract class GuiListScreen extends GuiScreen
 	}
 
 	@Override
-	public void drawScreen(int width, int height) throws SlickException
+	public void drawScreen(Graphics g, int width, int height) throws SlickException
 	{
 		if (this.drawBricks)
 		{
