@@ -1,17 +1,16 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import java.io.File;
-import java.util.List;
-
+import com.clashsoft.dungeonrun.client.engine.I18n;
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.client.engine.I18n;
+import java.io.File;
+import java.util.List;
 
 public class GuiCreateWorld extends GuiListScreen
 {
 	public GuiScreen	superGui;
-	
-	public boolean		editMode	= true;
+
 	public String		worldName	= I18n.getString("world.new.template");
 	
 	public GuiCreateWorld(GuiScreen superGui)
@@ -36,32 +35,35 @@ public class GuiCreateWorld extends GuiListScreen
 	@Override
 	public void keyTyped(int key, char c) throws SlickException
 	{
-		if (this.editMode && this.selection == 0)
+		if (this.selection != 0)
 		{
-			if (key == 14 && !this.worldName.isEmpty())
-			{
-				this.worldName = this.worldName.substring(0, this.worldName.length() - 1);
-			}
-			else if (Character.isLetterOrDigit(c) || c == ' ')
-			{
-				this.worldName += c;
-			}
+			super.keyTyped(key, c);
+			return;
+		}
+
+		if (key == Keyboard.KEY_BACK && !this.worldName.isEmpty())
+		{
+			this.worldName = this.worldName.substring(0, this.worldName.length() - 1);
+		}
+		else if (Character.isLetterOrDigit(c) || c == ' ')
+		{
+			this.worldName += c;
+		}
+		else
+		{
+			super.keyTyped(key, c);
 		}
 	}
-	
+
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
-		if (i == 0)
-		{
-			this.editMode = !this.editMode;
-		}
-		else if (i == 1)
+		if (i == 1)
 		{
 			File saves = new File(this.dr.getSaveDataFolder(), "saves");
 			File newWorld = new File(saves, this.worldName.trim());
 			newWorld.mkdirs();
-			
+
 			this.dr.displayGuiScreen(this.superGui);
 		}
 		else if (i == 2)
@@ -73,10 +75,15 @@ public class GuiCreateWorld extends GuiListScreen
 	@Override
 	public String getEntry(int i)
 	{
-		if (i == 0)
+		if (i != 0)
 		{
-			return this.worldName;
+			return super.getEntry(i);
 		}
-		return super.getEntry(i);
+
+		if (this.selection == i)
+		{
+			return this.worldName + '_';
+		}
+		return this.worldName;
 	}
 }
