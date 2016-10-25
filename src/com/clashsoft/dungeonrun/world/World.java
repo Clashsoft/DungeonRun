@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.world;
 
+import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
@@ -10,10 +11,7 @@ import com.clashsoft.nbt.tags.collection.NBTTagList;
 import org.newdawn.slick.SlickException;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class World
 {
@@ -62,10 +60,14 @@ public class World
 	{
 		System.out.println("Generating missing chunk at " + x);
 
-		Chunk c = new Chunk(this, x);
-		WorldGenerator.generateChunk(c);
-		this.setChunk(x, c);
-		return c;
+		final Random random = new Random();
+		final Chunk chunk = new Chunk(this, x);
+
+		WorldGenerator.generateChunk(chunk, random);
+		this.setChunk(x, chunk);
+		WorldGenerator.generateStructures(this, random, x << 4);
+
+		return chunk;
 	}
 
 	protected void updateChunkBounds(int x)
@@ -138,20 +140,16 @@ public class World
 
 	public BlockInWorld getBlock(int x, int y)
 	{
-		Chunk c = this.getChunkAtCoordinates(x);
-		if (c != null)
-		{
-			return c.getBlock(x & 15, y);
-		}
-		return BlockInWorld.AIR;
+		final Chunk chunk = this.getChunkAtCoordinates(x);
+		return chunk == null ? BlockInWorld.AIR : chunk.getBlock(x & 15, y);
 	}
 
-	public void setBlock(int block, int meta, int x, int y)
+	public void setBlock(Block block, int meta, int x, int y)
 	{
 		this.setBlock(block, meta, x, y, Chunk.UPDATE);
 	}
 
-	public void setBlock(int block, int meta, int x, int y, int flags)
+	public void setBlock(Block block, int meta, int x, int y, int flags)
 	{
 		Chunk c = this.getChunkAtCoordinates(x);
 		if (c != null)
@@ -160,14 +158,16 @@ public class World
 		}
 	}
 
+	public int getHeight(int x)
+	{
+		final Chunk chunk = this.getChunkAtCoordinates(x);
+		return chunk != null ? chunk.getHeight(x & 15) : 0;
+	}
+
 	public float getLightValue(int x, int y)
 	{
-		Chunk c = this.getChunkAtCoordinates(x);
-		if (c != null)
-		{
-			return c.getLightValue(x & 15, y);
-		}
-		return 1F;
+		final Chunk chunk = this.getChunkAtCoordinates(x);
+		return chunk != null ? chunk.getLightValue(x & 15, y) : 1F;
 	}
 
 	public void setLightValue(int x, int y, float f)
