@@ -5,7 +5,8 @@ import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
-import org.newdawn.slick.SlickException;
+
+import java.util.Random;
 
 public abstract class Entity implements INBTSaveable
 {
@@ -17,11 +18,11 @@ public abstract class Entity implements INBTSaveable
 
 	private boolean isDead;
 
-	public double posX      = 0.5;
-	public double posY      = 70;
-	public double velocityX = 0;
-	public double velocityY = 0;
-	public byte   rot       = 3;
+	public double posX;
+	public double posY;
+	public double velocityX;
+	public double velocityY;
+	public float  pitch;
 
 	public int airTime = 0;
 
@@ -29,9 +30,6 @@ public abstract class Entity implements INBTSaveable
 	{
 		this.entityId = nextEntityId++;
 		this.worldObj = world;
-		this.setLocation(0.5F, 32);
-		this.setVelocity(0, 0);
-		this.setRotation(3); // South
 	}
 
 	public void setLocation(double x, double y)
@@ -40,9 +38,15 @@ public abstract class Entity implements INBTSaveable
 		this.posY = y;
 	}
 
-	public void setRotation(int rot)
+	public void setPitch(float pitch)
 	{
-		this.rot = (byte) (rot % 4);
+		pitch %= 360;
+		if (pitch < 0)
+		{
+			pitch += 360;
+		}
+
+		this.pitch = pitch;
 	}
 
 	public void setVelocity(double x, double y)
@@ -57,23 +61,32 @@ public abstract class Entity implements INBTSaveable
 		this.posY += y;
 	}
 
+	public boolean tryMove(double x, double y)
+	{
+		final int parts = 10;
+		final double partX = x / parts;
+		final double partY = y / parts;
+
+		for (int i = 0; i < parts; i++)
+		{
+			this.posX += partX;
+			this.posY += partY;
+
+			if (this.isCollided())
+			{
+				this.posX -= partX;
+				this.posY -= partY;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public void addVelocity(double x, double y)
 	{
 		this.velocityX += x;
 		this.velocityY += y;
-	}
-
-	public void move(double distance, int dir)
-	{
-		switch (dir)
-		{
-		case 1:
-			this.move(distance, 0D);
-			break;
-		case 3:
-			this.move(-distance, 0D);
-			break;
-		}
 	}
 
 	public abstract float getWidth();
@@ -90,7 +103,7 @@ public abstract class Entity implements INBTSaveable
 		return this.isDead;
 	}
 
-	public void updateEntity()
+	public void updateEntity(Random random)
 	{
 		this.applyGravity();
 		this.processVelocity();
@@ -98,12 +111,10 @@ public abstract class Entity implements INBTSaveable
 
 	protected void applyGravity()
 	{
-		final float offset = 0.1F + this.airTime * 0.1F;
-		this.posY -= offset;
+		final double offset = 0.1 + this.airTime * 0.1;
 
-		if (this.isCollided())
+		if (this.tryMove(0, -offset))
 		{
-			this.posY += offset;
 			this.airTime = 0;
 		}
 		else
@@ -114,31 +125,25 @@ public abstract class Entity implements INBTSaveable
 
 	protected void processVelocity()
 	{
-		this.posX += this.velocityX;
-		this.posY += this.velocityY;
+		if (this.tryMove(this.velocityX, this.velocityY))
+		{
+			this.velocityX = this.velocityY = 0;
+			return;
+		}
 
-		this.addVelocity(getNormalizer(this.velocityX, 0.1F), getNormalizer(this.velocityY, 0.1F));
+		this.addVelocity(toZero(this.velocityX, 0.1F), toZero(this.velocityY, 0.1F));
 	}
 
-	private static double getNormalizer(double par1, double par2)
+	private static double toZero(double from, double by)
 	{
-		if (par1 >= par2)
+		if (from > 0)
 		{
-			return -par2;
+			return from > by ? -by : -from;
 		}
-		else if (par1 <= -par2)
+		else
 		{
-			return par2;
+			return -from > by ? by : from;
 		}
-		else if (par1 < par2 && par1 >= 0)
-		{
-			return -par1;
-		}
-		else if (par1 > -par2 && par1 <= 0)
-		{
-			return par1;
-		}
-		return 0F;
 	}
 
 	public boolean isCollided()
@@ -173,9 +178,7 @@ public abstract class Entity implements INBTSaveable
 		return block != null && block.getBlock() != null && block.getBlock().canCollide(block.getMetadata(), this);
 	}
 
-	public abstract Render getRenderer() throws SlickException;
-
-	public abstract String getTexture();
+	public abstract Render getRenderer();
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
@@ -193,7 +196,7 @@ public abstract class Entity implements INBTSaveable
 		momentum.setDouble("y", this.velocityY);
 		nbt.setTagCompound(momentum);
 
-		nbt.setByte("rot", this.rot);
+		nbt.setFloat("pitch", this.pitch);
 		nbt.setInteger("airtime", this.airTime);
 	}
 
@@ -216,7 +219,7 @@ public abstract class Entity implements INBTSaveable
 			this.velocityY = momentum.getDouble("y");
 		}
 
-		this.rot = nbt.getByte("rot");
+		this.pitch = nbt.getFloat("pitch");
 		this.airTime = nbt.getInteger("airtime");
 	}
 }

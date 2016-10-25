@@ -81,7 +81,7 @@ public abstract class GuiScreen
 			{
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10,
 						String.format("PlayerPos: (%.2f;%.2f)", this.player.posX, this.player.posY));
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerRot: %d", this.player.rot));
+				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerPitch: %f", this.player.pitch));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10,
 						String.format("PlayerVelocity: (%.2f;%.2f)", this.player.velocityX, this.player.velocityY));
 				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s", this.dr.getWorld().worldInfo.getName()));

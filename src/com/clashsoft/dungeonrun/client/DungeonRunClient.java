@@ -232,8 +232,8 @@ public class DungeonRunClient extends DungeonRun
 		if (this.thePlayer == null)
 		{
 			this.thePlayer = new EntityPlayer(this.theWorld, this.username);
-			this.thePlayer.setLocation(0D, 64D);
-			this.theWorld.spawnEntityInWorld(this.thePlayer);
+			this.thePlayer.setLocation(0.5D, this.theWorld.getHeight(0));
+			this.theWorld.spawnEntity(this.thePlayer);
 		}
 		
 		this.theIngameGui = new GuiIngame(this.thePlayer);

@@ -8,10 +8,10 @@ import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import org.newdawn.slick.SlickException;
 
+import java.util.Random;
+
 public class EntityPlayer extends EntityLiving
 {
-	public RenderPlayer renderer;
-
 	public String username = "";
 
 	public InventoryPlayer inventory;
@@ -28,48 +28,42 @@ public class EntityPlayer extends EntityLiving
 		super(world);
 		this.username = username;
 		this.inventory = new InventoryPlayer(this);
-		this.renderer = new RenderPlayer(this);
 	}
 
 	@Override
 	public float getWidth()
 	{
-		return 0.75F;
+		return 12 / 16F;
 	}
 
 	@Override
 	public float getHeight()
 	{
-		return 1.5F;
+		return 24 / 16F;
 	}
 
 	@Override
-	public RenderPlayer getRenderer() throws SlickException
+	public RenderPlayer getRenderer()
 	{
-		return this.renderer;
+		return RenderPlayer.INSTANCE;
 	}
 
 	@Override
-	public String getTexture()
-	{
-		return "resources/textures/entity/knights.png";
-	}
-
-	@Override
-	public void updateEntity()
+	public void updateEntity(Random random)
 	{
 		if (this.isWalking)
 		{
-			final double distance = this.airTime > 0 ? 0.3 : this.isSprinting ? 0.2 : 0.1;
-			this.move(distance, this.rot);
+			double distance = this.airTime > 0 ? 0.4 : this.isSprinting ? 0.3 : 0.15;
 
-			if (this.isCollided())
+			if (this.pitch >= 90 && this.pitch <= 270)
 			{
-				this.move(-distance, this.rot);
+				distance = -distance;
 			}
+
+			this.tryMove(distance, 0);
 		}
 
-		super.updateEntity();
+		super.updateEntity(random);
 	}
 
 	@Override
@@ -86,9 +80,17 @@ public class EntityPlayer extends EntityLiving
 		super.setDead();
 	}
 
-	public void walk(int dir)
+	public void walk(int sign)
 	{
-		this.rot = (byte) (dir & 3);
+		if (sign > 0)
+		{
+			this.pitch = 0;
+		}
+		else
+		{
+			this.pitch = 180;
+		}
+
 		this.isWalking = true;
 	}
 

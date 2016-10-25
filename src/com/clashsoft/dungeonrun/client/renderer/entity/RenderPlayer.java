@@ -2,15 +2,18 @@ package com.clashsoft.dungeonrun.client.renderer.entity;
 
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.newdawn.slick.*;
 
 public class RenderPlayer extends Render<EntityPlayer>
 {
+	public static final RenderPlayer INSTANCE = new RenderPlayer();
+
 	private Renderable[] sprites = new Renderable[6];
 
-	public RenderPlayer(EntityPlayer player) throws SlickException
+	private RenderPlayer()
 	{
-		final SpriteSheet textures = new SpriteSheet(new Image(player.getTexture()), 12, 24);
+		final SpriteSheet textures = ResourceHelper.playerSprites;
 
 		final Image standing = textures.getSprite(0, 0);
 		this.sprites[0] = standing;
@@ -36,16 +39,9 @@ public class RenderPlayer extends Render<EntityPlayer>
 
 		final float width = player.getWidth() * 16;
 		final float height = player.getHeight() * 16;
-
 		final float offX = (float) x - width / 2;
 		final float offY = (float) y - height;
 
 		this.sprites[index].draw(offX, offY);
-
-		/*/ Toggle bounding box
-		g.setBackground(Color.transparent);
-		g.setColor(Color.white);
-		g.drawRect(offX, offY, width, height);
-		//*/
 	}
 }

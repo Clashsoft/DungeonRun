@@ -3,6 +3,8 @@ package com.clashsoft.dungeonrun.entity;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 
+import java.util.Random;
+
 public abstract class EntityLiving extends EntityDamagable
 {
 	private int jumpCounter = 0;
@@ -21,14 +23,14 @@ public abstract class EntityLiving extends EntityDamagable
 	}
 
 	@Override
-	public void updateEntity()
+	public void updateEntity(Random random)
 	{
 		if (this.jumpCounter == 1)
 		{
 			this.jumpCounter = 0;
 			this.addVelocity(0, 0.6);
 		}
-		super.updateEntity();
+		super.updateEntity(random);
 	}
 
 	@Override

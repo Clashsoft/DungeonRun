@@ -24,7 +24,6 @@ public class GuiMainMenu extends GuiListScreen
 		this.dr.soundEngine.playMusic("main_menu", true);
 		
 		this.player = new EntityPlayer(null);
-		this.player.rot = 1;
 	}
 	
 	@Override
