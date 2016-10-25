@@ -1,6 +1,7 @@
 package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.entity.EntityMonster;
 
 import java.util.Random;
 
@@ -8,40 +9,58 @@ public class WorldGenerator
 {
 	public static void generateChunk(Chunk chunk, Random random)
 	{
-		int top = 62;
-
-		for (int x = 0; x < 16; x++)
+		if (chunk.chunkX < 0)
 		{
-			top += random.nextInt(3) - 1;
-			int stone = top - 4 - random.nextInt(3);
+			int sideTop = chunk.world.getHeight(chunk.worldPosX(16));
 
-			for (int y = 0; y <= top; y++)
+			for (int x = 15; x >= 0; --x)
 			{
-				final Block block;
-
-				if (y == top)
-				{
-					block = Block.grass;
-				}
-				else if (y > stone)
-				{
-					block = Block.dirt;
-				}
-				else
-				{
-					block = Block.stone;
-				}
-
-				chunk.setBlock(block, 0, x, y, 0);
+				final int top = sideTop + random.nextInt(3) - 1;
+				generateColumn(chunk, random, x, top);
+				sideTop = top;
 			}
 		}
+		else
+		{
+			int sideTop = chunk.chunkX == 0 ? 64 : chunk.world.getHeight(chunk.worldPosX(-1));
 
-		chunk.initializeLightValues();
+			for (int x = 0; x < 16; x++)
+			{
+				final int top = sideTop + random.nextInt(3) - 1;
+				generateColumn(chunk, random, x, top);
+				sideTop = top;
+			}
+		}
+	}
+
+	private static void generateColumn(Chunk chunk, Random random, int x, int top)
+	{
+		int stone = top - 4 - random.nextInt(3);
+
+		for (int y = 0; y <= top; y++)
+		{
+			final Block block;
+
+			if (y == top)
+			{
+				block = Block.grass;
+			}
+			else if (y > stone)
+			{
+				block = Block.dirt;
+			}
+			else
+			{
+				block = Block.stone;
+			}
+
+			chunk.setBlock(block, 0, x, y, 0);
+		}
 	}
 
 	public static void generateStructures(World world, Random random, int x)
 	{
-		for (int i = random.nextInt(2); i >= 0; i--)
+		if (random.nextInt(10) == 0)
 		{
 			int tx = x + random.nextInt(Chunk.WIDTH);
 			int ty = world.getHeight(tx);
@@ -52,7 +71,7 @@ public class WorldGenerator
 			}
 		}
 
-		for (int i = random.nextInt(5); i >= 0; i--)
+		for (int i = random.nextInt(4); i >= 0; i--)
 		{
 			int tx = x + random.nextInt(Chunk.WIDTH);
 			int ty = world.getHeight(tx);
@@ -63,6 +82,15 @@ public class WorldGenerator
 			}
 		}
 
+		for (int i = random.nextInt(3); i >= 0; --i)
+		{
+			final int mx = x + random.nextInt(Chunk.WIDTH);
+			final int my = world.getHeight(x);
+
+			final EntityMonster monster = new EntityMonster(world);
+			monster.setLocation(mx + 0.5, my + 2);
+			world.spawnEntity(monster);
+		}
 	}
 
 	private static void generateTree(World world, Random random, int x, int y)

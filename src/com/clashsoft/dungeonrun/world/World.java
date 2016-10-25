@@ -27,8 +27,12 @@ public class World
 	private Map<Integer, Entity>      entitys       = new HashMap<>();
 	private Map<String, EntityPlayer> playerEntitys = new HashMap<>();
 
+	private List<Entity> spawnList = new ArrayList<>();
+
 	public int minChunkX = 0;
 	public int maxChunkX = 0;
+
+	public final Random random = new Random();
 
 	public World(WorldInfo info)
 	{
@@ -60,12 +64,13 @@ public class World
 	{
 		System.out.println("Generating missing chunk at " + x);
 
-		final Random random = new Random();
 		final Chunk chunk = new Chunk(this, x);
-
-		WorldGenerator.generateChunk(chunk, random);
 		this.setChunk(x, chunk);
-		WorldGenerator.generateStructures(this, random, x << 4);
+
+		WorldGenerator.generateChunk(chunk, this.random);
+		chunk.initLightAndHeightMap();
+		WorldGenerator.generateStructures(this, this.random, x << 4);
+		chunk.initLightAndHeightMap();
 
 		return chunk;
 	}
@@ -87,35 +92,47 @@ public class World
 		return this.getChunkAtCoordinates(x) != null;
 	}
 
-	public void spawnEntityInWorld(Entity e)
+	public void spawnEntity(Entity entity)
 	{
-		if (e instanceof EntityPlayer)
+		this.spawnList.add(entity);
+	}
+
+	private void spawnEntity0(Entity entity)
+	{
+		if (entity instanceof EntityPlayer)
 		{
-			this.playerEntitys.put(((EntityPlayer) e).username, (EntityPlayer) e);
+			final EntityPlayer player = (EntityPlayer) entity;
+			this.playerEntitys.put(player.username, player);
 		}
-		this.entitys.put(e.entityId, e);
+		this.entitys.put(entity.entityId, entity);
 	}
 
 	public void removeEntity(int id)
 	{
-		this.entitys.remove(id);
-
-		if (this.entitys.get(id) instanceof EntityPlayer)
+		final Entity entity = this.entitys.remove(id);
+		if (entity instanceof EntityPlayer)
 		{
-			this.playerEntitys.remove(((EntityPlayer) this.entitys.get(id)).username);
+			this.playerEntitys.remove(((EntityPlayer) entity).username);
 		}
 	}
 
 	public void updateWorld() throws SlickException
 	{
-		Iterator<Map.Entry<Integer, Entity>> iterator = this.entitys.entrySet().iterator();
-		Map.Entry<Integer, Entity> e = null;
+		for (Entity entity : this.spawnList)
+		{
+			this.spawnEntity0(entity);
+		}
+		this.spawnList.clear();
+
+		final Iterator<Map.Entry<Integer, Entity>> iterator = this.entitys.entrySet().iterator();
 
 		while (iterator.hasNext())
 		{
-			e = iterator.next();
-			Entity entity = e.getValue();
-			entity.updateEntity();
+			final Map.Entry<Integer, Entity> entry = iterator.next();
+
+			final Entity entity = entry.getValue();
+			entity.updateEntity(this.random);
+
 			if (entity.isDead())
 			{
 				iterator.remove();
@@ -293,7 +310,7 @@ public class World
 					NBTTagCompound compound = (NBTTagCompound) base;
 					Entity entity = EntityList.constructFromNBT(compound, this);
 					entity.readFromNBT(compound);
-					this.spawnEntityInWorld(entity);
+					this.spawnEntity(entity);
 				}
 			}
 		}

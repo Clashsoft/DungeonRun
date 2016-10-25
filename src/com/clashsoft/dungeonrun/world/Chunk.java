@@ -9,9 +9,10 @@ public class Chunk implements INBTSaveable
 {
 	public static final int UPDATE_NEIGHBORS = 1;
 	public static final int UPDATE_LIGHT     = 2;
-	public static final int UPDATE           = UPDATE_NEIGHBORS | UPDATE_LIGHT;
+	public static final int UPDATE_HEIGHT    = 4;
+	public static final int UPDATE           = UPDATE_NEIGHBORS | UPDATE_LIGHT | UPDATE_HEIGHT;
 
-	public static final int WIDTH = 16;
+	public static final int WIDTH  = 16;
 	public static final int HEIGHT = 256;
 
 	public final World world;
@@ -22,7 +23,7 @@ public class Chunk implements INBTSaveable
 	private int[] metadataValues;
 
 	private float[] lightValues;
-	private int[] heightMap;
+	private int[]   heightMap;
 
 	private boolean hasChanged;
 
@@ -38,16 +39,18 @@ public class Chunk implements INBTSaveable
 		this.heightMap = new int[WIDTH];
 	}
 
-	protected void initializeLightValues()
+	protected void initLightAndHeightMap()
 	{
-		for (int x = 0; x < 16; x++)
+		for (int x = 0; x < WIDTH; x++)
 		{
-			for (int y = 0; y < 16; y++)
+			for (int y = HEIGHT - 1; y >= 0; y--)
 			{
-				for (int z = 0; z < 16; z++)
+				final int blockID = this.getBlockID(index(x, y));
+
+				if (blockID != 0 && Block.blocksList[blockID].isSolid())
 				{
-					BlockInWorld block = this.getBlock(x, y);
-					this.lightValues[index(x, y)] = block != null ? block.getLightValue() : 0.1F;
+					this.heightMap[x] = y;
+					break;
 				}
 			}
 		}
@@ -57,25 +60,27 @@ public class Chunk implements INBTSaveable
 	{
 		int index = index(x, y);
 
-		this.blockIDs[index] = block == null ? 0 : block.blockID;
+		this.blockIDs[index] = block == null ? 0 : block.getID();
 		this.metadataValues[index] = metadata;
 
 		// Update Light
-		float f = this.getLightValue(x, y);
 		if ((flags & UPDATE_LIGHT) != 0)
 		{
-			this.updateLightValues(x, y, f);
+			this.updateLightValues(x, y, this.getLightValue(x, y));
 		}
 
 		// Update Height Map
-		this.updateHeightMap(block, x, y);
+		if ((flags & UPDATE_HEIGHT) != 0)
+		{
+			this.updateHeightMap(block, x, y);
+		}
 
 		this.hasChanged = true;
 	}
 
 	private void updateHeightMap(Block block, int x, int y)
 	{
-		if (block != null)
+		if (block != null && block.isSolid())
 		{
 			if (y > this.heightMap[x])
 			{
@@ -109,14 +114,16 @@ public class Chunk implements INBTSaveable
 
 	public void updateLightValues(int x, int y, float newValue)
 	{
-		for (int dx = -12; dx <= +12; dx++)
-		{
-			for (int dy = -12; dy <= 12; dy++)
-			{
-				final int x1 = this.worldPosX(x + dx);
-				final int y1 = y + dy;
+		final int startX = x - 12;
+		final int endX = x + 12;
+		final int startY = Math.max(0, y - 12);
+		final int endY = Math.min(y + 12, HEIGHT - 1);
 
-				final int offset = Math.abs(dx) + Math.abs(dy);
+		for (int x1 = startX; x1 <= endX; x1++)
+		{
+			for (int y1 = startY; y1 <= endY; y1++)
+			{
+				final int offset = Math.abs(x1 - x) + Math.abs(y1 - y);
 
 				float localLight = this.world.getLightValue(x1, y1);
 				float scaledOffset = offset / 16F;
@@ -130,7 +137,7 @@ public class Chunk implements INBTSaveable
 
 	public int worldPosX(int x)
 	{
-		return this.chunkX << 4 | x;
+		return (this.chunkX << 4) + x;
 	}
 
 	public BlockInWorld getBlock(int x, int y)

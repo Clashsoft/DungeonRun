@@ -22,10 +22,10 @@ public class Block implements IStackable
 	public static Block planksWall  = new Block(10).setBlockName("plank_wall").setBackground();
 	public static Block water       = new Block(11).setBlockName("water").setBackground();
 
-	public int blockID;
-	public boolean isBackground = true;
-	public String blockName;
-	public Image  texture;
+	protected final int blockID;
+	protected boolean solid = true;
+	protected String blockName;
+	protected Image  texture;
 
 	public Block(int id)
 	{
@@ -48,14 +48,24 @@ public class Block implements IStackable
 
 	public Block setBackground()
 	{
-		this.isBackground = false;
+		this.solid = false;
 		return this;
+	}
+
+	public boolean isSolid()
+	{
+		return this.solid;
 	}
 
 	public Block setBlockName(String name)
 	{
 		this.blockName = name;
 		return this;
+	}
+
+	public String getBlockName()
+	{
+		return this.blockName;
 	}
 
 	public void registerIcons()
@@ -92,7 +102,7 @@ public class Block implements IStackable
 
 	public boolean canCollide(int metadata, Entity entity)
 	{
-		return this.isBackground;
+		return this.solid;
 	}
 
 	public float getLightValue()
