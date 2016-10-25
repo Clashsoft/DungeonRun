@@ -16,7 +16,7 @@ public class BlockGrass extends Block
 	public void registerIcons()
 	{
 		super.registerIcons();
-		this.sideIcon = this.getIcon("grass_side");
+		this.sideIcon = getIcon("grass_side");
 	}
 	
 	@Override
