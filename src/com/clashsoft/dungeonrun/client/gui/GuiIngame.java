@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.client.gui;
 
+import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.client.renderer.Render;
@@ -7,6 +8,8 @@ import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.dungeonrun.world.gen.HouseGenerator;
+import com.clashsoft.dungeonrun.world.gen.TreeGenerator;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -91,6 +94,28 @@ public class GuiIngame extends GuiScreen
 	@Override
 	public void keyTyped(int key, char c) throws SlickException
 	{
+		final EntityPlayer player = this.player;
+		final World world = player.worldObj;
+
+		final int posX = player.getBlockX();
+		final int posY = player.getBlockY();
+
+		switch (key)
+		{
+		case Input.KEY_H:
+			HouseGenerator.generateHouse(world, world.random, posX, posY);
+			break;
+		case Input.KEY_T:
+			TreeGenerator.generateTree(world, world.random, posX, posY);
+			break;
+		case Input.KEY_L:
+			world.setBlock(Blocks.plankLadder, 0, posX, posY + 1);
+			world.setBlock(Blocks.plankLadder, 0, posX, posY + 2);
+			break;
+		case Input.KEY_ESCAPE:
+			this.dr.pauseGame();
+			break;
+		}
 	}
 
 	@Override

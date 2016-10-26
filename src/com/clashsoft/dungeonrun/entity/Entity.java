@@ -35,10 +35,35 @@ public abstract class Entity implements INBTSaveable
 		this.worldObj = world;
 	}
 
+	public double getX()
+	{
+		return this.posX;
+	}
+
+	public int getBlockX()
+	{
+		return (int) Math.round(this.posX - 0.5);
+	}
+
+	public int getBlockY()
+	{
+		return (int) Math.round(this.posY - 0.5);
+	}
+
+	public double getY()
+	{
+		return this.posY;
+	}
+
 	public void setLocation(double x, double y)
 	{
 		this.posX = x;
 		this.posY = y;
+	}
+
+	public float getPitch()
+	{
+		return this.pitch;
 	}
 
 	public void setPitch(float pitch)
@@ -52,10 +77,26 @@ public abstract class Entity implements INBTSaveable
 		this.pitch = pitch;
 	}
 
+	public double getVelocityX()
+	{
+		return this.velocityX;
+	}
+
+	public double getVelocityY()
+	{
+		return this.velocityY;
+	}
+
 	public void setVelocity(double x, double y)
 	{
 		this.velocityX = x;
 		this.velocityY = y;
+	}
+
+	public void addVelocity(double x, double y)
+	{
+		this.velocityX += x;
+		this.velocityY += y;
 	}
 
 	public void move(double x, double y)
@@ -84,12 +125,6 @@ public abstract class Entity implements INBTSaveable
 		}
 
 		return false;
-	}
-
-	public void addVelocity(double x, double y)
-	{
-		this.velocityX += x;
-		this.velocityY += y;
 	}
 
 	public abstract float getWidth();
