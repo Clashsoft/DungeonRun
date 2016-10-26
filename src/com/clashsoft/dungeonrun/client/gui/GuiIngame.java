@@ -5,7 +5,6 @@ import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
@@ -79,11 +78,7 @@ public class GuiIngame extends GuiScreen
 			{
 				for (int x = minX; x <= maxX; x++)
 				{
-					BlockInWorld block = world.getBlock(x, y);
-					if (block != null && !block.isAir())
-					{
-						this.renderBlocks.renderBlock(block, x, y, posY, camX, camY);
-					}
+					this.renderBlocks.renderBlock(world, x, y, posY, camX, camY);
 				}
 			}
 		}
@@ -135,7 +130,6 @@ public class GuiIngame extends GuiScreen
 		{
 			float x = input.getMouseX();
 			float y = input.getMouseY();
-
 		}
 	}
 

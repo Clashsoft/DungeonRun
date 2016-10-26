@@ -155,10 +155,16 @@ public class World
 		return this.playerEntitys.get(username);
 	}
 
-	public BlockInWorld getBlock(int x, int y)
+	public Block getBlock(int x, int y)
 	{
 		final Chunk chunk = this.getChunkAtCoordinates(x);
-		return chunk == null ? BlockInWorld.AIR : chunk.getBlock(x & 15, y);
+		return chunk == null ? null : chunk.getBlock(x & 15, y);
+	}
+
+	public int getBlockMetadata(int x, int y)
+	{
+		final Chunk chunk = this.getChunkAtCoordinates(x);
+		return chunk == null ? 0 : chunk.getBlockMetadata(x & 15, y);
 	}
 
 	public void setBlock(Block block, int meta, int x, int y)

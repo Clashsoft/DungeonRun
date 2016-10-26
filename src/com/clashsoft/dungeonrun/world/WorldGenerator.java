@@ -65,7 +65,7 @@ public class WorldGenerator
 			int tx = x + random.nextInt(Chunk.WIDTH);
 			int ty = world.getHeight(tx);
 
-			if (world.getBlock(tx, ty).getBlock() == Block.grass)
+			if (world.getBlock(tx, ty) == Block.grass)
 			{
 				generateHouse(world, random, tx, ty);
 			}
@@ -76,7 +76,7 @@ public class WorldGenerator
 			int tx = x + random.nextInt(Chunk.WIDTH);
 			int ty = world.getHeight(tx);
 
-			if (world.getBlock(tx, ty).getBlock() == Block.grass)
+			if (world.getBlock(tx, ty) == Block.grass)
 			{
 				generateTree(world, random, tx, ty);
 			}
@@ -133,7 +133,7 @@ public class WorldGenerator
 
 			// Generate dirt blocks below the house
 			int top = y - 1;
-			while (top >= 0 && world.getBlock(x, top).getBlock() != Block.dirt)
+			while (top >= 0 && world.getBlock(x, top) != Block.dirt)
 			{
 				world.setBlock(Block.dirt, 0, x, top, 0);
 				top--;

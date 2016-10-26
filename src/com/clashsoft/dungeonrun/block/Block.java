@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.block;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.item.IStackable;
 import com.clashsoft.dungeonrun.item.ItemStack;
+import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -89,7 +90,7 @@ public class Block implements IStackable
 		return null;
 	}
 
-	public Image getTexture(int side, int meta) throws SlickException
+	public Image getTexture(int metadata) throws SlickException
 	{
 		return this.texture;
 	}
@@ -100,7 +101,7 @@ public class Block implements IStackable
 		return 64;
 	}
 
-	public boolean canCollide(int metadata, Entity entity)
+	public boolean canCollide(World world, int x, int y, Entity entity)
 	{
 		return this.solid;
 	}

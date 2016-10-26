@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.entity;
 
+import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.client.renderer.Render;
-import com.clashsoft.dungeonrun.world.BlockInWorld;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
@@ -163,8 +163,7 @@ public abstract class Entity implements INBTSaveable
 		{
 			for (int y = y1; y <= y2; y++)
 			{
-				BlockInWorld block = this.worldObj.getBlock(x, y);
-				if (this.canCollide(block))
+				if (this.canCollide(this.worldObj, x, y))
 				{
 					return true;
 				}
@@ -173,9 +172,10 @@ public abstract class Entity implements INBTSaveable
 		return false;
 	}
 
-	public boolean canCollide(BlockInWorld block)
+	public boolean canCollide(World world, int x, int y)
 	{
-		return block != null && block.getBlock() != null && block.getBlock().canCollide(block.getMetadata(), this);
+		final Block block = world.getBlock(x, y);
+		return block != null && block.canCollide(world, x, y, this);
 	}
 
 	public abstract Render getRenderer();

@@ -45,9 +45,9 @@ public class Chunk implements INBTSaveable
 		{
 			for (int y = HEIGHT - 1; y >= 0; y--)
 			{
-				final int blockID = this.getBlockID(index(x, y));
+				final Block block = this.getBlock(x, y);
 
-				if (blockID != 0 && Block.blocksList[blockID].isSolid())
+				if (block != null && block.isSolid())
 				{
 					this.heightMap[x] = y;
 					break;
@@ -140,29 +140,14 @@ public class Chunk implements INBTSaveable
 		return (this.chunkX << 4) + x;
 	}
 
-	public BlockInWorld getBlock(int x, int y)
+	public Block getBlock(int x, int y)
 	{
-		int index = index(x, y);
-		return new BlockInWorld(this.world, this.getBlockID(index), this.getBlockMetadata(index),
-		                        this.getLightValue(index));
+		return Block.blocksList[this.getBlockID(x, y)];
 	}
 
 	public int getBlockID(int x, int y)
 	{
-		return this.getBlockID(index(x, y));
-	}
-
-	protected int getBlockID(int index)
-	{
-		try
-		{
-			return this.blockIDs[index];
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		return 0;
+		return this.blockIDs[index(x, y)];
 	}
 
 	public int getBlockMetadata(int x, int y)
