@@ -311,13 +311,15 @@ public class World
 		{
 			for (NamedBinaryTag base : entityDataList)
 			{
-				if (base instanceof NBTTagCompound)
+				if (!(base instanceof NBTTagCompound))
 				{
-					NBTTagCompound compound = (NBTTagCompound) base;
-					Entity entity = EntityList.constructFromNBT(compound, this);
-					entity.readFromNBT(compound);
-					this.spawnEntity(entity);
+					continue;
 				}
+
+				final NBTTagCompound compound = (NBTTagCompound) base;
+				Entity entity = EntityList.constructFromNBT(compound, this);
+				entity.readFromNBT(compound);
+				this.spawnEntity0(entity);
 			}
 		}
 
