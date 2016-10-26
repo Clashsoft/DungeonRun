@@ -12,6 +12,7 @@ public class Block implements IStackable
 {
 	public static Block[] blocksList = new Block[256];
 
+	public static Block air         = new Block(0).setBlockName("air").setBackground();
 	public static Block grass       = new BlockGrass(1).setBlockName("grass");
 	public static Block dirt        = new Block(2).setBlockName("dirt");
 	public static Block sand        = new Block(3).setBlockName("sand");
@@ -22,7 +23,8 @@ public class Block implements IStackable
 	public static Block cobbleStone = new Block(8).setBlockName("cobblestone").setBackground();
 	public static Block planks      = new Block(9).setBlockName("planks");
 	public static Block planksWall  = new Block(10).setBlockName("plank_wall").setBackground();
-	public static Block water       = new Block(11).setBlockName("water").setBackground();
+	public static Block ladder      = new BlockLadder(11).setBlockName("ladder").setBackground();
+	public static Block water       = new BlockLadder(12).setBlockName("water").setBackground();
 
 	protected final int blockID;
 	protected boolean solid = true;
@@ -59,6 +61,16 @@ public class Block implements IStackable
 		return this.solid;
 	}
 
+	public boolean isAir()
+	{
+		return this == air;
+	}
+
+	public boolean isClimbable()
+	{
+		return false;
+	}
+
 	public Block setBlockName(String name)
 	{
 		this.blockName = name;
@@ -72,7 +84,7 @@ public class Block implements IStackable
 
 	public void registerIcons()
 	{
-		if (this.blockName != null)
+		if (this.blockName != null && this != air)
 		{
 			this.texture = getIcon(this.blockName);
 		}

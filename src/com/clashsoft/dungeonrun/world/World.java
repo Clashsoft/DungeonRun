@@ -158,7 +158,7 @@ public class World
 	public Block getBlock(int x, int y)
 	{
 		final Chunk chunk = this.getChunkAtCoordinates(x);
-		return chunk == null ? null : chunk.getBlock(x & 15, y);
+		return chunk == null ? Block.air : chunk.getBlock(x & 15, y);
 	}
 
 	public int getBlockMetadata(int x, int y)
