@@ -25,8 +25,7 @@ public class HouseGenerator
 		boolean leftEntrance = false;
 		boolean rightEntrance = false;
 
-		// Left Entrance
-		for (int i = 0; i < floors; i++)
+		for (int i = 0; ; i++)
 		{
 			if (!leftEntrance && generateEntrance(world, x - width, y + height * i + 1, -1))
 			{
@@ -35,6 +34,11 @@ public class HouseGenerator
 			if (!rightEntrance && generateEntrance(world, x + width, y + height * i + 1, 1))
 			{
 				rightEntrance = true;
+			}
+
+			if (i + 1 >= floors)
+			{
+				break;
 			}
 
 			final int off = random.nextInt(width);
@@ -59,13 +63,19 @@ public class HouseGenerator
 
 	private static boolean generateEntrance(World world, int x, int y, int off)
 	{
-		if (!world.getBlock(x + off, y).isSolid() && !world.getBlock(x + off, y + 1).isSolid())
+		if (world.getBlock(x + off, y + 1).isSolid())
 		{
-			world.setBlock(Blocks.plankWall, 0, x, y);
-			world.setBlock(Blocks.plankWall, 0, x, y + 1);
-			return true;
+			return false;
 		}
-		return false;
+
+		if (world.getBlock(x + off, y).isSolid())
+		{
+			world.setBlock(Blocks.air, 0, x + off, y);
+		}
+
+		world.setBlock(Blocks.plankWall, 0, x, y);
+		world.setBlock(Blocks.plankWall, 0, x, y + 1);
+		return true;
 	}
 
 	private static void generateFloor(World world, int x, int y, int width, int height)
