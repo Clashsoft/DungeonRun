@@ -13,9 +13,10 @@ import java.util.List;
 
 public class ResourceHelper
 {
-	public static Image       introBackground;
-	public static Image       buttons;
-	public static Image       icons;
+	public static Image introBackground;
+	public static Image title;
+	public static Image icons;
+
 	public static SpriteSheet playerSprites;
 	public static SpriteSheet monsterSprites;
 	public static SpriteSheet iconsSprite;
@@ -25,8 +26,8 @@ public class ResourceHelper
 		playerSprites = new SpriteSheet(loadTexture("resources/textures/entity/knights.png"), 12, 24);
 		monsterSprites = new SpriteSheet(loadTexture("resources/textures/entity/enemies.png"), 32, 32);
 
+		title = loadTexture("resources/textures/gui/title.png");
 		introBackground = loadTexture("resources/textures/gui/intro_background.png");
-		buttons = loadTexture("resources/textures/gui/buttons.png");
 		icons = loadTexture("resources/textures/gui/icons.png");
 		iconsSprite = new SpriteSheet(icons, 18, 18);
 	}

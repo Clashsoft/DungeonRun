@@ -1,7 +1,9 @@
 package com.clashsoft.dungeonrun.client.gui;
 
+import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -19,11 +21,21 @@ public class GuiMainMenu extends GuiListScreen
 	}
 
 	@Override
+	public void drawScreen(Graphics g, int width, int height) throws SlickException
+	{
+		super.drawScreen(g, width, height);
+
+		final Image title = ResourceHelper.title;
+		title.draw((width - title.getWidth()) / 2, 30);
+
+	}
+
+	@Override
 	protected void drawEntry(String text, boolean selected, float x, float y, float width)
 	{
 		if (selected)
 		{
-			Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
+			final Image torch = Blocks.torch.getTexture(0);
 			torch.draw(x - torch.getWidth(), y - 4);
 			torch.draw(x + width, y - 4);
 		}
@@ -78,6 +90,6 @@ public class GuiMainMenu extends GuiListScreen
 	@Override
 	public int getYOffset()
 	{
-		return 60;
+		return 100;
 	}
 }

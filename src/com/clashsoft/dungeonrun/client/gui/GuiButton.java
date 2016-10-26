@@ -1,11 +1,9 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.SlickException;
-
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos2;
-import com.clashsoft.dungeonrun.util.ResourceHelper;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.SlickException;
 
 public class GuiButton
 {
@@ -33,7 +31,7 @@ public class GuiButton
 				GL11.glColor4f(0.8F, 0.8F, 0.8F, 1F);
 			}
 			int texture = this.isMouseHovering() ? 40 : 0;
-			DungeonRunClient.instance.renderEngine.drawTexture(ResourceHelper.buttons, this.pos.x, this.pos.y, 0, texture, 200, 40);
+			// DungeonRunClient.instance.renderEngine.drawTexture(ResourceHelper.buttons, this.pos.x, this.pos.y, 0, texture, 200, 40);
 		}
 	}
 	
