@@ -11,11 +11,14 @@ public class Blocks
 	public static Block log    = new Block("wood").setBackground();
 	public static Block leaves = new Block("leaves").setBackground();
 
+	public static Block stone      = new Block("stone");
+	public static Block stoneBrick = new Block("stone_brick");
+
 	public static Block brick = new Block("brick");
-	public static Block stone = new Block("stone");
 
 	public static Block cobbleStone       = new Block("cobblestone");
 	public static Block cobbleStoneWall   = new Block("cobblestone_wall").setBackground();
+	public static Block cobbleStoneLadder = new BlockLadder("cobblestone_ladder").setBackground();
 
 	public static Block planks      = new Block("planks");
 	public static Block plankWall   = new Block("plank_wall").setBackground();
