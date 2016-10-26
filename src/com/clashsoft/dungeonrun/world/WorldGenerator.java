@@ -14,7 +14,7 @@ public class WorldGenerator
 	{
 		if (chunk.chunkX < 0)
 		{
-			int sideTop = chunk.world.getHeight(chunk.worldPosX(16));
+			int sideTop = getTop(chunk.world, chunk.worldPosX(16));
 
 			for (int x = 15; x >= 0; --x)
 			{
@@ -25,7 +25,7 @@ public class WorldGenerator
 		}
 		else
 		{
-			int sideTop = chunk.chunkX == 0 ? 64 : chunk.world.getHeight(chunk.worldPosX(-1));
+			int sideTop = chunk.chunkX == 0 ? 64 : getTop(chunk.world, chunk.worldPosX(-1));
 
 			for (int x = 0; x < 16; x++)
 			{
@@ -34,6 +34,23 @@ public class WorldGenerator
 				sideTop = top;
 			}
 		}
+	}
+
+	private static int getTop(World world, int x)
+	{
+		int height = world.getHeight(x);
+
+		while (height >= 0)
+		{
+			final Block block = world.getBlock(x, height);
+			if (block == Blocks.grass || block == Blocks.dirt)
+			{
+				return height;
+			}
+
+			--height;
+		}
+		return 0;
 	}
 
 	private static void generateColumn(Chunk chunk, Random random, int x, int top)
