@@ -30,19 +30,6 @@ public class GuiMainMenu extends GuiListScreen
 
 		this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);
 	}
-
-	@Override
-	public void updateScreen() throws SlickException
-	{
-		super.updateScreen();
-		
-		if (this.player != null)
-		{
-			this.player.posX += 4;
-			this.player.posX %= 700;
-			this.player.isWalking = true;
-		}
-	}
 	
 	@Override
 	public String getTitle()

@@ -10,6 +10,9 @@ import java.util.Random;
 
 public abstract class Entity implements INBTSaveable
 {
+	protected static final int SOLID     = 1;
+	protected static final int CLIMBABLE = 2;
+
 	public static int nextEntityId = 0;
 
 	public int entityId;
@@ -111,6 +114,13 @@ public abstract class Entity implements INBTSaveable
 
 	protected void applyGravity()
 	{
+		final int collide = this.checkCollide();
+		if (collide != 0)
+		{
+			this.airTime = 0;
+			return;
+		}
+
 		final double offset = 0.1 + this.airTime * 0.1;
 
 		if (this.tryMove(0, -offset))
@@ -148,9 +158,14 @@ public abstract class Entity implements INBTSaveable
 
 	public boolean isCollided()
 	{
+		return (this.checkCollide() & SOLID) != 0;
+	}
+
+	public int checkCollide()
+	{
 		if (this.posY < 0)
 		{
-			return false;
+			return 0;
 		}
 
 		final double width = this.getWidth();
@@ -159,23 +174,23 @@ public abstract class Entity implements INBTSaveable
 		int y1 = (int) (Math.ceil(this.posY));
 		int y2 = (int) Math.floor(this.posY + this.getHeight());
 
+		int result = 0;
 		for (int x = x1; x <= x2; x++)
 		{
 			for (int y = y1; y <= y2; y++)
 			{
-				if (this.canCollide(this.worldObj, x, y))
+				final Block block = this.worldObj.getBlock(x, y);
+				if (block.isClimbable())
 				{
-					return true;
+					result |= CLIMBABLE;
+				}
+				if (block.isSolid())
+				{
+					result |= SOLID;
 				}
 			}
 		}
-		return false;
-	}
-
-	public boolean canCollide(World world, int x, int y)
-	{
-		final Block block = world.getBlock(x, y);
-		return block != null && block.canCollide(world, x, y, this);
+		return result;
 	}
 
 	public abstract Render getRenderer();

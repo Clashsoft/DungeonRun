@@ -1,6 +1,7 @@
 package com.clashsoft.dungeonrun.client.renderer.entity;
 
 import com.clashsoft.dungeonrun.client.renderer.Render;
+import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.newdawn.slick.*;
@@ -35,7 +36,7 @@ public class RenderPlayer extends Render<EntityPlayer>
 	{
 		final float pitch = player.pitch;
 
-		final int index = (player.airTime > 0 ? 2 : player.isWalking ? 4 : 0) + (pitch >= 90 && pitch <= 270 ? 1 : 0);
+		final int index = (player.airTime > 0 ? 2 : player.getMovement() != EntityLiving.STANDING ? 4 : 0) + (pitch >= 90 && pitch <= 270 ? 1 : 0);
 
 		final float width = player.getWidth() * 16;
 		final float height = player.getHeight() * 16;

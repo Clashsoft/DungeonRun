@@ -4,6 +4,7 @@ import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.Entity;
+import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.Color;
@@ -95,38 +96,82 @@ public class GuiIngame extends GuiScreen
 	@Override
 	public void updateScreen() throws SlickException
 	{
-		Input input = this.dr.getInput();
+		final Input input = this.dr.getInput();
 
-		if (this.player != null)
-		{
-			if (input.isKeyDown(Input.KEY_D))
-			{
-				this.player.walk(1);
-			}
-			else if (input.isKeyDown(Input.KEY_A))
-			{
-				this.player.walk(-1);
-			}
-			else
-			{
-				this.player.isWalking = false;
-			}
+		int vert = this.checkVerticalMovement(input);
+		int hor = this.checkHorizontalMovement(input);
 
-			if (input.isKeyDown(Input.KEY_SPACE))
-			{
-				this.player.jump();
-			}
-			this.player.isSprinting = input.isKeyDown(Input.KEY_LSHIFT);
-		}
-		if (input.isKeyDown(Input.KEY_ESCAPE))
+		if (vert != 0 || hor != 0)
 		{
-			this.dr.pauseGame();
+			this.player.setPitch(getPitch(vert, hor));
 		}
-		if (input.isMousePressed(0))
+
+		if (input.isKeyDown(Input.KEY_SPACE))
 		{
-			float x = input.getMouseX();
-			float y = input.getMouseY();
+			this.player.jump();
 		}
+	}
+
+	private static float getPitch(int vert, int hor)
+	{
+		// 135  90  45
+		// 180       0
+		// 225 270 315
+
+		if (vert == 0)
+		{
+			return hor > 0 ? 0 : 180;
+		}
+		else if (vert > 0)
+		{
+			return hor < 0 ? 135 : hor == 0 ? 90 : 45;
+		}
+		else
+		{
+			return hor < 0 ? 225 : hor == 0 ? 270 : 315;
+		}
+	}
+
+	private int checkHorizontalMovement(Input input)
+	{
+		int hor = 0;
+
+		if (input.isKeyDown(Input.KEY_D))
+		{
+			hor += 1;
+		}
+		if (input.isKeyDown(Input.KEY_A))
+		{
+			hor -= 1;
+		}
+
+		if (hor == 0)
+		{
+			this.player.setMovement(EntityLiving.STANDING);
+		}
+		else
+		{
+			this.player.setMovement(input.isKeyDown(Input.KEY_LSHIFT) ? EntityLiving.SPRINTING : EntityLiving.WALKING);
+		}
+
+		return hor;
+	}
+
+	private int checkVerticalMovement(Input input)
+	{
+		int ver = 0;
+
+		if (input.isKeyDown(Input.KEY_W))
+		{
+			ver += 1;
+		}
+		if (input.isKeyDown(Input.KEY_S))
+		{
+			ver -= 1;
+		}
+
+		this.player.setClimbing(ver != 0);
+		return ver;
 	}
 
 	@Override
