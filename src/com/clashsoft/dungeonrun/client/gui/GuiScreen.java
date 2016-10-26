@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.client.gui;
 
 import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
@@ -157,7 +157,7 @@ public abstract class GuiScreen
 		{
 			for (int j = 0; j < scaledHeight; j += 16)
 			{
-				Block.brick.getTexture(0).draw(i, j);
+				Blocks.brick.getTexture(0).draw(i, j);
 			}
 		}
 		GL11.glScalef(1F / scale, 1F / scale, 1F);

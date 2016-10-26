@@ -1,14 +1,15 @@
 package com.clashsoft.dungeonrun;
 
+import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.block.Blocks;
+import com.clashsoft.dungeonrun.server.IServer;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
+import com.clashsoft.dungeonrun.world.World;
+import org.newdawn.slick.*;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.newdawn.slick.*;
-
-import com.clashsoft.dungeonrun.block.Block;
-import com.clashsoft.dungeonrun.server.IServer;
-import com.clashsoft.dungeonrun.world.World;
 
 /**
  * Common DungeonRun game container.
@@ -16,23 +17,23 @@ import com.clashsoft.dungeonrun.world.World;
 public abstract class DungeonRun extends BasicGame implements IServer
 {
 	public static final String VERSION = "Alpha 0.1-PRE";
-	
+
 	protected static DungeonRun instance;
-	
-	protected AppGameContainer	theGameContainer;
-	
-	protected long				tick;
-	
+
+	protected AppGameContainer theGameContainer;
+
+	protected long tick;
+
 	public DungeonRun()
 	{
 		super("DungeonRun " + VERSION);
 	}
-	
+
 	public static DungeonRun getInstance()
 	{
 		return instance;
 	}
-	
+
 	public static void exit()
 	{
 		AppGameContainer container = instance == null ? null : instance.theGameContainer;
@@ -45,27 +46,28 @@ public abstract class DungeonRun extends BasicGame implements IServer
 			System.exit(0);
 		}
 	}
-	
+
 	/**
 	 * Initialize the main slick library and app container
-	 * 
+	 *
 	 * @throws SlickException
 	 */
 	public abstract void initGame() throws SlickException;
-	
+
 	public abstract World getWorld();
-	
+
 	@Override
 	public void init(GameContainer gc) throws SlickException
 	{
 		try
 		{
-			for (Block b : Block.blocksList)
+			ResourceHelper.setupTextures();
+
+			Blocks.init();
+
+			for (Block b : Block.blocks.values())
 			{
-				if (b != null)
-				{
-					b.registerIcons();
-				}
+				b.registerIcons();
 			}
 		}
 		catch (Exception ex)
@@ -77,7 +79,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 			this.handleError(error, "Initializing Server");
 		}
 	}
-	
+
 	@Override
 	public void shutdown() throws SlickException
 	{
@@ -95,7 +97,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 			this.handleError(error, "Server Shutdown");
 		}
 	}
-	
+
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
@@ -103,7 +105,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		{
 			g.setColor(Color.white);
 			g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
-			
+
 			g.setColor(Color.black);
 			g.drawString("DungeonRun Server " + VERSION, 5, 5);
 		}
@@ -116,7 +118,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 			this.handleError(error, "Server Screen Rendering");
 		}
 	}
-	
+
 	@Override
 	public void update(GameContainer gc, int tick) throws SlickException
 	{
@@ -138,7 +140,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 			this.handleError(error, "World Update");
 		}
 	}
-	
+
 	@Override
 	public File getSaveDataFolder()
 	{
@@ -149,7 +151,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		}
 		return f;
 	}
-	
+
 	public static String getAppdataDirectory()
 	{
 		String OS = System.getProperty("os.name").toUpperCase();
@@ -167,7 +169,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		}
 		return System.getProperty("user.dir");
 	}
-	
+
 	public static String getDateTime()
 	{
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
@@ -175,24 +177,24 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		String strDate = sdfDate.format(now);
 		return strDate;
 	}
-	
+
 	public long getTick()
 	{
 		return this.tick;
 	}
-	
+
 	@Override
 	public void startGame() throws SlickException
 	{
 		this.loadWorld(this.getWorld());
 	}
-	
+
 	public void handleException(Throwable ex, String s) throws SlickException
 	{
 		ex.printStackTrace();
 		exit();
 	}
-	
+
 	public void handleError(Error error, String s) throws SlickException
 	{
 		if (error instanceof OutOfMemoryError)
@@ -205,13 +207,13 @@ public abstract class DungeonRun extends BasicGame implements IServer
 			this.handleException(error, s);
 		}
 	}
-	
+
 	@Override
 	public void stopGame() throws SlickException
 	{
 		this.saveWorld(this.getWorld());
 	}
-	
+
 	@Override
 	public boolean saveWorld(World world) throws SlickException
 	{
@@ -219,14 +221,14 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		{
 			return false;
 		}
-		
+
 		String worldFileName = world.worldInfo.getFileName();
 		File saves = new File(this.getSaveDataFolder(), "saves");
 		if (!saves.exists())
 		{
 			saves.mkdirs();
 		}
-		
+
 		File worldDir = new File(saves, worldFileName);
 		if (!worldDir.exists())
 		{
@@ -234,7 +236,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		}
 		return world.save(worldDir);
 	}
-	
+
 	@Override
 	public boolean loadWorld(World world) throws SlickException
 	{
@@ -242,7 +244,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		{
 			return false;
 		}
-		
+
 		String worldFileName = world.worldInfo.getFileName();
 		File saves = new File(this.getSaveDataFolder(), "saves");
 		if (!saves.exists())
@@ -250,7 +252,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 			saves.mkdirs();
 			return false;
 		}
-		
+
 		File worldFile = new File(saves, worldFileName);
 		return world.load(worldFile);
 	}

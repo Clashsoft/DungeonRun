@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.block;
 
 public class BlockLadder extends Block
 {
-	public BlockLadder(int id)
+	public BlockLadder(String id)
 	{
 		super(id);
 	}

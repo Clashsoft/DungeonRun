@@ -23,12 +23,6 @@ public class Item implements IStackable
 		return this.itemID;
 	}
 	
-	@Override
-	public boolean isBlock()
-	{
-		return false;
-	}
-	
 	public Item setMaxUses(int maxUses)
 	{
 		this.maxUses = maxUses;

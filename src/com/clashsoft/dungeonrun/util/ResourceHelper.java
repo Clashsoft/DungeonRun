@@ -20,18 +20,6 @@ public class ResourceHelper
 	public static SpriteSheet monsterSprites;
 	public static SpriteSheet iconsSprite;
 
-	static
-	{
-		try
-		{
-			setupTextures();
-		}
-		catch (SlickException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
 	public static void setupTextures() throws SlickException
 	{
 		playerSprites = new SpriteSheet(loadTexture("resources/textures/entity/knights.png"), 12, 24);

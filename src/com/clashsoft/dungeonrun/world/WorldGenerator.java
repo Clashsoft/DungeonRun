@@ -1,7 +1,10 @@
 package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.entity.EntityMonster;
+import com.clashsoft.dungeonrun.world.gen.HouseGenerator;
+import com.clashsoft.dungeonrun.world.gen.TreeGenerator;
 
 import java.util.Random;
 
@@ -43,15 +46,15 @@ public class WorldGenerator
 
 			if (y == top)
 			{
-				block = Block.grass;
+				block = Blocks.grass;
 			}
 			else if (y > stone)
 			{
-				block = Block.dirt;
+				block = Blocks.dirt;
 			}
 			else
 			{
-				block = Block.stone;
+				block = Blocks.stone;
 			}
 
 			chunk.setBlock(block, 0, x, y, 0);
@@ -60,14 +63,14 @@ public class WorldGenerator
 
 	public static void generateStructures(World world, Random random, int x)
 	{
-		if (random.nextInt(5) == 0)
+		if (random.nextInt(2) == 0)
 		{
 			int tx = x + random.nextInt(Chunk.WIDTH);
 			int ty = world.getHeight(tx);
 
-			if (world.getBlock(tx, ty) == Block.grass)
+			if (world.getBlock(tx, ty) == Blocks.grass)
 			{
-				generateHouse(world, random, tx, ty);
+				HouseGenerator.generateHouse(world, random, tx, ty);
 			}
 		}
 
@@ -76,9 +79,9 @@ public class WorldGenerator
 			int tx = x + random.nextInt(Chunk.WIDTH);
 			int ty = world.getHeight(tx);
 
-			if (world.getBlock(tx, ty) == Block.grass)
+			if (world.getBlock(tx, ty) == Blocks.grass)
 			{
-				generateTree(world, random, tx, ty);
+				TreeGenerator.generateTree(world, random, tx, ty);
 			}
 		}
 
@@ -91,56 +94,5 @@ public class WorldGenerator
 			monster.setLocation(mx + 0.5, my + 2);
 			world.spawnEntity(monster);
 		}
-	}
-
-	private static void generateTree(World world, Random random, int x, int y)
-	{
-		int height = random.nextInt(3) + 3;
-		for (int i = 1; i <= height; i++)
-		{
-			world.setBlock(Block.log, 0, x, y + i);
-		}
-
-		world.setBlock(Block.leaves, 0, x - 1, y + height);
-		world.setBlock(Block.leaves, 0, x + 1, y + height);
-		world.setBlock(Block.leaves, 0, x, y + height + 1);
-	}
-
-	private static void generateHouse(World world, Random random, int x, int y)
-	{
-		int width = (5 + random.nextInt(5)) / 2;
-		int height = 3;
-
-		for (int i = -width; i <= width; i++)
-		{
-			// Top and bottom floor
-			world.setBlock(Block.planks, 0, x + i, y);
-			world.setBlock(Block.planks, 0, x + i, y + height + 1);
-
-			// Roof
-			int roofHeight = width - Math.abs(i) + 2;
-			for (int j = 2; j < roofHeight; j++)
-			{
-				world.setBlock(Block.cobbleStone, 0, x + i, y + height + j);
-			}
-			world.setBlock(Block.brick, 0, x + i, y + height + roofHeight);
-
-			// Background walls
-			for (int j = 1; j <= height; j++)
-			{
-				world.setBlock(Block.planksWall, 0, x + i, y + j);
-			}
-
-			// Generate dirt blocks below the house
-			int top = y - 1;
-			while (top >= 0 && world.getBlock(x + i, top) != Block.dirt)
-			{
-				world.setBlock(Block.dirt, 0, x + i, top);
-				top--;
-			}
-		}
-
-		world.setBlock(Block.brick, 0, x - width - 1, y + height + 1);
-		world.setBlock(Block.brick, 0, x + width + 1, y + height + 1);
 	}
 }

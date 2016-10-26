@@ -2,9 +2,7 @@ package com.clashsoft.dungeonrun.item;
 
 public interface IStackable
 {
-	public boolean isBlock();
+	int getID();
 	
-	public int getID();
-	
-	public int getMaxStackSize(ItemStack stack);
+	int getMaxStackSize(ItemStack stack);
 }

@@ -60,7 +60,7 @@ public class Chunk implements INBTSaveable
 	{
 		int index = index(x, y);
 
-		this.blockIDs[index] = block == null ? 0 : block.getID();
+		this.blockIDs[index] = this.world.getBlockID(block);
 		this.metadataValues[index] = metadata;
 
 		// Update Light
@@ -142,7 +142,7 @@ public class Chunk implements INBTSaveable
 
 	public Block getBlock(int x, int y)
 	{
-		return Block.blocksList[this.getBlockID(x, y)];
+		return this.world.getBlockByID(this.getBlockID(x, y));
 	}
 
 	public int getBlockID(int x, int y)
