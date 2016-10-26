@@ -60,7 +60,7 @@ public class WorldGenerator
 
 	public static void generateStructures(World world, Random random, int x)
 	{
-		if (random.nextInt(10) == 0)
+		if (random.nextInt(5) == 0)
 		{
 			int tx = x + random.nextInt(Chunk.WIDTH);
 			int ty = world.getHeight(tx);
@@ -85,7 +85,7 @@ public class WorldGenerator
 		for (int i = random.nextInt(3); i >= 0; --i)
 		{
 			final int mx = x + random.nextInt(Chunk.WIDTH);
-			final int my = world.getHeight(x);
+			final int my = Math.max(world.getHeight(x), world.getHeight(x + 1));
 
 			final EntityMonster monster = new EntityMonster(world);
 			monster.setLocation(mx + 0.5, my + 2);
@@ -101,9 +101,9 @@ public class WorldGenerator
 			world.setBlock(Block.log, 0, x, y + i);
 		}
 
-		world.setBlock(Block.leaves, 0, x - 1, y + height, 0);
-		world.setBlock(Block.leaves, 0, x + 1, y + height, 0);
-		world.setBlock(Block.leaves, 0, x, y + height + 1, 0);
+		world.setBlock(Block.leaves, 0, x - 1, y + height);
+		world.setBlock(Block.leaves, 0, x + 1, y + height);
+		world.setBlock(Block.leaves, 0, x, y + height + 1);
 	}
 
 	private static void generateHouse(World world, Random random, int x, int y)
@@ -133,9 +133,9 @@ public class WorldGenerator
 
 			// Generate dirt blocks below the house
 			int top = y - 1;
-			while (top >= 0 && world.getBlock(x, top) != Block.dirt)
+			while (top >= 0 && world.getBlock(x + i, top) != Block.dirt)
 			{
-				world.setBlock(Block.dirt, 0, x, top, 0);
+				world.setBlock(Block.dirt, 0, x + i, top);
 				top--;
 			}
 		}
