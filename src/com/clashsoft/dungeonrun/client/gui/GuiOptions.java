@@ -1,12 +1,9 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import java.util.List;
-
+import com.clashsoft.dungeonrun.client.engine.I18n;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-
-import com.clashsoft.dungeonrun.client.engine.I18n;
 
 public class GuiOptions extends GuiListScreen
 {
@@ -89,18 +86,15 @@ public class GuiOptions extends GuiListScreen
 	@Override
 	public String getTitle()
 	{
-		return "options.title";
+		return I18n.getString("options.title");
 	}
-	
+
 	@Override
-	public void addEntrys(List<String> s)
+	public int entryCount()
 	{
-		s.add("options.soundvolume");
-		s.add("options.musicvolume");
-		s.add("options.video.title");
-		s.add("gui.back");
+		return 4;
 	}
-	
+
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
@@ -117,14 +111,17 @@ public class GuiOptions extends GuiListScreen
 	@Override
 	public String getEntry(int i)
 	{
-		if (i == 0)
+		switch (i)
 		{
+		case 0:
 			return String.format(I18n.getString("options.soundvolume") + ": %.2f", this.dr.gameSettings.soundVolume);
-		}
-		if (i == 1)
-		{
+		case 1:
 			return String.format(I18n.getString("options.musicvolume") + ": %.2f", this.dr.gameSettings.musicVolume);
+		case 2:
+			return I18n.getString("options.video.title") + "...";
+		case 3:
+			return I18n.getString("gui.back");
 		}
-		return super.getEntry(i);
+		return null;
 	}
 }

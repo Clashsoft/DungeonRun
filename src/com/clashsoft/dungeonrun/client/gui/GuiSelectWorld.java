@@ -1,81 +1,97 @@
 package com.clashsoft.dungeonrun.client.gui;
 
+import com.clashsoft.dungeonrun.client.engine.I18n;
+import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.dungeonrun.world.WorldInfo;
+import org.newdawn.slick.SlickException;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.newdawn.slick.SlickException;
-
-import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.dungeonrun.world.WorldInfo;
-
 public class GuiSelectWorld extends GuiListScreen
 {
-	public GuiScreen	superGui;
-	
-	public List<String>	worlds	= new ArrayList<String>();
-	
+	public GuiScreen superGui;
+
+	public List<String> worlds = new ArrayList<>();
+
 	public GuiSelectWorld(GuiScreen superGui)
 	{
 		this.superGui = superGui;
 	}
-	
+
 	@Override
 	public void reloadGUI() throws SlickException
 	{
 		this.worlds.clear();
-		
-		File saves = new File(this.dr.getSaveDataFolder(), "saves");
-		
-		File[] files = saves.listFiles();
-		if (files != null)
+
+		final File saveFolder = new File(this.dr.getSaveDataFolder(), "saves");
+		final File[] worldDirs = saveFolder.listFiles();
+
+		if (worldDirs != null)
 		{
-			for (File f : saves.listFiles())
+			for (File file : worldDirs)
 			{
-				if (f.isDirectory())
+				if (file.isDirectory())
 				{
-					this.worlds.add(f.getName());
+					this.worlds.add(file.getName());
 				}
 			}
 		}
-		
+
 		super.reloadGUI();
 	}
-	
+
 	@Override
 	public String getTitle()
 	{
-		return "world.select";
+		return I18n.getString("world.select");
 	}
-	
+
 	@Override
-	public void addEntrys(List<String> s)
+	public int entryCount()
 	{
-		s.addAll(this.worlds);
-		s.add("world.create");
-		s.add("gui.cancel");
+		return this.worlds.size() + 2;
 	}
-	
+
+	@Override
+	public String getEntry(int i)
+	{
+		if (i < this.worlds.size())
+		{
+			return this.worlds.get(i);
+		}
+
+		i -= this.worlds.size();
+		switch (i)
+		{
+		case 0:
+			return I18n.getString("world.create") + "...";
+		case 1:
+			return I18n.getString("gui.cancel");
+		}
+		return null;
+	}
+
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
-		if (i >= this.worlds.size())
-		{
-			i -= this.worlds.size();
-			
-			if (i == 0)
-			{
-				this.dr.displayGuiScreen(new GuiCreateWorld(this));
-			}
-			else if (i == 1)
-			{
-				this.dr.displayGuiScreen(this.superGui);
-			}
-		}
-		else
+		if (i < this.worlds.size())
 		{
 			String worldName = this.worlds.get(i);
 			this.dr.startWorld(new World(new WorldInfo(worldName)));
+			return;
+		}
+
+		i -= this.worlds.size();
+		switch (i)
+		{
+		case 0:
+			this.dr.displayGuiScreen(new GuiCreateWorld(this));
+			break;
+		case 1:
+			this.dr.displayGuiScreen(this.superGui);
+			break;
 		}
 	}
 }

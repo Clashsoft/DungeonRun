@@ -6,7 +6,6 @@ import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.world.World;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -34,9 +33,6 @@ public class GuiIngame extends GuiScreen
 	@Override
 	public void drawScreen(Graphics g, int width, int height) throws SlickException
 	{
-		GL11.glColor3f(1F, 1F, 1F);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-
 		this.renderBlocks.width = width;
 		this.renderBlocks.height = height;
 

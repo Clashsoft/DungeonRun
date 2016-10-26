@@ -5,7 +5,6 @@ import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.SlickException;
 
 import java.io.File;
-import java.util.List;
 
 public class GuiCreateWorld extends GuiListScreen
 {
@@ -21,15 +20,7 @@ public class GuiCreateWorld extends GuiListScreen
 	@Override
 	public String getTitle()
 	{
-		return "world.create";
-	}
-	
-	@Override
-	public void addEntrys(List<String> s)
-	{
-		s.add("worldname");
-		s.add("gui.done");
-		s.add("gui.cancel");
+		return I18n.getString("world.create");
 	}
 	
 	@Override
@@ -56,6 +47,31 @@ public class GuiCreateWorld extends GuiListScreen
 	}
 
 	@Override
+	public int entryCount()
+	{
+		return 3;
+	}
+
+	@Override
+	public String getEntry(int i)
+	{
+		switch (i)
+		{
+		case 0:
+			if (this.selection == 0)
+			{
+				return this.worldName + '_';
+			}
+			return this.worldName;
+		case 1:
+			return I18n.getString("gui.done");
+		case 2:
+			return I18n.getString("gui.cancel");
+		}
+		return null;
+	}
+
+	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
 		if (i == 1)
@@ -70,20 +86,5 @@ public class GuiCreateWorld extends GuiListScreen
 		{
 			this.dr.displayGuiScreen(this.superGui);
 		}
-	}
-	
-	@Override
-	public String getEntry(int i)
-	{
-		if (i != 0)
-		{
-			return super.getEntry(i);
-		}
-
-		if (this.selection == i)
-		{
-			return this.worldName + '_';
-		}
-		return this.worldName;
 	}
 }

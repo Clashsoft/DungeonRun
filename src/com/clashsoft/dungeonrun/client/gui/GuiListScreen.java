@@ -1,26 +1,19 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.SoundEngine;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class GuiListScreen extends GuiScreen
 {
-	protected int          selection  = 0;
-	protected List<String> entrys     = new ArrayList<String>();
-	protected boolean      drawBricks = true;
+	protected int     selection  = 0;
+	protected boolean drawBricks = true;
 
 	@Override
 	public void reloadGUI() throws SlickException
 	{
-		this.entrys.clear();
-		this.addEntrys(this.entrys);
 	}
 
 	@Override
@@ -31,27 +24,26 @@ public abstract class GuiListScreen extends GuiScreen
 			this.drawDefaultBackground(width, height);
 		}
 
-		String title = I18n.getString(this.getTitle());
+		final String title = this.getTitle();
 
 		this.dr.fontRenderer
 			.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, 20, title, 0x00EFFF, true);
 
-		for (int i = 0; i < this.entrys.size(); i++)
+		for (int i = 0, count = this.entryCount(); i < count; i++)
 		{
-			String text = this.getEntry(i);
-			boolean selected = this.selection == i;
-			float textWidth = this.dr.fontRenderer.getStringWidth(text);
-			float x = (width - textWidth) / 2 + this.getXOffset();
-			float y = i * 20 + this.getYOffset();
+			final String text = this.getEntry(i);
+			final boolean selected = this.selection == i;
+			final float textWidth = this.dr.fontRenderer.getStringWidth(text);
+			final float x = (width - textWidth) / 2 + this.getXOffset();
+			final float y = i * 20 + this.getYOffset();
 
-			if (this.isMouseInRegion(x - 5, y, textWidth, 20))
-			{
-				this.selection = i;
-				selected = true;
-			}
-
-			this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFFFF : 0xAAAAAA, true);
+			this.drawEntry(text, selected, x, y, textWidth);
 		}
+	}
+
+	protected void drawEntry(String text, boolean selected, float x, float y, float width)
+	{
+		this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFFFF : 0xAAAAAA, true);
 	}
 
 	@Override
@@ -77,7 +69,7 @@ public abstract class GuiListScreen extends GuiScreen
 		case Input.KEY_UP:
 			if (this.selection == 0)
 			{
-				this.selection = this.entrys.size() - 1;
+				this.selection = this.entryCount() - 1;
 			}
 			else
 			{
@@ -86,7 +78,7 @@ public abstract class GuiListScreen extends GuiScreen
 			this.onEntrySelect(this.selection);
 			break;
 		case Input.KEY_DOWN:
-			if (this.selection == this.entrys.size() - 1)
+			if (this.selection == this.entryCount() - 1)
 			{
 				this.selection = 0;
 			}
@@ -104,8 +96,6 @@ public abstract class GuiListScreen extends GuiScreen
 
 	public abstract String getTitle();
 
-	public abstract void addEntrys(List<String> s);
-
 	public abstract void onEntryUsed(int selection) throws SlickException;
 
 	public void onEntrySelect(int selection) throws SlickException
@@ -122,8 +112,7 @@ public abstract class GuiListScreen extends GuiScreen
 		return 40;
 	}
 
-	public String getEntry(int i)
-	{
-		return I18n.getString(this.entrys.get(i));
-	}
+	public abstract int entryCount();
+
+	public abstract String getEntry(int i);
 }

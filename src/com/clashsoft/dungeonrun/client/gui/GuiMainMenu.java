@@ -1,18 +1,12 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import java.util.List;
-
 public class GuiMainMenu extends GuiListScreen
 {
-	private EntityPlayer	player;
-	
 	public GuiMainMenu()
 	{
 	}
@@ -22,44 +16,21 @@ public class GuiMainMenu extends GuiListScreen
 	{
 		this.dr.soundEngine.stopAllMusics();
 		this.dr.soundEngine.playMusic("main_menu", true);
-		
-		this.player = new EntityPlayer(null);
 	}
-	
+
 	@Override
-	public void drawScreen(Graphics g, int width, int height) throws SlickException
+	protected void drawEntry(String text, boolean selected, float x, float y, float width)
 	{
-		this.drawDefaultBackground(width, height);
-		
-		for (int i = 0; i < this.entrys.size(); i++)
+		if (selected)
 		{
-			String text = this.getEntry(i);
-			boolean selected = this.selection == i;
-			float textWidth = this.dr.fontRenderer.getStringWidth(text);
-			float x = (width - textWidth) / 2;
-			float y = i * 20 + 120;
-			
-			if (this.isMouseInRegion(x - 10, y, textWidth, 10))
-			{
-				this.selection = i;
-				selected = true;
-			}
-			
-			if (selected)
-			{
-				Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
-				torch.draw(x - torch.getWidth(), y - 4);
-				torch.draw(x + textWidth, y - 4);
-			}
-			
-			this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);
+			Image torch = ResourceHelper.iconsSprite.getSprite(3, 0);
+			torch.draw(x - torch.getWidth(), y - 4);
+			torch.draw(x + width, y - 4);
 		}
-		
-		GL11.glScalef(3F, 3F, 1F);
-		this.player.getRenderer().render(this.player, g, this.player.posX, height / 2D - 20D);
-		GL11.glScalef(1F / 3F, 1F / 3F, 1F);
+
+		this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);
 	}
-	
+
 	@Override
 	public void updateScreen() throws SlickException
 	{
@@ -76,17 +47,30 @@ public class GuiMainMenu extends GuiListScreen
 	@Override
 	public String getTitle()
 	{
-		return "mainmenu.title";
+		return "";
 	}
-	
+
 	@Override
-	public void addEntrys(List<String> s)
+	public int entryCount()
 	{
-		s.add("game.singleplayer");
-		s.add("options.title");
-		s.add("game.quit");
+		return 3;
 	}
-	
+
+	@Override
+	public String getEntry(int i)
+	{
+		switch (i)
+		{
+		case 0:
+			return I18n.getString("game.singleplayer");
+		case 1:
+			return I18n.getString("options.title");
+		case 2:
+			return I18n.getString("game.quit");
+		}
+		return null;
+	}
+
 	@Override
 	public void onEntryUsed(int i) throws SlickException
 	{
