@@ -36,7 +36,6 @@ public class RenderBlocks
 		Image image = block.getTexture(metadata);
 		if (image != null)
 		{
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			image.draw(x, y);
 		}
 	}

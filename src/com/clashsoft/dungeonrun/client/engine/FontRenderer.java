@@ -1,15 +1,14 @@
 package com.clashsoft.dungeonrun.client.engine;
 
-import java.util.*;
-
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.client.DungeonRunClient;
-import com.clashsoft.dungeonrun.util.ResourceHelper;
+import java.util.*;
 
 public class FontRenderer
 {
@@ -155,7 +154,7 @@ public class FontRenderer
 			
 			try
 			{
-				Image image = new Image(charPath);
+				Image image = ResourceHelper.loadTexture(charPath);
 				this.charMap.put(character, image);
 			}
 			catch (Exception ex)

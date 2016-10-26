@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.block;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.item.IStackable;
 import com.clashsoft.dungeonrun.item.ItemStack;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -81,7 +82,7 @@ public class Block implements IStackable
 	{
 		try
 		{
-			return new Image("resources/textures/blocks/" + name + ".png");
+			return ResourceHelper.loadTexture("resources/textures/blocks/" + name + ".png");
 		}
 		catch (SlickException e)
 		{

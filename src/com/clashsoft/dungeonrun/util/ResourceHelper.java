@@ -34,12 +34,12 @@ public class ResourceHelper
 
 	public static void setupTextures() throws SlickException
 	{
-		playerSprites = new SpriteSheet(new Image("resources/textures/entity/knights.png"), 12, 24);
-		monsterSprites = new SpriteSheet(new Image("resources/textures/entity/enemies.png"), 32, 32);
+		playerSprites = new SpriteSheet(loadTexture("resources/textures/entity/knights.png"), 12, 24);
+		monsterSprites = new SpriteSheet(loadTexture("resources/textures/entity/enemies.png"), 32, 32);
 
-		introBackground = new Image("resources/textures/gui/intro_background.png");
-		buttons = new Image("resources/textures/gui/buttons.png");
-		icons = new Image("resources/textures/gui/icons.png");
+		introBackground = loadTexture("resources/textures/gui/intro_background.png");
+		buttons = loadTexture("resources/textures/gui/buttons.png");
+		icons = loadTexture("resources/textures/gui/icons.png");
 		iconsSprite = new SpriteSheet(icons, 18, 18);
 	}
 
@@ -66,5 +66,10 @@ public class ResourceHelper
 		}
 
 		return lines;
+	}
+
+	public static Image loadTexture(String resource) throws SlickException
+	{
+		return new Image(resource, false, Image.FILTER_NEAREST);
 	}
 }
