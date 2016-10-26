@@ -1,11 +1,11 @@
 package com.clashsoft.dungeonrun.entity;
 
+import com.clashsoft.dungeonrun.world.World;
+import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 
 public class EntityList
 {
@@ -23,6 +23,7 @@ public class EntityList
 		addMapping("Damageable", EntityDamagable.class);
 		addMapping("Living", EntityLiving.class);
 		addMapping("Player", EntityPlayer.class);
+		addMapping("Monster", EntityMonster.class);
 	}
 	
 	public static void addMapping(String name, Class clazz)

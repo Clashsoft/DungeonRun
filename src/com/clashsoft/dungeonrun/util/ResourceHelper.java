@@ -17,6 +17,7 @@ public class ResourceHelper
 	public static Image       buttons;
 	public static Image       icons;
 	public static SpriteSheet playerSprites;
+	public static SpriteSheet monsterSprites;
 	public static SpriteSheet iconsSprite;
 
 	static
@@ -34,6 +35,7 @@ public class ResourceHelper
 	public static void setupTextures() throws SlickException
 	{
 		playerSprites = new SpriteSheet(new Image("resources/textures/entity/knights.png"), 12, 24);
+		monsterSprites = new SpriteSheet(new Image("resources/textures/entity/enemies.png"), 32, 32);
 
 		introBackground = new Image("resources/textures/gui/intro_background.png");
 		buttons = new Image("resources/textures/gui/buttons.png");
