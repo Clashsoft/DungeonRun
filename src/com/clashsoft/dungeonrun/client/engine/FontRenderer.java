@@ -372,7 +372,7 @@ public class FontRenderer
 				int l = 0;
 				for (Character character : this.chars)
 				{
-					char c1 = character.charValue();
+					char c1 = character;
 					if (this.getCharWidth(c1) == k)
 					{
 						l++;
@@ -437,7 +437,7 @@ public class FontRenderer
 	
 	public float drawChar(float x, float y, char c, float red, float green, float blue, float alpha)
 	{
-		Image image = this.charMap.get(Character.valueOf(c));
+		Image image = this.charMap.get(c);
 		
 		if (this.globalUnicode || this.unicode || image == null)
 		{
@@ -452,8 +452,6 @@ public class FontRenderer
 		if (this.draw)
 		{
 			GL11.glPushMatrix();
-			
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			
 			GL11.glScalef(b, this.getHeight() / height, 1F);
 			

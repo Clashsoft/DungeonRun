@@ -23,6 +23,7 @@ public class DungeonRunClient extends DungeonRun
 	public RenderEngine	renderEngine;
 	public SoundEngine	soundEngine;
 	public FontRenderer	fontRenderer;
+	public FontRenderer smallFontRenderer;
 	public I18n			i18n;
 	
 	public int	mousePosX	= 0;
@@ -88,6 +89,7 @@ public class DungeonRunClient extends DungeonRun
 			this.renderEngine = new RenderEngine(this);
 			this.soundEngine = new SoundEngine(this);
 			this.fontRenderer = new FontRenderer(this, "default");
+			this.smallFontRenderer = new FontRenderer(this, "small");
 			this.i18n = new I18n();
 			
 			this.gameSettings.updateGame();
@@ -235,7 +237,8 @@ public class DungeonRunClient extends DungeonRun
 			this.thePlayer.setLocation(0.5D, this.theWorld.getHeight(0));
 			this.theWorld.spawnEntity(this.thePlayer);
 		}
-		
+
+		this.isGameRunning = true;
 		this.theIngameGui = new GuiIngame(this.thePlayer);
 		this.displayGuiScreen(this.theIngameGui);
 	}

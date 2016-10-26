@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.client.gui;
 import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
+import com.clashsoft.dungeonrun.client.engine.FontRenderer;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ScaledResolution;
 import org.lwjgl.input.Mouse;
@@ -72,26 +73,27 @@ public abstract class GuiScreen
 			}
 		}
 
-		this.dr.fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7i %s (%d FPS)",
-		                                                              DungeonRun.VERSION, this.dr.getFPS()));
 		if (this.dr.gameSettings.debugMode)
 		{
+			final FontRenderer fontRenderer = this.dr.smallFontRenderer;
+			fontRenderer.drawStringWithShadow(5, 5, String.format("\u00a7iDungeon Run\u00a7i %s (%d FPS)",
+			                                                      DungeonRun.VERSION, this.dr.getFPS()));
 			int var = 5;
+			final int offset = 7;
 
-			this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("Tick: %d", this.dr.getTick()));
+			fontRenderer.drawStringWithShadow(5, var += offset, String.format("Tick: %d", this.dr.getTick()));
 			if (this.player != null)
 			{
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerPos: (%.2f;%.2f)",
-				                                                                      this.player.posX,
-				                                                                      this.player.posY));
-				this.dr.fontRenderer
-					.drawStringWithShadow(5, var += 10, String.format("PlayerPitch: %f", this.player.pitch));
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerVelocity: (%.2f;%.2f)",
-				                                                                      this.player.velocityX,
-				                                                                      this.player.velocityY));
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format("PlayerWorld: %s",
-				                                                                      this.dr.getWorld().worldInfo
-					                                                                      .getName()));
+				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerPos: (%.2f; %.2f)",
+				                                                                  this.player.posX, this.player.posY));
+				fontRenderer
+					.drawStringWithShadow(5, var += offset, String.format("PlayerPitch: %f", this.player.pitch));
+				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerVelocity: (%.2f; %.2f)",
+				                                                                  this.player.velocityX,
+				                                                                  this.player.velocityY));
+				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerWorld: %s",
+				                                                                  this.dr.getWorld().worldInfo
+					                                                                  .getName()));
 			}
 
 			{
@@ -100,10 +102,10 @@ public abstract class GuiScreen
 				long maxMemory = runtime.maxMemory() / 1024 / 1024;
 				long totalMemory = runtime.totalMemory() / 1024 / 1024;
 
-				this.dr.fontRenderer.drawStringWithShadow(5, var += 10, String.format(
+				fontRenderer.drawStringWithShadow(5, var += offset, String.format(
 					"Memory: Free: %d MB, Max: %d MB, Total: %d MB", freeMemory, maxMemory, totalMemory));
-				this.dr.fontRenderer
-					.drawStringWithShadow(5, var += 10, String.format("Processors: %d", runtime.availableProcessors()));
+				fontRenderer.drawStringWithShadow(5, var += offset,
+				                                  String.format("Processors: %d", runtime.availableProcessors()));
 			}
 		}
 		GL11.glPopMatrix();
@@ -157,7 +159,7 @@ public abstract class GuiScreen
 		{
 			for (int j = 0; j < scaledHeight; j += 16)
 			{
-				Blocks.brick.getTexture(0).draw(i, j);
+				Blocks.cobbleStoneWall.getTexture(0).draw(i, j);
 			}
 		}
 		GL11.glScalef(1F / scale, 1F / scale, 1F);
