@@ -56,12 +56,15 @@ public class World
 			// Copy/map existing data
 			for (String key : from)
 			{
-				if (key != null)
+				final Block block = Block.blocks.get(key);
+				if (block == null)
 				{
-					this.blockToID.put(key, index);
-					this.idToBlock[index] = Block.blocks.get(key);
-					index++;
+					continue;
 				}
+
+				this.blockToID.put(key, index);
+				this.idToBlock[index] = block;
+				index++;
 			}
 		}
 

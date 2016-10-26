@@ -10,9 +10,9 @@ public class HouseGenerator
 {
 	public static void generateHouse(World world, Random random, int x, int y)
 	{
-		int width = (5 + random.nextInt(5)) / 2;
-		int height = 4;
-		int floors = 1 + random.nextInt(3);
+		final int width = (5 + random.nextInt(5)) / 2;
+		final int height = 4;
+		final int floors = 1 + random.nextInt(3);
 
 		generateRoof(world, x, y + height * floors, width);
 
