@@ -24,6 +24,7 @@ public class Blocks
 	public static Block plankWall   = new Block("plank_wall").setBackground();
 	public static Block plankLadder = new BlockLadder("plank_ladder").setBackground();
 
+	public static Block torch = new Block("torch").setBackground();
 	public static Block water = new BlockLadder("water").setBackground();
 
 	public static void init()

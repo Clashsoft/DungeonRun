@@ -71,7 +71,7 @@ public class Block
 		return null;
 	}
 
-	public Image getTexture(int metadata) throws SlickException
+	public Image getTexture(int metadata)
 	{
 		return this.texture;
 	}
