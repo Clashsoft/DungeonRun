@@ -8,7 +8,9 @@ import java.util.Random;
 
 public class EntityMonster extends EntityLiving
 {
-	private int targetX;
+	private double targetX;
+	private EntityPlayer target;
+	public int alertTicks;
 
 	public EntityMonster(World world)
 	{
@@ -20,12 +22,50 @@ public class EntityMonster extends EntityLiving
 		return false;
 	}
 
+	private double squareDistance(Entity entity)
+	{
+		double dx = entity.posX - this.posX;
+		double dy = entity.posY - this.posY;
+		return dx * dx + dy * dy;
+	}
+
 	@Override
 	public void updateEntity(Random random)
 	{
-		if (random.nextInt(40) == 0)
+		if (this.target != null)
 		{
-			this.targetX = (int) this.posX + random.nextInt(40) - 20;
+			if (this.squareDistance(this.target) > 64)
+			{
+				this.target = null;
+				this.alertTicks = 0;
+			}
+			else
+			{
+				this.targetX = this.target.posX;
+
+				if (this.alertTicks > 0)
+				{
+					this.alertTicks--;
+				}
+			}
+		}
+		else
+		{
+			for (EntityPlayer player : this.worldObj.getPlayers())
+			{
+				if (this.squareDistance(player) <= 64)
+				{
+					this.alertTicks = 10;
+					this.target = player;
+					break;
+				}
+			}
+
+			if (random.nextInt(40) == 0)
+			{
+				this.alertTicks = 0;
+				this.targetX = (int) this.posX + random.nextInt(40) - 20;
+			}
 		}
 
 		if (Math.abs(this.posX - this.targetX) > 0.2)
@@ -42,7 +82,7 @@ public class EntityMonster extends EntityLiving
 				this.pitch = 0;
 			}
 
-			if (!this.tryMove(distance, 0) && random.nextInt(10) == 0)
+			if (!this.tryMove(distance, 0))
 			{
 				this.jump();
 			}

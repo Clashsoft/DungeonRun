@@ -11,6 +11,7 @@ public class RenderMonster extends Render<EntityMonster>
 	public static final RenderMonster INSTANCE = new RenderMonster();
 
 	private final Image[] sprites = new Image[4];
+	private final Image alert = ResourceHelper.iconsSprite.getSprite(4, 0);
 
 	private RenderMonster()
 	{
@@ -34,5 +35,10 @@ public class RenderMonster extends Render<EntityMonster>
 		final float offY = (float) y - sprite.getHeight();
 
 		sprite.draw(offX, offY);
+
+		if (monster.alertTicks > 0)
+		{
+			this.alert.draw((float) x - this.alert.getWidth() / 2, offY - this.alert.getHeight());
+		}
 	}
 }
