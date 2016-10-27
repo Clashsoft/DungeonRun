@@ -36,7 +36,7 @@ public class RenderMonster extends Render<EntityMonster>
 
 		sprite.draw(offX, offY);
 
-		if (monster.alertTicks > 0)
+		if (monster.alertTicks > 0 && monster.alertTicks <= 10)
 		{
 			this.alert.draw((float) x - this.alert.getWidth() / 2, offY - this.alert.getHeight());
 		}

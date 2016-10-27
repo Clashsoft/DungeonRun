@@ -23,7 +23,7 @@ public abstract class EntityLiving extends EntityDamagable
 
 	public void jump()
 	{
-		if (this.airTime == 0)
+		if (this.airTime == 0 && !this.climbing)
 		{
 			this.jumping = true;
 		}
