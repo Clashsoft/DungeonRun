@@ -1,50 +1,60 @@
 package com.clashsoft.dungeonrun.item;
 
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
-import com.clashsoft.nbt.util.INBTSaveable;
 
-public class ItemStack implements INBTSaveable
+public final class ItemStack
 {
-	public IStackable	item;
-	public int			stackSize;
-	public int			metadata;
-	
-	public ItemStack(IStackable stackable)
+	public final Item item;
+	public       int  metadata;
+	public       int  size;
+
+	public ItemStack(Item item, int metadata, int size)
 	{
-		this(stackable, 1);
+		this.item = item;
+		this.size = size;
+		this.metadata = metadata;
 	}
-	
-	public ItemStack(IStackable stackable, int stackSize)
-	{
-		this(stackable, stackSize, 0);
-	}
-	
-	public ItemStack(IStackable stackable, int stackSize, int meta)
-	{
-		this.item = stackable;
-		this.stackSize = stackSize;
-		this.metadata = meta;
-	}
-	
-	public int getMaxStackSize()
-	{
-		return this.item.getMaxStackSize(this);
-	}
-	
-	@Override
+
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("ItemID", this.item.getID());
-		nbt.setInteger("StackSize", this.stackSize);
-		nbt.setInteger("DamageValue", this.metadata);
+
 	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+
+	public static ItemStack readFromNBT(NBTTagCompound nbt)
 	{
-		int itemID = nbt.getInteger("ItemID");
-		this.item = Item.itemsList[itemID];
-		this.stackSize = nbt.getInteger("StackSize");
-		this.metadata = nbt.getInteger("DamageValue");
+		Item item = Item.items.get(nbt.getString("item"));
+		if (item == null)
+		{
+			return null;
+		}
+
+		int metadata = nbt.getInteger("metadata");
+		int size = nbt.getInteger("size");
+		return new ItemStack(item, metadata, size);
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (!(obj instanceof ItemStack))
+		{
+			return false;
+		}
+
+		final ItemStack that = (ItemStack) obj;
+		return this.metadata == that.metadata && this.size == that.size && this.item == that.item;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int result = this.item.hashCode();
+		result = 31 * result + this.metadata;
+		result = 31 * result + this.size;
+		return result;
 	}
 }

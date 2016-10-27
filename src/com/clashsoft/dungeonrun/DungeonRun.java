@@ -2,6 +2,8 @@ package com.clashsoft.dungeonrun;
 
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.block.Blocks;
+import com.clashsoft.dungeonrun.item.Item;
+import com.clashsoft.dungeonrun.item.Items;
 import com.clashsoft.dungeonrun.server.IServer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import com.clashsoft.dungeonrun.world.World;
@@ -63,11 +65,17 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		{
 			ResourceHelper.setupTextures();
 
+			Items.init();
 			Blocks.init();
 
 			for (Block b : Block.blocks.values())
 			{
 				b.registerIcons();
+			}
+
+			for (Item i : Item.items.values())
+			{
+				i.registerIcons();
 			}
 		}
 		catch (Exception ex)

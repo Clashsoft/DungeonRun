@@ -2,10 +2,19 @@ package com.clashsoft.dungeonrun.item;
 
 public class ItemTool extends Item
 {
-	protected ItemTool(int id, float damage, EnumToolMaterial material)
+	private final float damage;
+	private final EnumToolMaterial material;
+
+	protected ItemTool(String id, float damage, EnumToolMaterial material)
 	{
 		super(id);
-		this.setMaxStackSize(1);
+		this.damage = damage;
+		this.material = material;
 	}
-	
+
+	@Override
+	public float getDamageVsEntity(ItemStack stack)
+	{
+		return this.damage + this.material.getEntityDamage();
+	}
 }

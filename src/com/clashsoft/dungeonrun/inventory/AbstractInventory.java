@@ -8,54 +8,67 @@ import com.clashsoft.nbt.util.INBTSaveable;
 
 public abstract class AbstractInventory implements INBTSaveable
 {
-	public abstract void setStackInSlot(int slot, ItemStack stack);
-	
-	public abstract ItemStack getStackInSlot(int slot);
-	
-	public abstract int getFirstSlotWithItemStack(ItemStack stack);
-	
-	public abstract int getInventorySize();
-	
+	public abstract void setStack(int slot, ItemStack stack);
+
+	public abstract ItemStack getStack(int slot);
+
+	public int indexOf(ItemStack stack)
+	{
+		for (int i = 0; i < this.size(); i++)
+		{
+			if (this.getStack(i).equals(stack))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public abstract int size();
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		NBTTagList slots = new NBTTagList("Slots");
-		for (int i = 0; i < this.getInventorySize(); i++)
+		for (int i = 0; i < this.size(); i++)
 		{
-			ItemStack stack = this.getStackInSlot(i);
+			final ItemStack stack = this.getStack(i);
 			if (stack != null)
 			{
-				NBTTagCompound compound = new NBTTagCompound("#" + i);
+				final NBTTagCompound compound = new NBTTagCompound("#" + i);
 				stack.writeToNBT(compound);
-				compound.setInteger("SlotID", i);
-				
+				compound.setInteger("slot", i);
+
 				slots.addTagCompound(compound);
 			}
 		}
-		
+
 		nbt.setTagList(slots);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		NBTTagList slots = nbt.getTagList("Slots");
-		if (slots != null)
+		if (slots == null)
 		{
-			for (int i = 0; i < slots.size(); i++)
+			return;
+		}
+
+		for (int i = 0; i < slots.size(); i++)
+		{
+			final NamedBinaryTag base = slots.tagAt(i);
+			if (!(base instanceof NBTTagCompound))
 			{
-				NamedBinaryTag base = slots.tagAt(i);
-				if (base instanceof NBTTagCompound)
-				{
-					NBTTagCompound compound = (NBTTagCompound) base;
-					
-					int slotID = compound.getInteger("id");
-					ItemStack stack = new ItemStack(null, 0, 0);
-					stack.readFromNBT(compound);
-					
-					this.setStackInSlot(slotID, stack);
-				}
+				continue;
 			}
+
+			final NBTTagCompound compound = (NBTTagCompound) base;
+
+			final int slotID = compound.getInteger("slot");
+			final ItemStack stack = ItemStack.readFromNBT(compound);
+
+			this.setStack(slotID, stack);
 		}
 	}
 }

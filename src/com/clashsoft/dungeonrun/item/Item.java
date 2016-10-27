@@ -1,52 +1,55 @@
 package com.clashsoft.dungeonrun.item;
 
-public class Item implements IStackable
+import com.clashsoft.dungeonrun.client.engine.I18n;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import java.util.Map;
+import java.util.TreeMap;
+
+public class Item
 {
-	public static Item[]	itemsList		= new Item[4096];
-	
-	public static Item		swordWood		= new ItemSword(1, EnumToolMaterial.WOOD);
-	
-	public int				itemID;
-	
-	public int				maxUses			= 0;
-	public int				maxStackSize	= 64;
-	
-	public Item(int id)
+	public static Map<String, Item> items = new TreeMap<>();
+
+	public final String name;
+
+	private int maxUses;
+	private Image icon;
+
+	public Item(String id)
 	{
-		this.itemID = id;
-		itemsList[id] = this;
+		this.name = id;
+		items.put(id, this);
 	}
-	
-	@Override
-	public int getID()
-	{
-		return this.itemID;
-	}
-	
+
 	public Item setMaxUses(int maxUses)
 	{
 		this.maxUses = maxUses;
 		return this;
 	}
-	
-	public Item setMaxStackSize(int maxStackSize)
+
+	public String getLocalizedName(ItemStack stack)
 	{
-		this.maxStackSize = maxStackSize;
-		return this;
+		return I18n.getString("item." + this.name + ".name");
 	}
-	
-	@Override
-	public int getMaxStackSize(ItemStack stack)
+
+	public Image getIcon(ItemStack stack)
 	{
-		return this.maxStackSize;
+		return this.icon;
 	}
-	
+
+	public void registerIcons() throws SlickException
+	{
+		this.icon = ResourceHelper.loadTexture("resources/textures/items/" + this.name + ".png");
+	}
+
 	public float getDamageVsEntity(ItemStack stack)
 	{
 		return 0F;
 	}
-	
-	public float getMaxUses(ItemStack stack)
+
+	public int getMaxUses(ItemStack stack)
 	{
 		return this.maxUses;
 	}

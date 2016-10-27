@@ -2,11 +2,16 @@ package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.item.ItemStack;
+import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 
 public class InventoryPlayer extends AbstractInventory
 {
-	public EntityPlayer	player;
-	private ItemStack[]	inventory	= new ItemStack[64];
+	private static final int SIZE = 8;
+
+	public EntityPlayer player;
+	private ItemStack[]	inventory	= new ItemStack[SIZE];
+
+	public int handSlot;
 	
 	public InventoryPlayer(EntityPlayer ep)
 	{
@@ -14,33 +19,41 @@ public class InventoryPlayer extends AbstractInventory
 	}
 	
 	@Override
-	public ItemStack getStackInSlot(int i)
+	public ItemStack getStack(int i)
 	{
 		return this.inventory[i];
 	}
 	
 	@Override
-	public void setStackInSlot(int i, ItemStack stack)
+	public void setStack(int i, ItemStack stack)
 	{
 		this.inventory[i] = stack;
 	}
-	
-	@Override
-	public int getFirstSlotWithItemStack(ItemStack stack)
+
+	public ItemStack getHeldStack()
 	{
-		for (int i = 0; i < this.inventory.length; i++)
-		{
-			if (this.inventory[i].equals(stack))
-			{
-				return i;
-			}
-		}
-		return -1;
+		return this.inventory[this.handSlot];
 	}
-	
+
 	@Override
-	public int getInventorySize()
+	public int size()
 	{
-		return this.inventory.length;
+		return SIZE;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+
+		nbt.setInteger("handSlot", this.handSlot);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+
+		this.handSlot = nbt.getInteger("handSlot");
 	}
 }
