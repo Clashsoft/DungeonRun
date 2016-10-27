@@ -2,6 +2,7 @@ package com.clashsoft.dungeonrun.world.gen;
 
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.block.Blocks;
+import com.clashsoft.dungeonrun.entity.EntityPotster;
 import com.clashsoft.dungeonrun.world.World;
 
 import java.util.Random;
@@ -10,38 +11,50 @@ public class HouseGenerator
 {
 	public static void generateHouse(World world, Random random, int x, int y)
 	{
-		final int width = (5 + random.nextInt(5)) / 2;
-		final int height = 4;
-		final int floors = 1 + random.nextInt(3);
+		generateHouse(world, random, x, y, 5 + random.nextInt(10));
+	}
 
-		generateRoof(world, x, y + height * floors, width);
+	public static void generateHouse(World world, Random random, int x, int y, int width)
+	{
+		final int halfWidth = width / 2;
+		final int height = 4;
+
+		final int groundFloors = random.nextInt(4);
+		final int floors = 1 + random.nextInt(3) + groundFloors;
+
+		y -= groundFloors * height;
+
+		// Find out where to generate the entrances
+		int leftEntrance = 0;
+		int rightEntrance = 0;
+		for (int i = floors - 1; i >= 0; i--)
+		{
+			if (!world.getBlock(x - halfWidth - 1, y + height * i + 1).isSolid())
+			{
+				leftEntrance = i;
+			}
+			if (!world.getBlock(x + halfWidth + 1, y + height * i + 1).isSolid())
+			{
+				rightEntrance = i;
+			}
+		}
+
+		generateRoof(world, x, y + height * floors, halfWidth);
 
 		// Floors
 		for (int i = 0; i < floors; i++)
 		{
-			generateFloor(world, x, y + height * i, width, height);
+			generateFloor(world, random, x, y + height * i, halfWidth, height, i < leftEntrance && i < rightEntrance);
 		}
 
-		boolean leftEntrance = false;
-		boolean rightEntrance = false;
+		generateEntrance(world, x - halfWidth, y + height * leftEntrance + 1, -1);
+		generateEntrance(world, x + halfWidth, y + height * rightEntrance + 1, 1);
 
-		for (int i = 0; ; i++)
+		// Generate ladders
+
+		for (int i = 0; i < floors; i++)
 		{
-			if (!leftEntrance && generateEntrance(world, x - width, y + height * i + 1, -1))
-			{
-				leftEntrance = true;
-			}
-			if (!rightEntrance && generateEntrance(world, x + width, y + height * i + 1, 1))
-			{
-				rightEntrance = true;
-			}
-
-			if (i + 1 >= floors)
-			{
-				break;
-			}
-
-			final int off = random.nextInt(width);
+			final int off = random.nextInt(halfWidth - 1);
 			final int ladder = x + (random.nextBoolean() ? off : -off);
 			for (int l = 0; l <= height; l++)
 			{
@@ -50,7 +63,7 @@ public class HouseGenerator
 		}
 
 		// Generate dirt blocks below the house
-		for (int i = -width; i <= width; i++)
+		for (int i = -halfWidth; i <= halfWidth; i++)
 		{
 			int top = y - 1;
 			while (top >= 0)
@@ -69,13 +82,8 @@ public class HouseGenerator
 		}
 	}
 
-	private static boolean generateEntrance(World world, int x, int y, int off)
+	private static void generateEntrance(World world, int x, int y, int off)
 	{
-		if (world.getBlock(x + off, y + 1).isSolid())
-		{
-			return false;
-		}
-
 		if (world.getBlock(x + off, y).isSolid())
 		{
 			world.setBlock(Blocks.air, 0, x + off, y);
@@ -83,22 +91,32 @@ public class HouseGenerator
 
 		world.setBlock(Blocks.plankWall, 0, x, y);
 		world.setBlock(Blocks.plankWall, 0, x, y + 1);
-		return true;
 	}
 
-	private static void generateFloor(World world, int x, int y, int width, int height)
+	private static void generateFloor(World world, Random random, int x, int y, int width, int height, boolean stone)
 	{
+		final Block solid = !stone ? Blocks.planks : Blocks.cobbleStone;
+		final Block wall = !stone ? Blocks.plankWall : Blocks.cobbleStoneWall;
+
 		for (int i = -width; i <= width; i++)
 		{
-			world.setBlock(Blocks.planks, 0, x + i, y);
+			world.setBlock(solid, 0, x + i, y);
 
-			Block wall = i == -width || i == width ? Blocks.planks : Blocks.plankWall;
+			final Block wall1 = i == -width || i == width ? solid : wall;
 
 			// Background walls
 			for (int j = 1; j < height; j++)
 			{
-				world.setBlock(wall, 0, x + i, y + j);
+				world.setBlock(wall1, 0, x + i, y + j);
 			}
+		}
+
+		final int rand = random.nextInt(2) - 1;
+		if (rand != 0)
+		{
+			final EntityPotster potster = new EntityPotster(world);
+			potster.setLocation(x + (width - 1) * rand + 0.5, y + 1);
+			world.spawnEntity(potster);
 		}
 	}
 

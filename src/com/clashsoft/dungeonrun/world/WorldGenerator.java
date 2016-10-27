@@ -2,6 +2,7 @@ package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.block.Blocks;
+import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityMonster;
 import com.clashsoft.dungeonrun.world.gen.HouseGenerator;
 import com.clashsoft.dungeonrun.world.gen.TreeGenerator;
@@ -107,9 +108,14 @@ public class WorldGenerator
 			final int mx = x + random.nextInt(Chunk.WIDTH);
 			final int my = Math.max(world.getHeight(x), world.getHeight(x + 1));
 
-			final EntityMonster monster = new EntityMonster(world);
+			final Entity monster = getRandomMonster(world, random);
 			monster.setLocation(mx + 0.5, my + 2);
 			world.spawnEntity(monster);
 		}
+	}
+
+	private static Entity getRandomMonster(World world, Random random)
+	{
+		return new EntityMonster(world);
 	}
 }
