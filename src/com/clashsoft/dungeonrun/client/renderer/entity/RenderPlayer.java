@@ -3,7 +3,9 @@ package com.clashsoft.dungeonrun.client.renderer.entity;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 
 public class RenderPlayer extends Render<EntityPlayer>
@@ -36,7 +38,8 @@ public class RenderPlayer extends Render<EntityPlayer>
 	{
 		final float pitch = player.pitch;
 
-		final int index = (player.airTime > 0 ? 2 : player.getMovement() != EntityLiving.STANDING ? 4 : 0) + (pitch >= 90 && pitch <= 270 ? 1 : 0);
+		final boolean flip = pitch >= 90 && pitch <= 270;
+		final int index = (player.airTime > 0 ? 2 : player.getMovement() != EntityLiving.STANDING ? 4 : 0) + (flip ? 1 : 0);
 
 		final float width = player.getWidth() * 16;
 		final float height = player.getHeight() * 16;
@@ -44,5 +47,20 @@ public class RenderPlayer extends Render<EntityPlayer>
 		final float offY = (float) y - height;
 
 		this.sprites[index].draw(offX, offY);
+
+		ItemStack handStack = player.inventory.getHeldStack();
+		if (handStack == null)
+		{
+			return;
+		}
+
+		GL11.glPushMatrix();
+
+		GL11.glTranslatef((float) x - 4, (float) y - 32, 0);
+		GL11.glScalef(0.5f, 0.5f, 1);
+
+		handStack.item.getIcon(handStack).draw(0, 0);
+
+		GL11.glPopMatrix();
 	}
 }
