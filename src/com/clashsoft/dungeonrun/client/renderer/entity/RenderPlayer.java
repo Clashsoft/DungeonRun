@@ -12,25 +12,21 @@ public class RenderPlayer extends Render<EntityPlayer>
 {
 	public static final RenderPlayer INSTANCE = new RenderPlayer();
 
-	private Renderable[] sprites = new Renderable[6];
+	private Image     standing;
+	private Image     jumping;
+	private Image     attacking;
+	private Animation walking;
 
 	private RenderPlayer()
 	{
 		final SpriteSheet textures = ResourceHelper.playerSprites;
 
-		final Image standing = textures.getSprite(0, 0);
-		this.sprites[0] = standing;
-		this.sprites[1] = standing.getFlippedCopy(true, false);
+		this.standing = textures.getSprite(0, 0);
 
-		final Image jumping = textures.getSprite(4, 0);
-		this.sprites[2] = jumping;
-		this.sprites[3] = jumping.getFlippedCopy(true, false);
+		this.jumping = textures.getSprite(4, 0);
+		this.attacking = textures.getSprite(3, 0);
 
-		final Image walk1 = textures.getSprite(1, 0);
-		final Image walk2 = textures.getSprite(2, 0);
-		this.sprites[4] = new Animation(new Image[] { walk1, walk2 }, 200);
-		this.sprites[5] = new Animation(new Image[] { walk1.getFlippedCopy(true, false),
-			walk2.getFlippedCopy(true, false) }, 200);
+		this.walking = new Animation(new Image[] { textures.getSprite(1, 0), textures.getSprite(2, 0) }, 200);
 	}
 
 	@Override
@@ -38,29 +34,56 @@ public class RenderPlayer extends Render<EntityPlayer>
 	{
 		final float pitch = player.pitch;
 
+		final int attackTime = player.getAttackTime();
+
 		final boolean flip = pitch >= 90 && pitch <= 270;
-		final int index = (player.airTime > 0 ? 2 : player.getMovement() != EntityLiving.STANDING ? 4 : 0) + (flip ? 1 : 0);
+		final Renderable sprite = this.getSprite(player, attackTime);
 
-		final float width = player.getWidth() * 16;
-		final float height = player.getHeight() * 16;
-		final float offX = (float) x - width / 2;
-		final float offY = (float) y - height;
-
-		this.sprites[index].draw(offX, offY);
-
-		ItemStack handStack = player.inventory.getHeldStack();
-		if (handStack == null)
-		{
-			return;
-		}
+		final float width = 12;
+		final float height = 24;
 
 		GL11.glPushMatrix();
 
-		GL11.glTranslatef((float) x - 4, (float) y - 32, 0);
-		GL11.glScalef(0.5f, 0.5f, 1);
+		GL11.glTranslated(x, y, 0);
 
-		handStack.item.getIcon(handStack).draw(0, 0);
+		if (flip)
+		{
+			GL11.glScalef(-1, 1, 1);
+		}
+
+		GL11.glTranslatef(-width / 2, -height, 0);
+
+		sprite.draw(0, 0);
+
+		if (attackTime > 0)
+		{
+			final ItemStack handStack = player.inventory.getHeldStack();
+			if (handStack != null)
+			{
+				int centerX = 2;
+				int centerY = 14;
+
+				GL11.glTranslatef(8 + centerX, -2 + centerY, 0);
+				GL11.glRotatef(90F + -15F * attackTime, 0, 0, 1);
+				GL11.glTranslatef(-centerX, -centerY, 0);
+
+				handStack.item.getIcon(handStack).draw(0, 0);
+			}
+		}
 
 		GL11.glPopMatrix();
+	}
+
+	private Renderable getSprite(EntityPlayer player, int attackTime)
+	{
+		if (attackTime > 0)
+		{
+			return this.attacking;
+		}
+		if (player.airTime > 0)
+		{
+			return this.jumping;
+		}
+		return player.getMovement() == EntityLiving.STANDING ? this.standing : this.walking;
 	}
 }

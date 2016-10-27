@@ -10,11 +10,15 @@ import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import org.newdawn.slick.SlickException;
 
+import java.util.Random;
+
 public class EntityPlayer extends EntityLiving
 {
 	public String username = "";
 
 	public final InventoryPlayer inventory;
+
+	private int attackTime = 0;
 
 	public EntityPlayer(World world) throws SlickException
 	{
@@ -47,6 +51,19 @@ public class EntityPlayer extends EntityLiving
 		return RenderPlayer.INSTANCE;
 	}
 
+	public int getAttackTime()
+	{
+		return this.attackTime;
+	}
+
+	public void attack()
+	{
+		if (this.attackTime == 0)
+		{
+			this.attackTime = 10;
+		}
+	}
+
 	@Override
 	public void setDead()
 	{
@@ -65,6 +82,17 @@ public class EntityPlayer extends EntityLiving
 	public boolean canBeDamagedBy(DamageSource source)
 	{
 		return true;
+	}
+
+	@Override
+	public void updateEntity(Random random)
+	{
+		if (this.attackTime > 0)
+		{
+			this.attackTime--;
+		}
+
+		super.updateEntity(random);
 	}
 
 	@Override

@@ -164,17 +164,31 @@ public class GuiIngame extends GuiScreen
 	private int checkHorizontalMovement(Input input)
 	{
 		int hor = 0;
+		boolean attack = false;
 
-		if (input.isKeyDown(Input.KEY_D))
+		if (input.isKeyDown(Input.KEY_E))
+		{
+			hor += 1;
+			this.player.attack();
+			attack = true;
+		}
+		else if (input.isKeyDown(Input.KEY_D))
 		{
 			hor += 1;
 		}
-		if (input.isKeyDown(Input.KEY_A))
+
+		if (input.isKeyDown(Input.KEY_Q))
+		{
+			hor -= 1;
+			this.player.attack();
+			attack = true;
+		}
+		else if (input.isKeyDown(Input.KEY_A))
 		{
 			hor -= 1;
 		}
 
-		if (hor == 0)
+		if (hor == 0 || attack)
 		{
 			this.player.setMovement(EntityLiving.STANDING);
 		}
