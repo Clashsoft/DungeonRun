@@ -21,7 +21,6 @@ public abstract class GuiScreen
 	public static final Color colorAlpha = new Color(0F, 0F, 0F, 0.5F);
 
 	protected DungeonRunClient dr;
-	protected EntityPlayer     player;
 
 	protected Input input;
 
@@ -82,15 +81,15 @@ public abstract class GuiScreen
 			final int offset = 7;
 
 			fontRenderer.drawStringWithShadow(5, var += offset, String.format("Tick: %d", this.dr.getTick()));
-			if (this.player != null)
+
+			final EntityPlayer player = this.dr.thePlayer;
+			if (player != null)
 			{
-				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerPos: (%.2f; %.2f)",
-				                                                                  this.player.posX, this.player.posY));
-				fontRenderer
-					.drawStringWithShadow(5, var += offset, String.format("PlayerPitch: %f", this.player.pitch));
+				fontRenderer.drawStringWithShadow(5, var += offset,
+				                                  String.format("PlayerPos: (%.2f; %.2f)", player.posX, player.posY));
+				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerPitch: %f", player.pitch));
 				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerVelocity: (%.2f; %.2f)",
-				                                                                  this.player.velocityX,
-				                                                                  this.player.velocityY));
+				                                                                  player.velocityX, player.velocityY));
 				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerWorld: %s",
 				                                                                  this.dr.getWorld().worldInfo
 					                                                                  .getName()));

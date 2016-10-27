@@ -9,6 +9,8 @@ mainmenu.title=Main Menu
 
 pausemenu.title=Game Menu
 
+inventory.title=Inventory
+
 options.title=Game Settings
 options.soundvolume=Sound Volume
 options.musicvolume=Music Volume
@@ -26,9 +28,12 @@ options.video.guiscale.3=Large
 gui.cancel=Cancel
 gui.done=Done
 gui.back=< Back
+gui.close=Close
 
 world.select=Select World
 world.loading=Loading World...
 world.saving=Saving World...
 world.create=Create World
 world.new.template=New World
+
+item.sword.name=Sword

@@ -31,13 +31,13 @@ public class GuiMainMenu extends GuiListScreen
 	}
 
 	@Override
-	protected void drawEntry(String text, boolean selected, float x, float y, float width)
+	protected void drawEntry(String text, boolean selected, float x, float y, float textWidth)
 	{
 		if (selected)
 		{
 			final Image torch = Blocks.torch.getTexture(0);
 			torch.draw(x - torch.getWidth(), y - 4);
-			torch.draw(x + width, y - 4);
+			torch.draw(x + textWidth, y - 4);
 		}
 
 		this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);

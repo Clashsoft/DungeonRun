@@ -17,7 +17,8 @@ import org.newdawn.slick.SlickException;
 
 public class GuiIngame extends GuiScreen
 {
-	public RenderBlocks renderBlocks;
+	private final EntityPlayer player;
+	public        RenderBlocks renderBlocks;
 	private boolean worldSaving = false;
 
 	public GuiIngame(EntityPlayer player)
@@ -114,6 +115,9 @@ public class GuiIngame extends GuiScreen
 			break;
 		case Input.KEY_ESCAPE:
 			this.dr.pauseGame();
+			break;
+		case Input.KEY_I:
+			this.dr.displayGuiScreen(new GuiInventory(this.player));
 			break;
 		}
 	}

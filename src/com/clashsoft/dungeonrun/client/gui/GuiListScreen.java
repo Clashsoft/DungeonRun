@@ -8,6 +8,10 @@ import org.newdawn.slick.SlickException;
 
 public abstract class GuiListScreen extends GuiScreen
 {
+	protected static final int SELECTION_COLOR = 0xFFFFFF;
+	protected static final int ENTRY_COLOR     = 0xAAAAAA;
+	protected static final int TITLE_COLOR     = 0x00EFFF;
+
 	protected int     selection  = 0;
 	protected boolean drawBricks = true;
 
@@ -27,23 +31,28 @@ public abstract class GuiListScreen extends GuiScreen
 		final String title = this.getTitle();
 
 		this.dr.fontRenderer
-			.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, 20, title, 0x00EFFF, true);
+			.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, 20, title, TITLE_COLOR, true);
 
 		for (int i = 0, count = this.entryCount(); i < count; i++)
 		{
-			final String text = this.getEntry(i);
-			final boolean selected = this.selection == i;
-			final float textWidth = this.dr.fontRenderer.getStringWidth(text);
-			final float x = (width - textWidth) / 2 + this.getXOffset();
-			final float y = i * 20 + this.getYOffset();
-
-			this.drawEntry(text, selected, x, y, textWidth);
+			this.drawEntry(i, width, height);
 		}
 	}
 
-	protected void drawEntry(String text, boolean selected, float x, float y, float width)
+	protected void drawEntry(int i, int width, int height)
 	{
-		this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFFFF : 0xAAAAAA, true);
+		final String text = this.getEntry(i);
+		final boolean selected = this.selection == i;
+		final float textWidth = this.dr.fontRenderer.getStringWidth(text);
+		final float x = (width - textWidth) / 2 + this.getXOffset();
+		final float y = i * 20 + this.getYOffset();
+
+		this.drawEntry(text, selected, x, y, textWidth);
+	}
+
+	protected void drawEntry(String text, boolean selected, float x, float y, float textWidth)
+	{
+		this.dr.fontRenderer.drawString(x, y, text, selected ? SELECTION_COLOR : ENTRY_COLOR, true);
 	}
 
 	@Override

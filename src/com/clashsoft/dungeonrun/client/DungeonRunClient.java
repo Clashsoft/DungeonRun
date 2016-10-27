@@ -17,37 +17,37 @@ import java.io.File;
 public class DungeonRunClient extends DungeonRun
 {
 	public static DungeonRunClient instance;
-	
+
 	public String username;
-	
-	public RenderEngine	renderEngine;
-	public SoundEngine	soundEngine;
-	public FontRenderer	fontRenderer;
+
+	public RenderEngine renderEngine;
+	public SoundEngine  soundEngine;
+	public FontRenderer fontRenderer;
 	public FontRenderer smallFontRenderer;
-	public I18n			i18n;
-	
-	public int	mousePosX	= 0;
-	public int	mousePosY	= 0;
-	
+	public I18n         i18n;
+
+	public int mousePosX = 0;
+	public int mousePosY = 0;
+
 	public GameSettings gameSettings;
-	
-	public GuiScreen		currentGui;
-	public GuiIngame		theIngameGui;
-	protected EntityPlayer	thePlayer;
-	protected World			theWorld;
-	protected boolean		isGameRunning;
-	
+
+	public    GuiScreen    currentGui;
+	public    GuiIngame    theIngameGui;
+	public    EntityPlayer thePlayer;
+	protected World        theWorld;
+	protected boolean      isGameRunning;
+
 	public boolean isPaused;
-	
-	protected int	screenWidth;
-	protected int	screenHeight;
-	
+
+	protected int screenWidth;
+	protected int screenHeight;
+
 	public DungeonRunClient(String username) throws SlickException
 	{
 		super();
 		this.username = username;
 	}
-	
+
 	public static void main(String[] args)
 	{
 		String username = "Clashsoft";
@@ -62,7 +62,7 @@ public class DungeonRunClient extends DungeonRun
 			DungeonRun.exit();
 		}
 	}
-	
+
 	@Override
 	public void initGame() throws SlickException
 	{
@@ -75,7 +75,7 @@ public class DungeonRunClient extends DungeonRun
 		this.theGameContainer.setShowFPS(false);
 		this.theGameContainer.start();
 	}
-	
+
 	@Override
 	public void init(GameContainer arg0) throws SlickException
 	{
@@ -83,19 +83,19 @@ public class DungeonRunClient extends DungeonRun
 		{
 			Mouse.setClipMouseCoordinatesToWindow(true);
 			this.getInput().addListener(this);
-			
+
 			this.gameSettings = new GameSettings(this);
-			
+
 			this.renderEngine = new RenderEngine(this);
 			this.soundEngine = new SoundEngine(this);
 			this.fontRenderer = new FontRenderer(this, "default");
 			this.smallFontRenderer = new FontRenderer(this, "small");
 			this.i18n = new I18n();
-			
+
 			this.gameSettings.updateGame();
-			
+
 			this.displayGuiScreen(new GuiIntro());
-			
+
 			super.init(arg0);
 		}
 		catch (Exception ex)
@@ -107,7 +107,7 @@ public class DungeonRunClient extends DungeonRun
 			this.handleError(error, "Initializing");
 		}
 	}
-	
+
 	@Override
 	public void shutdown() throws SlickException
 	{
@@ -125,7 +125,7 @@ public class DungeonRunClient extends DungeonRun
 			this.handleError(error, "World Shutdown");
 		}
 	}
-	
+
 	@Override
 	public void update(GameContainer gc, int tick) throws SlickException
 	{
@@ -135,14 +135,14 @@ public class DungeonRunClient extends DungeonRun
 			{
 				this.currentGui.updateScreen();
 			}
-			
+
 			super.update(gc, tick);
-			
+
 			if (this.theWorld != null && this.tick % 200 == 0)
 			{
 				new ClientSaveThread(this).start();
 			}
-			
+
 			Input input = gc.getInput();
 			if (input.isKeyPressed(Input.KEY_F2))
 			{
@@ -178,19 +178,19 @@ public class DungeonRunClient extends DungeonRun
 			this.handleError(error, "Client Update");
 		}
 	}
-	
+
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
 		try
 		{
 			this.renderEngine.graphics = g;
-			
+
 			if (this.theIngameGui != null && this.isGameRunning())
 			{
 				this.theIngameGui.render(g, gc.getWidth(), gc.getHeight());
 			}
-			
+
 			if (this.currentGui != null)
 			{
 				this.currentGui.render(g, gc.getWidth(), gc.getHeight());
@@ -205,32 +205,32 @@ public class DungeonRunClient extends DungeonRun
 			this.handleError(error, "Rendering Screen");
 		}
 	}
-	
+
 	public Input getInput()
 	{
 		return this.theGameContainer.getInput();
 	}
-	
+
 	public int getFPS()
 	{
 		return this.theGameContainer.getFPS();
 	}
-	
+
 	public Graphics getGraphics()
 	{
 		return this.theGameContainer.getGraphics();
 	}
-	
+
 	@Override
 	public void startGame() throws SlickException
 	{
 		this.displayGuiScreen(new GuiInfo("world.loading"));
-		
+
 		this.soundEngine.stopAllMusics();
 		super.startGame();
-		
+
 		this.thePlayer = this.theWorld.getPlayer(this.username);
-		
+
 		if (this.thePlayer == null)
 		{
 			this.thePlayer = new EntityPlayer(this.theWorld, this.username);
@@ -242,22 +242,22 @@ public class DungeonRunClient extends DungeonRun
 		this.theIngameGui = new GuiIngame(this.thePlayer);
 		this.displayGuiScreen(this.theIngameGui);
 	}
-	
+
 	@Override
 	public void stopGame() throws SlickException
 	{
 		this.displayGuiScreen(new GuiInfo("world.saving"));
-		
+
 		super.stopGame();
-		
+
 		this.theIngameGui = null;
 		this.isGameRunning = false;
 		this.theWorld = null;
 		this.thePlayer = null;
-		
+
 		this.displayGuiScreen(new GuiMainMenu());
 	}
-	
+
 	@Override
 	public void pauseGame() throws SlickException
 	{
@@ -265,50 +265,50 @@ public class DungeonRunClient extends DungeonRun
 		new ClientSaveThread(this).start();
 		this.displayGuiScreen(new GuiPauseMenu());
 	}
-	
+
 	@Override
 	public void resumeGame() throws SlickException
 	{
 		this.isPaused = false;
 		this.displayGuiScreen(this.theIngameGui);
 	}
-	
+
 	@Override
 	public World getWorld()
 	{
 		return this.theWorld;
 	}
-	
+
 	public GuiScreen displayGuiScreen(GuiScreen gui) throws SlickException
 	{
 		this.currentGui = gui;
 		this.currentGui.init(this);
 		return gui;
 	}
-	
+
 	public void setFullScreen(boolean flag) throws SlickException
 	{
 		this.theGameContainer.setDisplayMode(this.screenWidth, this.screenHeight, flag);
 	}
-	
+
 	public void setVSync(boolean flag)
 	{
 		this.theGameContainer.setVSync(flag);
 	}
-	
+
 	@Override
 	public void startWorld(World world) throws SlickException
 	{
 		this.theWorld = world;
 		this.startGame();
 	}
-	
+
 	@Override
 	public boolean isGameRunning() throws SlickException
 	{
 		return this.isGameRunning;
 	}
-	
+
 	@Override
 	public void keyPressed(int key, char c)
 	{
@@ -324,7 +324,7 @@ public class DungeonRunClient extends DungeonRun
 			}
 		}
 	}
-	
+
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy)
 	{
