@@ -53,10 +53,18 @@ public class HouseGenerator
 		for (int i = -width; i <= width; i++)
 		{
 			int top = y - 1;
-			while (top >= 0 && world.getBlock(x + i, top) != Blocks.dirt)
+			while (top >= 0)
 			{
-				world.setBlock(Blocks.dirt, 0, x + i, top);
-				top--;
+				Block block = world.getBlock(x + i, top);
+				if (block == Blocks.air || block == Blocks.grass)
+				{
+					world.setBlock(Blocks.dirt, 0, x + i, top);
+					top--;
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 	}
