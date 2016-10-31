@@ -7,13 +7,13 @@ import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
+import com.clashsoft.dungeonrun.item.ItemStack;
+import com.clashsoft.dungeonrun.util.ResourceHelper;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.gen.HouseGenerator;
 import com.clashsoft.dungeonrun.world.gen.TreeGenerator;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 
 public class GuiIngame extends GuiScreen
 {
@@ -41,10 +41,23 @@ public class GuiIngame extends GuiScreen
 		this.renderBlocks.width = width;
 		this.renderBlocks.height = height;
 
-		if (this.player != null)
+		this.renderLevel(g, width, height);
+
+		final Image hotbar = ResourceHelper.hotbar;
+		final int x = (width - hotbar.getWidth()) / 2;
+		hotbar.draw(x, 2);
+
+		final InventoryPlayer inventory = this.player.inventory;
+		for (int i = 0; i < 8; i++)
 		{
-			this.renderLevel(g, width, height);
+			ItemStack stack = inventory.getStack(i);
+			if (stack != null)
+			{
+				stack.item.getIcon(stack).draw(x + i * 18 + 2, 4);
+			}
 		}
+
+		ResourceHelper.hotbarSelection.draw(x + inventory.handSlot * 18 - 1, 1);
 
 		if (this.worldSaving)
 		{

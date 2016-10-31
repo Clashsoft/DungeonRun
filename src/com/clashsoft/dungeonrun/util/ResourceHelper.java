@@ -17,6 +17,9 @@ public class ResourceHelper
 	public static Image title;
 	public static Image icons;
 
+	public static Image hotbar;
+	public static Image hotbarSelection;
+
 	public static SpriteSheet playerSprites;
 	public static SpriteSheet monsterSprites;
 	public static SpriteSheet iconsSprite;
@@ -30,6 +33,9 @@ public class ResourceHelper
 		introBackground = loadTexture("resources/textures/gui/intro_background.png");
 		icons = loadTexture("resources/textures/gui/icons.png");
 		iconsSprite = new SpriteSheet(icons, 18, 18);
+
+		hotbar = loadTexture("resources/textures/gui/hotbar.png");
+		hotbarSelection = loadTexture("resources/textures/gui/hotbar_selection.png");
 	}
 
 	public static List<String> readAllLines(String resource)
