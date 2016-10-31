@@ -17,7 +17,15 @@ public final class ItemStack
 
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-
+		nbt.setString("item", this.item.name);
+		if (this.size != 1)
+		{
+			nbt.setInteger("size", this.size);
+		}
+		if (this.metadata != 0)
+		{
+			nbt.setInteger("metadata", this.metadata);
+		}
 	}
 
 	public static ItemStack readFromNBT(NBTTagCompound nbt)
@@ -28,8 +36,8 @@ public final class ItemStack
 			return null;
 		}
 
+		int size = nbt.hasTag("size") ? nbt.getInteger("size") : 1;
 		int metadata = nbt.getInteger("metadata");
-		int size = nbt.getInteger("size");
 		return new ItemStack(item, metadata, size);
 	}
 

@@ -1,7 +1,6 @@
 package com.clashsoft.dungeonrun.entity;
 
 import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 
 import java.util.Random;
 
@@ -93,17 +92,5 @@ public abstract class EntityLiving extends EntityDamagable
 		}
 
 		super.updateEntity(random);
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt)
-	{
-		super.writeToNBT(nbt);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
-		super.readFromNBT(nbt);
 	}
 }

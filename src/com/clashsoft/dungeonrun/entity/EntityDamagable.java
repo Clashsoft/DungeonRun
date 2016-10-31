@@ -31,15 +31,15 @@ public abstract class EntityDamagable extends Entity
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		
-		nbt.setFloat("Health", this.health);
+
+		nbt.setFloat("health", this.health);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		
-		this.health = nbt.getFloat("Health");
+
+		this.health = nbt.getFloat("health");
 	}
 }

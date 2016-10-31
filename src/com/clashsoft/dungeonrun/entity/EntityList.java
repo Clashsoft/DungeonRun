@@ -19,11 +19,9 @@ public class EntityList
 	
 	public static void registerMappings()
 	{
-		addMapping("Entity", Entity.class);
-		addMapping("Damageable", EntityDamagable.class);
-		addMapping("Living", EntityLiving.class);
-		addMapping("Player", EntityPlayer.class);
-		addMapping("Monster", EntityMonster.class);
+		addMapping("player", EntityPlayer.class);
+		addMapping("monster", EntityMonster.class);
+		addMapping("potster", EntityPotster.class);
 	}
 	
 	public static void addMapping(String name, Class clazz)

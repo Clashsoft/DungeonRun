@@ -153,7 +153,7 @@ public class World
 			final EntityPlayer player = (EntityPlayer) entity;
 			this.playerEntitys.put(player.username, player);
 		}
-		this.entitys.put(entity.entityId, entity);
+		this.entitys.put(entity.id, entity);
 	}
 
 	public void removeEntity(int id)
@@ -305,7 +305,7 @@ public class World
 		for (Integer i : this.entitys.keySet())
 		{
 			Entity entity = this.entitys.get(i);
-			NBTTagCompound entityNBT = new NBTTagCompound(Integer.toString(entity.entityId));
+			NBTTagCompound entityNBT = new NBTTagCompound(Integer.toString(entity.id));
 			entity.writeToNBT(entityNBT);
 			entityDataList.addTagCompound(entityNBT);
 		}

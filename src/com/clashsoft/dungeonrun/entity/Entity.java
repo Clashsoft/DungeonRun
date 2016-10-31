@@ -15,7 +15,7 @@ public abstract class Entity implements INBTSaveable
 
 	public static int nextEntityId = 0;
 
-	public int entityId;
+	public int id;
 
 	public final World worldObj;
 
@@ -31,7 +31,7 @@ public abstract class Entity implements INBTSaveable
 
 	public Entity(World world)
 	{
-		this.entityId = nextEntityId++;
+		this.id = nextEntityId++;
 		this.worldObj = world;
 	}
 
@@ -234,17 +234,13 @@ public abstract class Entity implements INBTSaveable
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setString("type", EntityList.getNameFromClass(this.getClass()));
-		nbt.setInteger("id", this.entityId);
+		nbt.setInteger("id", this.id);
 
-		NBTTagCompound pos = new NBTTagCompound("pos");
-		pos.setDouble("x", this.posX);
-		pos.setDouble("y", this.posY);
-		nbt.setTagCompound(pos);
+		nbt.setDouble("posX", this.posX);
+		nbt.setDouble("posY", this.posY);
 
-		NBTTagCompound momentum = new NBTTagCompound("velocity");
-		momentum.setDouble("x", this.velocityX);
-		momentum.setDouble("y", this.velocityY);
-		nbt.setTagCompound(momentum);
+		nbt.setDouble("velocityY", this.velocityX);
+		nbt.setDouble("velocityX", this.velocityY);
 
 		nbt.setFloat("pitch", this.pitch);
 		nbt.setInteger("airtime", this.airTime);
@@ -253,21 +249,13 @@ public abstract class Entity implements INBTSaveable
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		this.entityId = nbt.getInteger("id");
+		this.id = nbt.getInteger("id");
 
-		NBTTagCompound pos = nbt.getTagCompound("pos");
-		if (pos != null)
-		{
-			this.posX = pos.getDouble("x");
-			this.posY = pos.getDouble("y");
-		}
+		this.posX = nbt.getDouble("posX");
+		this.posY = nbt.getDouble("posY");
 
-		NBTTagCompound momentum = nbt.getTagCompound("velocity");
-		if (momentum != null)
-		{
-			this.velocityX = momentum.getDouble("x");
-			this.velocityY = momentum.getDouble("y");
-		}
+		this.velocityX = nbt.getDouble("velocityX");
+		this.velocityY = nbt.getDouble("velocityY");
 
 		this.pitch = nbt.getFloat("pitch");
 		this.airTime = nbt.getInteger("airtime");

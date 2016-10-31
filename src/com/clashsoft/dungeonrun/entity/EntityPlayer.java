@@ -100,9 +100,10 @@ public class EntityPlayer extends EntityLiving
 	{
 		super.writeToNBT(nbt);
 
-		nbt.setString("Username", this.username);
+		nbt.setString("username", this.username);
+		nbt.setInteger("kills", this.kills);
 
-		NBTTagCompound inventory = new NBTTagCompound("Inventory");
+		final NBTTagCompound inventory = new NBTTagCompound("inventory");
 		this.inventory.writeToNBT(inventory);
 		nbt.setTagCompound(inventory);
 	}
@@ -112,9 +113,9 @@ public class EntityPlayer extends EntityLiving
 	{
 		super.readFromNBT(nbt);
 
-		this.username = nbt.getString("Username");
+		this.username = nbt.getString("username");
+		this.kills = nbt.getInteger("kills");
 
-		NBTTagCompound inventory = nbt.getTagCompound("Inventory");
-		this.inventory.readFromNBT(inventory);
+		this.inventory.readFromNBT(nbt.getTagCompound("inventory"));
 	}
 }
