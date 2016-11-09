@@ -21,27 +21,38 @@ public class World
 	private static final String LEVEL_FILENAME  = "level.drf";
 	private static final String CHUNK_EXTENSION = ".chk";
 
-	public WorldInfo worldInfo = null;
+	// World Info
+	private WorldInfo worldInfo;
+
+	private File worldDir;
+	private File chunksDir;
 
 	private NBTTagCompound worldNBT = new NBTTagCompound("World");
 
-	private Map<Integer, Chunk>       chunks        = new HashMap<>();
-	private Map<Integer, Entity>      entitys       = new HashMap<>();
-	private Map<String, EntityPlayer> playerEntitys = new HashMap<>();
+	// Entities
+	private final Map<Integer, Entity>      entitys       = new HashMap<>();
+	private final Map<String, EntityPlayer> playerEntitys = new HashMap<>();
+	private final List<Entity>              spawnList     = new ArrayList<>();
 
-	private Map<String, Integer> blockToID = new TreeMap<>();
+	// Block IDs
+	private final Map<String, Integer> blockToID = new TreeMap<>();
 	private Block[] idToBlock;
 
-	private List<Entity> spawnList = new ArrayList<>();
-
-	public int minChunkX = 0;
-	public int maxChunkX = 0;
+	// Chunk Info
+	private final Map<Integer, Chunk> chunks = new HashMap<>();
 
 	public final Random random = new Random();
 
-	public World(WorldInfo info)
+	public World(WorldInfo info, File worldDir)
 	{
 		this.worldInfo = info;
+		this.worldDir = worldDir;
+		this.chunksDir = new File(worldDir, CHUNKS_DIRNAME);
+	}
+
+	public WorldInfo getWorldInfo()
+	{
+		return this.worldInfo;
 	}
 
 	public void generateIDs(String[] from)
@@ -90,17 +101,28 @@ public class World
 
 	public Chunk getChunk(int x)
 	{
-		Chunk c = this.chunks.get(x);
-		if (c == null)
+		Chunk chunk = this.chunks.get(x);
+		if (chunk != null)
 		{
-			c = this.newChunk(x);
+			return chunk;
 		}
-		return c;
+
+		final File chunkFile = new File(this.chunksDir, "chunk_" + x + CHUNK_EXTENSION);
+		if (!chunkFile.exists())
+		{
+			return this.generateChunk(x);
+		}
+
+		final NBTTagCompound nbt = (NBTTagCompound) NBTSerializer.deserialize(chunkFile);
+		chunk = new Chunk(this, x);
+		chunk.readFromNBT(nbt);
+		this.chunks.put(x, chunk);
+
+		return chunk;
 	}
 
 	private void setChunk(int x, Chunk chunk)
 	{
-		this.updateChunkBounds(x);
 		this.chunks.put(x, chunk);
 	}
 
@@ -109,10 +131,8 @@ public class World
 		return this.getChunk(x >> 4);
 	}
 
-	protected Chunk newChunk(int x)
+	private Chunk generateChunk(int x)
 	{
-		System.out.println("Generating missing chunk at " + x);
-
 		final Chunk chunk = new Chunk(this, x);
 		this.setChunk(x, chunk);
 
@@ -124,21 +144,9 @@ public class World
 		return chunk;
 	}
 
-	protected void updateChunkBounds(int x)
+	public boolean isChunkLoaded(int x)
 	{
-		if (x > this.maxChunkX)
-		{
-			this.maxChunkX = x;
-		}
-		if (x < this.minChunkX)
-		{
-			this.minChunkX = x;
-		}
-	}
-
-	public boolean isChunkLoaded(int x, int y)
-	{
-		return this.getChunkAtCoordinates(x) != null;
+		return this.chunks.containsKey(x >> 4);
 	}
 
 	public void spawnEntity(Entity entity)
@@ -251,9 +259,14 @@ public class World
 		}
 	}
 
-	public boolean save(File file)
+	public boolean save(ChunkSaver chunkSaver)
 	{
 		long now = System.currentTimeMillis();
+
+		if (!this.worldDir.exists() && !this.worldDir.mkdirs())
+		{
+			return false;
+		}
 
 		if (this.worldNBT == null)
 		{
@@ -262,7 +275,7 @@ public class World
 
 		// -- Level --
 
-		File level = new File(file, LEVEL_FILENAME);
+		File level = new File(this.worldDir, LEVEL_FILENAME);
 
 		this.saveWorldInfo();
 
@@ -272,7 +285,12 @@ public class World
 
 		// -- Chunks --
 
-		final int chunks = this.saveChunks(file);
+		if (!this.chunksDir.exists() && !this.chunksDir.mkdirs())
+		{
+			return false;
+		}
+
+		final int chunks = this.saveChunks(chunkSaver);
 
 		now = System.currentTimeMillis() - now;
 
@@ -294,11 +312,6 @@ public class World
 
 		this.worldNBT.setTagArray(new NBTTagArray("BlockIDs", this.getBlockIDs()));
 
-		// Chunk bounds
-
-		this.worldNBT.setInteger("MinChunkX", this.minChunkX);
-		this.worldNBT.setInteger("MaxChunkX", this.maxChunkX);
-
 		// Entities
 
 		NBTTagList entityDataList = new NBTTagList("entities");
@@ -312,35 +325,36 @@ public class World
 		this.worldNBT.setTagList(entityDataList);
 	}
 
-	private int saveChunks(File saveDir)
+	private int saveChunks(ChunkSaver chunkSaver)
 	{
-		File regionDir = new File(saveDir, CHUNKS_DIRNAME);
-		if (!regionDir.exists())
-		{
-			regionDir.mkdirs();
-		}
-
 		int chunks = 0;
 
-		for (int x = this.minChunkX; x <= this.maxChunkX; x++)
+		synchronized (this.chunks)
 		{
-			final Chunk chunk = this.chunks.get(x);
-			if (chunk == null || !chunk.isDirty())
+			for (Chunk chunk : this.chunks.values())
 			{
-				continue;
+				if (chunk.isDirty())
+				{
+					chunks++;
+					chunkSaver.enqueue(chunk);
+				}
 			}
-
-			String fileName = "chunk_" + x;
-			File chunkFile = new File(regionDir, fileName + CHUNK_EXTENSION);
-			NBTTagCompound chunkCompound = new NBTTagCompound(fileName);
-
-			chunks++;
-			chunk.writeToNBT(chunkCompound);
-			NBTSerializer.serialize(chunkCompound, chunkFile);
-
-			chunk.markClean();
 		}
+
 		return chunks;
+	}
+
+	protected void saveChunk(Chunk chunk)
+	{
+		String fileName = "chunk_" + chunk.chunkX;
+		File chunkFile = new File(this.chunksDir, fileName + CHUNK_EXTENSION);
+
+		NBTTagCompound chunkCompound = new NBTTagCompound(fileName);
+
+		chunk.writeToNBT(chunkCompound);
+		NBTSerializer.serialize(chunkCompound, chunkFile);
+
+		chunk.markClean();
 	}
 
 	private String[] getBlockIDs()
@@ -354,11 +368,11 @@ public class World
 		return blockIDs;
 	}
 
-	public boolean load(File file)
+	public boolean load()
 	{
 		// -- Level --
 
-		File level = new File(file, LEVEL_FILENAME);
+		File level = new File(this.worldDir, LEVEL_FILENAME);
 		if (!level.exists())
 		{
 			this.generateIDs(null);
@@ -374,47 +388,11 @@ public class World
 
 		this.loadWorldInfo();
 
-		// -- Chunks --
-
-		return this.loadChunks(file);
-	}
-
-	private boolean loadChunks(File saveDir)
-	{
-		File regionDir = new File(saveDir, CHUNKS_DIRNAME);
-		if (!regionDir.exists())
-		{
-			return false;
-		}
-
-		for (int x = this.minChunkX; x < this.maxChunkX; x++)
-		{
-			Chunk chunk = this.chunks.get(x);
-			if (chunk != null)
-			{
-				continue;
-			}
-
-			final File chunkFile = new File(regionDir, "chunk_" + x + CHUNK_EXTENSION);
-			if (!chunkFile.exists())
-			{
-				continue;
-			}
-
-			NBTTagCompound nbt = (NBTTagCompound) NBTSerializer.deserialize(chunkFile);
-			chunk = new Chunk(this, x);
-			chunk.readFromNBT(nbt);
-			this.chunks.put(x, chunk);
-		}
-
 		return true;
 	}
 
 	private void loadWorldInfo()
 	{
-		this.minChunkX = this.worldNBT.getInteger("MinChunkX");
-		this.maxChunkX = this.worldNBT.getInteger("MaxChunkX");
-
 		// World info
 
 		NBTTagCompound infoCompound = this.worldNBT.getTagCompound("info");

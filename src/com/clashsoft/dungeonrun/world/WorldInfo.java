@@ -1,9 +1,9 @@
 package com.clashsoft.dungeonrun.world;
 
-import java.util.Date;
-
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
+
+import java.util.Date;
 
 public class WorldInfo implements INBTSaveable
 {
@@ -16,32 +16,27 @@ public class WorldInfo implements INBTSaveable
 		this.name = this.fileName = name;
 		this.creationTime = new Date().getTime();
 	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	public void setCreationTime(long time)
-	{
-		this.creationTime = time;
-	}
-	
-	public void setCreationDate(Date date)
-	{
-		this.creationTime = date.getTime();
-	}
-	
+
 	public String getName()
 	{
 		return this.name;
 	}
-	
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	public long getCreationTime()
 	{
 		return this.creationTime;
 	}
-	
+
+	public void setCreationTime(long time)
+	{
+		this.creationTime = time;
+	}
+
 	public String getFileName()
 	{
 		return this.fileName;
@@ -56,7 +51,6 @@ public class WorldInfo implements INBTSaveable
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setString("Name", this.name);
-		nbt.setString("FileName", this.fileName);
 		nbt.setLong("CreationTime", this.creationTime);
 	}
 	
@@ -64,7 +58,6 @@ public class WorldInfo implements INBTSaveable
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.name = nbt.getString("Name");
-		this.fileName = nbt.getString("FileName");
 		this.creationTime = nbt.getLong("CreationTime");
 	}
 }

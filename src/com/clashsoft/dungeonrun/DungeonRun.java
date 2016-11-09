@@ -6,6 +6,7 @@ import com.clashsoft.dungeonrun.item.Item;
 import com.clashsoft.dungeonrun.item.Items;
 import com.clashsoft.dungeonrun.server.IServer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
+import com.clashsoft.dungeonrun.world.ChunkSaver;
 import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.*;
 
@@ -20,9 +21,15 @@ public abstract class DungeonRun extends BasicGame implements IServer
 {
 	public static final String VERSION = "Alpha 0.1-PRE";
 
+	public static final File GAME_DIRECTORY  = new File(getAppdataDirectory(), "DungeonRun");
+	public static final File SAVES_DIRECTORY = new File(GAME_DIRECTORY, "saves");
+
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+
 	protected static DungeonRun instance;
 
 	protected AppGameContainer theGameContainer;
+	protected ChunkSaver       chunkSaver;
 
 	protected long tick;
 
@@ -152,12 +159,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	@Override
 	public File getSaveDataFolder()
 	{
-		File f = new File(getAppdataDirectory(), "dungeonrun");
-		if (!f.exists())
-		{
-			f.mkdirs();
-		}
-		return f;
+		return GAME_DIRECTORY;
 	}
 
 	public static String getAppdataDirectory()
@@ -180,10 +182,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 
 	public static String getDateTime()
 	{
-		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-		Date now = new Date();
-		String strDate = sdfDate.format(now);
-		return strDate;
+		return DATE_FORMAT.format(new Date());
 	}
 
 	public long getTick()
@@ -194,7 +193,11 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	@Override
 	public void startGame() throws SlickException
 	{
-		this.loadWorld(this.getWorld());
+		final World world = this.getWorld();
+		this.loadWorld(world);
+
+		this.chunkSaver = new ChunkSaver();
+		this.chunkSaver.start();
 	}
 
 	public void handleException(Throwable ex, String s) throws SlickException
@@ -220,48 +223,19 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	public void stopGame() throws SlickException
 	{
 		this.saveWorld(this.getWorld());
+		this.chunkSaver.disable();
+		this.chunkSaver = null;
 	}
 
 	@Override
 	public boolean saveWorld(World world) throws SlickException
 	{
-		if (world == null)
-		{
-			return false;
-		}
-
-		String worldFileName = world.worldInfo.getFileName();
-		File saves = new File(this.getSaveDataFolder(), "saves");
-		if (!saves.exists())
-		{
-			saves.mkdirs();
-		}
-
-		File worldDir = new File(saves, worldFileName);
-		if (!worldDir.exists())
-		{
-			worldDir.mkdirs();
-		}
-		return world.save(worldDir);
+		return world != null && world.save(this.chunkSaver);
 	}
 
 	@Override
 	public boolean loadWorld(World world) throws SlickException
 	{
-		if (world == null)
-		{
-			return false;
-		}
-
-		String worldFileName = world.worldInfo.getFileName();
-		File saves = new File(this.getSaveDataFolder(), "saves");
-		if (!saves.exists())
-		{
-			saves.mkdirs();
-			return false;
-		}
-
-		File worldFile = new File(saves, worldFileName);
-		return world.load(worldFile);
+		return world != null && world.load();
 	}
 }

@@ -91,8 +91,8 @@ public abstract class GuiScreen
 				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerVelocity: (%.2f; %.2f)",
 				                                                                  player.velocityX, player.velocityY));
 				fontRenderer.drawStringWithShadow(5, var += offset, String.format("PlayerWorld: %s",
-				                                                                  this.dr.getWorld().worldInfo
-					                                                                  .getName()));
+				                                                                  this.dr.getWorld().getWorldInfo()
+				                                                                         .getName()));
 			}
 
 			{
