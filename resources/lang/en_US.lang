@@ -38,4 +38,11 @@ world.create.name=Name
 world.saves_dir.open=Open Saves Directory
 world.new.template=New World
 
-item.sword.name=Sword
+# Items
+
+item.iron_sword.name=Iron Sword
+item.iron_dagger.name=Iron Dagger
+item.iron_hammer.name=Iron Hammer
+
+item.wood_sword.name=Wooden Sword
+item.wood_hammer.name=Wooden Hammer

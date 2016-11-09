@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.client.renderer.entity;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.item.Item;
 import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.lwjgl.opengl.GL11;
@@ -55,23 +56,37 @@ public class RenderPlayer extends Render<EntityPlayer>
 
 		sprite.draw(0, 0);
 
-		if (attackTime > 0)
-		{
-			final ItemStack handStack = player.inventory.getHeldStack();
-			if (handStack != null)
-			{
-				int centerX = 2;
-				int centerY = 14;
-
-				GL11.glTranslatef(8 + centerX, -2 + centerY, 0);
-				GL11.glRotatef(90F + -15F * attackTime, 0, 0, 1);
-				GL11.glTranslatef(-centerX, -centerY, 0);
-
-				handStack.item.getIcon(handStack).draw(0, 0);
-			}
-		}
+		this.drawHeldItem(player, attackTime);
 
 		GL11.glPopMatrix();
+	}
+
+	private void drawHeldItem(EntityPlayer player, int attackTime)
+	{
+		if (attackTime <= 0)
+		{
+			return;
+		}
+
+		final ItemStack handStack = player.inventory.getHeldStack();
+		if (handStack == null)
+		{
+			return;
+		}
+
+		if (handStack.item.getSwingType(handStack) == Item.STILL)
+		{
+			attackTime = 3;
+		}
+
+		final int centerX = 2;
+		final int centerY = 14;
+
+		GL11.glTranslatef(8 + centerX, -2 + centerY, 0);
+		GL11.glRotatef(90F + -15F * attackTime, 0, 0, 1);
+		GL11.glTranslatef(-centerX, -centerY, 0);
+
+		handStack.item.getIcon(handStack).draw(0, 0);
 	}
 
 	private Renderable getSprite(EntityPlayer player, int attackTime)

@@ -4,8 +4,8 @@ import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.client.gui.GuiDeath;
 import com.clashsoft.dungeonrun.client.renderer.entity.RenderPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
+import com.clashsoft.dungeonrun.item.Item;
 import com.clashsoft.dungeonrun.item.ItemStack;
-import com.clashsoft.dungeonrun.item.Items;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import org.newdawn.slick.SlickException;
@@ -32,7 +32,17 @@ public class EntityPlayer extends EntityLiving
 		super(world);
 		this.username = username;
 		this.inventory = new InventoryPlayer(this);
-		this.inventory.setStack(0, new ItemStack(Items.sword, 0, 1));
+
+		int index = 0;
+		for (Item item : Item.items.values())
+		{
+			this.inventory.setStack(index++, new ItemStack(item));
+
+			if (index >= 8)
+			{
+				break;
+			}
+		}
 	}
 
 	@Override

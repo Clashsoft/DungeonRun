@@ -10,7 +10,10 @@ import java.util.TreeMap;
 
 public class Item
 {
-	public static Map<String, Item> items = new TreeMap<>();
+	public static final Map<String, Item> items = new TreeMap<>();
+
+	public static final int ROTATE = 0;
+	public static final int STILL = 1;
 
 	public final String name;
 
@@ -52,5 +55,10 @@ public class Item
 	public int getMaxUses(ItemStack stack)
 	{
 		return this.maxUses;
+	}
+
+	public int getSwingType(ItemStack stack)
+	{
+		return ROTATE;
 	}
 }

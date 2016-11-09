@@ -8,6 +8,11 @@ public final class ItemStack
 	public       int  metadata;
 	public       int  size;
 
+	public ItemStack(Item item)
+	{
+		this.item = item;
+	}
+
 	public ItemStack(Item item, int metadata, int size)
 	{
 		this.item = item;
@@ -30,14 +35,14 @@ public final class ItemStack
 
 	public static ItemStack readFromNBT(NBTTagCompound nbt)
 	{
-		Item item = Item.items.get(nbt.getString("item"));
+		final Item item = Item.items.get(nbt.getString("item"));
 		if (item == null)
 		{
 			return null;
 		}
 
-		int size = nbt.hasTag("size") ? nbt.getInteger("size") : 1;
-		int metadata = nbt.getInteger("metadata");
+		final int size = nbt.hasTag("size") ? nbt.getInteger("size") : 1;
+		final int metadata = nbt.getInteger("metadata"); // defaults to 0
 		return new ItemStack(item, metadata, size);
 	}
 
