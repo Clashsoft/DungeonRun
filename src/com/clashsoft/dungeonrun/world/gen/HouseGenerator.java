@@ -23,6 +23,10 @@ public class HouseGenerator
 		final int floors = 1 + random.nextInt(3) + groundFloors;
 
 		y -= groundFloors * height;
+		if (y < 0)
+		{
+			return;
+		}
 
 		// Find out where to generate the entrances
 		int leftEntrance = 0;
