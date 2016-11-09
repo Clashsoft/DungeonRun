@@ -16,19 +16,12 @@ public class EntityAIFollow implements EntityAI<EntityLiving>
 		this.walkRandom = walkRandom;
 	}
 
-	private double squareDistance(Entity e1, Entity e2)
-	{
-		double dx = e2.posX - e1.posX;
-		double dy = e2.posY - e1.posY;
-		return dx * dx + dy * dy;
-	}
-
 	@Override
 	public void update(EntityLiving entity, Random random)
 	{
 		if (this.target != null)
 		{
-			if (this.squareDistance(entity, this.target) > this.squareDistance)
+			if (entity.squareDistanceTo(this.target) > this.squareDistance)
 			{
 				this.target = null;
 			}
@@ -41,7 +34,7 @@ public class EntityAIFollow implements EntityAI<EntityLiving>
 		{
 			for (EntityPlayer player : entity.worldObj.getPlayers())
 			{
-				if (this.squareDistance(entity, player) <= this.squareDistance)
+				if (entity.squareDistanceTo(player) <= this.squareDistance)
 				{
 					this.target = player;
 					break;

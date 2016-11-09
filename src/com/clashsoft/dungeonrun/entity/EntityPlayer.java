@@ -20,6 +20,8 @@ public class EntityPlayer extends EntityLiving
 
 	private int attackTime = 0;
 
+	private int kills;
+
 	public EntityPlayer(World world) throws SlickException
 	{
 		this(world, "");
@@ -45,6 +47,11 @@ public class EntityPlayer extends EntityLiving
 		return 24 / 16F;
 	}
 
+	public int getKillCount()
+	{
+		return this.kills;
+	}
+
 	@Override
 	public RenderPlayer getRenderer()
 	{
@@ -61,6 +68,27 @@ public class EntityPlayer extends EntityLiving
 		if (this.attackTime == 0)
 		{
 			this.attackTime = 10;
+		}
+		else
+		{
+			return;
+		}
+
+		final ItemStack selected = this.inventory.getHeldStack();
+		final float damage = 1F + (selected != null ? selected.item.getDamageVsEntity(selected) : 0F);
+
+		for (Entity entity : this.worldObj.getEntitys())
+		{
+			if (entity.squareDistanceTo(this) > 4 || entity == this || !(entity instanceof EntityDamagable))
+			{
+				continue;
+			}
+
+			((EntityDamagable) entity).damageEntity(DamageSource.PLAYER, damage);
+			if (entity.isDead())
+			{
+				this.kills++;
+			}
 		}
 	}
 

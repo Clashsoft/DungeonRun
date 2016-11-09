@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.client.renderer.entity;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.entity.EntityMonster;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -11,7 +12,7 @@ public class RenderMonster extends Render<EntityMonster>
 	public static final RenderMonster INSTANCE = new RenderMonster();
 
 	private final Image[] sprites = new Image[4];
-	private final Image alert = ResourceHelper.iconsSprite.getSprite(4, 0);
+	private final Image   alert   = ResourceHelper.iconsSprite.getSprite(4, 0);
 
 	private RenderMonster()
 	{
@@ -34,7 +35,14 @@ public class RenderMonster extends Render<EntityMonster>
 		final float offX = (float) x - sprite.getWidth() / 2;
 		final float offY = (float) y - sprite.getHeight();
 
-		sprite.draw(offX, offY);
+		if (monster.getHurtTime() > 0)
+		{
+			sprite.draw(offX, offY, new Color(0.8F, 0.5F, 0.5F));
+		}
+		else
+		{
+			sprite.draw(offX, offY);
+		}
 
 		if (monster.alertTicks > 0 && monster.alertTicks <= 10)
 		{

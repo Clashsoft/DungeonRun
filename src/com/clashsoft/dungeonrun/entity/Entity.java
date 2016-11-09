@@ -35,6 +35,13 @@ public abstract class Entity implements INBTSaveable
 		this.worldObj = world;
 	}
 
+	public final double squareDistanceTo(Entity e2)
+	{
+		final double dx = e2.posX - this.posX;
+		final double dy = e2.posY - this.posY;
+		return dx * dx + dy * dy;
+	}
+
 	public double getX()
 	{
 		return this.posX;
