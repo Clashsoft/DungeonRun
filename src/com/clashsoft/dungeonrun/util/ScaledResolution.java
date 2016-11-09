@@ -4,55 +4,54 @@ import com.clashsoft.dungeonrun.client.gui.GameSettings;
 
 public class ScaledResolution
 {
-	public int		scaledWidth;
-	public int		scaledHeight;
-	public double	scaledWidthD;
-	public double	scaledHeightD;
-	public int		scaleFactor;
-	
+	public final int    scaledWidth;
+	public final int    scaledHeight;
+	public final double scaledWidthD;
+	public final double scaledHeightD;
+	public final int    scaleFactor;
+
 	public ScaledResolution(GameSettings settings, int width, int height)
 	{
-		this.scaledWidth = width;
-		this.scaledHeight = height;
-		this.scaleFactor = 1;
-		int k = settings.guiSize;
-		
-		if (k == 0)
+		int scaleFactor = 1;
+		int maxIterations = settings.guiSize;
+
+		if (maxIterations == 0)
 		{
-			k = 1000;
+			maxIterations = 1000;
 		}
-		
-		while (this.scaleFactor < k && this.scaledWidth / (this.scaleFactor + 1) >= 320 && this.scaledHeight / (this.scaleFactor + 1) >= 240)
+
+		while (scaleFactor < maxIterations && width / (scaleFactor + 1) >= 320 && height / (scaleFactor + 1) >= 240)
 		{
-			++this.scaleFactor;
+			++scaleFactor;
 		}
-		
-		this.scaledWidthD = (double) this.scaledWidth / (double) this.scaleFactor;
-		this.scaledHeightD = (double) this.scaledHeight / (double) this.scaleFactor;
+
+		this.scaleFactor = scaleFactor;
+		this.scaledWidthD = (double) width / (double) this.scaleFactor;
+		this.scaledHeightD = (double) height / (double) this.scaleFactor;
 		this.scaledWidth = (int) Math.ceil(this.scaledWidthD);
 		this.scaledHeight = (int) Math.ceil(this.scaledHeightD);
 	}
-	
+
 	public int getScaledWidth()
 	{
 		return this.scaledWidth;
 	}
-	
+
 	public int getScaledHeight()
 	{
 		return this.scaledHeight;
 	}
-	
+
 	public double getScaledWidth_double()
 	{
 		return this.scaledWidthD;
 	}
-	
+
 	public double getScaledHeight_double()
 	{
 		return this.scaledHeightD;
 	}
-	
+
 	public int getScaleFactor()
 	{
 		return this.scaleFactor;

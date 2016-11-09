@@ -13,7 +13,7 @@ public class GuiIntro extends GuiScreen
 	private int tick = 0;
 
 	@Override
-	public void reloadGUI()
+	public void rescaleGUI()
 	{
 
 	}

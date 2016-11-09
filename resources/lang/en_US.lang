@@ -34,6 +34,7 @@ world.select=Select World
 world.loading=Loading World...
 world.saving=Saving World...
 world.create=Create World
+world.create.name=Name
 world.saves_dir.open=Open Saves Directory
 world.new.template=New World
 

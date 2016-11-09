@@ -16,11 +16,6 @@ public abstract class GuiListScreen extends GuiScreen
 	protected boolean drawBricks = true;
 
 	@Override
-	public void reloadGUI() throws SlickException
-	{
-	}
-
-	@Override
 	public void drawScreen(Graphics g, int width, int height) throws SlickException
 	{
 		if (this.drawBricks)
@@ -42,17 +37,21 @@ public abstract class GuiListScreen extends GuiScreen
 	protected void drawEntry(int i, int width, int height)
 	{
 		final String text = this.getEntry(i);
-		final boolean selected = this.selection == i;
 		final float textWidth = this.dr.fontRenderer.getStringWidth(text);
 		final float x = (width - textWidth) / 2 + this.getXOffset();
 		final float y = i * 20 + this.getYOffset();
 
-		this.drawEntry(text, selected, x, y, textWidth);
+		this.drawEntry(text, i, x, y, textWidth);
 	}
 
-	protected void drawEntry(String text, boolean selected, float x, float y, float textWidth)
+	protected void drawEntry(String text, int index, float x, float y, float textWidth)
 	{
-		this.dr.fontRenderer.drawString(x, y, text, selected ? SELECTION_COLOR : ENTRY_COLOR, true);
+		if (index == this.selection)
+		{
+			this.drawHighlight(x - 4, y - 4, textWidth + 8, 16);
+		}
+
+		this.dr.fontRenderer.drawString(x, y, text, index == this.selection ? SELECTION_COLOR : ENTRY_COLOR, true);
 	}
 
 	@Override

@@ -15,11 +15,6 @@ public class GuiInfo extends GuiScreen
 	}
 	
 	@Override
-	public void reloadGUI() throws SlickException
-	{
-	}
-	
-	@Override
 	public void drawScreen(Graphics g, int par1, int par2) throws SlickException
 	{
 		this.drawBricks(par1, par2);

@@ -69,7 +69,7 @@ public class DungeonRunClient extends DungeonRun
 		this.theGameContainer = new AppGameContainer(this);
 		this.screenWidth = this.theGameContainer.getScreenWidth();
 		this.screenHeight = this.theGameContainer.getScreenHeight();
-		this.theGameContainer.setDisplayMode(800, 450, false);
+		this.setFullScreen(false);
 		this.theGameContainer.setMinimumLogicUpdateInterval(50);
 		this.theGameContainer.setMaximumLogicUpdateInterval(50);
 		this.theGameContainer.setShowFPS(false);
@@ -282,13 +282,20 @@ public class DungeonRunClient extends DungeonRun
 	public GuiScreen displayGuiScreen(GuiScreen gui) throws SlickException
 	{
 		this.currentGui = gui;
-		this.currentGui.init(this);
+		this.currentGui.init(this, this.theGameContainer.getWidth(), this.theGameContainer.getHeight());
 		return gui;
 	}
 
 	public void setFullScreen(boolean flag) throws SlickException
 	{
-		this.theGameContainer.setDisplayMode(this.screenWidth, this.screenHeight, flag);
+		if (flag)
+		{
+			this.theGameContainer.setDisplayMode(this.screenWidth, this.screenHeight, true);
+		}
+		else
+		{
+			this.theGameContainer.setDisplayMode(800, 480, false);
+		}
 	}
 
 	public void setVSync(boolean flag)

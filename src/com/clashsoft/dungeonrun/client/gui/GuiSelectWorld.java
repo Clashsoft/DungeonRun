@@ -24,7 +24,7 @@ public class GuiSelectWorld extends GuiListScreen
 	}
 
 	@Override
-	public void reloadGUI() throws SlickException
+	public void initGUI() throws SlickException
 	{
 		this.worlds.clear();
 
@@ -40,8 +40,6 @@ public class GuiSelectWorld extends GuiListScreen
 				}
 			}
 		}
-
-		super.reloadGUI();
 	}
 
 	@Override
@@ -78,9 +76,14 @@ public class GuiSelectWorld extends GuiListScreen
 	}
 
 	@Override
-	protected void drawEntry(int i, int width, int height)
+	protected void drawEntry(String text, int index, float x, float y, float textWidth)
 	{
-		super.drawEntry(i, width, height);
+		if (index >= this.worlds.size())
+		{
+			y += 10;
+		}
+
+		super.drawEntry(text, index, x, y, textWidth);
 	}
 
 	@Override

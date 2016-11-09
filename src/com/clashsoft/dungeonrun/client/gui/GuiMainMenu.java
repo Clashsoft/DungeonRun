@@ -31,16 +31,18 @@ public class GuiMainMenu extends GuiListScreen
 	}
 
 	@Override
-	protected void drawEntry(String text, boolean selected, float x, float y, float textWidth)
+	protected void drawEntry(String text, int index, float x, float y, float textWidth)
 	{
-		if (selected)
+		if (index == this.selection)
 		{
+			this.drawHighlight(x - 20, y - 6, textWidth + 40, 20);
+
 			final Image torch = Blocks.torch.getTexture(0);
 			torch.draw(x - torch.getWidth(), y - 4);
 			torch.draw(x + textWidth, y - 4);
 		}
 
-		this.dr.fontRenderer.drawString(x, y, text, selected ? 0xFFFF00 : 0x00EFFF, true);
+		this.dr.fontRenderer.drawString(x, y, text, index == this.selection ? 0xFFFF00 : TITLE_COLOR, true);
 	}
 	
 	@Override
