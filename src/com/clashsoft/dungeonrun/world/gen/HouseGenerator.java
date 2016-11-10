@@ -55,15 +55,25 @@ public class HouseGenerator
 		generateEntrance(world, x - halfWidth, y + height * leftEntrance + 1, -1);
 		generateEntrance(world, x + halfWidth, y + height * rightEntrance + 1, 1);
 
-		// Generate ladders
+		// Generate ladders and chests
 
 		for (int i = 0; i < floors; i++)
 		{
-			final int off = random.nextInt(halfWidth - 1);
-			final int ladder = x + (random.nextBoolean() ? off : -off);
+			final int dir = random.nextBoolean() ? 1 : -1;
+			final int off = dir * random.nextInt(halfWidth - 1);
+			final int ladder = x + off;
+
+			// Ladders
 			for (int l = 0; l <= height; l++)
 			{
 				world.addForegroundBlock(new ForegroundBlock(ladder, y + i * height + l + 1, Blocks.ladder, 0));
+			}
+
+			// Chest
+			if (random.nextInt(4) == 0)
+			{
+				Block block = i < leftEntrance && i < rightEntrance ? Blocks.stoneChest : Blocks.woodChest;
+				world.addForegroundBlock(new ForegroundBlock(x + dir * (halfWidth - 1), y + i * height + 1, block, 0));
 			}
 		}
 

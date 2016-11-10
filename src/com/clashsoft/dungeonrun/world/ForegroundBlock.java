@@ -9,7 +9,7 @@ public class ForegroundBlock
 	public final int y;
 
 	public final Block block;
-	public final int   metadata;
+	public       int   metadata;
 
 	public ForegroundBlock(int x, int y, Block block, int metadata)
 	{

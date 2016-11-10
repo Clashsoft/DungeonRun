@@ -53,7 +53,7 @@ public class EntityPotster extends EntityLiving
 	@Override
 	public boolean canBeDamagedBy(DamageSource source)
 	{
-		return false;
+		return true;
 	}
 
 	@Override
