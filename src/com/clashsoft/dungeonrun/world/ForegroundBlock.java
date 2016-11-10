@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import dyvil.tools.nbt.collection.NBTMap;
 
 public class ForegroundBlock
 {
@@ -46,7 +46,7 @@ public class ForegroundBlock
 		return result;
 	}
 
-	public void writeToNBT(NBTTagCompound nbt, World world)
+	public void writeToNBT(NBTMap nbt, World world)
 	{
 		nbt.setInteger("x", this.x);
 		nbt.setInteger("y", this.y);
@@ -58,12 +58,12 @@ public class ForegroundBlock
 		}
 	}
 
-	public static ForegroundBlock readFromNBT(NBTTagCompound nbt, World world)
+	public static ForegroundBlock readFromNBT(NBTMap nbt, World world)
 	{
 		int x = nbt.getInteger("x");
 		int y = nbt.getInteger("y");
 		int id = nbt.getInteger("id");
-		int metadata = nbt.getInteger("metadata");
+		int metadata = nbt.getInteger("metadata"); // default to 0
 		return new ForegroundBlock(x, y, world.getBlockByID(id), metadata);
 	}
 }

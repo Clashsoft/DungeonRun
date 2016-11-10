@@ -1,6 +1,6 @@
 package com.clashsoft.dungeonrun.item;
 
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import dyvil.tools.nbt.collection.NBTMap;
 
 public final class ItemStack
 {
@@ -43,7 +43,7 @@ public final class ItemStack
 		return true;
 	}
 
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTMap nbt)
 	{
 		nbt.setString("item", this.item.name);
 		if (this.size != 1)
@@ -56,7 +56,7 @@ public final class ItemStack
 		}
 	}
 
-	public static ItemStack readFromNBT(NBTTagCompound nbt)
+	public static ItemStack readFromNBT(NBTMap nbt)
 	{
 		final Item item = Item.items.get(nbt.getString("item"));
 		if (item == null)

@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.world;
 
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
-import com.clashsoft.nbt.util.INBTSaveable;
+import dyvil.tools.nbt.collection.NBTMap;
+import dyvil.tools.nbt.util.INBTSaveable;
 
 import java.util.Date;
 
@@ -48,14 +48,14 @@ public class WorldInfo implements INBTSaveable
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTMap nbt)
 	{
 		nbt.setString("Name", this.name);
 		nbt.setLong("CreationTime", this.creationTime);
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTMap nbt)
 	{
 		this.name = nbt.getString("Name");
 		this.creationTime = nbt.getLong("CreationTime");

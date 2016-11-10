@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.entity;
 
 import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import dyvil.tools.nbt.collection.NBTMap;
 
 import java.util.Random;
 
@@ -57,7 +57,7 @@ public abstract class EntityDamagable extends Entity
 	public abstract boolean canBeDamagedBy(DamageSource source);
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTMap nbt)
 	{
 		super.writeToNBT(nbt);
 
@@ -65,7 +65,7 @@ public abstract class EntityDamagable extends Entity
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTMap nbt)
 	{
 		super.readFromNBT(nbt);
 

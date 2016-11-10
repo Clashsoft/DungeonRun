@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.item.ItemStack;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import dyvil.tools.nbt.collection.NBTMap;
 
 public class InventoryPlayer extends AbstractInventory
 {
@@ -42,7 +42,7 @@ public class InventoryPlayer extends AbstractInventory
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTMap nbt)
 	{
 		super.writeToNBT(nbt);
 
@@ -50,7 +50,7 @@ public class InventoryPlayer extends AbstractInventory
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTMap nbt)
 	{
 		super.readFromNBT(nbt);
 

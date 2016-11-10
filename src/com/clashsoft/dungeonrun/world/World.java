@@ -5,11 +5,11 @@ import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityList;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
-import com.clashsoft.nbt.NamedBinaryTag;
-import com.clashsoft.nbt.io.NBTSerializer;
-import com.clashsoft.nbt.tags.collection.NBTTagArray;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
-import com.clashsoft.nbt.tags.collection.NBTTagList;
+import dyvil.tools.nbt.NamedBinaryTag;
+import dyvil.tools.nbt.collection.NBTArray;
+import dyvil.tools.nbt.collection.NBTList;
+import dyvil.tools.nbt.collection.NBTMap;
+import dyvil.tools.nbt.util.NBTSerializer;
 import org.newdawn.slick.SlickException;
 
 import java.io.File;
@@ -27,7 +27,7 @@ public class World
 	private File worldDir;
 	private File chunksDir;
 
-	private NBTTagCompound worldNBT = new NBTTagCompound("World");
+	private NBTMap worldNBT = new NBTMap();
 
 	// Entities
 	private final Map<Integer, Entity>      entitys       = new HashMap<>();
@@ -113,7 +113,7 @@ public class World
 			return this.generateChunk(x);
 		}
 
-		final NBTTagCompound nbt = (NBTTagCompound) NBTSerializer.deserialize(chunkFile);
+		final NBTMap nbt = (NBTMap) NBTSerializer.deserialize(chunkFile);
 		chunk = new Chunk(this, x);
 		chunk.readFromNBT(nbt);
 		this.chunks.put(x, chunk);
@@ -296,11 +296,6 @@ public class World
 			return false;
 		}
 
-		if (this.worldNBT == null)
-		{
-			this.worldNBT = new NBTTagCompound("World");
-		}
-
 		// -- Level --
 
 		File level = new File(this.worldDir, LEVEL_FILENAME);
@@ -332,25 +327,25 @@ public class World
 	{
 		// World Info
 
-		NBTTagCompound infoCompound = new NBTTagCompound("info");
+		NBTMap infoCompound = new NBTMap();
 		this.worldInfo.writeToNBT(infoCompound);
-		this.worldNBT.setTagCompound(infoCompound);
+		this.worldNBT.setTag("info", infoCompound);
 
 		// Block IDs
 
-		this.worldNBT.setTagArray(new NBTTagArray("BlockIDs", this.getBlockIDs()));
+		this.worldNBT.setTag("blockIDs", new NBTArray(this.getBlockIDs()));
 
 		// Entities
 
-		NBTTagList entityDataList = new NBTTagList("entities");
-		for (Integer i : this.entitys.keySet())
+		NBTList entityDataList = new NBTList(this.entitys.size());
+		for (Entity entity : this.entitys.values())
 		{
-			Entity entity = this.entitys.get(i);
-			NBTTagCompound entityNBT = new NBTTagCompound(Integer.toString(entity.id));
-			entity.writeToNBT(entityNBT);
-			entityDataList.addTagCompound(entityNBT);
+			final NBTMap nbt = new NBTMap();
+
+			entity.writeToNBT(nbt);
+			entityDataList.addTag(nbt);
 		}
-		this.worldNBT.setTagList(entityDataList);
+		this.worldNBT.setTag("entities", entityDataList);
 	}
 
 	private int saveChunks(ChunkSaver chunkSaver)
@@ -377,8 +372,7 @@ public class World
 		String fileName = "chunk_" + chunk.chunkX;
 		File chunkFile = new File(this.chunksDir, fileName + CHUNK_EXTENSION);
 
-		NBTTagCompound chunkCompound = new NBTTagCompound(fileName);
-
+		final NBTMap chunkCompound = new NBTMap();
 		chunk.writeToNBT(chunkCompound);
 		NBTSerializer.serialize(chunkCompound, chunkFile);
 
@@ -407,7 +401,7 @@ public class World
 			return false;
 		}
 
-		this.worldNBT = (NBTTagCompound) NBTSerializer.deserialize(level);
+		this.worldNBT = (NBTMap) NBTSerializer.deserialize(level);
 		if (this.worldNBT == null)
 		{
 			this.generateIDs(null);
@@ -423,27 +417,27 @@ public class World
 	{
 		// World info
 
-		NBTTagCompound infoCompound = this.worldNBT.getTagCompound("info");
+		NBTMap infoCompound = this.worldNBT.getTagCompound("info");
 		this.worldInfo.readFromNBT(infoCompound);
 
-		NBTTagList entityDataList = this.worldNBT.getTagList("entities");
+		NBTList entityDataList = this.worldNBT.getTagList("entities");
 		if (entityDataList != null)
 		{
 			for (NamedBinaryTag base : entityDataList)
 			{
-				if (!(base instanceof NBTTagCompound))
+				if (!(base instanceof NBTMap))
 				{
 					continue;
 				}
 
-				final NBTTagCompound compound = (NBTTagCompound) base;
+				final NBTMap compound = (NBTMap) base;
 				Entity entity = EntityList.constructFromNBT(compound, this);
 				entity.readFromNBT(compound);
 				this.spawnEntity0(entity);
 			}
 		}
 
-		final NBTTagArray blockIDs = this.worldNBT.getTagArray("BlockIDs");
+		final NBTArray blockIDs = this.worldNBT.getTagArray("blockIDs");
 		this.generateIDs(blockIDs == null ? null : blockIDs.getStringArray());
 	}
 }

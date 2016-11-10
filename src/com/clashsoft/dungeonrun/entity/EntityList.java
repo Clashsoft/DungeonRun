@@ -1,7 +1,7 @@
 package com.clashsoft.dungeonrun.entity;
 
 import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import dyvil.tools.nbt.collection.NBTMap;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class EntityList
 		return null;
 	}
 	
-	public static Entity constructFromNBT(NBTTagCompound nbt, World world)
+	public static Entity constructFromNBT(NBTMap nbt, World world)
 	{
 		String entityType = nbt.getString("type");
 		Entity entity = EntityList.constructFromType(entityType, world);

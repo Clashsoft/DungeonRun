@@ -7,7 +7,7 @@ import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
 import com.clashsoft.dungeonrun.item.Item;
 import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.world.World;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import dyvil.tools.nbt.collection.NBTMap;
 import org.newdawn.slick.SlickException;
 
 import java.util.Random;
@@ -139,20 +139,20 @@ public class EntityPlayer extends EntityLiving
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTMap nbt)
 	{
 		super.writeToNBT(nbt);
 
 		nbt.setString("username", this.username);
 		nbt.setInteger("kills", this.kills);
 
-		final NBTTagCompound inventory = new NBTTagCompound("inventory");
+		final NBTMap inventory = new NBTMap();
 		this.inventory.writeToNBT(inventory);
-		nbt.setTagCompound(inventory);
+		nbt.setTag("inventory", inventory);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTMap nbt)
 	{
 		super.readFromNBT(nbt);
 

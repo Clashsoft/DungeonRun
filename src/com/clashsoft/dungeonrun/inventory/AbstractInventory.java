@@ -1,10 +1,10 @@
 package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.item.ItemStack;
-import com.clashsoft.nbt.NamedBinaryTag;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
-import com.clashsoft.nbt.tags.collection.NBTTagList;
-import com.clashsoft.nbt.util.INBTSaveable;
+import dyvil.tools.nbt.NamedBinaryTag;
+import dyvil.tools.nbt.collection.NBTMap;
+import dyvil.tools.nbt.collection.NBTList;
+import dyvil.tools.nbt.util.INBTSaveable;
 
 public abstract class AbstractInventory implements INBTSaveable
 {
@@ -58,29 +58,31 @@ public abstract class AbstractInventory implements INBTSaveable
 	public abstract int size();
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTMap nbt)
 	{
-		NBTTagList slots = new NBTTagList("Slots");
-		for (int i = 0; i < this.size(); i++)
+		final int size = this.size();
+		final NBTList slots = new NBTList(size);
+
+		for (int slotIndex = 0; slotIndex < size; slotIndex++)
 		{
-			final ItemStack stack = this.getStack(i);
+			final ItemStack stack = this.getStack(slotIndex);
 			if (stack != null)
 			{
-				final NBTTagCompound compound = new NBTTagCompound("#" + i);
-				stack.writeToNBT(compound);
-				compound.setInteger("slot", i);
+				final NBTMap compound = new NBTMap();
 
-				slots.addTagCompound(compound);
+				compound.setInteger("slot", slotIndex);
+				stack.writeToNBT(compound);
+				slots.addTag(compound);
 			}
 		}
 
-		nbt.setTagList(slots);
+		nbt.setTag("slots", slots);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTMap nbt)
 	{
-		NBTTagList slots = nbt.getTagList("Slots");
+		NBTList slots = nbt.getTagList("Slots");
 		if (slots == null)
 		{
 			return;
@@ -88,13 +90,13 @@ public abstract class AbstractInventory implements INBTSaveable
 
 		for (int i = 0; i < slots.size(); i++)
 		{
-			final NamedBinaryTag base = slots.tagAt(i);
-			if (!(base instanceof NBTTagCompound))
+			final NamedBinaryTag base = slots.getTag(i);
+			if (!(base instanceof NBTMap))
 			{
 				continue;
 			}
 
-			final NBTTagCompound compound = (NBTTagCompound) base;
+			final NBTMap compound = (NBTMap) base;
 
 			final int slotID = compound.getInteger("slot");
 			final ItemStack stack = ItemStack.readFromNBT(compound);

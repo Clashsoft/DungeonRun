@@ -1,11 +1,11 @@
 package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
-import com.clashsoft.nbt.NamedBinaryTag;
-import com.clashsoft.nbt.tags.collection.NBTTagArray;
-import com.clashsoft.nbt.tags.collection.NBTTagCompound;
-import com.clashsoft.nbt.tags.collection.NBTTagList;
-import com.clashsoft.nbt.util.INBTSaveable;
+import dyvil.tools.nbt.NamedBinaryTag;
+import dyvil.tools.nbt.collection.NBTArray;
+import dyvil.tools.nbt.collection.NBTList;
+import dyvil.tools.nbt.collection.NBTMap;
+import dyvil.tools.nbt.util.INBTSaveable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -195,36 +195,35 @@ public class Chunk implements INBTSaveable
 
 	protected static int index(int x, int y)
 	{
-		return x << 0 | y << 4;
+		return x & 15 | y << 4;
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTMap nbt)
 	{
 		nbt.setInteger("x", this.chunkX);
-		nbt.setTagArray(new NBTTagArray("ids", this.blockIDs));
-		nbt.setTagArray(new NBTTagArray("data", this.metadataValues));
-		nbt.setTagArray(new NBTTagArray("heightMap", this.heightMap));
-		nbt.setTagArray(new NBTTagArray("lightValues", this.lightValues));
+		nbt.setTag("ids", new NBTArray(this.blockIDs));
+		nbt.setTag("data", new NBTArray(this.metadataValues));
+		nbt.setTag("heightMap", new NBTArray(this.heightMap));
+		nbt.setTag("lightValues", new NBTArray(this.lightValues));
 
 		if (!this.foregroundBlocks.isEmpty())
 		{
-			final NBTTagList foregroundBlocks = new NBTTagList("foregroundBlocks");
+			final NBTList foregroundBlocks = new NBTList();
 
 			for (ForegroundBlock block : this.foregroundBlocks)
 			{
-				NBTTagCompound blockNBT = new NBTTagCompound(null);
+				final NBTMap blockNBT = new NBTMap();
 				block.writeToNBT(blockNBT, this.world);
 				foregroundBlocks.addTag(blockNBT);
 			}
 
-			nbt.setTag(foregroundBlocks);
+			nbt.setTag("foregroundBlocks", foregroundBlocks);
 		}
-
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTMap nbt)
 	{
 		this.chunkX = nbt.getInteger("x");
 		this.blockIDs = nbt.getTagArray("ids").getIntArray();
@@ -232,16 +231,16 @@ public class Chunk implements INBTSaveable
 		this.heightMap = nbt.getTagArray("heightMap").getIntArray();
 		this.lightValues = nbt.getTagArray("lightValues").getFloatArray();
 
-		final NBTTagList foregroundBlocks = nbt.getTagList("foregroundBlocks");
+		final NBTList foregroundBlocks = nbt.getTagList("foregroundBlocks");
 
 		if (foregroundBlocks != null)
 		{
 			for (int i = 0; i < foregroundBlocks.size(); i++)
 			{
-				NamedBinaryTag tag = foregroundBlocks.tagAt(i);
-				if (tag instanceof NBTTagCompound)
+				final NamedBinaryTag tag = foregroundBlocks.getTag(i);
+				if (tag instanceof NBTMap)
 				{
-					this.foregroundBlocks.add(ForegroundBlock.readFromNBT((NBTTagCompound) tag, this.world));
+					this.foregroundBlocks.add(ForegroundBlock.readFromNBT((NBTMap) tag, this.world));
 				}
 			}
 		}
