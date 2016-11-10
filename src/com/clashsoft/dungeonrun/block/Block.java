@@ -1,7 +1,9 @@
 package com.clashsoft.dungeonrun.block;
 
 import com.clashsoft.dungeonrun.entity.Entity;
+import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
+import com.clashsoft.dungeonrun.world.ForegroundBlock;
 import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -72,6 +74,10 @@ public class Block
 	public boolean canCollide(World world, int x, int y, Entity entity)
 	{
 		return this.isSolid();
+	}
+
+	public void activate(World world, ForegroundBlock block, EntityPlayer player)
+	{
 	}
 
 	public float getLightValue()

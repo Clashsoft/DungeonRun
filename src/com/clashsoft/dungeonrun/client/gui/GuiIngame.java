@@ -123,6 +123,12 @@ public class GuiIngame extends GuiScreen
 
 		switch (key)
 		{
+		case Input.KEY_W:
+			for (ForegroundBlock block : world.getForegroundBlocks(posX, posY, posX, posY + 1))
+			{
+				block.block.activate(world, block, this.player);
+			}
+			break;
 		case Input.KEY_H:
 			HouseGenerator.generateHouse(world, world.random, posX, posY);
 			break;

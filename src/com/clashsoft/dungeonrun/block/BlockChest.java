@@ -1,5 +1,8 @@
 package com.clashsoft.dungeonrun.block;
 
+import com.clashsoft.dungeonrun.entity.EntityPlayer;
+import com.clashsoft.dungeonrun.world.ForegroundBlock;
+import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.Image;
 
 public class BlockChest extends BlockBackground
@@ -17,6 +20,12 @@ public class BlockChest extends BlockBackground
 		super.registerIcons();
 
 		this.openTexture = getIcon(this.blockName + "_open");
+	}
+
+	@Override
+	public void activate(World world, ForegroundBlock block, EntityPlayer player)
+	{
+		block.metadata = 1;
 	}
 
 	@Override
