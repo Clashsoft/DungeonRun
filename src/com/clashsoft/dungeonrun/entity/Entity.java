@@ -2,6 +2,7 @@ package com.clashsoft.dungeonrun.entity;
 
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.client.renderer.Render;
+import com.clashsoft.dungeonrun.world.ForegroundBlock;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
 import com.clashsoft.nbt.util.INBTSaveable;
@@ -27,7 +28,8 @@ public abstract class Entity implements INBTSaveable
 	public double velocityY;
 	public float  pitch;
 
-	public int airTime = 0;
+	public    int airTime;
+	protected int collision;
 
 	public Entity(World world)
 	{
@@ -150,40 +152,25 @@ public abstract class Entity implements INBTSaveable
 
 	public void updateEntity(Random random)
 	{
-		this.applyGravity();
-		this.processVelocity();
-	}
+		this.collision = this.checkCollide();
 
-	protected void applyGravity()
-	{
-		final int collide = this.checkCollide();
-		if (collide != 0)
+		if (this.collision == 0)
 		{
-			this.airTime = 0;
-			return;
+			this.addVelocity(0, -0.2);
 		}
 
-		final double offset = 0.1 + this.airTime * 0.1;
-
-		if (this.tryMove(0, -offset))
-		{
-			this.airTime = 0;
-		}
-		else
-		{
-			this.airTime++;
-		}
-	}
-
-	protected void processVelocity()
-	{
 		if (this.tryMove(this.velocityX, this.velocityY))
 		{
 			this.velocityX = this.velocityY = 0;
+			this.airTime = 0;
 			return;
 		}
 
-		this.addVelocity(toZero(this.velocityX, 0.1F), toZero(this.velocityY, 0.1F));
+		if (this.collision == 0)
+		{
+			this.airTime++;
+		}
+		// this.addVelocity(toZero(this.velocityX, 0.05F), toZero(this.velocityY, 0.05F));
 	}
 
 	private static double toZero(double from, double by)
@@ -200,7 +187,8 @@ public abstract class Entity implements INBTSaveable
 
 	public boolean isCollided()
 	{
-		return (this.checkCollide() & SOLID) != 0;
+		this.collision = this.checkCollide();
+		return (this.collision & SOLID) != 0;
 	}
 
 	public int checkCollide()
@@ -214,7 +202,7 @@ public abstract class Entity implements INBTSaveable
 		int x1 = (int) Math.floor(this.posX - width / 2);
 		int x2 = (int) Math.floor(this.posX + width / 2);
 		int y1 = (int) (Math.ceil(this.posY));
-		int y2 = (int) Math.floor(this.posY + this.getHeight());
+		int y2 = (int) Math.ceil(this.posY + this.getHeight());
 
 		int result = 0;
 		for (int x = x1; x <= x2; x++)
@@ -222,16 +210,21 @@ public abstract class Entity implements INBTSaveable
 			for (int y = y1; y <= y2; y++)
 			{
 				final Block block = this.worldObj.getBlock(x, y);
-				if (block.isClimbable())
-				{
-					result |= CLIMBABLE;
-				}
 				if (block.isSolid())
 				{
 					result |= SOLID;
 				}
 			}
 		}
+
+		for (ForegroundBlock foregroundBlock : this.worldObj.getForegroundBlocks(x1, y1, x2, y2))
+		{
+			if (foregroundBlock.block.isClimbable())
+			{
+				result |= CLIMBABLE;
+			}
+		}
+
 		return result;
 	}
 

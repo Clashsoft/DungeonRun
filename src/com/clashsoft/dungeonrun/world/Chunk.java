@@ -160,6 +160,11 @@ public class Chunk implements INBTSaveable
 
 	public int getBlockID(int x, int y)
 	{
+		if (y < 0 || y >= HEIGHT)
+		{
+			return 0;
+		}
+
 		return this.blockIDs[index(x, y)];
 	}
 

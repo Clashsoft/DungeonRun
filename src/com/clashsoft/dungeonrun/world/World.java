@@ -96,7 +96,7 @@ public class World
 
 	protected Block getBlockByID(int id)
 	{
-		return this.idToBlock[id];
+		return id >= this.idToBlock.length ? null : this.idToBlock[id];
 	}
 
 	public Chunk getChunk(int x)

@@ -6,11 +6,10 @@ import java.util.Random;
 
 public abstract class EntityLiving extends EntityDamagable
 {
-	public static final int STANDING = 0;
-	public static final int WALKING = 1;
+	public static final int STANDING  = 0;
+	public static final int WALKING   = 1;
 	public static final int SPRINTING = 2;
 
-	protected boolean jumping;
 	protected boolean climbing;
 
 	protected int movement = STANDING;
@@ -22,15 +21,10 @@ public abstract class EntityLiving extends EntityDamagable
 
 	public void jump()
 	{
-		if (this.airTime == 0 && !this.climbing)
+		if (this.airTime == 0 && this.velocityY == 0 && (this.collision & Entity.CLIMBABLE) == 0)
 		{
-			this.jumping = true;
+			this.addVelocity(0, 1.25);
 		}
-	}
-
-	public boolean isJumping()
-	{
-		return this.jumping;
 	}
 
 	public int getMovement()
@@ -71,10 +65,8 @@ public abstract class EntityLiving extends EntityDamagable
 			break;
 		}
 
-		if (this.climbing && (this.checkCollide() & CLIMBABLE) != 0)
+		if (this.climbing && (this.collision & CLIMBABLE) != 0)
 		{
-			this.jumping = false;
-
 			if (this.pitch >= 45 && this.pitch <= 135)
 			{
 				this.tryMove(0, 0.2);
@@ -83,12 +75,6 @@ public abstract class EntityLiving extends EntityDamagable
 			{
 				this.tryMove(0, -0.2);
 			}
-		}
-
-		if (this.jumping)
-		{
-			this.jumping = false;
-			this.addVelocity(0, 0.6);
 		}
 
 		super.updateEntity(random);
