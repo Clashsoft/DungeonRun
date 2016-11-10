@@ -14,11 +14,11 @@ import java.util.Random;
 
 public class EntityPlayer extends EntityLiving
 {
-	public String username = "";
+	private String username;
 
 	public final InventoryPlayer inventory;
 
-	private int attackTime = 0;
+	private int attackTime;
 
 	private int kills;
 
@@ -55,6 +55,11 @@ public class EntityPlayer extends EntityLiving
 	public float getHeight()
 	{
 		return 24 / 16F;
+	}
+
+	public String getUsername()
+	{
+		return this.username;
 	}
 
 	public int getKillCount()

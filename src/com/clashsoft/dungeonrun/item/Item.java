@@ -17,19 +17,12 @@ public class Item
 
 	public final String name;
 
-	private int maxUses;
 	private Image icon;
 
 	public Item(String id)
 	{
 		this.name = id;
 		items.put(id, this);
-	}
-
-	public Item setMaxUses(int maxUses)
-	{
-		this.maxUses = maxUses;
-		return this;
 	}
 
 	public String getLocalizedName(ItemStack stack)
@@ -54,7 +47,12 @@ public class Item
 
 	public int getMaxUses(ItemStack stack)
 	{
-		return this.maxUses;
+		return 0;
+	}
+
+	public int getMaxStackSize(ItemStack stack)
+	{
+		return 64;
 	}
 
 	public int getSwingType(ItemStack stack)

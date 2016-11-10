@@ -24,6 +24,37 @@ public abstract class AbstractInventory implements INBTSaveable
 		return -1;
 	}
 
+	public boolean add(ItemStack stack)
+	{
+		int empty = -1;
+
+		for (int i = 0; i < this.size(); i++)
+		{
+			final ItemStack slot = this.getStack(i);
+			if (slot == null)
+			{
+				if (empty < 0)
+				{
+					empty = i;
+				}
+				continue;
+			}
+
+			if (slot.merge(stack))
+			{
+				return true;
+			}
+		}
+
+		if (empty < 0)
+		{
+			return false;
+		}
+
+		this.setStack(empty, stack);
+		return true;
+	}
+
 	public abstract int size();
 
 	@Override

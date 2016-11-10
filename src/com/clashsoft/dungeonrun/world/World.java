@@ -159,7 +159,7 @@ public class World
 		if (entity instanceof EntityPlayer)
 		{
 			final EntityPlayer player = (EntityPlayer) entity;
-			this.playerEntitys.put(player.username, player);
+			this.playerEntitys.put(player.getUsername(), player);
 		}
 		this.entitys.put(entity.id, entity);
 	}
@@ -169,7 +169,7 @@ public class World
 		final Entity entity = this.entitys.remove(id);
 		if (entity instanceof EntityPlayer)
 		{
-			this.playerEntitys.remove(((EntityPlayer) entity).username);
+			this.playerEntitys.remove(((EntityPlayer) entity).getUsername());
 		}
 	}
 
