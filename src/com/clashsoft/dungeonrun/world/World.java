@@ -238,6 +238,34 @@ public class World
 		}
 	}
 
+	public void addForegroundBlock(ForegroundBlock block)
+	{
+		final Collection<ForegroundBlock> list = this.getChunkAtCoordinates(block.x).getForegroundBlocks();
+
+		if (!list.contains(block))
+		{
+			list.add(block);
+		}
+	}
+
+	public Collection<ForegroundBlock> getForegroundBlocks(int x1, int y1, int x2, int y2)
+	{
+		final Collection<ForegroundBlock> list = new ArrayList<>();
+
+		for (int cx = x1 >> 4; cx <= x2 >> 4; cx++)
+		{
+			for (ForegroundBlock block : this.getChunk(cx).getForegroundBlocks())
+			{
+				if (block.x >= x1 && block.x <= x2 && block.y >= y1 && block.y <= y2)
+				{
+					list.add(block);
+				}
+			}
+		}
+
+		return list;
+	}
+
 	public int getHeight(int x)
 	{
 		final Chunk chunk = this.getChunkAtCoordinates(x);

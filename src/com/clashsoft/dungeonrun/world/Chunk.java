@@ -1,9 +1,15 @@
 package com.clashsoft.dungeonrun.world;
 
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.nbt.NamedBinaryTag;
 import com.clashsoft.nbt.tags.collection.NBTTagArray;
 import com.clashsoft.nbt.tags.collection.NBTTagCompound;
+import com.clashsoft.nbt.tags.collection.NBTTagList;
 import com.clashsoft.nbt.util.INBTSaveable;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Chunk implements INBTSaveable
 {
@@ -25,6 +31,8 @@ public class Chunk implements INBTSaveable
 	private float[] lightValues;
 	private int[]   heightMap;
 
+	private List<ForegroundBlock> foregroundBlocks = new ArrayList<>();
+
 	private boolean hasChanged;
 
 	public Chunk(World w, int x)
@@ -37,6 +45,11 @@ public class Chunk implements INBTSaveable
 
 		this.lightValues = new float[WIDTH * HEIGHT];
 		this.heightMap = new int[WIDTH];
+	}
+
+	public Collection<ForegroundBlock> getForegroundBlocks()
+	{
+		return this.foregroundBlocks;
 	}
 
 	protected void initLightAndHeightMap()
@@ -188,6 +201,21 @@ public class Chunk implements INBTSaveable
 		nbt.setTagArray(new NBTTagArray("data", this.metadataValues));
 		nbt.setTagArray(new NBTTagArray("heightMap", this.heightMap));
 		nbt.setTagArray(new NBTTagArray("lightValues", this.lightValues));
+
+		if (!this.foregroundBlocks.isEmpty())
+		{
+			final NBTTagList foregroundBlocks = new NBTTagList("foregroundBlocks");
+
+			for (ForegroundBlock block : this.foregroundBlocks)
+			{
+				NBTTagCompound blockNBT = new NBTTagCompound(null);
+				block.writeToNBT(blockNBT, this.world);
+				foregroundBlocks.addTag(blockNBT);
+			}
+
+			nbt.setTag(foregroundBlocks);
+		}
+
 	}
 
 	@Override
@@ -198,6 +226,20 @@ public class Chunk implements INBTSaveable
 		this.metadataValues = nbt.getTagArray("data").getIntArray();
 		this.heightMap = nbt.getTagArray("heightMap").getIntArray();
 		this.lightValues = nbt.getTagArray("lightValues").getFloatArray();
+
+		final NBTTagList foregroundBlocks = nbt.getTagList("foregroundBlocks");
+
+		if (foregroundBlocks != null)
+		{
+			for (int i = 0; i < foregroundBlocks.size(); i++)
+			{
+				NamedBinaryTag tag = foregroundBlocks.tagAt(i);
+				if (tag instanceof NBTTagCompound)
+				{
+					this.foregroundBlocks.add(ForegroundBlock.readFromNBT((NBTTagCompound) tag, this.world));
+				}
+			}
+		}
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
 import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
+import com.clashsoft.dungeonrun.world.ForegroundBlock;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.gen.HouseGenerator;
 import com.clashsoft.dungeonrun.world.gen.TreeGenerator;
@@ -92,11 +93,17 @@ public class GuiIngame extends GuiScreen
 			{
 				for (int x = minX; x <= maxX; x++)
 				{
-					this.renderBlocks.renderBlock(world, x, y, posY, camX, camY);
+					this.renderBlocks.renderBlock(world, x, y, camX, camY);
 				}
 			}
 		}
-		for (Entity entity : this.player.worldObj.getEntitys())
+
+		for (ForegroundBlock block : world.getForegroundBlocks(minX, minY, maxX, maxY))
+		{
+			this.renderBlocks.renderBlock(block.block, block.metadata, block.x, block.y, camX, camY);
+		}
+
+		for (Entity entity : world.getEntitys())
 		{
 			final Render render = entity.getRenderer();
 			render.width = width;
@@ -123,8 +130,8 @@ public class GuiIngame extends GuiScreen
 			TreeGenerator.generateTree(world, world.random, posX, posY);
 			break;
 		case Input.KEY_L:
-			world.setBlock(Blocks.plankLadder, 0, posX, posY + 1);
-			world.setBlock(Blocks.plankLadder, 0, posX, posY + 2);
+			world.addForegroundBlock(new ForegroundBlock(posX, posY + 1, Blocks.ladder, 0));
+			world.addForegroundBlock(new ForegroundBlock(posX, posY + 2, Blocks.ladder, 0));
 			break;
 		case Input.KEY_ESCAPE:
 			this.dr.pauseGame();

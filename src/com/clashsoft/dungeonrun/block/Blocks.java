@@ -18,11 +18,11 @@ public class Blocks
 
 	public static Block cobbleStone       = new Block("cobblestone");
 	public static Block cobbleStoneWall   = new Block("cobblestone_wall").setBackground();
-	public static Block cobbleStoneLadder = new BlockLadder("cobblestone_ladder").setBackground();
 
 	public static Block planks      = new Block("planks");
 	public static Block plankWall   = new Block("plank_wall").setBackground();
-	public static Block plankLadder = new BlockLadder("plank_ladder").setBackground();
+
+	public static Block ladder = new BlockLadder("ladder").setBackground();
 
 	public static Block torch = new Block("torch").setBackground();
 	public static Block water = new BlockLadder("water").setBackground();
