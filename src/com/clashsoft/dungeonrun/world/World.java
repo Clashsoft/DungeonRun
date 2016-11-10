@@ -91,7 +91,7 @@ public class World
 
 	protected int getBlockID(Block block)
 	{
-		return this.blockToID.get(block.getBlockName());
+		return block == null ? 0 : this.blockToID.get(block.getBlockName());
 	}
 
 	protected Block getBlockByID(int id)

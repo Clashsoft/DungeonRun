@@ -1,6 +1,6 @@
 package com.clashsoft.dungeonrun.client.gui;
 
-import com.clashsoft.dungeonrun.block.Blocks;
+import com.clashsoft.dungeonrun.block.BlockLadder;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.client.renderer.Render;
@@ -130,8 +130,8 @@ public class GuiIngame extends GuiScreen
 			TreeGenerator.generateTree(world, world.random, posX, posY);
 			break;
 		case Input.KEY_L:
-			world.addForegroundBlock(new ForegroundBlock(posX, posY + 1, Blocks.ladder, 0));
-			world.addForegroundBlock(new ForegroundBlock(posX, posY + 2, Blocks.ladder, 0));
+			BlockLadder.setLadder(world, posX, posY + 1);
+			BlockLadder.setLadder(world, posX, posY + 2);
 			break;
 		case Input.KEY_ESCAPE:
 			this.dr.pauseGame();

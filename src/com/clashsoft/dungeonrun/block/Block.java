@@ -14,8 +14,7 @@ public class Block
 	public static final Map<String, Block> blocks = new TreeMap<>();
 
 	protected final String blockName;
-	protected boolean solid = true;
-	protected Image  texture;
+	protected       Image  texture;
 
 	public Block(String id)
 	{
@@ -24,15 +23,14 @@ public class Block
 		blocks.put(id, this);
 	}
 
-	public Block setBackground()
+	public String getBlockName()
 	{
-		this.solid = false;
-		return this;
+		return this.blockName;
 	}
 
 	public boolean isSolid()
 	{
-		return this.solid;
+		return true;
 	}
 
 	public boolean isAir()
@@ -43,11 +41,6 @@ public class Block
 	public boolean isClimbable()
 	{
 		return false;
-	}
-
-	public String getBlockName()
-	{
-		return this.blockName;
 	}
 
 	public void registerIcons()
@@ -78,7 +71,7 @@ public class Block
 
 	public boolean canCollide(World world, int x, int y, Entity entity)
 	{
-		return this.solid;
+		return this.isSolid();
 	}
 
 	public float getLightValue()

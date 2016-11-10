@@ -1,6 +1,7 @@
 package com.clashsoft.dungeonrun.world.gen;
 
 import com.clashsoft.dungeonrun.block.Block;
+import com.clashsoft.dungeonrun.block.BlockLadder;
 import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.entity.EntityPotster;
 import com.clashsoft.dungeonrun.world.ForegroundBlock;
@@ -66,7 +67,7 @@ public class HouseGenerator
 			// Ladders
 			for (int l = 0; l <= height; l++)
 			{
-				world.addForegroundBlock(new ForegroundBlock(ladder, y + i * height + l + 1, Blocks.ladder, 0));
+				BlockLadder.setLadder(world, ladder, y + i * height + l + 1);
 			}
 
 			// Chest

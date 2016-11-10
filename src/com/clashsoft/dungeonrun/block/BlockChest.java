@@ -2,7 +2,7 @@ package com.clashsoft.dungeonrun.block;
 
 import org.newdawn.slick.Image;
 
-public class BlockChest extends Block
+public class BlockChest extends BlockBackground
 {
 	private Image openTexture;
 
