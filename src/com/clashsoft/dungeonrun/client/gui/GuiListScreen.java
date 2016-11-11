@@ -26,7 +26,7 @@ public abstract class GuiListScreen extends GuiScreen
 		final String title = this.getTitle();
 
 		this.dr.fontRenderer
-			.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, 20, title, TITLE_COLOR, true);
+			.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, this.getYOffset(), title, TITLE_COLOR, true);
 
 		for (int i = 0, count = this.entryCount(); i < count; i++)
 		{
@@ -39,7 +39,7 @@ public abstract class GuiListScreen extends GuiScreen
 		final String text = this.getEntry(i);
 		final float textWidth = this.dr.fontRenderer.getStringWidth(text);
 		final float x = (width - textWidth) / 2 + this.getXOffset();
-		final float y = i * 20 + this.getYOffset();
+		final float y = i * 20 + this.getYOffset() + 20;
 
 		this.drawEntry(text, i, x, y, textWidth);
 	}
@@ -117,7 +117,7 @@ public abstract class GuiListScreen extends GuiScreen
 
 	public int getYOffset()
 	{
-		return 40;
+		return 20;
 	}
 
 	public abstract int entryCount();

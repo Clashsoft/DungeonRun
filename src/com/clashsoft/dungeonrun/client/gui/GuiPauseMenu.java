@@ -1,6 +1,7 @@
 package com.clashsoft.dungeonrun.client.gui;
 
 import com.clashsoft.dungeonrun.client.engine.I18n;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 public class GuiPauseMenu extends GuiListScreen
@@ -48,5 +49,17 @@ public class GuiPauseMenu extends GuiListScreen
 			this.dr.stopGame();
 			break;
 		}
+	}
+
+	@Override
+	public void keyTyped(int key, char c) throws SlickException
+	{
+		if (key == Input.KEY_ESCAPE)
+		{
+			this.dr.resumeGame();
+			return;
+		}
+
+		super.keyTyped(key, c);
 	}
 }
