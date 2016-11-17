@@ -4,7 +4,6 @@ import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.client.gui.GuiDeath;
 import com.clashsoft.dungeonrun.client.renderer.entity.RenderPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
-import com.clashsoft.dungeonrun.item.Item;
 import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.world.World;
 import dyvil.tools.nbt.collection.NBTMap;
@@ -32,17 +31,6 @@ public class EntityPlayer extends EntityLiving
 		super(world);
 		this.username = username;
 		this.inventory = new InventoryPlayer(this);
-
-		int index = 0;
-		for (Item item : Item.items.values())
-		{
-			this.inventory.setStack(index++, new ItemStack(item));
-
-			if (index >= 8)
-			{
-				break;
-			}
-		}
 	}
 
 	@Override
