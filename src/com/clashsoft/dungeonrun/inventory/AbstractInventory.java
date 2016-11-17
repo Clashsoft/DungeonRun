@@ -82,7 +82,7 @@ public abstract class AbstractInventory implements INBTSaveable
 	@Override
 	public void readFromNBT(NBTMap nbt)
 	{
-		NBTList slots = nbt.getTagList("Slots");
+		final NBTList slots = nbt.getTagList("slots");
 		if (slots == null)
 		{
 			return;

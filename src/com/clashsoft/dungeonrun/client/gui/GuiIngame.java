@@ -8,7 +8,6 @@ import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
-import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import com.clashsoft.dungeonrun.world.ForegroundBlock;
 import com.clashsoft.dungeonrun.world.World;
@@ -51,11 +50,7 @@ public class GuiIngame extends GuiScreen
 		final InventoryPlayer inventory = this.player.inventory;
 		for (int i = 0; i < 8; i++)
 		{
-			ItemStack stack = inventory.getStack(i);
-			if (stack != null)
-			{
-				stack.item.getIcon(stack).draw(x + i * 18 + 2, 4);
-			}
+			GuiInventory.drawItem(x + i * 18 + 2, 4, inventory.getStack(i), this.dr);
 		}
 
 		ResourceHelper.hotbarSelection.draw(x + inventory.handSlot * 18 - 1, 1);
@@ -145,6 +140,11 @@ public class GuiIngame extends GuiScreen
 		case Input.KEY_I:
 			this.dr.displayGuiScreen(new GuiInventory(this.player));
 			break;
+		}
+
+		if (key >= Input.KEY_1 && key <= Input.KEY_8)
+		{
+			this.player.inventory.handSlot = key - Input.KEY_1;
 		}
 	}
 

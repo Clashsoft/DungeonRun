@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.client.gui;
 
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
@@ -99,10 +100,21 @@ public class GuiInventory extends GuiListScreen
 		}
 
 		final ItemStack stack = this.inventory.getStack(i);
-		if (stack != null)
+		drawItem(x - 20, y - 4, stack, this.dr);
+	}
+
+	public static void drawItem(int x, int y, ItemStack stack, DungeonRunClient dr)
+	{
+		if (stack == null)
 		{
-			stack.item.getIcon(stack).draw(x - 20, y - 4);
-			this.dr.smallFontRenderer.drawString(x - 20, y - 4, Integer.toString(stack.size), 0xFFFFFF, true);
+			return;
+		}
+
+		stack.item.getIcon(stack).draw(x, y);
+
+		if (stack.size != 1)
+		{
+			dr.smallFontRenderer.drawString(x, y, Integer.toString(stack.size), 0xFFFFFF, true);
 		}
 	}
 
