@@ -47,5 +47,7 @@ item.iron_hammer.name=Iron Hammer
 item.wood_sword.name=Wooden Sword
 item.wood_hammer.name=Wooden Hammer
 
+item.copper_coin.name=Copper Coin
+item.silver_coin.name=Silver Coin
 item.gold_coin.name=Gold Coin
 item.green_gem.name=Green Gem

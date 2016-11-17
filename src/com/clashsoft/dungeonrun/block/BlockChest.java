@@ -37,7 +37,7 @@ public class BlockChest extends BlockBackground
 
 		if (this != Blocks.stoneChest)
 		{
-			player.inventory.add(new ItemStack(Items.gold_coin, 0, 2 + world.random.nextInt(8)));
+			player.inventory.add(new ItemStack(Items.copper_coin, 0, 2 + world.random.nextInt(8)));
 			return;
 		}
 
