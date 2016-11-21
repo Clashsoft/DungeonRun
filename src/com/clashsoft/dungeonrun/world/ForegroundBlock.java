@@ -8,8 +8,8 @@ public class ForegroundBlock
 	public final int x;
 	public final int y;
 
-	public final Block block;
-	public       int   metadata;
+	public Block block;
+	public int   metadata;
 
 	public ForegroundBlock(int x, int y, Block block, int metadata)
 	{
@@ -33,7 +33,7 @@ public class ForegroundBlock
 
 		ForegroundBlock that = (ForegroundBlock) o;
 
-		return this.x == that.x && this.y == that.y && this.metadata == that.metadata && this.block == that.block;
+		return this.x == that.x && this.y == that.y;
 	}
 
 	@Override

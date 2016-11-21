@@ -213,9 +213,12 @@ public class Chunk implements INBTSaveable
 
 			for (ForegroundBlock block : this.foregroundBlocks)
 			{
-				final NBTMap blockNBT = new NBTMap();
-				block.writeToNBT(blockNBT, this.world);
-				foregroundBlocks.addTag(blockNBT);
+				if (block.block != null)
+				{
+					final NBTMap blockNBT = new NBTMap();
+					block.writeToNBT(blockNBT, this.world);
+					foregroundBlocks.addTag(blockNBT);
+				}
 			}
 
 			nbt.setTag("foregroundBlocks", foregroundBlocks);
