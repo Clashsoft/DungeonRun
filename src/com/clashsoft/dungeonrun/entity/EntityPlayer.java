@@ -78,7 +78,8 @@ public class EntityPlayer extends EntityLiving
 		}
 
 		final ItemStack selected = this.inventory.getHeldStack();
-		final float damage = 1F + (selected != null ? selected.item.getDamageVsEntity(selected) : 0F);
+		final float damage = 1F + (selected != null ? selected.item.getDamage(selected) : 0F);
+		final float knockback = 0.1F + (selected != null ? selected.item.getKnockback(selected) : 0F);
 
 		for (Entity entity : this.worldObj.getEntitys())
 		{
@@ -92,6 +93,7 @@ public class EntityPlayer extends EntityLiving
 			{
 				this.kills++;
 			}
+			entity.addVelocity((this.pitch >= 90 && this.pitch <= 270 ? -1 : 1) * knockback, 0.5);
 		}
 	}
 

@@ -3,6 +3,7 @@ package com.clashsoft.dungeonrun.item;
 public class ItemTool extends Item
 {
 	private final float        damage;
+	private float knockback = 0.4F;
 	private final ToolMaterial material;
 	private boolean dagger;
 
@@ -19,6 +20,12 @@ public class ItemTool extends Item
 		return this;
 	}
 
+	public ItemTool withKnockback(float knockback)
+	{
+		this.knockback = knockback;
+		return this;
+	}
+
 	@Override
 	public int getSwingType(ItemStack stack)
 	{
@@ -26,8 +33,14 @@ public class ItemTool extends Item
 	}
 
 	@Override
-	public float getDamageVsEntity(ItemStack stack)
+	public float getDamage(ItemStack stack)
 	{
 		return this.damage + this.material.getEntityDamage();
+	}
+
+	@Override
+	public float getKnockback(ItemStack stack)
+	{
+		return this.knockback;
 	}
 }

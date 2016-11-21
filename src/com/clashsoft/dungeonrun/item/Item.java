@@ -40,7 +40,12 @@ public class Item
 		this.icon = ResourceHelper.loadTexture("resources/textures/items/" + this.name + ".png");
 	}
 
-	public float getDamageVsEntity(ItemStack stack)
+	public float getDamage(ItemStack stack)
+	{
+		return 0F;
+	}
+
+	public float getKnockback(ItemStack stack)
 	{
 		return 0F;
 	}
