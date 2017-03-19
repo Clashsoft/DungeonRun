@@ -22,7 +22,8 @@ public class Blocks
 	public static BlockSolid      planks    = new BlockSolid("planks");
 	public static BlockBackground plankWall = new BlockBackground("plank_wall");
 
-	public static BlockLadder ladder = new BlockLadder("ladder");
+	public static BlockLadder     ladder    = new BlockLadder("ladder");
+	public static BlockBackground clothRoof = new BlockBackground("cloth_roof");
 
 	public static BlockBackground torch = new BlockBackground("torch");
 	public static BlockLadder     water = new BlockLadder("water");

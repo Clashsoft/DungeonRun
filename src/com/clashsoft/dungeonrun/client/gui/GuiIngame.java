@@ -127,6 +127,9 @@ public class GuiIngame extends GuiScreen
 		case Input.KEY_H:
 			HouseGenerator.generateHouse(world, world.random, posX, posY);
 			break;
+		case Input.KEY_K:
+			HouseGenerator.generateStore(world, world.random, posX, posY);
+			break;
 		case Input.KEY_T:
 			TreeGenerator.generateTree(world, world.random, posX, posY);
 			break;

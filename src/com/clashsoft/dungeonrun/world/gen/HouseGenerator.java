@@ -4,6 +4,7 @@ import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.block.BlockLadder;
 import com.clashsoft.dungeonrun.block.Blocks;
 import com.clashsoft.dungeonrun.entity.EntityPotster;
+import com.clashsoft.dungeonrun.entity.npc.EntityClerk;
 import com.clashsoft.dungeonrun.world.ForegroundBlock;
 import com.clashsoft.dungeonrun.world.World;
 
@@ -11,6 +12,35 @@ import java.util.Random;
 
 public class HouseGenerator
 {
+	public static void generate(World world, Random random, int x, int y)
+	{
+		if (random.nextInt(10) == 0)
+		{
+			generateStore(world, random, x, y);
+			return;
+		}
+		generateHouse(world, random, x, y);
+	}
+
+	public static void generateStore(World world, Random random, int x, int y)
+	{
+		for (int i = -2; i <= 2; i++)
+		{
+			world.addForegroundBlock(new ForegroundBlock(x + i, y + 3, Blocks.clothRoof, 0));
+			world.setBlock(Blocks.planks, 0, x + i, y + 3);
+			world.setBlock(Blocks.plankWall, 0, x + i, y + 2);
+			world.setBlock(Blocks.plankWall, 0, x + i, y + 1);
+			world.setBlock(Blocks.planks, 0, x + i, y);
+		}
+
+		world.addForegroundBlock(new ForegroundBlock(x - 2, y + 2, Blocks.torch, 0));
+		world.addForegroundBlock(new ForegroundBlock(x + 2, y + 2, Blocks.torch, 0));
+
+		final EntityClerk clerk = new EntityClerk(world);
+		clerk.setLocation(x + 0.5, y);
+		world.spawnEntity(clerk);
+	}
+
 	public static void generateHouse(World world, Random random, int x, int y)
 	{
 		generateHouse(world, random, x, y, 5 + random.nextInt(10));

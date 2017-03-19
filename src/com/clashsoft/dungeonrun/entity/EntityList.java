@@ -1,5 +1,6 @@
 package com.clashsoft.dungeonrun.entity;
 
+import com.clashsoft.dungeonrun.entity.npc.EntityClerk;
 import com.clashsoft.dungeonrun.world.World;
 import dyvil.tools.nbt.collection.NBTMap;
 
@@ -22,6 +23,7 @@ public class EntityList
 		addMapping("player", EntityPlayer.class);
 		addMapping("monster", EntityMonster.class);
 		addMapping("potster", EntityPotster.class);
+		addMapping("clerk", EntityClerk.class);
 	}
 	
 	public static void addMapping(String name, Class clazz)

@@ -22,12 +22,14 @@ public class ResourceHelper
 
 	public static SpriteSheet playerSprites;
 	public static SpriteSheet monsterSprites;
+	public static SpriteSheet npcSprites;
 	public static SpriteSheet iconsSprite;
 
 	public static void setupTextures() throws SlickException
 	{
 		playerSprites = new SpriteSheet(loadTexture("resources/textures/entity/knights.png"), 12, 24);
 		monsterSprites = new SpriteSheet(loadTexture("resources/textures/entity/enemies.png"), 32, 32);
+		npcSprites = new SpriteSheet(loadTexture("resources/textures/entity/npcs.png"), 16, 28);
 
 		title = loadTexture("resources/textures/gui/title.png");
 		introBackground = loadTexture("resources/textures/gui/intro_background.png");
