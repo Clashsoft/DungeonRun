@@ -21,6 +21,11 @@ public final class ItemStack
 		this.metadata = metadata;
 	}
 
+	public int getValue()
+	{
+		return this.item.getValue(this) * this.size;
+	}
+
 	public boolean merge(ItemStack other)
 	{
 		if (!this.itemEquals(other))

@@ -43,4 +43,10 @@ public class ItemTool extends Item
 	{
 		return this.knockback;
 	}
+
+	@Override
+	public int getValue(ItemStack stack)
+	{
+		return (int) this.getDamage(stack) + this.material.getMaxUses();
+	}
 }

@@ -8,6 +8,8 @@ import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
+import com.clashsoft.dungeonrun.item.Item;
+import com.clashsoft.dungeonrun.item.Items;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import com.clashsoft.dungeonrun.world.ForegroundBlock;
 import com.clashsoft.dungeonrun.world.World;
@@ -55,11 +57,31 @@ public class GuiIngame extends GuiScreen
 
 		ResourceHelper.hotbarSelection.draw(x + inventory.handSlot * 18 - 1, 1);
 
+		this.drawCoins(inventory);
+
 		if (this.worldSaving)
 		{
 			String text = I18n.getString("world.saving");
 			float w = this.dr.fontRenderer.getStringWidth(text);
 			this.dr.fontRenderer.drawStringWithShadow(width - 20F - w, height - 20F, text, 0xFFFFFF);
+		}
+	}
+
+	private static final Item[] COINS = { Items.copper_coin, Items.silver_coin, Items.gold_coin };
+
+	private void drawCoins(InventoryPlayer inventory)
+	{
+		int coins = inventory.getCoins();
+
+		for (int i = COINS.length - 1; i >= 0; i--)
+		{
+			final Item item = COINS[i];
+			item.getIcon(null).draw(10, 10 + i * 20);
+
+			final int value = item.getCoinValue();
+			final int amount = coins / value;
+			coins -= amount * value;
+			this.dr.fontRenderer.drawStringWithShadow(30, 14 + i * 20, "x " + amount);
 		}
 	}
 

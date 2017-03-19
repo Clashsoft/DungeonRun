@@ -65,6 +65,16 @@ public class Item
 		return ROTATE;
 	}
 
+	public int getCoinValue()
+	{
+		return 0;
+	}
+
+	public int getValue(ItemStack stack)
+	{
+		return 0;
+	}
+
 	public ItemStack[] getSubItems()
 	{
 		return new ItemStack[] { new ItemStack(this) };
