@@ -5,6 +5,7 @@ import com.clashsoft.dungeonrun.client.gui.GuiDeath;
 import com.clashsoft.dungeonrun.client.renderer.entity.RenderPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
 import com.clashsoft.dungeonrun.item.ItemStack;
+import com.clashsoft.dungeonrun.item.Items;
 import com.clashsoft.dungeonrun.world.World;
 import dyvil.tools.nbt.collection.NBTMap;
 import org.newdawn.slick.SlickException;
@@ -31,6 +32,8 @@ public class EntityPlayer extends EntityLiving
 		super(world);
 		this.username = username;
 		this.inventory = new InventoryPlayer(this);
+		this.inventory.add(new ItemStack(Items.wood_sword));
+		this.inventory.add(new ItemStack(Items.gold_coin));
 	}
 
 	@Override

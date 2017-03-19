@@ -64,4 +64,9 @@ public class Item
 	{
 		return ROTATE;
 	}
+
+	public ItemStack[] getSubItems()
+	{
+		return new ItemStack[] { new ItemStack(this) };
+	}
 }

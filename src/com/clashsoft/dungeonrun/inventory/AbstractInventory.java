@@ -24,11 +24,31 @@ public abstract class AbstractInventory implements INBTSaveable
 		return -1;
 	}
 
-	public boolean add(ItemStack stack)
+	public boolean canAdd(ItemStack stack)
+	{
+		int stackSize = stack.size;
+		for (int i = 0, size = this.size(); i < size; i++)
+		{
+			final ItemStack slot = this.getStack(i);
+			if (slot == null)
+			{
+				return true;
+			}
+
+			if (slot.itemEquals(stack))
+			{
+				stackSize -= stack.item.getMaxStackSize(stack) - slot.size;
+			}
+		}
+
+		return stackSize <= 0;
+	}
+
+	public void add(ItemStack stack)
 	{
 		int empty = -1;
 
-		for (int i = 0; i < this.size(); i++)
+		for (int i = 0, size = this.size(); i < size; i++)
 		{
 			final ItemStack slot = this.getStack(i);
 			if (slot == null)
@@ -42,17 +62,58 @@ public abstract class AbstractInventory implements INBTSaveable
 
 			if (slot.merge(stack))
 			{
-				return true;
+				return;
 			}
 		}
 
 		if (empty < 0)
 		{
-			return false;
+			return;
 		}
 
 		this.setStack(empty, stack);
-		return true;
+	}
+
+	public void remove(ItemStack stack)
+	{
+		for (int i = 0, size = this.size(); i < size; i++)
+		{
+			final ItemStack slot = this.getStack(i);
+			if (!slot.itemEquals(stack))
+			{
+				continue;
+			}
+
+			if (slot.size - stack.size > 0)
+			{
+				slot.size -= stack.size;
+				stack.size = 0;
+				return;
+			}
+			stack.size -= slot.size;
+			this.setStack(i, null); // remove the item from the slot
+		}
+	}
+
+	public boolean canRemove(ItemStack stack)
+	{
+		int stackSize = stack.size;
+		for (int i = 0, size = this.size(); i < size; i++)
+		{
+			final ItemStack slot = this.getStack(i);
+			if (slot == null || !slot.itemEquals(stack))
+			{
+				continue;
+			}
+
+			if (slot.size >= stack.size)
+			{
+				return true;
+			}
+
+			stackSize -= slot.size;
+		}
+		return stackSize <= 0;
 	}
 
 	public abstract int size();
