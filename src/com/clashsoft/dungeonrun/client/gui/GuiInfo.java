@@ -15,19 +15,19 @@ public class GuiInfo extends GuiScreen
 	}
 	
 	@Override
-	public void drawScreen(Graphics g, int par1, int par2) throws SlickException
+	public void drawScreen(Graphics g, int par1, int par2)
 	{
 		this.drawBricks(par1, par2);
 		this.dr.fontRenderer.drawStringWithShadow((par1 - this.dr.fontRenderer.getStringWidth(this.message)) / 2, (par2 - this.dr.fontRenderer.getStringHeigth(this.message)) / 2, this.message, 0xFFFFFF);
 	}
 	
 	@Override
-	public void updateScreen() throws SlickException
+	public void updateScreen()
 	{
 	}
 	
 	@Override
-	public void keyTyped(int key, char c) throws SlickException
+	public void keyTyped(int key, char c)
 	{
 	}
 }

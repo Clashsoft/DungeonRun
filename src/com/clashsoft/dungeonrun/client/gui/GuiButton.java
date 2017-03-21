@@ -3,7 +3,6 @@ package com.clashsoft.dungeonrun.client.gui;
 import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import com.clashsoft.dungeonrun.util.DimensionHelper.Pos2;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.SlickException;
 
 public class GuiButton
 {
@@ -22,7 +21,7 @@ public class GuiButton
 		this.text = text;
 	}
 	
-	public void render() throws SlickException
+	public void render()
 	{
 		if (!this.isInvisible)
 		{

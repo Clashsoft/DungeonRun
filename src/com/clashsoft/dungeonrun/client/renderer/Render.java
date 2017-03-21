@@ -1,14 +1,13 @@
 package com.clashsoft.dungeonrun.client.renderer;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 
 public abstract class Render<T>
 {
 	public int	width;
 	public int	height;
 	
-	public void render(T renderable, Graphics g, double x, double y, double camX, double camY) throws SlickException
+	public void render(T renderable, Graphics g, double x, double y, double camX, double camY)
 	{
 		double offX = camX - x;
 		double offY = camY - y;

@@ -4,7 +4,6 @@ import com.clashsoft.dungeonrun.DungeonRun;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.WorldInfo;
-import org.newdawn.slick.SlickException;
 
 import java.awt.*;
 import java.io.File;
@@ -24,7 +23,7 @@ public class GuiSelectWorld extends GuiListScreen
 	}
 
 	@Override
-	public void initGUI() throws SlickException
+	public void initGUI()
 	{
 		this.worlds.clear();
 
@@ -87,7 +86,7 @@ public class GuiSelectWorld extends GuiListScreen
 	}
 
 	@Override
-	public void onEntryUsed(int i) throws SlickException
+	public void onEntryUsed(int i)
 	{
 		if (i < this.worlds.size())
 		{

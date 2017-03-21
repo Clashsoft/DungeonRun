@@ -19,7 +19,7 @@ public class GuiIntro extends GuiScreen
 	}
 
 	@Override
-	public void drawScreen(Graphics g, int par1, int par2) throws SlickException
+	public void drawScreen(Graphics g, int par1, int par2)
 	{
 		float alpha;
 
@@ -40,7 +40,7 @@ public class GuiIntro extends GuiScreen
 	}
 
 	@Override
-	public void updateScreen() throws SlickException
+	public void updateScreen()
 	{
 		if (this.tick < MAX_TICK)
 		{
@@ -53,7 +53,7 @@ public class GuiIntro extends GuiScreen
 	}
 
 	@Override
-	public void keyTyped(int key, char c) throws SlickException
+	public void keyTyped(int key, char c)
 	{
 	}
 }

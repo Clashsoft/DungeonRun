@@ -8,7 +8,6 @@ import com.clashsoft.dungeonrun.item.ItemStack;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 public class GuiInventory extends GuiListScreen
 {
@@ -27,7 +26,7 @@ public class GuiInventory extends GuiListScreen
 	}
 
 	@Override
-	public void drawScreen(Graphics g, int width, int height) throws SlickException
+	public void drawScreen(Graphics g, int width, int height)
 	{
 		final int windowWidth = 120;
 
@@ -44,7 +43,7 @@ public class GuiInventory extends GuiListScreen
 	}
 
 	@Override
-	public void onEntryUsed(int selection) throws SlickException
+	public void onEntryUsed(int selection)
 	{
 		if (selection == this.inventory.size())
 		{
@@ -119,7 +118,7 @@ public class GuiInventory extends GuiListScreen
 	}
 
 	@Override
-	public void keyTyped(int key, char c) throws SlickException
+	public void keyTyped(int key, char c)
 	{
 		if (key == Input.KEY_ESCAPE)
 		{

@@ -15,13 +15,13 @@ public class GuiOptions extends GuiListScreen
 	}
 	
 	@Override
-	public void drawScreen(Graphics g, int par1, int par2) throws SlickException
+	public void drawScreen(Graphics g, int par1, int par2)
 	{
 		super.drawScreen(g, par1, par2);
 	}
 	
 	@Override
-	public void updateScreen() throws SlickException
+	public void updateScreen()
 	{
 		GameSettings gs = this.dr.gameSettings;
 		super.updateScreen();
@@ -90,7 +90,7 @@ public class GuiOptions extends GuiListScreen
 	}
 
 	@Override
-	public void onEntryUsed(int i) throws SlickException
+	public void onEntryUsed(int i)
 	{
 		if (i == 2)
 		{

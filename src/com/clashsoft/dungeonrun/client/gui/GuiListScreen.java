@@ -4,7 +4,6 @@ import com.clashsoft.dungeonrun.client.engine.SoundEngine;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 public abstract class GuiListScreen extends GuiScreen
 {
@@ -16,7 +15,7 @@ public abstract class GuiListScreen extends GuiScreen
 	protected boolean drawBricks = true;
 
 	@Override
-	public void drawScreen(Graphics g, int width, int height) throws SlickException
+	public void drawScreen(Graphics g, int width, int height)
 	{
 		if (this.drawBricks)
 		{
@@ -55,7 +54,7 @@ public abstract class GuiListScreen extends GuiScreen
 	}
 
 	@Override
-	public void updateScreen() throws SlickException
+	public void updateScreen()
 	{
 		if (Mouse.isButtonDown(0))
 		{
@@ -63,14 +62,14 @@ public abstract class GuiListScreen extends GuiScreen
 		}
 	}
 
-	private void clickEntry() throws SlickException
+	private void clickEntry()
 	{
 		this.onEntryUsed(this.selection);
 		this.dr.soundEngine.playSoundEffect("click", SoundEngine.DEFAULT_LOCATION);
 	}
 
 	@Override
-	public void keyTyped(int key, char c) throws SlickException
+	public void keyTyped(int key, char c)
 	{
 		switch (key)
 		{
@@ -104,9 +103,9 @@ public abstract class GuiListScreen extends GuiScreen
 
 	public abstract String getTitle();
 
-	public abstract void onEntryUsed(int selection) throws SlickException;
+	public abstract void onEntryUsed(int selection);
 
-	public void onEntrySelect(int selection) throws SlickException
+	public void onEntrySelect(int selection)
 	{
 	}
 

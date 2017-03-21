@@ -11,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +30,7 @@ public abstract class GuiScreen
 
 	protected ScaledResolution scaledResolution;
 
-	public final void init(DungeonRunClient game, int width, int height) throws SlickException
+	public final void init(DungeonRunClient game, int width, int height)
 	{
 		this.dr = game;
 		this.input = this.dr.getInput();
@@ -40,7 +39,7 @@ public abstract class GuiScreen
 		this.initGUI();
 	}
 
-	public final void rescale(int width, int height) throws SlickException
+	public final void rescale(int width, int height)
 	{
 		this.windowWidth = width;
 		this.windowHeight = height;
@@ -49,7 +48,7 @@ public abstract class GuiScreen
 		this.rescaleGUI();
 	}
 
-	public final void render(Graphics g, int width, int height) throws SlickException
+	public final void render(Graphics g, int width, int height)
 	{
 		if (this.windowWidth != width || this.windowHeight != height)
 		{
@@ -110,19 +109,19 @@ public abstract class GuiScreen
 		GL11.glPopMatrix();
 	}
 
-	public void initGUI() throws SlickException
+	public void initGUI()
 	{
 	}
 
-	public abstract void keyTyped(int key, char c) throws SlickException;
+	public abstract void keyTyped(int key, char c);
 
-	public void rescaleGUI() throws SlickException
+	public void rescaleGUI()
 	{
 	}
 
-	public abstract void drawScreen(Graphics g, int width, int height) throws SlickException;
+	public abstract void drawScreen(Graphics g, int width, int height);
 
-	public abstract void updateScreen() throws SlickException;
+	public abstract void updateScreen();
 
 	public double getRescaleFactorX(int windowWidth)
 	{
@@ -146,7 +145,7 @@ public abstract class GuiScreen
 
 	}
 
-	public void drawBricks(int width, int height) throws SlickException
+	public void drawBricks(int width, int height)
 	{
 		final int scale = 2;
 		final int scaledWidth = width / scale;
@@ -164,7 +163,7 @@ public abstract class GuiScreen
 		GL11.glScalef(1F / scale, 1F / scale, 1F);
 	}
 
-	public void drawDefaultBackground(int width, int height) throws SlickException
+	public void drawDefaultBackground(int width, int height)
 	{
 		if (this.dr.isGameRunning())
 		{

@@ -1,13 +1,12 @@
 package com.clashsoft.dungeonrun.client.engine;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
-import com.clashsoft.dungeonrun.client.DungeonRunClient;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SoundEngine
 {
@@ -37,18 +36,26 @@ public class SoundEngine
 		this.dr = dr;
 	}
 	
-	public void playSoundEffect(String sound, SoundLocation sl) throws SlickException
+	public void playSoundEffect(String sound, SoundLocation sl)
 	{
 		this.playSoundEffect(sound, sl, this.dr.gameSettings.soundVolume);
 	}
 	
-	public void playSoundEffect(String sound, SoundLocation sl, float volume) throws SlickException
+	public void playSoundEffect(String sound, SoundLocation sl, float volume)
 	{
 		Sound s = this.sounds.get(sound);
 		if (s == null)
 		{
-			s = new Sound("resources/audio/" + sound.replace('.', '/') + ".ogg");
-			this.sounds.put(sound, s);
+			final String ref = "resources/audio/" + sound.replace('.', '/') + ".ogg";
+			try
+			{
+				s = new Sound(ref);
+				this.sounds.put(sound, s);
+			}
+			catch (SlickException e)
+			{
+				return;
+			}
 		}
 		s.playAt(1F, volume, sl.x, sl.y, sl.z);
 	}
@@ -70,18 +77,25 @@ public class SoundEngine
 		}
 	}
 	
-	public void playMusic(String music, boolean repeat) throws SlickException
+	public void playMusic(String music, boolean repeat)
 	{
 		this.playMusic(music, repeat, this.dr.gameSettings.musicVolume);
 	}
 	
-	public void playMusic(String music, boolean repeat, float volume) throws SlickException
+	public void playMusic(String music, boolean repeat, float volume)
 	{
 		Music m = this.musics.get(music);
 		if (m == null)
 		{
-			m = new Music("resources/audio/music/" + music.replace('.', '/') + ".ogg");
-			this.musics.put(music, m);
+			try
+			{
+				m = new Music("resources/audio/music/" + music.replace('.', '/') + ".ogg");
+				this.musics.put(music, m);
+			}
+			catch (SlickException e)
+			{
+				return;
+			}
 		}
 		if (repeat)
 		{

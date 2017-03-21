@@ -25,7 +25,7 @@ public class GuiCreateWorld extends GuiListScreen
 	}
 
 	@Override
-	public void keyTyped(int key, char c) throws SlickException
+	public void keyTyped(int key, char c)
 	{
 		if (this.selection != 0)
 		{
@@ -99,7 +99,7 @@ public class GuiCreateWorld extends GuiListScreen
 	}
 
 	@Override
-	public void onEntryUsed(int i) throws SlickException
+	public void onEntryUsed(int i)
 	{
 		if (i == 1)
 		{

@@ -10,7 +10,7 @@ public class DungeonRunServer extends DungeonRun
 {
 	public World	theWorld;
 	
-	public DungeonRunServer() throws SlickException
+	public DungeonRunServer()
 	{
 		super();
 	}
@@ -41,14 +41,14 @@ public class DungeonRunServer extends DungeonRun
 	}
 	
 	@Override
-	public void startWorld(World world) throws SlickException
+	public void startWorld(World world)
 	{
 		this.theWorld = world;
 		this.startGame();
 	}
 	
 	@Override
-	public boolean isGameRunning() throws SlickException
+	public boolean isGameRunning()
 	{
 		return true;
 	}
@@ -60,12 +60,12 @@ public class DungeonRunServer extends DungeonRun
 	}
 	
 	@Override
-	public void pauseGame() throws SlickException
+	public void pauseGame()
 	{
 	}
 	
 	@Override
-	public void resumeGame() throws SlickException
+	public void resumeGame()
 	{
 	}
 }

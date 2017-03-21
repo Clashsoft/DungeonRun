@@ -8,7 +8,6 @@ import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.item.Items;
 import com.clashsoft.dungeonrun.world.World;
 import dyvil.tools.nbt.collection.NBTMap;
-import org.newdawn.slick.SlickException;
 
 import java.util.Random;
 
@@ -22,12 +21,12 @@ public class EntityPlayer extends EntityLiving
 
 	private int kills;
 
-	public EntityPlayer(World world) throws SlickException
+	public EntityPlayer(World world)
 	{
 		this(world, "");
 	}
 
-	public EntityPlayer(World world, String username) throws SlickException
+	public EntityPlayer(World world, String username)
 	{
 		super(world);
 		this.username = username;
@@ -103,14 +102,7 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void setDead()
 	{
-		try
-		{
-			DungeonRunClient.instance.displayGuiScreen(new GuiDeath());
-		}
-		catch (SlickException e)
-		{
-			e.printStackTrace();
-		}
+		DungeonRunClient.instance.displayGuiScreen(new GuiDeath());
 		super.setDead();
 	}
 

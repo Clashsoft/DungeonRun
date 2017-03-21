@@ -42,7 +42,7 @@ public class DungeonRunClient extends DungeonRun
 	protected int screenWidth;
 	protected int screenHeight;
 
-	public DungeonRunClient(String username) throws SlickException
+	public DungeonRunClient(String username)
 	{
 		super();
 		this.username = username;
@@ -109,7 +109,7 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void shutdown() throws SlickException
+	public void shutdown()
 	{
 		try
 		{
@@ -127,7 +127,7 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void update(GameContainer gc, int tick) throws SlickException
+	public void update(GameContainer gc, int tick)
 	{
 		try
 		{
@@ -180,7 +180,7 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void render(GameContainer gc, Graphics g) throws SlickException
+	public void render(GameContainer gc, Graphics g)
 	{
 		try
 		{
@@ -222,7 +222,7 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void startGame() throws SlickException
+	public void startGame()
 	{
 		this.displayGuiScreen(new GuiInfo("world.loading"));
 
@@ -244,7 +244,7 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void stopGame() throws SlickException
+	public void stopGame()
 	{
 		this.displayGuiScreen(new GuiInfo("world.saving"));
 
@@ -259,7 +259,7 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void pauseGame() throws SlickException
+	public void pauseGame()
 	{
 		this.isPaused = true;
 		new ClientSaveThread(this).start();
@@ -267,7 +267,7 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void resumeGame() throws SlickException
+	public void resumeGame()
 	{
 		this.isPaused = false;
 		this.displayGuiScreen(this.theIngameGui);
@@ -279,22 +279,29 @@ public class DungeonRunClient extends DungeonRun
 		return this.theWorld;
 	}
 
-	public GuiScreen displayGuiScreen(GuiScreen gui) throws SlickException
+	public GuiScreen displayGuiScreen(GuiScreen gui)
 	{
 		this.currentGui = gui;
 		this.currentGui.init(this, this.theGameContainer.getWidth(), this.theGameContainer.getHeight());
 		return gui;
 	}
 
-	public void setFullScreen(boolean flag) throws SlickException
+	public void setFullScreen(boolean flag)
 	{
-		if (flag)
+		try
 		{
-			this.theGameContainer.setDisplayMode(this.screenWidth, this.screenHeight, true);
+			if (flag)
+			{
+
+				this.theGameContainer.setDisplayMode(this.screenWidth, this.screenHeight, true);
+			}
+			else
+			{
+				this.theGameContainer.setDisplayMode(800, 480, false);
+			}
 		}
-		else
+		catch (SlickException ignored)
 		{
-			this.theGameContainer.setDisplayMode(800, 480, false);
 		}
 	}
 
@@ -304,14 +311,14 @@ public class DungeonRunClient extends DungeonRun
 	}
 
 	@Override
-	public void startWorld(World world) throws SlickException
+	public void startWorld(World world)
 	{
 		this.theWorld = world;
 		this.startGame();
 	}
 
 	@Override
-	public boolean isGameRunning() throws SlickException
+	public boolean isGameRunning()
 	{
 		return this.isGameRunning;
 	}
@@ -321,14 +328,7 @@ public class DungeonRunClient extends DungeonRun
 	{
 		if (this.currentGui != null)
 		{
-			try
-			{
-				this.currentGui.keyTyped(key, c);
-			}
-			catch (SlickException ex)
-			{
-				ex.printStackTrace();
-			}
+			this.currentGui.keyTyped(key, c);
 		}
 	}
 

@@ -35,7 +35,7 @@ public class GuiPauseMenu extends GuiListScreen
 	}
 
 	@Override
-	public void onEntryUsed(int i) throws SlickException
+	public void onEntryUsed(int i)
 	{
 		switch (i)
 		{
@@ -52,7 +52,7 @@ public class GuiPauseMenu extends GuiListScreen
 	}
 
 	@Override
-	public void keyTyped(int key, char c) throws SlickException
+	public void keyTyped(int key, char c)
 	{
 		if (key == Input.KEY_ESCAPE)
 		{

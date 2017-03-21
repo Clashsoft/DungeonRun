@@ -29,7 +29,7 @@ public class GuiIngame extends GuiScreen
 	}
 
 	@Override
-	public void initGUI() throws SlickException
+	public void initGUI()
 	{
 		this.renderBlocks = this.dr.renderEngine.blockRenderer;
 
@@ -38,7 +38,7 @@ public class GuiIngame extends GuiScreen
 	}
 
 	@Override
-	public void drawScreen(Graphics g, int width, int height) throws SlickException
+	public void drawScreen(Graphics g, int width, int height)
 	{
 		this.renderBlocks.width = width;
 		this.renderBlocks.height = height;
@@ -85,7 +85,7 @@ public class GuiIngame extends GuiScreen
 		}
 	}
 
-	private void renderLevel(Graphics g, int width, int height) throws SlickException
+	private void renderLevel(Graphics g, int width, int height)
 	{
 		World world = this.player.worldObj;
 		double camX = this.player.posX;
@@ -130,7 +130,7 @@ public class GuiIngame extends GuiScreen
 	}
 
 	@Override
-	public void keyTyped(int key, char c) throws SlickException
+	public void keyTyped(int key, char c)
 	{
 		final EntityPlayer player = this.player;
 		final World world = player.worldObj;
@@ -174,7 +174,7 @@ public class GuiIngame extends GuiScreen
 	}
 
 	@Override
-	public void updateScreen() throws SlickException
+	public void updateScreen()
 	{
 		final Input input = this.dr.getInput();
 

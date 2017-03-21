@@ -5,7 +5,6 @@ import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 public class GuiMainMenu extends GuiListScreen
 {
@@ -14,14 +13,14 @@ public class GuiMainMenu extends GuiListScreen
 	}
 	
 	@Override
-	public void initGUI() throws SlickException
+	public void initGUI()
 	{
 		this.dr.soundEngine.stopAllMusics();
 		this.dr.soundEngine.playMusic("main_menu", true);
 	}
 
 	@Override
-	public void drawScreen(Graphics g, int width, int height) throws SlickException
+	public void drawScreen(Graphics g, int width, int height)
 	{
 		super.drawScreen(g, width, height);
 
@@ -73,7 +72,7 @@ public class GuiMainMenu extends GuiListScreen
 	}
 
 	@Override
-	public void onEntryUsed(int i) throws SlickException
+	public void onEntryUsed(int i)
 	{
 		switch (i)
 		{

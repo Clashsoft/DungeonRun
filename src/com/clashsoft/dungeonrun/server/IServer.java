@@ -1,35 +1,34 @@
 package com.clashsoft.dungeonrun.server;
 
-import java.io.File;
-
+import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.world.World;
+import java.io.File;
 
 public interface IServer
 {
 	public File getSaveDataFolder();
 	
-	public boolean loadWorld(World world) throws SlickException;
+	public boolean loadWorld(World world);
 	
-	public boolean saveWorld(World world) throws SlickException;
+	public boolean saveWorld(World world);
 	
-	public void update(GameContainer gc, int tick) throws SlickException;
+	public void update(GameContainer gc, int tick);
 	
 	public void init(GameContainer gc) throws SlickException;
 	
-	public void shutdown() throws SlickException;
+	public void shutdown();
 	
-	public void startWorld(World world) throws SlickException;
+	public void startWorld(World world);
 	
-	public void startGame() throws SlickException;
+	public void startGame();
 	
-	public void stopGame() throws SlickException;
+	public void stopGame();
 	
-	public void pauseGame() throws SlickException;
+	public void pauseGame();
 	
-	public void resumeGame() throws SlickException;
+	public void resumeGame();
 	
-	public boolean isGameRunning() throws SlickException;
+	public boolean isGameRunning();
 }

@@ -96,7 +96,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	}
 
 	@Override
-	public void shutdown() throws SlickException
+	public void shutdown()
 	{
 		try
 		{
@@ -114,7 +114,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	}
 
 	@Override
-	public void render(GameContainer gc, Graphics g) throws SlickException
+	public void render(GameContainer gc, Graphics g)
 	{
 		try
 		{
@@ -135,7 +135,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	}
 
 	@Override
-	public void update(GameContainer gc, int tick) throws SlickException
+	public void update(GameContainer gc, int tick)
 	{
 		try
 		{
@@ -191,7 +191,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	}
 
 	@Override
-	public void startGame() throws SlickException
+	public void startGame()
 	{
 		final World world = this.getWorld();
 		this.loadWorld(world);
@@ -200,13 +200,13 @@ public abstract class DungeonRun extends BasicGame implements IServer
 		this.chunkSaver.start();
 	}
 
-	public void handleException(Throwable ex, String s) throws SlickException
+	public void handleException(Throwable ex, String s)
 	{
 		ex.printStackTrace();
 		exit();
 	}
 
-	public void handleError(Error error, String s) throws SlickException
+	public void handleError(Error error, String s)
 	{
 		if (error instanceof OutOfMemoryError)
 		{
@@ -220,7 +220,7 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	}
 
 	@Override
-	public void stopGame() throws SlickException
+	public void stopGame()
 	{
 		this.saveWorld(this.getWorld());
 		this.chunkSaver.disable();
@@ -228,13 +228,13 @@ public abstract class DungeonRun extends BasicGame implements IServer
 	}
 
 	@Override
-	public boolean saveWorld(World world) throws SlickException
+	public boolean saveWorld(World world)
 	{
 		return world != null && world.save(this.chunkSaver);
 	}
 
 	@Override
-	public boolean loadWorld(World world) throws SlickException
+	public boolean loadWorld(World world)
 	{
 		return world != null && world.load();
 	}

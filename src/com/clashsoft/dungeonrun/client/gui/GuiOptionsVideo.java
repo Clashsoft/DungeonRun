@@ -25,7 +25,7 @@ public class GuiOptionsVideo extends GuiListScreen
 	}
 
 	@Override
-	public void onEntryUsed(int i) throws SlickException
+	public void onEntryUsed(int i)
 	{
 		switch (i)
 		{

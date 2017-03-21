@@ -3,7 +3,6 @@ package com.clashsoft.dungeonrun.client.engine;
 import com.clashsoft.dungeonrun.block.Block;
 import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 public class RenderBlocks
 {
@@ -14,7 +13,7 @@ public class RenderBlocks
 	{
 	}
 
-	public void renderBlock(World world, int x, int y, double camX, double camY) throws SlickException
+	public void renderBlock(World world, int x, int y, double camX, double camY)
 	{
 		Block block = world.getBlock(x, y);
 
@@ -24,7 +23,7 @@ public class RenderBlocks
 		}
 	}
 
-	public void renderBlock(Block block, int metadata, int x, int y, double camX, double camY) throws SlickException
+	public void renderBlock(Block block, int metadata, int x, int y, double camX, double camY)
 	{
 		double offX = camX - x;
 		double offY = camY - y;
@@ -35,7 +34,7 @@ public class RenderBlocks
 		this.renderBlock(block, metadata, renderX, renderY);
 	}
 
-	protected void renderBlock(Block block, int metadata, float x, float y) throws SlickException
+	protected void renderBlock(Block block, int metadata, float x, float y)
 	{
 		Image image = block.getTexture(metadata);
 		if (image != null)

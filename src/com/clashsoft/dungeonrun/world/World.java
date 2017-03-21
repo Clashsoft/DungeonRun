@@ -207,7 +207,7 @@ public class World
 		return this.playerEntitys.values();
 	}
 
-	public EntityPlayer getPlayer(String username) throws SlickException
+	public EntityPlayer getPlayer(String username)
 	{
 		return this.playerEntitys.get(username);
 	}
