@@ -99,10 +99,10 @@ public class GuiInventory extends GuiListScreen
 		}
 
 		final ItemStack stack = this.inventory.getStack(i);
-		drawItem(x - 20, y - 4, stack, this.dr);
+		drawItem(x - 20, y - 4, stack);
 	}
 
-	public static void drawItem(int x, int y, ItemStack stack, DungeonRunClient dr)
+	public static void drawItem(int x, int y, ItemStack stack)
 	{
 		if (stack == null)
 		{
@@ -113,7 +113,7 @@ public class GuiInventory extends GuiListScreen
 
 		if (stack.size != 1)
 		{
-			dr.smallFontRenderer.drawString(x, y, Integer.toString(stack.size), 0xFFFFFF, true);
+			DungeonRunClient.instance.smallFontRenderer.drawString(x, y, Integer.toString(stack.size), 0xFFFFFF, true);
 		}
 	}
 

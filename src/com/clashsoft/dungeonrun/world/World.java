@@ -202,6 +202,30 @@ public class World
 		return this.entitys.values();
 	}
 
+	public Collection<Entity> getEntities(int x1, int y1, int x2, int y2)
+	{
+		final Collection<Entity> list = new ArrayList<>();
+
+		for (Entity entity : this.entitys.values())
+		{
+			final double x = entity.getX();
+			if (x < x1 || x > x2)
+			{
+				continue;
+			}
+
+			final double y = entity.getY();
+			if (y < y1 || y > y2)
+			{
+				continue;
+			}
+
+			list.add(entity);
+		}
+
+		return list;
+	}
+
 	public Collection<EntityPlayer> getPlayers()
 	{
 		return this.playerEntitys.values();

@@ -1,6 +1,8 @@
 package com.clashsoft.dungeonrun.client.gui;
 
 import com.clashsoft.dungeonrun.block.BlockLadder;
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
+import com.clashsoft.dungeonrun.client.engine.FontRenderer;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import com.clashsoft.dungeonrun.client.engine.RenderBlocks;
 import com.clashsoft.dungeonrun.client.renderer.Render;
@@ -8,14 +10,16 @@ import com.clashsoft.dungeonrun.entity.Entity;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
 import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.inventory.InventoryPlayer;
-import com.clashsoft.dungeonrun.item.Item;
 import com.clashsoft.dungeonrun.item.Items;
 import com.clashsoft.dungeonrun.util.ResourceHelper;
 import com.clashsoft.dungeonrun.world.ForegroundBlock;
 import com.clashsoft.dungeonrun.world.World;
 import com.clashsoft.dungeonrun.world.gen.HouseGenerator;
 import com.clashsoft.dungeonrun.world.gen.TreeGenerator;
-import org.newdawn.slick.*;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 
 public class GuiIngame extends GuiScreen
 {
@@ -52,12 +56,12 @@ public class GuiIngame extends GuiScreen
 		final InventoryPlayer inventory = this.player.inventory;
 		for (int i = 0; i < 8; i++)
 		{
-			GuiInventory.drawItem(x + i * 18 + 2, 4, inventory.getStack(i), this.dr);
+			GuiInventory.drawItem(x + i * 18 + 2, 4, inventory.getStack(i));
 		}
 
 		ResourceHelper.hotbarSelection.draw(x + inventory.handSlot * 18 - 1, 1);
 
-		this.drawCoins(inventory);
+		drawCoins(inventory.getCoins(), width - 10, 10);
 
 		if (this.worldSaving)
 		{
@@ -67,21 +71,24 @@ public class GuiIngame extends GuiScreen
 		}
 	}
 
-	private static final Item[] COINS = { Items.copper_coin, Items.silver_coin, Items.gold_coin };
+	private static final int[] COIN_VALUES = { Items.copper_coin.getCoinValue(), Items.silver_coin.getCoinValue(),
+		Items.gold_coin.getCoinValue() };
 
-	private void drawCoins(InventoryPlayer inventory)
+	public static void drawCoins(int coins, int x, int y)
 	{
-		int coins = inventory.getCoins();
+		final FontRenderer fontRenderer = DungeonRunClient.instance.fontRenderer;
+		x -= 10;
 
-		for (int i = COINS.length - 1; i >= 0; i--)
+		for (int i = COIN_VALUES.length - 1 ; i >= 0; i--)
 		{
-			final Item item = COINS[i];
-			item.getIcon(null).draw(10, 10 + i * 20);
-
-			final int value = item.getCoinValue();
+			ResourceHelper.iconsSprite.getSprite(2 - i, 2).draw(x - i * 16, y);
+			final int value = COIN_VALUES[i];
 			final int amount = coins / value;
 			coins -= amount * value;
-			this.dr.fontRenderer.drawStringWithShadow(30, 14 + i * 20, "x " + amount);
+
+			final String text = Integer.toString(amount);
+			final float width = fontRenderer.getStringWidth(text);
+			fontRenderer.drawStringWithShadow(x - i * 16 - width - 2, y, text);
 		}
 	}
 
@@ -145,6 +152,11 @@ public class GuiIngame extends GuiScreen
 			{
 				block.block.activate(world, block, this.player);
 			}
+			for (Entity entity : world.getEntities(posX - 1, posY - 1, posX + 1, posY + 1))
+			{
+				entity.onPlayerInteract(this.player);
+			}
+
 			break;
 		case Input.KEY_H:
 			HouseGenerator.generateHouse(world, world.random, posX, posY);

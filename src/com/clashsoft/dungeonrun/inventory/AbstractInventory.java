@@ -79,7 +79,7 @@ public abstract class AbstractInventory implements INBTSaveable
 		for (int i = 0, size = this.size(); i < size; i++)
 		{
 			final ItemStack slot = this.getStack(i);
-			if (!slot.itemEquals(stack))
+			if (slot == null || !slot.itemEquals(stack))
 			{
 				continue;
 			}
@@ -87,10 +87,9 @@ public abstract class AbstractInventory implements INBTSaveable
 			if (slot.size - stack.size > 0)
 			{
 				slot.size -= stack.size;
-				stack.size = 0;
 				return;
 			}
-			stack.size -= slot.size;
+			stack.size += slot.size;
 			this.setStack(i, null); // remove the item from the slot
 		}
 	}

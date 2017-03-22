@@ -228,6 +228,10 @@ public abstract class Entity implements INBTSaveable
 		return result;
 	}
 
+	public void onPlayerInteract(EntityPlayer player)
+	{
+	}
+
 	public abstract Render getRenderer();
 
 	@Override

@@ -28,6 +28,10 @@ public class InventoryPlayer extends AbstractInventory
 
 	public boolean canTrade(EntityClerk.Trade trade)
 	{
+		if (trade.item.size <= 0)
+		{
+			return false;
+		}
 		if (trade.amount > 0)
 		{
 			return this.coins - trade.amount >= 0 && this.canAdd(trade.item);
@@ -44,12 +48,12 @@ public class InventoryPlayer extends AbstractInventory
 
 		if (trade.amount > 0)
 		{
-			this.add(trade.item);
+			this.add(trade.item.copy());
 			this.coins -= trade.amount;
 			return;
 		}
 
-		this.remove(trade.item);
+		this.remove(trade.item.copy());
 		this.coins += -trade.amount;
 	}
 
@@ -89,7 +93,7 @@ public class InventoryPlayer extends AbstractInventory
 	@Override
 	public void setStack(int i, ItemStack stack)
 	{
-		if (this.addCoin(stack))
+		if (stack != null && this.addCoin(stack))
 		{
 			return;
 		}

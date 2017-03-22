@@ -37,6 +37,7 @@ public class HouseGenerator
 		world.addForegroundBlock(new ForegroundBlock(x + 2, y + 2, Blocks.torch, 0));
 
 		final EntityClerk clerk = new EntityClerk(world);
+		clerk.generateTrades(random);
 		clerk.setLocation(x + 0.5, y);
 		world.spawnEntity(clerk);
 	}

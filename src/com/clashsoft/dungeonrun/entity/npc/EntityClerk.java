@@ -1,9 +1,12 @@
 package com.clashsoft.dungeonrun.entity.npc;
 
+import com.clashsoft.dungeonrun.client.DungeonRunClient;
+import com.clashsoft.dungeonrun.client.gui.GuiTrades;
 import com.clashsoft.dungeonrun.client.renderer.Render;
 import com.clashsoft.dungeonrun.client.renderer.entity.RenderClerk;
 import com.clashsoft.dungeonrun.entity.DamageSource;
 import com.clashsoft.dungeonrun.entity.EntityLiving;
+import com.clashsoft.dungeonrun.entity.EntityPlayer;
 import com.clashsoft.dungeonrun.item.Item;
 import com.clashsoft.dungeonrun.item.ItemStack;
 import com.clashsoft.dungeonrun.world.World;
@@ -36,6 +39,16 @@ public class EntityClerk extends EntityLiving
 		super(world);
 	}
 
+	public int getTradeCount()
+	{
+		return this.trades.size();
+	}
+
+	public Trade getTrade(int index)
+	{
+		return this.trades.get(index);
+	}
+
 	public void generateTrades(Random random)
 	{
 		List<ItemStack> valuables = new ArrayList<>();
@@ -54,12 +67,12 @@ public class EntityClerk extends EntityLiving
 		for (int n = random.nextInt(3) + 3; n >= 0; n--)
 		{
 			ItemStack valuable = valuables.get(random.nextInt(valuables.size()));
-			int amount = (int) (valuable.getValue() * multiplier);
+			int price = (int) (valuable.getValue() * multiplier);
 			if (random.nextBoolean())
 			{
-				amount *= -1;
+				price *= -1;
 			}
-			this.trades.add(new Trade(amount, valuable));
+			this.trades.add(new Trade(price, valuable));
 		}
 	}
 
@@ -88,6 +101,12 @@ public class EntityClerk extends EntityLiving
 	}
 
 	@Override
+	public void onPlayerInteract(EntityPlayer player)
+	{
+		DungeonRunClient.instance.displayGuiScreen(new GuiTrades(player, this));
+	}
+
+	@Override
 	public void writeToNBT(NBTMap nbt)
 	{
 		super.writeToNBT(nbt);
@@ -98,6 +117,7 @@ public class EntityClerk extends EntityLiving
 			NBTMap map = new NBTMap();
 			trade.item.writeToNBT(map);
 			map.setInteger("amount", trade.amount);
+			trades.addTag(map);
 		}
 
 		nbt.setTag("trades", trades);

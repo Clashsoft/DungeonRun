@@ -108,4 +108,9 @@ public final class ItemStack
 		result = 31 * result + this.size;
 		return result;
 	}
+
+	public ItemStack copy()
+	{
+		return new ItemStack(this.item, this.metadata, this.size);
+	}
 }

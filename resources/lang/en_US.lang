@@ -11,6 +11,8 @@ pausemenu.title=Game Menu
 
 inventory.title=Inventory
 
+clerk.title=Clerk
+
 options.title=Game Settings
 options.soundvolume=Sound Volume
 options.musicvolume=Music Volume
