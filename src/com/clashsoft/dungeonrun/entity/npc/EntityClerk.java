@@ -15,6 +15,7 @@ import dyvil.tools.nbt.collection.NBTList;
 import dyvil.tools.nbt.collection.NBTMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -62,11 +63,18 @@ public class EntityClerk extends EntityLiving
 				}
 			}
 		}
+		Collections.shuffle(valuables);
 
-		float multiplier = 1 + random.nextFloat() * 0.5F;
+		final float multiplier = 1 + random.nextFloat() * 0.5F;
 		for (int n = random.nextInt(3) + 3; n >= 0; n--)
 		{
-			ItemStack valuable = valuables.get(random.nextInt(valuables.size()));
+			final int size = valuables.size();
+			if (size == 0)
+			{
+				return;
+			}
+
+			ItemStack valuable = valuables.remove(size - 1);
 			int price = (int) (valuable.getValue() * multiplier);
 			if (random.nextBoolean())
 			{
