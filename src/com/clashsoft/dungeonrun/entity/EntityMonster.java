@@ -8,7 +8,8 @@ import java.util.Random;
 
 public class EntityMonster extends EntityLiving
 {
-	public int alertTicks;
+	private int alertTicks;
+	private int attackTime;
 
 	private final EntityAIFollow ai = new EntityAIFollow(8.0, true);
 
@@ -17,9 +18,9 @@ public class EntityMonster extends EntityLiving
 		super(world);
 	}
 
-	public boolean isAttacking()
+	public boolean isAlert()
 	{
-		return false;
+		return this.alertTicks > 0 && this.alertTicks <= 10;
 	}
 
 	@Override

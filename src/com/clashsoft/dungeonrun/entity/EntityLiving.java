@@ -12,12 +12,23 @@ public abstract class EntityLiving extends EntityDamagable
 	public static final int ATTACK_DISTANCE = 4;
 
 	protected boolean climbing;
+	protected int attackTime;
 
 	protected int movement = STANDING;
 
 	public EntityLiving(World world)
 	{
 		super(world);
+	}
+
+	public boolean isAttacking()
+	{
+		return this.attackTime > 5;
+	}
+
+	public int getAttackTime()
+	{
+		return this.attackTime;
 	}
 
 	public void jump()
@@ -30,12 +41,18 @@ public abstract class EntityLiving extends EntityDamagable
 
 	public void attack(Entity entity, float damage)
 	{
+		if (this.attackTime > 0)
+		{
+			return;
+		}
+
 		if (!(entity instanceof EntityDamagable))
 		{
 			return;
 		}
 
 		((EntityDamagable) entity).damageEntity(DamageSource.PLAYER, damage);
+		this.attackTime = 10;
 		if (entity.isDead())
 		{
 			this.onKill(entity);
@@ -69,6 +86,11 @@ public abstract class EntityLiving extends EntityDamagable
 	@Override
 	public void updateEntity(Random random)
 	{
+		if (this.attackTime > 0)
+		{
+			this.attackTime--;
+		}
+
 		switch (this.movement)
 		{
 		case WALKING:

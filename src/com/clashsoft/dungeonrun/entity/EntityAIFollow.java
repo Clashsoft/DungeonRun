@@ -21,12 +21,19 @@ public class EntityAIFollow implements EntityAI<EntityLiving>
 	{
 		if (this.target != null)
 		{
-			if (entity.squareDistanceTo(this.target) > this.squareDistance)
+			final double distanceTo = entity.squareDistanceTo(this.target);
+
+			if (distanceTo > this.squareDistance)
 			{
 				this.target = null;
 			}
 			else
 			{
+				if (distanceTo <= EntityLiving.ATTACK_DISTANCE)
+				{
+					entity.attack(this.target, 1);
+				}
+
 				this.targetX = this.target.posX;
 			}
 		}

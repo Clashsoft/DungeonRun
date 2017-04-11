@@ -17,8 +17,6 @@ public class EntityPlayer extends EntityLiving
 
 	public final InventoryPlayer inventory;
 
-	private int attackTime;
-
 	private int kills;
 
 	public EntityPlayer(World world)
@@ -63,18 +61,9 @@ public class EntityPlayer extends EntityLiving
 		return RenderPlayer.INSTANCE;
 	}
 
-	public int getAttackTime()
-	{
-		return this.attackTime;
-	}
-
 	public void attack()
 	{
-		if (this.attackTime == 0)
-		{
-			this.attackTime = 10;
-		}
-		else
+		if (this.attackTime > 0)
 		{
 			return;
 		}
@@ -120,9 +109,9 @@ public class EntityPlayer extends EntityLiving
 	@Override
 	public void updateEntity(Random random)
 	{
-		if (this.attackTime > 0)
+		if (this.health < this.getMaxHealth() && random.nextInt(40) == 0)
 		{
-			this.attackTime--;
+			this.health++;
 		}
 
 		super.updateEntity(random);
