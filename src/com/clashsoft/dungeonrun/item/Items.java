@@ -13,7 +13,10 @@ public class Items
 	public static final Item copper_coin = new ItemCoin("copper_coin", 1);
 	public static final Item silver_coin = new ItemCoin("silver_coin", 10);
 	public static final Item gold_coin   = new ItemCoin("gold_coin", 100);
-	public static final Item green_gem   = new Item("green_gem");
+
+	public static final Item green_gem     = new ItemValuable("green_gem", 300);
+	public static final Item blue_crystal  = new ItemValuable("blue_crystal", 500);
+	public static final Item gold_artifact = new ItemValuable("gold_artifact", 400);
 
 	public static void init()
 	{

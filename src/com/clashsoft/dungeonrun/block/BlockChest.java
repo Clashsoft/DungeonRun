@@ -41,12 +41,6 @@ public class BlockChest extends BlockBackground
 			return;
 		}
 
-		if (world.random.nextInt(4) == 0)
-		{
-			player.inventory.add(new ItemStack(Items.green_gem));
-			return;
-		}
-
 		final Object[] items = Item.items.values().toArray();
 		final Item item = (Item) items[world.random.nextInt(items.length)];
 
