@@ -7,7 +7,7 @@ import java.util.Random;
 
 public abstract class EntityDamagable extends Entity
 {
-	public float health = 20;
+	public float health = this.getMaxHealth();
 
 	protected int hurtTime = 0;
 
@@ -19,6 +19,11 @@ public abstract class EntityDamagable extends Entity
 	public float getHealth()
 	{
 		return this.health;
+	}
+
+	public float getMaxHealth()
+	{
+		return 20;
 	}
 
 	public int getHurtTime()

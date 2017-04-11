@@ -62,12 +62,36 @@ public class GuiIngame extends GuiScreen
 		ResourceHelper.hotbarSelection.draw(x + inventory.handSlot * 18 - 1, 1);
 
 		drawCoins(inventory.getCoins(), width - 10, 10);
+		drawHealth(this.player, 10, 10);
 
 		if (this.worldSaving)
 		{
 			String text = I18n.getString("world.saving");
 			float w = this.dr.fontRenderer.getStringWidth(text);
 			this.dr.fontRenderer.drawStringWithShadow(width - 20F - w, height - 20F, text, 0xFFFFFF);
+		}
+	}
+
+	private static void drawHealth(EntityPlayer player, int x, int y)
+	{
+		final float health = player.getHealth();
+		final float hearts = player.getMaxHealth() / 2;
+		for (int i = 0; i < hearts; i++)
+		{
+			final int spriteX;
+			if (health > i * 2 + 1)
+			{
+				spriteX = 0;
+			}
+			else if (health > i * 2)
+			{
+				spriteX = 1;
+			}
+			else
+			{
+				spriteX = 2;
+			}
+			ResourceHelper.iconsSprite.getSprite(spriteX, 0).draw(x + i * 9, y);
 		}
 	}
 
@@ -79,7 +103,7 @@ public class GuiIngame extends GuiScreen
 		final FontRenderer fontRenderer = DungeonRunClient.instance.fontRenderer;
 		x -= 10;
 
-		for (int i = COIN_VALUES.length - 1 ; i >= 0; i--)
+		for (int i = COIN_VALUES.length - 1; i >= 0; i--)
 		{
 			ResourceHelper.iconsSprite.getSprite(2 - i, 2).draw(x - i * 16, y);
 			final int value = COIN_VALUES[i];

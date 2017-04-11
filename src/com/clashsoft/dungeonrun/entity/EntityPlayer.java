@@ -85,17 +85,22 @@ public class EntityPlayer extends EntityLiving
 
 		for (Entity entity : this.worldObj.getEntitys())
 		{
-			if (entity.squareDistanceTo(this) > 4 || entity == this || !(entity instanceof EntityDamagable))
+			if (entity.squareDistanceTo(this) > ATTACK_DISTANCE || entity == this)
 			{
 				continue;
 			}
 
-			((EntityDamagable) entity).damageEntity(DamageSource.PLAYER, damage);
-			if (entity.isDead())
-			{
-				this.kills++;
-			}
+			this.attack(entity, damage);
 			entity.addVelocity((this.pitch >= 90 && this.pitch <= 270 ? -1 : 1) * knockback, 0.5);
+		}
+	}
+
+	@Override
+	public void onKill(Entity entity)
+	{
+		if (entity instanceof EntityLiving)
+		{
+			this.kills++;
 		}
 	}
 

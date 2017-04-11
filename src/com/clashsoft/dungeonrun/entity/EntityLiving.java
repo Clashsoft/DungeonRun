@@ -9,6 +9,7 @@ public abstract class EntityLiving extends EntityDamagable
 	public static final int STANDING  = 0;
 	public static final int WALKING   = 1;
 	public static final int SPRINTING = 2;
+	public static final int ATTACK_DISTANCE = 4;
 
 	protected boolean climbing;
 
@@ -25,6 +26,24 @@ public abstract class EntityLiving extends EntityDamagable
 		{
 			this.addVelocity(0, 1.25);
 		}
+	}
+
+	public void attack(Entity entity, float damage)
+	{
+		if (!(entity instanceof EntityDamagable))
+		{
+			return;
+		}
+
+		((EntityDamagable) entity).damageEntity(DamageSource.PLAYER, damage);
+		if (entity.isDead())
+		{
+			this.onKill(entity);
+		}
+	}
+
+	public void onKill(Entity entity)
+	{
 	}
 
 	public int getMovement()
