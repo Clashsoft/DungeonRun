@@ -28,6 +28,8 @@ public class EntityPlayer extends EntityLiving
 	{
 		super(world);
 		this.username = username;
+		this.respawn();
+
 		this.inventory = new InventoryPlayer(this);
 		this.inventory.add(new ItemStack(Items.wood_sword));
 		this.inventory.add(new ItemStack(Items.gold_coin));
@@ -97,7 +99,13 @@ public class EntityPlayer extends EntityLiving
 	public void setDead()
 	{
 		DungeonRunClient.instance.displayGuiScreen(new GuiDeath());
-		super.setDead();
+		DungeonRunClient.instance.pauseGame();
+	}
+
+	public void respawn()
+	{
+		this.setLocation(0.5D, this.worldObj.getHeight(0));
+		this.health = this.getMaxHealth();
 	}
 
 	@Override

@@ -197,6 +197,7 @@ public class GuiIngame extends GuiScreen
 			break;
 		case Input.KEY_ESCAPE:
 			this.dr.pauseGame();
+			this.dr.displayGuiScreen(new GuiPauseMenu());
 			break;
 		case Input.KEY_I:
 			this.dr.displayGuiScreen(new GuiInventory(this.player));

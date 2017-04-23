@@ -1,7 +1,6 @@
 package com.clashsoft.dungeonrun.client.gui;
 
 import com.clashsoft.dungeonrun.client.engine.I18n;
-import org.newdawn.slick.SlickException;
 
 public class GuiDeath extends GuiListScreen
 {
@@ -37,7 +36,8 @@ public class GuiDeath extends GuiListScreen
 		switch (i)
 		{
 		case 0:
-			this.dr.startGame();
+			this.dr.thePlayer.respawn();
+			this.dr.resumeGame();
 			break;
 		case 1:
 			this.dr.stopGame();

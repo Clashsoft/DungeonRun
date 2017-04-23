@@ -136,7 +136,10 @@ public class DungeonRunClient extends DungeonRun
 				this.currentGui.updateScreen();
 			}
 
-			super.update(gc, tick);
+			if (!this.isPaused)
+			{
+				super.update(gc, tick);
+			}
 
 			if (this.theWorld != null && this.tick % 200 == 0)
 			{
@@ -229,12 +232,12 @@ public class DungeonRunClient extends DungeonRun
 		this.soundEngine.stopAllMusics();
 		super.startGame();
 
+		this.isPaused = false;
 		this.thePlayer = this.theWorld.getPlayer(this.username);
 
 		if (this.thePlayer == null)
 		{
 			this.thePlayer = new EntityPlayer(this.theWorld, this.username);
-			this.thePlayer.setLocation(0.5D, this.theWorld.getHeight(0));
 			this.theWorld.spawnEntity(this.thePlayer);
 		}
 
@@ -263,7 +266,6 @@ public class DungeonRunClient extends DungeonRun
 	{
 		this.isPaused = true;
 		new ClientSaveThread(this).start();
-		this.displayGuiScreen(new GuiPauseMenu());
 	}
 
 	@Override

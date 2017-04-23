@@ -95,6 +95,7 @@ public abstract class GuiListScreen extends GuiScreen
 			}
 			this.onEntrySelect(this.selection);
 			break;
+		case Input.KEY_SPACE:
 		case Input.KEY_ENTER:
 			this.clickEntry();
 			break;
