@@ -11,7 +11,7 @@ public class GuiMainMenu extends GuiListScreen
 	public GuiMainMenu()
 	{
 	}
-	
+
 	@Override
 	public void initGUI()
 	{
@@ -26,7 +26,6 @@ public class GuiMainMenu extends GuiListScreen
 
 		final Image title = ResourceHelper.title;
 		title.draw((width - title.getWidth()) / 2, 30);
-
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class GuiMainMenu extends GuiListScreen
 
 		this.dr.fontRenderer.drawString(x, y, text, index == this.selection ? 0xFFFF00 : TITLE_COLOR, true);
 	}
-	
+
 	@Override
 	public String getTitle()
 	{
@@ -87,7 +86,7 @@ public class GuiMainMenu extends GuiListScreen
 			break;
 		}
 	}
-	
+
 	@Override
 	public int getYOffset()
 	{

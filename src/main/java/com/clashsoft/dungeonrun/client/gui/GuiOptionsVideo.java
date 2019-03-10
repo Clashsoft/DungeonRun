@@ -1,7 +1,6 @@
 package com.clashsoft.dungeonrun.client.gui;
 
 import com.clashsoft.dungeonrun.client.engine.I18n;
-import org.newdawn.slick.SlickException;
 
 public class GuiOptionsVideo extends GuiListScreen
 {

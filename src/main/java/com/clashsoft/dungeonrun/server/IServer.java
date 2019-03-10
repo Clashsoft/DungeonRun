@@ -8,27 +8,27 @@ import java.io.File;
 
 public interface IServer
 {
-	public File getSaveDataFolder();
-	
-	public boolean loadWorld(World world);
-	
-	public boolean saveWorld(World world);
-	
-	public void update(GameContainer gc, int tick);
-	
-	public void init(GameContainer gc) throws SlickException;
-	
-	public void shutdown();
-	
-	public void startWorld(World world);
-	
-	public void startGame();
-	
-	public void stopGame();
-	
-	public void pauseGame();
-	
-	public void resumeGame();
-	
-	public boolean isGameRunning();
+	File getSaveDataFolder();
+
+	boolean loadWorld(World world);
+
+	boolean saveWorld(World world);
+
+	void update(GameContainer gc, int tick);
+
+	void init(GameContainer gc) throws SlickException;
+
+	void shutdown();
+
+	void startWorld(World world);
+
+	void startGame();
+
+	void stopGame();
+
+	void pauseGame();
+
+	void resumeGame();
+
+	boolean isGameRunning();
 }

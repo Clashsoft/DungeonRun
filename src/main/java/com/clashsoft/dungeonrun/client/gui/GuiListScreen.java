@@ -25,7 +25,8 @@ public abstract class GuiListScreen extends GuiScreen
 		final String title = this.getTitle();
 
 		this.dr.fontRenderer
-			.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, this.getYOffset(), title, TITLE_COLOR, true);
+			.drawString((width - this.dr.fontRenderer.getStringWidth(title)) / 2, this.getYOffset(), title, TITLE_COLOR,
+			            true);
 
 		for (int i = 0, count = this.entryCount(); i < count; i++)
 		{

@@ -11,11 +11,11 @@ public class StringUtils
 		StringBuilder current = new StringBuilder();
 		List<String> result = new ArrayList<String>();
 		boolean quote = false;
-		
+
 		for (int i = 0; i < text.length(); i++)
 		{
 			char c = text.charAt(i);
-			
+
 			if (c == splitChar && !quote)
 			{
 				result.add(current.toString());
@@ -25,17 +25,17 @@ public class StringUtils
 			{
 				current.append(c);
 			}
-			
+
 			if (c == '"' && i > 0 && text.charAt(i - 1) != '\\')
 			{
 				quote = !quote;
 			}
 		}
 		result.add(current.toString());
-		
+
 		return result.toArray(new String[result.size()]);
 	}
-	
+
 	public static Object parse(String type, String text)
 	{
 		switch (type)

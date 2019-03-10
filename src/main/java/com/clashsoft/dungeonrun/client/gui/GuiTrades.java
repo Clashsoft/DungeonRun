@@ -106,7 +106,6 @@ public class GuiTrades extends GuiListScreen
 		}
 
 		this.dr.fontRenderer.drawString((int) ((width - textWidth) / 2), y, entry, color, true);
-
 	}
 
 	@Override

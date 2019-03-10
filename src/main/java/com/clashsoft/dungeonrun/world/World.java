@@ -36,7 +36,7 @@ public class World
 
 	// Block IDs
 	private final Map<String, Integer> blockToID = new TreeMap<>();
-	private Block[] idToBlock;
+	private       Block[]              idToBlock;
 
 	// Chunk Info
 	private final Map<Integer, Chunk> chunks = new HashMap<>();

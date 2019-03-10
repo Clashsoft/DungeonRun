@@ -1,20 +1,19 @@
 package com.clashsoft.dungeonrun.server;
 
+import com.clashsoft.dungeonrun.DungeonRun;
+import com.clashsoft.dungeonrun.world.World;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
-import com.clashsoft.dungeonrun.DungeonRun;
-import com.clashsoft.dungeonrun.world.World;
-
 public class DungeonRunServer extends DungeonRun
 {
-	public World	theWorld;
-	
+	public World theWorld;
+
 	public DungeonRunServer()
 	{
 		super();
 	}
-	
+
 	@Override
 	public void initGame() throws SlickException
 	{
@@ -25,7 +24,7 @@ public class DungeonRunServer extends DungeonRun
 		this.theGameContainer.setShowFPS(false);
 		this.theGameContainer.start();
 	}
-	
+
 	public static void main(String[] args)
 	{
 		try
@@ -39,31 +38,31 @@ public class DungeonRunServer extends DungeonRun
 			DungeonRun.exit();
 		}
 	}
-	
+
 	@Override
 	public void startWorld(World world)
 	{
 		this.theWorld = world;
 		this.startGame();
 	}
-	
+
 	@Override
 	public boolean isGameRunning()
 	{
 		return true;
 	}
-	
+
 	@Override
 	public World getWorld()
 	{
 		return this.theWorld;
 	}
-	
+
 	@Override
 	public void pauseGame()
 	{
 	}
-	
+
 	@Override
 	public void resumeGame()
 	{

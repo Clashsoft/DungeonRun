@@ -7,7 +7,7 @@ public class EntityAIFollow implements EntityAI<EntityLiving>
 	public  EntityPlayer target;
 	private double       targetX;
 
-	private final double squareDistance;
+	private final double  squareDistance;
 	private final boolean walkRandom;
 
 	public EntityAIFollow(double maxDistance, boolean walkRandom)

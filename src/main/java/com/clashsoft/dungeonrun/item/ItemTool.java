@@ -3,9 +3,9 @@ package com.clashsoft.dungeonrun.item;
 public class ItemTool extends Item
 {
 	private final float        damage;
-	private float knockback = 0.4F;
+	private       float        knockback = 0.4F;
 	private final ToolMaterial material;
-	private boolean dagger;
+	private       boolean      dagger;
 
 	protected ItemTool(String id, float damage, ToolMaterial material)
 	{

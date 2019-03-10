@@ -10,8 +10,8 @@ public class InventoryPlayer extends AbstractInventory
 {
 	private static final int SIZE = 8;
 
-	public EntityPlayer player;
-	private ItemStack[] inventory = new ItemStack[SIZE];
+	public  EntityPlayer player;
+	private ItemStack[]  inventory = new ItemStack[SIZE];
 
 	public  int handSlot;
 	private int coins;

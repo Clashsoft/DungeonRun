@@ -3,23 +3,22 @@ package com.clashsoft.dungeonrun.client.gui;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 public class GuiOptions extends GuiListScreen
 {
-	private GuiScreen	superGui;
-	
+	private GuiScreen superGui;
+
 	public GuiOptions(GuiScreen superGui)
 	{
 		this.superGui = superGui;
 	}
-	
+
 	@Override
 	public void drawScreen(Graphics g, int par1, int par2)
 	{
 		super.drawScreen(g, par1, par2);
 	}
-	
+
 	@Override
 	public void updateScreen()
 	{
@@ -76,7 +75,7 @@ public class GuiOptions extends GuiListScreen
 			}
 		}
 	}
-	
+
 	@Override
 	public String getTitle()
 	{
@@ -101,7 +100,7 @@ public class GuiOptions extends GuiListScreen
 			this.dr.displayGuiScreen(this.superGui);
 		}
 	}
-	
+
 	@Override
 	public String getEntry(int i)
 	{

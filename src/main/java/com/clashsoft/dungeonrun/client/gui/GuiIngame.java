@@ -25,7 +25,7 @@ public class GuiIngame extends GuiScreen
 {
 	private final EntityPlayer player;
 	public        RenderBlocks renderBlocks;
-	private boolean worldSaving = false;
+	private       boolean      worldSaving = false;
 
 	public GuiIngame(EntityPlayer player)
 	{

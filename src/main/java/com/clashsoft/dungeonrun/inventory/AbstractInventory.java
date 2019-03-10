@@ -2,8 +2,8 @@ package com.clashsoft.dungeonrun.inventory;
 
 import com.clashsoft.dungeonrun.item.ItemStack;
 import dyvil.tools.nbt.NamedBinaryTag;
-import dyvil.tools.nbt.collection.NBTMap;
 import dyvil.tools.nbt.collection.NBTList;
+import dyvil.tools.nbt.collection.NBTMap;
 import dyvil.tools.nbt.util.INBTSaveable;
 
 public abstract class AbstractInventory implements INBTSaveable

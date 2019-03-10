@@ -13,7 +13,7 @@ public class Item
 	public static final Map<String, Item> items = new TreeMap<>();
 
 	public static final int ROTATE = 0;
-	public static final int STILL = 1;
+	public static final int STILL  = 1;
 
 	public final String name;
 

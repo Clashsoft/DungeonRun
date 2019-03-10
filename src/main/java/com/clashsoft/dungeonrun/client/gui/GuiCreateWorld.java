@@ -3,7 +3,6 @@ package com.clashsoft.dungeonrun.client.gui;
 import com.clashsoft.dungeonrun.client.engine.I18n;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.SlickException;
 
 import java.io.File;
 
