@@ -12,16 +12,7 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-	main {
-		java {
-			srcDir 'src'
-		}
-		resources {
-			srcDir 'resources'
-		}
-	}
-}
+sourceSets.main.resources.srcDir 'resources'
 
 dependencies {
 	// https://mvnrepository.com/artifact/org.slick2d/slick2d-core
